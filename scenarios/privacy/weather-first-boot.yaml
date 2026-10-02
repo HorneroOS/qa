@@ -1,0 +1,25 @@
+id: privacy/weather-first-boot
+purpose: >-
+  A fresh desktop keeps weather location unset and presents an intentional
+  offline state until the user chooses a place.
+covers: [shell#96]
+instruction: Open the Dashboard, move to Weather, and inspect its first-boot state.
+requires:
+  resolution: 1280x800
+steps:
+  - key: super+d
+  - wait: {stable: 0.5, timeout: 8}
+  - key: right
+  - key: right
+  - key: right
+  - wait: {stable: 0.5, timeout: 8}
+  - screenshot: weather-unconfigured
+proof:
+  - note: No weather location was configured by the factory defaults.
+    probe: {run: "horneroctl config show services.weatherLocation", equals: ""}
+  - note: Shell remains alive with weather left unconfigured.
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+media: [weather-unconfigured]
+budget: {wall_s: 90, max_actions: 12}
+artifacts: {screenshots: always, logs: on-failure}

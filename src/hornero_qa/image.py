@@ -212,7 +212,11 @@ def refresh(
             },
             "runtime_packages": RUNTIME_PACKAGES,
             "aur_runtime_packages": AUR_RUNTIME_PACKAGES,
-            "catalogues": {"shell_presets": "user catalogue seeded from shell presets/"},
+            "catalogues": {
+                "shell_presets": "user catalogue seeded from shell presets/",
+                "themes": "hornero-config system package; user copies removed",
+                "wallpapers": "hornero-config system package; user copies removed",
+            },
         },
     )
     shutil.rmtree(build, ignore_errors=True)
@@ -266,6 +270,17 @@ install -d ~/.local/share/hornero/shell-presets
 install -m0644 ~/.config/quickshell/presets/*.json ~/.local/share/hornero/shell-presets/
 sudo pacman -Sy --noconfirm --needed {pkgs}
 yay -S --noconfirm --needed --removemake {aur}
+# Build/install the exact config pin as its system package. The shell deploy
+# step also materializes defaults into a staging HOME for validation; that
+# user tree must not be the only source of product catalogues in a ready image.
+test -d "$HOME/hx-config/packaging"
+(cd "$HOME/hx-config/packaging" && makepkg --syncdeps --install --noconfirm --cleanbuild)
+sudo test -d /usr/share/hornero/themes
+sudo test -d /usr/share/hornero/wallpapers
+# Keep factory user preferences, but remove recipe/media copies so theme QA
+# proves the installed package path rather than the deploy helper's HOME copy.
+rm -rf "$HOME/.local/share/hornero/themes" "$HOME/.local/share/dots/themes"
+rm -rf "$HOME/.local/share/hornero/wallpapers" "$HOME/.local/share/dots/wallpapers"
 sudo gpasswd -a "$USER" uucp > /dev/null
 sudo touch /etc/cloud/cloud-init.disabled
 /usr/local/bin/horneroctl welcome set-show-on-login false --yes || true

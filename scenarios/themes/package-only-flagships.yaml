@@ -1,0 +1,58 @@
+id: themes/package-only-flagships
+purpose: >-
+  Installed Hornero theme packs apply without a user or dotfiles theme
+  catalogue, including Light and Pampa with matching GTK and icons.
+instruction: >-
+  Search for Hornero Light in the launcher and apply it. Then search for
+  Pampa and apply it. Inspect both results and return to Hornero Light.
+requires:
+  resolution: 1280x800
+steps:
+  - probe:
+      run: "test ! -e \"$HOME/.local/share/hornero/themes\" && test ! -e \"$HOME/.local/share/dots/themes\" && test ! -e \"$HOME/.local/share/hornero/wallpapers\" && test ! -e \"$HOME/.local/share/dots/wallpapers\" && echo no-user-catalogue"
+      equals: "no-user-catalogue"
+  - probe:
+      run: "horneroctl appearance theme list --full --json | jq -er '.message | fromjson | any(.[]; .id == \"hornero-light\") and any(.[]; .id == \"pampa\")'"
+      equals: "true"
+  - key: ctrl+space
+  - wait: {stable: 0.4, timeout: 8}
+  - type: ">theme Hornero Light"
+  - wait: {stable: 0.5, timeout: 8}
+  - key: enter
+  - probe:
+      run: "horneroctl appearance theme get"
+      contains: "hornero-light"
+      retry_s: 20
+  - screenshot: package-only-hornero-light
+  - key: ctrl+space
+  - wait: {stable: 0.4, timeout: 8}
+  - type: ">theme Pampa"
+  - wait: {stable: 0.5, timeout: 8}
+  - key: enter
+  - probe:
+      run: "horneroctl appearance theme get"
+      contains: "pampa"
+      retry_s: 30
+  - screenshot: package-only-pampa
+  - key: ctrl+space
+  - wait: {stable: 0.4, timeout: 8}
+  - type: ">theme Hornero Light"
+  - wait: {stable: 0.5, timeout: 8}
+  - key: enter
+  - probe:
+      run: "horneroctl appearance theme get"
+      contains: "hornero-light"
+      retry_s: 20
+proof:
+  - note: No personal or legacy user theme or wallpaper catalogue was present.
+    probe: {run: "test ! -e \"$HOME/.local/share/hornero/themes\" && test ! -e \"$HOME/.local/share/dots/themes\" && test ! -e \"$HOME/.local/share/hornero/wallpapers\" && test ! -e \"$HOME/.local/share/dots/wallpapers\" && echo clean", equals: "clean"}
+  - note: Installed system catalogue provides both flagship theme packs.
+    probe: {run: "horneroctl appearance theme list --full --json | jq -er '.message | fromjson | any(.[]; .id == \"hornero-light\") and any(.[]; .id == \"pampa\")'", equals: "true"}
+  - note: Final appearance is Hornero Light with its GTK color policy and icons.
+    probe: {run: "horneroctl appearance status --json | jq -r '[.mode,.gtkTheme,.iconTheme,.gtkColorScheme] | join(\"|\")'", equals: "light|Hornero-Light|Papirus|prefer-light"}
+  - note: Shell remains alive after repeated system-pack transitions.
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+media: [package-only-hornero-light, package-only-pampa]
+budget: {wall_s: 360, max_actions: 50}
+artifacts: {screenshots: always, logs: on-failure}

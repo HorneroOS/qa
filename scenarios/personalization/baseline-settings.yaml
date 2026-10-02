@@ -1,0 +1,27 @@
+id: personalization/baseline-settings
+purpose: Capture the current Settings and Appearance presentation on the post-candidate Preview 14 shell.
+instruction: Open the launcher, select its Settings action, then inspect the current Appearance controls.
+requires:
+  resolution: 1280x800
+steps:
+  - key: ctrl+space
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - type: ">Settings"
+  - wait: {stable: 0.5, timeout: 8}
+  - screenshot: launcher-settings-search
+  - key: enter
+  - probe:
+      run: "hyprctl clients -j | jq -r 'any(.[]; .title | startswith(\"Hornero Settings\"))'"
+      equals: 'true'
+      retry_s: 10
+  - screenshot: settings-overview
+  - key: escape
+  - wait: {changed: true, stable: 0.4, timeout: 5}
+proof:
+  - note: Quickshell remains alive after navigation.
+    probe: {run: pgrep -x qs || pgrep -x quickshell}
+  - note: The guest has no nonempty Hyprland configuration errors.
+    probe: {run: "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'", equals: '0'}
+  - screenshot: final
+budget: {wall_s: 180, max_actions: 20}
+artifacts: {screenshots: always, logs: on-failure}

@@ -2,8 +2,8 @@
 
 A **ready image** is a provisioned Arch guest with one exact Hornero
 composition baked in: shell tree + native plugin at a shell SHA, the config
-pin materialized, and a `horneroctl` binary. Runs never write to it; every
-attempt boots a throwaway qcow2 overlay.
+pin built and installed as `hornero-config`, and a `horneroctl` binary. Runs
+never write to it; every attempt boots a throwaway qcow2 overlay.
 
 ## Where state lives
 
@@ -81,6 +81,9 @@ What the mint adds on top of the composition:
 - Runtime packages a Hornero desktop needs (Papirus icons, `qt6ct`). `dunst`
   is installed **on purpose**: notification acceptance must prove the shell
   owns `org.freedesktop.Notifications` with a competitor present.
+- The exact config pin is built and installed as a system package. The
+  materialized user theme and wallpaper copies are removed afterward, so
+  appearance acceptance resolves those assets from `/usr/share`.
 - Welcome onboarding marked as seen.
 
 ## Adopting an existing image
@@ -104,4 +107,4 @@ product fix lands:
 
 | Gap | Workaround | Tracking |
 |---|---|---|
-| Package installs ship presets/themes where `horneroctl` does not read them | the mint seeds `~/.local/share/hornero/shell-presets` from the shell tree under test | [hornero#96](https://github.com/HorneroOS/hornero/issues/96) |
+| This QA image still seeds curated shell presets for layout journeys | the mint seeds `~/.local/share/hornero/shell-presets` from the shell tree under test; appearance packs and media come from the exact `hornero-config` package | shell#95 package integration |

@@ -1,0 +1,38 @@
+id: themes/ui-switch-hornero-light
+purpose: >-
+  A keyboard user can find Hornero Light through the launcher, apply it,
+  and observe one coherent Shell, GTK, icon, and mode state.
+instruction: >-
+  Open the launcher, search for Hornero Light, select it, and inspect the
+  desktop. Do not use IPC or SSH to perform the theme change.
+requires:
+  resolution: 1280x800
+steps:
+  - key: ctrl+space
+  - wait: {stable: 0.4, timeout: 8}
+  - type: ">theme Hornero Light"
+  - wait: {stable: 0.5, timeout: 8}
+  - screenshot: hornero-light-result
+  - key: enter
+  - probe:
+      run: "horneroctl appearance theme get"
+      contains: "hornero-light"
+      retry_s: 20
+  - screenshot: hornero-light-applied
+proof:
+  - note: Hornero Light is the active theme.
+    probe: {run: "horneroctl appearance theme get", contains: "hornero-light"}
+  - note: Theme application resolved the light GTK color policy.
+    probe: {run: "horneroctl appearance status --json | jq -r .gtkColorScheme", equals: "prefer-light"}
+  - note: The Shell appearance mode is light.
+    probe: {run: "horneroctl appearance status --json | jq -r .mode", equals: "light"}
+  - note: GTK uses the Hornero Light pack.
+    probe: {run: "horneroctl appearance status --json | jq -r .gtkTheme", equals: "Hornero-Light"}
+  - note: Icons use the Hornero Light pack.
+    probe: {run: "horneroctl appearance status --json | jq -r .iconTheme", equals: "Papirus"}
+  - note: Shell remains alive after the transaction.
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+media: [hornero-light-applied]
+budget: {wall_s: 180, max_actions: 20}
+artifacts: {screenshots: always, logs: on-failure}
