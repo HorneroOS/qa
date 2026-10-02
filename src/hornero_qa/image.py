@@ -269,7 +269,8 @@ PY
 install -d ~/.local/share/hornero/shell-presets
 install -m0644 ~/.config/quickshell/presets/*.json ~/.local/share/hornero/shell-presets/
 sudo pacman -Sy --noconfirm --needed {pkgs}
-yay -S --noconfirm --needed --removemake {aur}
+yay -S --noconfirm --needed --removemake \
+  --answerclean None --answerdiff None --answeredit None --answerupgrade None {aur}
 # Build/install the exact config pin as its system package. The shell deploy
 # step also materializes defaults into a staging HOME for validation; that
 # user tree must not be the only source of product catalogues in a ready image.
