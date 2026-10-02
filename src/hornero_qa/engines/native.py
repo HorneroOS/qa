@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import json
 import shutil
 import socket
@@ -38,6 +39,17 @@ def _free_port() -> int:
         return port
 
 
+def qmp_socket_path(work_dir: Path, run_name: str) -> Path:
+    """Short stable QMP socket path for a run.
+
+    AF_UNIX paths are limited to ~107 bytes, which a socket nested under the
+    per-run work directory exceeds for long scenario ids. The socket lives
+    directly in the state work dir under a hash of the run name instead.
+    """
+    digest = hashlib.sha1(run_name.encode("utf-8")).hexdigest()[:16]
+    return work_dir / f"qmp-{digest}.sock"
+
+
 class NativeEngine:
     name = "native"
 
@@ -60,7 +72,7 @@ class NativeEngine:
         self.smp = smp
         self.work = state.work_dir / run_dir.name
         self.overlay = self.work / "disk.qcow2"
-        self.qmp_sock = self.work / "qmp.sock"
+        self.qmp_sock = qmp_socket_path(state.work_dir, run_dir.name)
         self.serial = run_dir / "logs" / "serial.log"
         self.ssh_port = _free_port()
         self.unit = f"hornero-qa-{run_dir.name}"
@@ -73,6 +85,7 @@ class NativeEngine:
         if not self.image.exists():
             raise QAError(FailureClass.PROVISIONING, f"ready image missing: {self.image}")
         self.work.mkdir(parents=True, exist_ok=True)
+        self.qmp_sock.unlink(missing_ok=True)
         subprocess.run(
             [
                 "qemu-img",
@@ -158,6 +171,7 @@ class NativeEngine:
             self.stderr.close()
             self.stderr = None
         shutil.rmtree(self.work, ignore_errors=True)
+        self.qmp_sock.unlink(missing_ok=True)
 
     # ---------------------------------------------------------- observation --
     def screenshot(self, dest: Path, head: int = 0) -> Path:

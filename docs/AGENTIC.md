@@ -27,6 +27,11 @@ hornero-qa run drawers/dashboard-keyboard \
   --reviewer "python3 examples/adapters/assertion_reviewer.py"
 ```
 
+Relative paths in `--driver`/`--reviewer` resolve against the directory
+`hornero-qa` is invoked from: adapters execute with their own work
+directory as cwd, so the launcher absolutizes any argument naming an
+existing file before the run starts.
+
 With `--driver`, the scenario's `steps` are ignored: the driver works from
 the `instruction` and the screen alone. `setup` and `proof` still run
 exactly as in deterministic mode.

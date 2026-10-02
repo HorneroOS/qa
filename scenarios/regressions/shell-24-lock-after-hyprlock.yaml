@@ -1,23 +1,30 @@
 id: regressions/shell-24-lock-after-hyprlock
 purpose: >-
-  The shell survives locking the session after another locker (hyprlock)
-  locked and was released in the same session. Exact reproduction of
-  HorneroOS/shell#24: hyprlock locks, is terminated, then Super+L asks the
-  shell to lock.
+  The shell must survive a lock request after another locker (hyprlock)
+  died mid-lock in the same session (HorneroOS/shell#24, currently OPEN:
+  the direct IPC call kills the shell with the issue's wl_display fatal).
+  SIGTERM while holding the ext-session-lock strands the session in
+  Hyprland's crashed-lockscreen fallback by design (recovery is lua-only:
+  hl.clear_crashed_lockscreen); the crash fallback also swallows the
+  Super+L keybind, so the issue's direct `qs ipc call lock lock` is the
+  real probe. The contract is survival plus a truthful lock state.
 covers: [shell#24]
 setup:
   commands:
     - "setsid -f hyprlock > /tmp/hyprlock.log 2>&1"
     - "for i in $(seq 1 20); do grep -q onLockLocked /tmp/hyprlock.log 2>/dev/null && break; sleep 0.5; done; pgrep -x hyprlock"
     - "pkill -x hyprlock; for i in $(seq 1 20); do pgrep -x hyprlock > /dev/null || break; sleep 0.5; done; ! pgrep -x hyprlock"
-instruction: After another lock screen was used and closed, press Super+L to lock with the Hornero lock screen.
+instruction: After another lock screen died mid-lock, ask the Hornero shell to lock (Super+L, then direct IPC).
 steps:
+  - screenshot: crashed-fallback-before-lock
   - key: super+l
   - wait: {changed: true, stable: 1.0, timeout: 8}
+  - note: The issue's exact reproduction uses direct IPC, not the keybinding
+    probe: {run: "qs ipc call lock lock; echo ipc-ok", contains: ipc-ok}
 proof:
-  - note: The shell process is still running
+  - note: The shell process must survive both lock requests (red while #24 is open)
     probe: {run: "pgrep -x qs || pgrep -x quickshell"}
-  - note: The shell reports the session locked
-    probe: {run: "qs ipc call lock isLocked", equals: "true", retry_s: 5}
+  - note: The shell must truthfully report its lock surface never engaged
+    probe: {run: "qs ipc call lock isLocked", equals: "false", retry_s: 5}
   - screenshot: lock-after-hyprlock
 budget: {wall_s: 90}

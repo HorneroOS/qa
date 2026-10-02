@@ -112,12 +112,24 @@ class _Attempt:
 
     def probe(self, command: str, timeout: float = 20.0) -> ProbeResult:
         r = self.engine.probe(command, timeout=timeout)
-        if r.rc == SSH_FAILED and not self.engine.alive():
-            raise QAError(FailureClass.BOOT, "guest died during the run")
+        if r.rc == SSH_FAILED:
+            if not self.engine.alive():
+                raise QAError(FailureClass.BOOT, "guest died during the run")
+            # One retry with a live engine: a single reset connection (NAT
+            # hiccup, or a guest-side death mid-command) must not mask the
+            # product signal as a harness inconclusive. The retry either
+            # succeeds or confirms the transport is really down.
+            r = self.engine.probe(command, timeout=timeout)
         return r
 
     # ------------------------------------------------------------- phases --
     def boot(self) -> None:
+        engine = self.scenario.requires.get("engine", "native")
+        if engine != "native":
+            # Never run a scenario on an engine it did not ask for.
+            raise QAError(
+                FailureClass.HARNESS, f"engine {engine!r} is not available (docs/ARCHITECTURE.md §4)"
+            )
         self.engine.start()
         if not self.engine.wait_ssh(self.opts.boot_timeout_s):
             cls = (
@@ -171,6 +183,8 @@ class _Attempt:
         for cmd, cls in cmds:
             r = self.probe(cmd, timeout=60)
             self.bundle.action("setup", run=cmd, rc=r.rc, stdout=r.stdout[-400:], stderr=r.stderr[-400:])
+            if r.rc == SSH_FAILED:
+                raise self._transport_error(f"setup {cmd}")
             if r.rc != 0:
                 out = (r.stdout + " " + r.stderr).strip()[-300:]
                 raise QAError(cls, f"setup failed (rc={r.rc}): {cmd}: {out}")
@@ -250,12 +264,22 @@ class _Attempt:
         self.bundle.assertion(rec)
         return rec
 
+    def _transport_error(self, what: str) -> QAError:
+        """Classify a post-retry SSH 255: a command can break its own
+        connection while the product dies underneath (HorneroOS/shell#24:
+        the lock IPC kills the shell and its reply never comes back). A
+        definitely-dead shell is product signal; anything else is unknown.
+        """
+        if self.shell_alive() is False:
+            return QAError(FailureClass.PRODUCT_CRASH, f"{what} broke its connection and the shell died")
+        return QAError(FailureClass.HARNESS, f"{what}: probe transport failed")
+
     def check_probe(self, spec: dict[str, Any]) -> dict[str, Any]:
         end = time.monotonic() + float(spec.get("retry_s", 0))
         while True:
             r = self.probe(spec["run"])
             if r.rc == SSH_FAILED:
-                raise QAError(FailureClass.HARNESS, f"probe transport failed: {r.stderr[-200:]}")
+                raise self._transport_error(f"probe {spec['run']}")
             ok, why = _probe_ok(spec, r)
             if ok or time.monotonic() > end:
                 if "save" in spec:
@@ -266,6 +290,7 @@ class _Attempt:
                     "ok": ok,
                     "rc": r.rc,
                     "stdout": r.stdout[-600:],
+                    "stderr": r.stderr[-600:],
                     "detail": why,
                 }
             time.sleep(0.5)

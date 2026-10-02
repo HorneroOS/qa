@@ -9,7 +9,15 @@ from typing import TYPE_CHECKING, Any, cast
 import pytest
 from PIL import Image
 
-from hornero_qa.agentic import apply_review, run_adapter, sandbox_argv, validate_driver_reply, validate_review
+from hornero_qa.agentic import (
+    apply_review,
+    resolve_adapter_cmd,
+    run_adapter,
+    sandbox_argv,
+    validate_driver_reply,
+    validate_review,
+)
+from hornero_qa.engines.native import ProbeResult
 from hornero_qa.evidence import Bundle
 from hornero_qa.runner import RunOptions, _Attempt
 from hornero_qa.scenario import parse
@@ -109,6 +117,10 @@ class FakeEngine:
     def scroll(self, steps: int) -> None:
         self.calls.append(("scroll", steps))
 
+    def probe(self, command: str, timeout: float = 20.0) -> ProbeResult:
+        self.calls.append(("probe", command))
+        return ProbeResult(1, "", "no running quickshell instance")
+
 
 def _attempt(tmp_path: Path, max_malformed: int = 3) -> tuple[_Attempt, FakeEngine]:
     budget = f"budget: {{wall_s: 30, max_actions: 10, max_malformed: {max_malformed}}}\n"
@@ -171,3 +183,32 @@ def test_assertion_reviewer_reference(tmp_path: Path) -> None:
     reply = run_adapter(cmd, payload, tmp_path / "w", tmp_path / "h", sandbox=False)
     assert reply.data is not None and validate_review(reply.data) is None
     assert reply.data["verdict"] == "FAIL" and reply.data["disagrees_with_driver"] is True
+
+
+def test_unavailable_engine_is_refused_not_substituted(tmp_path: Path) -> None:
+    att, engine = _attempt(tmp_path)
+    att.scenario.requires = {"engine": "os-autoinst"}
+    with pytest.raises(QAError) as exc:
+        att.boot()
+    assert exc.value.cls is FailureClass.HARNESS and engine.calls == []
+
+
+def test_resolve_adapter_cmd(tmp_path: Path) -> None:
+    script = tmp_path / "adapters" / "replay_driver.py"
+    script.parent.mkdir()
+    script.write_text("# adapter")
+    (tmp_path / "actions.json").write_text("[]")
+    out = resolve_adapter_cmd(
+        ["python3", "adapters/replay_driver.py", "actions.json", "--flag", "super+d"], tmp_path
+    )
+    assert out[0] == "python3"
+    assert out[1] == str(script)
+    assert out[2] == str(tmp_path / "actions.json")
+    assert out[3:] == ["--flag", "super+d"]
+    assert resolve_adapter_cmd(["python3", "nope.py"], tmp_path) == ["python3", "nope.py"]
+
+
+def test_probe_assertion_keeps_stderr(tmp_path: Path) -> None:
+    att, _ = _attempt(tmp_path)
+    rec = att.check_probe({"run": "perf.sh", "contains": "rss"})
+    assert rec["ok"] is False and rec["stderr"] == "no running quickshell instance"

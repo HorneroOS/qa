@@ -70,6 +70,7 @@ def _validate(_: QAState, args: argparse.Namespace) -> int:
 
 
 def _run(state: QAState, args: argparse.Namespace) -> int:
+    from hornero_qa.agentic import resolve_adapter_cmd
     from hornero_qa.runner import RunOptions, run
 
     image = Path(args.image) if args.image else state.current_image()
@@ -83,8 +84,8 @@ def _run(state: QAState, args: argparse.Namespace) -> int:
             image=image,
             repeat=args.repeat,
             mem_mb=args.mem_mb,
-            driver=shlex.split(args.driver) if args.driver else None,
-            reviewer=shlex.split(args.reviewer) if args.reviewer else None,
+            driver=resolve_adapter_cmd(shlex.split(args.driver)) if args.driver else None,
+            reviewer=resolve_adapter_cmd(shlex.split(args.reviewer)) if args.reviewer else None,
         )
         summary = run(state, sc, opts)
         summaries.append(summary)
@@ -170,6 +171,28 @@ def _media(_: QAState, args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _web(state: QAState, args: argparse.Namespace) -> int:
+    from hornero_qa.web import DEFAULT_BASE, JOURNEY_DIR, discover_journeys, load_journey, run_journey
+
+    if args.journeys:
+        paths = []
+        for j in args.journeys:
+            cand = JOURNEY_DIR / f"{Path(j).name}.yaml"
+            if not cand.exists():
+                raise ScenarioError(f"no journey {j!r} (looked for {cand})")
+            paths.append(cand)
+    else:
+        paths = discover_journeys()
+    failed = False
+    for path in paths:
+        result = run_journey(state, load_journey(path), args.base or DEFAULT_BASE)
+        print(f"{result['verdict'].upper():<13} {path.stem}  {result['bundle']}")
+        if result["verdict"] != "pass":
+            failed = True
+            print(f"              {result['reason']}")
+    return EXIT_FAIL if failed else EXIT_OK
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="hornero-qa", description=__doc__)
     p.add_argument("--version", action="version", version=f"hornero-qa {__version__}")
@@ -220,6 +243,10 @@ def build_parser() -> argparse.ArgumentParser:
     a.add_argument("--tag", action="append", default=[])
     a.add_argument("--mode", choices=["structure", "pixel"], default="structure")
 
+    s = sub.add_parser("web", help="browser journeys and product-truth checks for the public site")
+    s.add_argument("journeys", nargs="*", help="journey names under web/journeys (default: all)")
+    s.add_argument("--base", help="site origin (default: the published site)")
+
     s = sub.add_parser("media", help="product media from certified runs")
     msub = s.add_subparsers(dest="media_cmd", required=True)
     m = msub.add_parser("export", help="export `media` screenshots of passing runs with provenance")
@@ -238,6 +265,7 @@ COMMANDS = {
     "image": _image,
     "anchor": _anchor,
     "media": _media,
+    "web": _web,
 }
 
 

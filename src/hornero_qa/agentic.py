@@ -35,6 +35,25 @@ class AdapterReply:
     stderr: str = ""
 
 
+def resolve_adapter_cmd(cmd: list[str], base: Path | None = None) -> list[str]:
+    """Absolutize argv elements that name existing files under base (default: cwd).
+
+    Adapters run with cwd set to their own work directory, so a repo-relative
+    `--driver`/`--reviewer` command (as docs/AGENTIC.md shows) would not
+    resolve there. Only elements that are existing files are rewritten;
+    interpreter names, flags and opaque arguments pass through untouched.
+    """
+    root = base if base is not None else Path.cwd()
+    out = []
+    for arg in cmd:
+        p = Path(arg)
+        if not p.is_absolute() and (root / p).is_file():
+            out.append(str(root / p))
+        else:
+            out.append(arg)
+    return out
+
+
 def sandbox_argv(
     cmd: list[str], workdir: Path, hidden: Path, extra_ro: list[Path] | None = None
 ) -> list[str]:
