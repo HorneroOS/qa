@@ -24,4 +24,4 @@ jobs:
       - name: Pytest
         run: uv run pytest -q
       - name: Markdown lint
-        run: npx --yes markdownlint-cli2 "**/*.md" "#.venv"
+        run: npx --yes markdownlint-cli2 "**/*.md" "#.venv/**" "#node_modules/**"

@@ -1,0 +1,25 @@
+id: layout-picker/keyboard-apply
+purpose: >-
+  The Layout Picker applies a layout with the keyboard alone: arrows move the
+  focus in catalogue order and Enter applies the focused preset.
+covers: [shell#93]
+setup:
+  layout: hornero-left
+instruction: >-
+  Open the Layout Picker with Super+Shift+B, move to the layout after the
+  current one with the Right arrow, and press Enter.
+steps:
+  - key: super+shift+b
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+  - probe: {run: "qs ipc call drawers state layoutPicker", equals: "true", retry_s: 3}
+  - note: The starting preset is in the catalogue the picker lists
+    probe: {run: "horneroctl shell preset list", contains: "hornero-left:"}
+  - key: right
+  - wait: {changed: true, stable: 0.3, timeout: 3}
+  - key: enter
+  - wait: {changed: true, stable: 1.0, timeout: 10}
+proof:
+  - note: Enter applied a different preset than the starting one
+    probe: {run: "horneroctl shell preset current", not_contains: hornero-left, retry_s: 5}
+  - screenshot: applied
+budget: {wall_s: 90}

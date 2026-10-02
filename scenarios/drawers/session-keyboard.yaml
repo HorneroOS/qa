@@ -1,0 +1,20 @@
+id: drawers/session-keyboard
+purpose: >-
+  SUPER+X opens the session drawer (lock, logout, reboot, shutdown) and
+  Escape dismisses it without triggering any session action.
+instruction: Press Super+X to open the session menu, then press Escape.
+steps:
+  - key: super+x
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+  - probe: {run: "qs ipc call drawers state session", equals: "true", retry_s: 3}
+  - screenshot: session
+  - key: escape
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+proof:
+  - note: The session drawer closed
+    probe: {run: "qs ipc call drawers state session", equals: "false", retry_s: 3}
+  - note: No session action ran (the session is not locked)
+    probe: {run: "qs ipc call lock isLocked", equals: "false"}
+  - screenshot: after-escape
+media: [session]
+budget: {wall_s: 60}

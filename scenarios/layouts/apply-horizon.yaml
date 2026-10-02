@@ -1,0 +1,20 @@
+id: layouts/apply-horizon
+purpose: >-
+  Horizon: inset top bar plus a clear bottom workspace strip. Applying the preset must switch the active preset and leave
+  exactly the declared bar edges visible.
+covers: [shell#88, shell#92]
+setup:
+  layout: horizon
+instruction: Switch the desktop layout to horizon and look at the result.
+proof:
+  - note: The active preset pointer names the applied preset
+    probe: {run: "horneroctl shell preset current", contains: horizon}
+  - note: Visible bar edges match the preset declaration
+    probe:
+      run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'"
+      equals: '["bottom","top"]'
+      retry_s: 10
+  - note: The layout as a user sees it
+    screenshot: layout-horizon
+media: [layout-horizon]
+budget: {wall_s: 90}

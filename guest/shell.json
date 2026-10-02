@@ -1,0 +1,5 @@
+{
+  "general": {
+    "idle": {"timeouts": [], "lockBeforeSleep": false, "inhibitWhenAudio": false}
+  }
+}

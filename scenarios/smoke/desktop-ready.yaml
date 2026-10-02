@@ -1,0 +1,18 @@
+id: smoke/desktop-ready
+purpose: >-
+  The ready image boots to a Hornero desktop: Hyprland session up, the shell
+  running and answering IPC, at least one bar visible, one output.
+instruction: Boot the machine and wait until the Hornero desktop is ready to use.
+proof:
+  - note: Hyprland session is running
+    probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
+  - note: The shell answers IPC and exposes the launcher drawer
+    probe: {run: "qs ipc call drawers list", contains: launcher}
+  - note: Exactly one output is configured
+    probe: {run: "hyprctl monitors -j | jq length", equals: "1"}
+  - note: At least one shell bar is visible
+    probe: {run: "qs ipc call debug bars | jq '[.[] | select(.visible)] | length > 0'", equals: "true", retry_s: 10}
+  - note: Desktop frame (non-blank) for the record
+    screenshot: desktop
+media: [desktop]
+budget: {wall_s: 60}
