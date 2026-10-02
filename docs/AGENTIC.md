@@ -12,6 +12,13 @@ one JSON document on stdin and writes one JSON document on stdout.
 | Driver | instruction, current screenshot, short history, budgets | return one input action | SSH, IPC, source access, probes, deciding the verdict |
 | Reviewer | scenario, proof criteria, assertions, action trace, final and per-step frames | type and explain a verdict | act on the guest, override a deterministic failure |
 
+The Driver's limits are requirements on the launcher, not on the model's
+good behaviour. A launcher that runs a Driver adapter must start it without
+the guest SSH key, without the QMP socket, with no network access to the
+guest, and with a working directory that holds only the current frame. An
+adapter that needs any of those is non-conforming. No launcher ships yet;
+this section is the acceptance bar for the first one.
+
 ## Driver: `hornero.qa.driver/1`
 
 Input (one turn):
@@ -89,6 +96,15 @@ taxonomy in `src/hornero_qa/taxonomy.py`.
 4. Every proof check passing deterministically → `PASS`; reviewer output is
    sampled for audit.
 
-Driver `done` + reviewer `FAIL` is a `FAIL` that needs human inspection.
-`--repeat N` reports counts per class, so a model miss is never reported as a
-Hornero regression.
+What the Reviewer may change:
+
+- It never turns a `FAIL` into a `PASS` and never overrides rule 1 or 2.
+- Under rule 3 it may change the class from `driver` to `product`, but only
+  with a reason that cites a frame or assertion as evidence.
+- Driver `done` + Reviewer `FAIL` while every deterministic proof check
+  passed is recorded as `FAIL` with the Reviewer's class and a
+  `needs_review` flag; a human confirms or discards it.
+
+`--repeat N` counts each attempt once, under its final verdict and class,
+so a model miss (`driver`) is never reported as a Hornero regression
+(`product`, `product_crash`).
