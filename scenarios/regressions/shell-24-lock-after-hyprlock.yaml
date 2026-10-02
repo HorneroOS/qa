@@ -1,0 +1,23 @@
+id: regressions/shell-24-lock-after-hyprlock
+purpose: >-
+  The shell survives locking the session after another locker (hyprlock)
+  locked and was released in the same session. Exact reproduction of
+  HorneroOS/shell#24: hyprlock locks, is terminated, then Super+L asks the
+  shell to lock.
+covers: [shell#24]
+setup:
+  commands:
+    - "setsid -f hyprlock > /tmp/hyprlock.log 2>&1"
+    - "for i in $(seq 1 20); do grep -q onLockLocked /tmp/hyprlock.log 2>/dev/null && break; sleep 0.5; done; pgrep -x hyprlock"
+    - "pkill -x hyprlock; for i in $(seq 1 20); do pgrep -x hyprlock > /dev/null || break; sleep 0.5; done; ! pgrep -x hyprlock"
+instruction: After another lock screen was used and closed, press Super+L to lock with the Hornero lock screen.
+steps:
+  - key: super+l
+  - wait: {changed: true, stable: 1.0, timeout: 8}
+proof:
+  - note: The shell process is still running
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - note: The shell reports the session locked
+    probe: {run: "qs ipc call lock isLocked", equals: "true", retry_s: 5}
+  - screenshot: lock-after-hyprlock
+budget: {wall_s: 90}

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shlex
 import shutil
 import sys
 from pathlib import Path
@@ -78,7 +79,14 @@ def _run(state: QAState, args: argparse.Namespace) -> int:
     summaries = []
     for name in args.scenarios:
         sc = load(resolve(name))
-        summary = run(state, sc, RunOptions(image=image, repeat=args.repeat, mem_mb=args.mem_mb))
+        opts = RunOptions(
+            image=image,
+            repeat=args.repeat,
+            mem_mb=args.mem_mb,
+            driver=shlex.split(args.driver) if args.driver else None,
+            reviewer=shlex.split(args.reviewer) if args.reviewer else None,
+        )
+        summary = run(state, sc, opts)
         summaries.append(summary)
         for r in summary["results"]:
             cls = r["class"] or "-"
@@ -179,6 +187,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--repeat", type=int, default=1, help="independent attempts per scenario (flakiness)")
     s.add_argument("--mem-mb", type=int, default=2048)
     s.add_argument("--json", action="store_true", help="print machine-readable summaries")
+    s.add_argument("--driver", help="agentic driver adapter command (docs/AGENTIC.md); replaces the steps")
+    s.add_argument("--reviewer", help="reviewer adapter command (docs/AGENTIC.md)")
 
     s = sub.add_parser("inspect", help="print an evidence bundle summary")
     s.add_argument("bundle")

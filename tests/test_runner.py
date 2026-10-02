@@ -27,6 +27,9 @@ def test_probe_json_paths() -> None:
     ok, why = _probe_ok({"run": "x", "json": "bars.3.edge", "equals": "top"}, r(out))
     assert not ok and "bars.3.edge" in why
     assert not _probe_ok({"run": "x", "json": "a", "equals": "1"}, r("not json"))[0]
+    rss = '{"samples": [{"rss_kb": 51234}]}'
+    assert _probe_ok({"run": "x", "json": "samples.0.rss_kb", "matches": "^[0-9]+$"}, r(rss))[0]
+    assert not _probe_ok({"run": "x", "json": "samples.0.rss_kb", "equals": "1"}, r(rss))[0]
     assert _dig({"a": [{"b": 2}]}, "a.0.b") == 2
 
 

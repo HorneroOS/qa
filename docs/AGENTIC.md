@@ -1,7 +1,8 @@
 # Agentic QA contracts
 
-Status: **contract**. The deterministic runner is the acceptance authority;
-agentic adapters are optional and land behind this contract. Nothing here
+Status: **implemented** (`src/hornero_qa/agentic.py`) with two reference
+adapters in `examples/adapters/`. The deterministic runner stays the
+acceptance authority; agentic runs are optional. Nothing here
 requires a specific model or vendor: an adapter is any executable that reads
 one JSON document on stdin and writes one JSON document on stdout.
 
@@ -12,12 +13,23 @@ one JSON document on stdin and writes one JSON document on stdout.
 | Driver | instruction, current screenshot, short history, budgets | return one input action | SSH, IPC, source access, probes, deciding the verdict |
 | Reviewer | scenario, proof criteria, assertions, action trace, final and per-step frames | type and explain a verdict | act on the guest, override a deterministic failure |
 
-The Driver's limits are requirements on the launcher, not on the model's
-good behaviour. A launcher that runs a Driver adapter must start it without
-the guest SSH key, without the QMP socket, with no network access to the
-guest, and with a working directory that holds only the current frame. An
-adapter that needs any of those is non-conforming. No launcher ships yet;
-this section is the acceptance bar for the first one.
+The Driver's limits are enforced by the launcher, not left to the model's
+good behaviour. Every adapter runs under bubblewrap: the whole Hornero QA
+state directory (guest SSH key, QMP sockets, images, other runs) is replaced
+by an empty tmpfs, and only the adapter's own work directory (the current
+frame) is writable. Network stays available so a model-backed adapter can
+reach its API, but without the key the guest cannot be reached. Runs refuse
+to start without `bwrap`.
+
+```sh
+hornero-qa run drawers/dashboard-keyboard \
+  --driver "python3 examples/adapters/replay_driver.py actions.json" \
+  --reviewer "python3 examples/adapters/assertion_reviewer.py"
+```
+
+With `--driver`, the scenario's `steps` are ignored: the driver works from
+the `instruction` and the screen alone. `setup` and `proof` still run
+exactly as in deterministic mode.
 
 ## Driver: `hornero.qa.driver/1`
 
@@ -64,9 +76,11 @@ Rules:
 
 ## Reviewer: `hornero.qa.review/1`
 
-Input: the scenario (`instruction`, `proof`), `assertions.json`,
-`actions.jsonl`, the final frame and per-step frames, the driver's end
-state, and infra signals (QEMU exit, capture errors).
+Input (`hornero.qa.review.in/1`): `scenario` (`id`, `instruction`,
+`proof`), `assertions` (every deterministic check with its detail),
+`trace` (path to `actions.jsonl`), `frames` (`final`, `screenshots`,
+`driver_turns`), `driver.end`, the `deterministic` verdict, class and
+reason, and the closed `taxonomy`. The bundle is mounted read-only.
 
 Output:
 

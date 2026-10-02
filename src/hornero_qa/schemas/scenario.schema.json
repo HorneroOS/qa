@@ -221,6 +221,11 @@
           "type": "number",
           "minimum": 0,
           "maximum": 60
+        },
+        "save": {
+          "description": "Keep the full stdout in the bundle as logs/<save> (e.g. a JSON report).",
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]*$"
         }
       }
     },
