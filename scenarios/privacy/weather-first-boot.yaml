@@ -9,14 +9,12 @@ requires:
 steps:
   - key: super+d
   - wait: {stable: 0.5, timeout: 8}
-  - key: right
-  - key: right
-  - key: right
+  - pointer: {x: 0.67, y: 0.08, click: left}
   - wait: {stable: 0.5, timeout: 8}
   - screenshot: weather-unconfigured
 proof:
-  - note: No weather location was configured by the factory defaults.
-    probe: {run: "horneroctl config show services.weatherLocation", equals: ""}
+  - note: Factory defaults leave weather location empty.
+    probe: {run: "jq -er '.services.weatherLocation == \"\"' /etc/xdg/hornero/shell.json", equals: "true"}
   - note: Shell remains alive with weather left unconfigured.
     probe: {run: "pgrep -x qs || pgrep -x quickshell"}
   - screenshot: final
