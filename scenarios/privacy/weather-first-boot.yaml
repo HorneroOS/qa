@@ -15,9 +15,11 @@ steps:
 proof:
   - note: Factory defaults leave weather location empty.
     probe: {run: "jq -er '.services.weatherLocation == \"\"' /etc/xdg/hornero/shell.json", equals: "true"}
+  - note: No IP geolocation or forecast provider request is attempted on first boot.
+    probe: {run: "journalctl --user -b --no-pager | grep -Ei 'ip-api\\.com|ipapi\\.co|geojs\\.io|ipinfo\\.io|open-meteo|nominatim|Weather:.*(geo|request)' || true", equals: "", save: "weather-network-attempts.txt"}
   - note: Shell remains alive with weather left unconfigured.
     probe: {run: "pgrep -x qs || pgrep -x quickshell"}
   - screenshot: final
 media: [weather-unconfigured]
 budget: {wall_s: 90, max_actions: 12}
-artifacts: {screenshots: always, logs: on-failure}
+artifacts: {screenshots: always, logs: always}
