@@ -9,9 +9,13 @@ requires:
   resolution: 1280x800
 steps:
   - key: ctrl+space
-  - wait: {stable: 0.4, timeout: 8}
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - probe:
+      run: "qs ipc call drawers state launcher"
+      equals: "true"
+      retry_s: 3
   - type: ">theme Hornero Light"
-  - wait: {stable: 0.5, timeout: 8}
+  - wait: {changed: true, stable: 0.5, timeout: 8}
   - screenshot: hornero-light-result
   - key: enter
   - probe:

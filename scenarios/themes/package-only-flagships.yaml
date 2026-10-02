@@ -15,9 +15,14 @@ steps:
       run: "horneroctl appearance theme list --full --json | jq -er '.message | fromjson | any(.[]; .id == \"hornero-light\") and any(.[]; .id == \"pampa\")'"
       equals: "true"
   - key: ctrl+space
-  - wait: {stable: 0.4, timeout: 8}
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - probe:
+      run: "qs ipc call drawers state launcher"
+      equals: "true"
+      retry_s: 3
   - type: ">theme Hornero Light"
-  - wait: {stable: 0.5, timeout: 8}
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: package-only-hornero-light-search
   - key: enter
   - probe:
       run: "horneroctl appearance theme get"
@@ -25,9 +30,14 @@ steps:
       retry_s: 20
   - screenshot: package-only-hornero-light
   - key: ctrl+space
-  - wait: {stable: 0.4, timeout: 8}
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - probe:
+      run: "qs ipc call drawers state launcher"
+      equals: "true"
+      retry_s: 3
   - type: ">theme Pampa"
-  - wait: {stable: 0.5, timeout: 8}
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: package-only-pampa-search
   - key: enter
   - probe:
       run: "horneroctl appearance theme get"
@@ -35,9 +45,13 @@ steps:
       retry_s: 30
   - screenshot: package-only-pampa
   - key: ctrl+space
-  - wait: {stable: 0.4, timeout: 8}
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - probe:
+      run: "qs ipc call drawers state launcher"
+      equals: "true"
+      retry_s: 3
   - type: ">theme Hornero Light"
-  - wait: {stable: 0.5, timeout: 8}
+  - wait: {changed: true, stable: 0.5, timeout: 8}
   - key: enter
   - probe:
       run: "horneroctl appearance theme get"
