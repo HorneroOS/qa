@@ -1,0 +1,8 @@
+id: web/site-health
+purpose: >-
+  Every page in the sitemap loads, makes no request to another host, logs no
+  console error and fits a phone and a desktop screen without sideways
+  scrolling.
+pages: sitemap
+viewports: [phone, desktop]
+checks: [status, third_party, console, overflow]

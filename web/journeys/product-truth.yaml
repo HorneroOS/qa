@@ -1,0 +1,12 @@
+id: web/product-truth
+purpose: >-
+  What the site says matches the product today: every shell preset and
+  theme pack on main is listed, the latest tagged preview is the one the
+  site names, and nothing offers an image download that does not exist.
+pages: []
+viewports: []
+truth:
+  - layouts_match_shell_main
+  - themes_match_config_main
+  - latest_tag_matches_hornero
+  - no_download_claims

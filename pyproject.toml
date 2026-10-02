@@ -23,6 +23,9 @@ dev = [
   "types-pyyaml>=6.0",
   "types-jsonschema>=4.23",
 ]
+web = [
+    "playwright>=1.63.0",
+]
 
 [build-system]
 requires = ["hatchling>=1.25"]

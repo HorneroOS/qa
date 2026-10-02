@@ -1,0 +1,16 @@
+id: web/first-visit
+purpose: >-
+  A first-time visitor can go from the home page to real captures, the
+  layouts, and an honest answer about installing.
+pages: []
+viewports: [phone, desktop]
+steps:
+  - visit: /
+  - expect_text: One desktop
+  - click: {role: link, name: See it running}
+  - expect_url: /showroom
+  - click: {role: link, name: Layouts, exact: true}
+  - expect_url: /layouts
+  - expect_text: Cockpit Clear
+  - click: {role: link, name: Install, exact: true}
+  - expect_text: Not installable yet
