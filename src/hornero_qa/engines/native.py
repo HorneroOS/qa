@@ -122,7 +122,9 @@ class NativeEngine:
             "-m",
             str(self.mem_mb),
             "-device",
-            f"virtio-vga,max_outputs={self.outputs},xres={w},yres={h}",
+            # Explicit id: per-head screendump addresses the GPU by device id,
+            # and the auto-assigned id is not stable (video0 does not exist).
+            f"virtio-vga,id=hxgpu0,max_outputs={self.outputs},xres={w},yres={h}",
             "-drive",
             f"file={self.overlay},format=qcow2,if=virtio",
             "-netdev",
@@ -180,7 +182,7 @@ class NativeEngine:
         if head == 0:
             q.screendump(dest)
         else:
-            q.cmd("screendump", filename=str(dest), format="png", device="video0", head=head)
+            q.cmd("screendump", filename=str(dest), format="png", device="hxgpu0", head=head)
         return dest
 
     def probe(self, command: str, timeout: float = 20.0) -> ProbeResult:
