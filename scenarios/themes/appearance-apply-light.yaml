@@ -1,0 +1,31 @@
+id: themes/appearance-apply-light
+purpose: Apply a theme from Appearance and verify the current-look preview follows the applied state.
+instruction: Open Settings, navigate to Appearance, select Hornero Light with the pointer, and inspect the updated preview.
+requires:
+  resolution: 1280x800
+steps:
+  - key: ctrl+space
+  - wait: {stable: 0.5, timeout: 8}
+  - type: ">Settings"
+  - wait: {stable: 0.5, timeout: 8}
+  - key: enter
+  - probe: {run: "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", equals: "Hornero Settings - Network", retry_s: 10}
+  - wait: {stable: 2.0, timeout: 10}
+  - pointer: {x: 0.17, y: 0.52, click: left}
+  - probe: {run: "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", equals: "Hornero Settings - Appearance", retry_s: 8}
+  - wait: {stable: 1.5, timeout: 10}
+  - screenshot: appearance-before-apply
+  - pointer: {x: 0.33, y: 0.62, click: left}
+  - probe: {run: "horneroctl appearance theme get", contains: "hornero-light", retry_s: 30}
+  - probe: {run: "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'", equals: "hornero-light|light|Hornero-Light|Papirus|prefer-light", retry_s: 10}
+  - wait: {stable: 1.5, timeout: 10}
+  - screenshot: appearance-hornero-light-current
+  - probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - key: escape
+proof:
+  - note: Appearance theme selection keeps the Shell alive.
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+budget: {wall_s: 220, max_actions: 24}
+artifacts: {screenshots: always, logs: on-failure}
+media: [appearance-hornero-light-current]

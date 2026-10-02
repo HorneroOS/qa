@@ -1,0 +1,31 @@
+{
+  "schema": "hornero.appearance-evidence/1",
+  "captured": "2026-10-02",
+  "resolution": "1280x800",
+  "engine": "native QEMU/KVM",
+  "memory_mb": 2048,
+  "config_sha": "96b68703ef88e64dcd2ce7f9bd224fd0c897c411",
+  "horneroctl": "horneroctl-v0.2.0-preview14",
+  "shell_base_sha": "b1a02df51dc000589d4de6de05a95f97e79bad55",
+  "shell_patch_sha256": "cf84155ed09a40992f26ffc487fbb98352d55154a3c31fbea763b8b96c8d260e",
+  "runs": {
+    "before-appearance.png": {
+      "run_id": "20261002T160649Z-personalization-settings-registry-appearance-1",
+      "scenario": "personalization/settings-registry-appearance",
+      "sha256": "fe63f608d9309226bc9b7e93b53cfb29bce52f7ce2d774a1e81bf7fa219a5da7",
+      "meaning": "Hornero Dark, before the Appearance preview and gallery changes; preview blank and metadata-heavy cards."
+    },
+    "after-appearance.png": {
+      "run_id": "20261002T162846Z-personalization-appearance-compact-render-check-1",
+      "scenario": "personalization/appearance-compact-render-check",
+      "sha256": "0e9e397bc40886b0a6ffcbcdeff615e51d78ec98cfbfc0e14ed6b24bc4517aba",
+      "meaning": "Hornero Dark current-look preview with wallpaper, palette, current marker, compact details; no runtime QML errors."
+    },
+    "after-light.png": {
+      "run_id": "20261002T163039Z-personalization/appearance-apply-light-1",
+      "scenario": "themes/appearance-apply-light",
+      "sha256": "d8d88e1ab660fae44d876b5982323e2f0aa132531b8e9c0f09195b012d16e494",
+      "meaning": "Pointer-selected Hornero Light; mode, GTK theme, icon theme and color-scheme agree; preview updated to Current look."
+    }
+  }
+}
