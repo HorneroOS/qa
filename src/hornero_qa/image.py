@@ -33,6 +33,11 @@ CONFIG_REPO = "https://github.com/HorneroOS/config"
 # not guarantee. dunst is installed on purpose: notification-ownership
 # acceptance must prove the shell wins the bus name with a competitor present.
 RUNTIME_PACKAGES = ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq"]
+# AUR runtime dependencies the Hornero packages declare (hornero-config
+# depends on python-materialyoucolor since HorneroOS/config#46: theme
+# switching regenerates the M3 scheme with it). Installed with the base
+# image's yay, exactly as a package install would pull them.
+AUR_RUNTIME_PACKAGES = ["python-materialyoucolor"]
 
 
 def _ssh(state: QAState, port: int, command: str, timeout: float = 1800) -> None:
@@ -202,6 +207,7 @@ def refresh(
                 "horneroctl_sha256": hashlib.sha256(horneroctl.read_bytes()).hexdigest(),
             },
             "runtime_packages": RUNTIME_PACKAGES,
+            "aur_runtime_packages": AUR_RUNTIME_PACKAGES,
             "catalogues": {"shell_presets": "user catalogue seeded from shell presets/"},
         },
     )
@@ -219,6 +225,7 @@ def _mint(state: QAState, port: int, horneroctl: Path) -> None:
         _scp(state, port, bundle, "/tmp/qa-guest.tar")
     _scp(state, port, horneroctl, "/tmp/horneroctl")
     pkgs = " ".join(RUNTIME_PACKAGES)
+    aur = " ".join(AUR_RUNTIME_PACKAGES)
     _ssh(
         state,
         port,
@@ -254,6 +261,7 @@ PY
 install -d ~/.local/share/hornero/shell-presets
 install -m0644 ~/.config/quickshell/presets/*.json ~/.local/share/hornero/shell-presets/
 sudo pacman -Sy --noconfirm --needed {pkgs}
+yay -S --noconfirm --needed --removemake {aur}
 sudo gpasswd -a "$USER" uucp > /dev/null
 sudo touch /etc/cloud/cloud-init.disabled
 /usr/local/bin/horneroctl welcome set-show-on-login false --yes || true
