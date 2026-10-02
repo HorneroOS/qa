@@ -44,13 +44,11 @@ RUNTIME_PACKAGES = [
     "jq",
     "hyprlock",
     "gtk3",
-    "python-pywal",
 ]
-# AUR runtime dependencies the Hornero packages declare (hornero-config
-# depends on python-materialyoucolor since HorneroOS/config#46: theme
-# switching regenerates the M3 scheme with it). Installed with the base
-# image's yay, exactly as a package install would pull them.
-AUR_RUNTIME_PACKAGES = ["python-materialyoucolor"]
+# AUR runtime dependencies the Hornero packages declare: M3 generation
+# requires python-materialyoucolor; recipe themes require python-pywal16's
+# `wal` command. Install with the base image's yay like package installs.
+AUR_RUNTIME_PACKAGES = ["python-materialyoucolor", "python-pywal16"]
 
 
 def _ssh(state: QAState, port: int, command: str, timeout: float = 1800) -> None:

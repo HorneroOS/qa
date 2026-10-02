@@ -36,7 +36,7 @@ Image and key files are rejected by repository governance
     "horneroctl_sha256": "<64-hex>"
   },
   "runtime_packages": ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq", "hyprlock", "gtk3"],
-  "aur_runtime_packages": ["python-materialyoucolor"]
+  "aur_runtime_packages": ["python-materialyoucolor", "python-pywal16"]
 }
 ```
 
@@ -75,9 +75,10 @@ What the mint adds on top of the composition:
   (`HORNERO-SHELL-READY`). The marker is diagnostic only; readiness is
   proven by the shell's IPC answering.
 - `shell.json` idle timeouts disabled (a locking guest would poison runs).
-- AUR runtime dependencies the Hornero packages declare
-  (`python-materialyoucolor`, required by `hornero-config` since
-  HorneroOS/config#46), installed with the base image's `yay`.
+- AUR runtime dependencies the Hornero packages declare:
+  `python-materialyoucolor` for M3 generation and `python-pywal16` for the
+  recipe pipeline's `wal` command. They are installed with the base image's
+  `yay`.
 - Runtime packages a Hornero desktop needs (Papirus icons, `qt6ct`). `dunst`
   is installed **on purpose**: notification acceptance must prove the shell
   owns `org.freedesktop.Notifications` with a competitor present.
