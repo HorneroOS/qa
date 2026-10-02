@@ -13,8 +13,12 @@ probes, and writes an evidence bundle for every run.
 
 ## Status
 
-Early. The native engine, the scenario/evidence model and the first product
-journeys are being built in the open. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Native engine, scenario/evidence model, ready-image builder and the first
+product journeys (smoke, layouts, Layout Picker, drawers, notifications,
+lock, themes) run today. Agentic adapters follow the contract in
+[docs/AGENTIC.md](docs/AGENTIC.md). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
+[docs/SCENARIOS.md](docs/SCENARIOS.md), [docs/IMAGES.md](docs/IMAGES.md) and
+[docs/MEDIA.md](docs/MEDIA.md).
 
 ## Quick start
 
@@ -25,7 +29,7 @@ image (see [docs/IMAGES.md](docs/IMAGES.md)).
 uv run hornero-qa doctor            # host checks (KVM, QEMU, image, memory)
 uv run hornero-qa list              # scenarios
 uv run hornero-qa run smoke/desktop-ready
-uv run hornero-qa inspect runs/<run-id>
+uv run hornero-qa inspect ~/.local/share/hornero/qa/runs/<run-id>
 ```
 
 ## What lives here (and what does not)

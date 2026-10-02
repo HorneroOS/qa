@@ -1,0 +1,20 @@
+id: layouts/apply-hornero-left
+purpose: >-
+  The Hornero original: one attached bar on the left edge. Applying the preset must switch the active preset and leave
+  exactly the declared bar edges visible.
+covers: [shell#88]
+setup:
+  layout: hornero-left
+instruction: Switch the desktop layout to hornero-left and look at the result.
+proof:
+  - note: The active preset pointer names the applied preset
+    probe: {run: "horneroctl shell preset current", contains: hornero-left}
+  - note: Visible bar edges match the preset declaration
+    probe:
+      run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'"
+      equals: '["left"]'
+      retry_s: 10
+  - note: The layout as a user sees it
+    screenshot: layout-hornero-left
+media: [layout-hornero-left]
+budget: {wall_s: 90}

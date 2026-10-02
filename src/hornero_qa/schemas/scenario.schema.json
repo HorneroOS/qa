@@ -1,0 +1,415 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/HorneroOS/qa/schemas/scenario.schema.json",
+  "title": "Hornero QA scenario",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "purpose",
+    "instruction",
+    "proof"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+(/[a-z0-9-]+)*$"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 10
+    },
+    "covers": {
+      "description": "Issues/PRs this scenario guards (regression coverage).",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_.-]+#[0-9]+$"
+      }
+    },
+    "requires": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "enum": [
+            "native",
+            "os-autoinst"
+          ]
+        },
+        "outputs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "resolution": {
+          "type": "string",
+          "pattern": "^[0-9]+x[0-9]+$"
+        }
+      }
+    },
+    "setup": {
+      "description": "Guest state prepared through the observation/setup lane before the journey starts.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "layout": {
+          "type": "string"
+        },
+        "theme": {
+          "type": "string"
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "instruction": {
+      "description": "What a user does, in plain language. Drives the agentic driver; documents the deterministic steps.",
+      "type": "string",
+      "minLength": 5
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/step"
+      }
+    },
+    "proof": {
+      "description": "Acceptance criteria, written by humans. Checked through the observation lane only.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/check"
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "wall_s": {
+          "type": "number",
+          "minimum": 5,
+          "maximum": 3600
+        },
+        "max_actions": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "max_malformed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "screenshots": {
+          "enum": [
+            "always",
+            "on-failure"
+          ]
+        },
+        "logs": {
+          "enum": [
+            "always",
+            "on-failure"
+          ]
+        }
+      }
+    },
+    "media": {
+      "description": "Screenshots from a passing run that may be promoted to product media.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "w",
+        "h"
+      ],
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "w": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "h": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "wait": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "changed": {
+          "type": "boolean"
+        },
+        "stable": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "timeout": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 300
+        },
+        "ignore": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rect"
+          }
+        }
+      }
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run"
+      ],
+      "properties": {
+        "run": {
+          "type": "string"
+        },
+        "equals": {
+          "type": "string"
+        },
+        "contains": {
+          "type": "string"
+        },
+        "matches": {
+          "type": "string"
+        },
+        "not_contains": {
+          "type": "string"
+        },
+        "json": {
+          "description": "Dotted path into JSON stdout, compared with `equals`.",
+          "type": "string"
+        },
+        "retry_s": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 60
+        }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "expect": {
+          "enum": [
+            "present",
+            "absent"
+          ]
+        },
+        "timeout": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 120
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 2,
+      "properties": {
+        "note": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "pointer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x",
+            "y"
+          ],
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "y": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "click": {
+              "enum": [
+                "left",
+                "right",
+                "middle"
+              ]
+            },
+            "glide": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60
+            }
+          }
+        },
+        "scroll": {
+          "type": "integer"
+        },
+        "wait": {
+          "$ref": "#/$defs/wait"
+        },
+        "probe": {
+          "$ref": "#/$defs/probe"
+        },
+        "anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "screenshot": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "pause": {
+          "description": "Last-resort fixed delay (seconds). Prefer wait/probe.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3
+        }
+      },
+      "additionalProperties": false,
+      "description": "Exactly one action, optionally with a note (a note alone documents the journey).",
+      "oneOf": [
+        {
+          "required": [
+            "note"
+          ],
+          "maxProperties": 1
+        },
+        {
+          "required": [
+            "key"
+          ]
+        },
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "pointer"
+          ]
+        },
+        {
+          "required": [
+            "scroll"
+          ]
+        },
+        {
+          "required": [
+            "wait"
+          ]
+        },
+        {
+          "required": [
+            "probe"
+          ]
+        },
+        {
+          "required": [
+            "anchor"
+          ]
+        },
+        {
+          "required": [
+            "screenshot"
+          ]
+        },
+        {
+          "required": [
+            "pause"
+          ]
+        }
+      ]
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 2,
+      "properties": {
+        "note": {
+          "type": "string"
+        },
+        "probe": {
+          "$ref": "#/$defs/probe"
+        },
+        "anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "screenshot": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        }
+      },
+      "description": "Exactly one observation, optionally with a note.",
+      "oneOf": [
+        {
+          "required": [
+            "probe"
+          ]
+        },
+        {
+          "required": [
+            "anchor"
+          ]
+        },
+        {
+          "required": [
+            "screenshot"
+          ]
+        }
+      ]
+    }
+  }
+}

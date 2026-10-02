@@ -1,0 +1,15 @@
+id: lock/lock-keyboard
+purpose: >-
+  SUPER+L locks the session with the shell's own lock screen (the shell owns
+  idle and manual lock).
+covers: [config#41]
+instruction: Press Super+L to lock the screen.
+steps:
+  - key: super+l
+  - wait: {changed: true, stable: 1.0, timeout: 8}
+proof:
+  - note: The shell reports the session locked
+    probe: {run: "qs ipc call lock isLocked", equals: "true", retry_s: 5}
+  - screenshot: lock
+media: [lock]
+budget: {wall_s: 60}

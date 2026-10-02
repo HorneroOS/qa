@@ -1,0 +1,20 @@
+id: layouts/apply-dock-bottom
+purpose: >-
+  Dock Bottom: a single dock-style bottom bar. Applying the preset must switch the active preset and leave
+  exactly the declared bar edges visible.
+covers: [shell#88]
+setup:
+  layout: dock-bottom
+instruction: Switch the desktop layout to dock-bottom and look at the result.
+proof:
+  - note: The active preset pointer names the applied preset
+    probe: {run: "horneroctl shell preset current", contains: dock-bottom}
+  - note: Visible bar edges match the preset declaration
+    probe:
+      run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'"
+      equals: '["bottom"]'
+      retry_s: 10
+  - note: The layout as a user sees it
+    screenshot: layout-dock-bottom
+media: [layout-dock-bottom]
+budget: {wall_s: 90}

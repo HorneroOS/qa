@@ -1,0 +1,13 @@
+id: themes/set-hornero-light
+purpose: >-
+  Switching the official theme to Hornero Light applies natively and the
+  active-theme query agrees afterwards.
+setup:
+  theme: hornero-light
+instruction: Switch the desktop theme to Hornero Light and look at the result.
+proof:
+  - note: The active official theme is Hornero Light
+    probe: {run: "horneroctl appearance theme get", contains: hornero-light, retry_s: 10}
+  - screenshot: hornero-light
+media: [hornero-light]
+budget: {wall_s: 120}
