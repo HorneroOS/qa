@@ -2,8 +2,8 @@
 
 A **ready image** is a provisioned Arch guest with one exact Hornero
 composition baked in: shell tree + native plugin at a shell SHA, the config
-pin materialized, and a `horneroctl` binary. Runs never write to it; every
-attempt boots a throwaway qcow2 overlay.
+pin built and installed as `hornero-config`, and a `horneroctl` binary. Runs
+never write to it; every attempt boots a throwaway qcow2 overlay.
 
 ## Where state lives
 
@@ -36,7 +36,7 @@ Image and key files are rejected by repository governance
     "horneroctl_sha256": "<64-hex>"
   },
   "runtime_packages": ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq", "hyprlock", "gtk3"],
-  "aur_runtime_packages": ["python-materialyoucolor"]
+  "aur_runtime_packages": ["python-materialyoucolor", "python-pywal16"]
 }
 ```
 
@@ -75,12 +75,16 @@ What the mint adds on top of the composition:
   (`HORNERO-SHELL-READY`). The marker is diagnostic only; readiness is
   proven by the shell's IPC answering.
 - `shell.json` idle timeouts disabled (a locking guest would poison runs).
-- AUR runtime dependencies the Hornero packages declare
-  (`python-materialyoucolor`, required by `hornero-config` since
-  HorneroOS/config#46), installed with the base image's `yay`.
+- AUR runtime dependencies the Hornero packages declare:
+  `python-materialyoucolor` for M3 generation and `python-pywal16` for the
+  recipe pipeline's `wal` command. They are installed with the base image's
+  `yay`.
 - Runtime packages a Hornero desktop needs (Papirus icons, `qt6ct`). `dunst`
   is installed **on purpose**: notification acceptance must prove the shell
   owns `org.freedesktop.Notifications` with a competitor present.
+- The exact config pin is built and installed as a system package. The
+  materialized user theme and wallpaper copies are removed afterward, so
+  appearance acceptance resolves those assets from `/usr/share`.
 - Welcome onboarding marked as seen.
 
 ## Adopting an existing image
@@ -104,4 +108,4 @@ product fix lands:
 
 | Gap | Workaround | Tracking |
 |---|---|---|
-| Package installs ship presets/themes where `horneroctl` does not read them | the mint seeds `~/.local/share/hornero/shell-presets` from the shell tree under test | [hornero#96](https://github.com/HorneroOS/hornero/issues/96) |
+| This QA image still seeds curated shell presets for layout journeys | the mint seeds `~/.local/share/hornero/shell-presets` from the shell tree under test; appearance packs and media come from the exact `hornero-config` package | shell#95 package integration |

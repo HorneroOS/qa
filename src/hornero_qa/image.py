@@ -36,12 +36,19 @@ CONFIG_REPO = "https://github.com/HorneroOS/config"
 # for the cross-locker regression (HorneroOS/shell#24). gtk3 is on every
 # desktop that runs a GTK app (hornero-config optdepends it) and pulls in
 # gsettings-desktop-schemas, which the shell's native GTK theming writes to.
-RUNTIME_PACKAGES = ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq", "hyprlock", "gtk3"]
-# AUR runtime dependencies the Hornero packages declare (hornero-config
-# depends on python-materialyoucolor since HorneroOS/config#46: theme
-# switching regenerates the M3 scheme with it). Installed with the base
-# image's yay, exactly as a package install would pull them.
-AUR_RUNTIME_PACKAGES = ["python-materialyoucolor"]
+RUNTIME_PACKAGES = [
+    "papirus-icon-theme",
+    "qt6ct",
+    "dunst",
+    "libnotify",
+    "jq",
+    "hyprlock",
+    "gtk3",
+]
+# AUR runtime dependencies the Hornero packages declare: M3 generation
+# requires python-materialyoucolor; recipe themes require python-pywal16's
+# `wal` command. Install with the base image's yay like package installs.
+AUR_RUNTIME_PACKAGES = ["python-materialyoucolor", "python-pywal16"]
 
 
 def _ssh(state: QAState, port: int, command: str, timeout: float = 1800) -> None:
@@ -212,7 +219,11 @@ def refresh(
             },
             "runtime_packages": RUNTIME_PACKAGES,
             "aur_runtime_packages": AUR_RUNTIME_PACKAGES,
-            "catalogues": {"shell_presets": "user catalogue seeded from shell presets/"},
+            "catalogues": {
+                "shell_presets": "user catalogue seeded from shell presets/",
+                "themes": "hornero-config system package; user copies removed",
+                "wallpapers": "hornero-config system package; user copies removed",
+            },
         },
     )
     shutil.rmtree(build, ignore_errors=True)
@@ -265,7 +276,19 @@ PY
 install -d ~/.local/share/hornero/shell-presets
 install -m0644 ~/.config/quickshell/presets/*.json ~/.local/share/hornero/shell-presets/
 sudo pacman -Sy --noconfirm --needed {pkgs}
-yay -S --noconfirm --needed --removemake {aur}
+yay -S --noconfirm --needed --removemake \
+  --answerclean None --answerdiff None --answeredit None --answerupgrade None {aur}
+# Build/install the exact config pin as its system package. The shell deploy
+# step also materializes defaults into a staging HOME for validation; that
+# user tree must not be the only source of product catalogues in a ready image.
+test -d "$HOME/hx-config/packaging"
+(cd "$HOME/hx-config/packaging" && makepkg --syncdeps --install --noconfirm --cleanbuild)
+sudo test -d /usr/share/hornero/themes
+sudo test -d /usr/share/hornero/wallpapers
+# Keep factory user preferences, but remove recipe/media copies so theme QA
+# proves the installed package path rather than the deploy helper's HOME copy.
+rm -rf "$HOME/.local/share/hornero/themes" "$HOME/.local/share/dots/themes"
+rm -rf "$HOME/.local/share/hornero/wallpapers" "$HOME/.local/share/dots/wallpapers"
 sudo gpasswd -a "$USER" uucp > /dev/null
 sudo touch /etc/cloud/cloud-init.disabled
 /usr/local/bin/horneroctl welcome set-show-on-login false --yes || true

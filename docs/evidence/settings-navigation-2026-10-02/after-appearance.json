@@ -1,0 +1,25 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "003-appearance-overview.png",
+  "sha256": "74125dc8551f5b7c18b7c9567949763de2eb7d7932c0befa74bc6e32f6c584e5",
+  "run_id": "20261002T072232Z-personalization-baseline-settings-1",
+  "scenario": "personalization/baseline-settings",
+  "captured": "2026-10-02T07:23:27Z",
+  "t": 54.326,
+  "product": {
+    "shell_sha": "0a18b169cecc83ee1f62a3d9a4af24071b31be5d",
+    "config_sha": "8bdbcc31bf7703e4dddbff1e758c17d7e399577f",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview13-13-g54a73fe (54a73fe)",
+    "horneroctl_sha256": "24a79361a861a65bbf51c97d6b1314d5dc650e2d98ee2a43e28f6356e7372924"
+  },
+  "environment": {
+    "engine": "native",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.2.7-arch1-1",
+    "qemu": "QEMU emulator version 11.1.1",
+    "image": "settings-after-0a18b16.qcow2",
+    "outputs": 1,
+    "resolution": "1280x800"
+  },
+  "step": 11
+}
