@@ -55,13 +55,15 @@ def _validate(_: QAState, args: argparse.Namespace) -> int:
             print(f"ERR {exc}")
             errors += 1
             continue
+        scenario_errors = 0
         for item in sc.steps + sc.proof:
             if "anchor" in item and not (ANCHORS_DIR / f"{item['anchor']['id']}.json").exists():
                 print(
                     f"ERR {path}: anchor {item['anchor']['id']!r} has no anchors/{item['anchor']['id']}.json"
                 )
-                errors += 1
-        if not errors:
+                scenario_errors += 1
+        errors += scenario_errors
+        if not scenario_errors:
             print(f"ok  {sc.id}")
     return EXIT_OK if errors == 0 else EXIT_FAIL
 
@@ -138,17 +140,12 @@ def _anchor(_: QAState, args: argparse.Namespace) -> int:
     from hornero_qa.vision import cut_anchor
 
     x, y, w, h = (int(v) for v in args.rect.split(","))
-    out_dir = ANCHORS_DIR / Path(args.id).parent
     prov = {"source": str(args.frame)}
     sidecar = Path(args.frame).with_suffix(".json")
     if sidecar.exists():
         meta = json.loads(sidecar.read_text(encoding="utf-8"))
         prov |= {k: meta[k] for k in ("run_id", "scenario", "product", "environment") if k in meta}
-    print(
-        cut_anchor(
-            args.frame, out_dir, Path(args.id).name, (x, y, w, h), args.tag, args.mode, provenance=prov
-        )
-    )
+    print(cut_anchor(args.frame, ANCHORS_DIR, args.id, (x, y, w, h), args.tag, args.mode, provenance=prov))
     return EXIT_OK
 
 

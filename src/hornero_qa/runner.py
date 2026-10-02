@@ -282,8 +282,12 @@ class _Attempt:
             out.append(rec)
         return out
 
-    def shell_alive(self) -> bool:
-        return self.probe("pgrep -x qs || pgrep -x quickshell").rc == 0
+    def shell_alive(self) -> bool | None:
+        """True/False from the guest; None when the probe transport failed (unknown)."""
+        rc = self.engine.probe("pgrep -x qs || pgrep -x quickshell").rc
+        if rc == SSH_FAILED:
+            return None
+        return rc == 0
 
 
 def _q(s: str) -> str:
@@ -333,12 +337,18 @@ def _probe_ok(spec: dict[str, Any], r: ProbeResult) -> tuple[bool, str]:
 
 
 def _environment(scenario: Scenario, image: Path) -> dict[str, Any]:
-    qemu = subprocess.run(["qemu-system-x86_64", "--version"], capture_output=True, text=True, check=False)
+    try:
+        qemu = subprocess.run(
+            ["qemu-system-x86_64", "--version"], capture_output=True, text=True, check=False, timeout=10
+        )
+        qemu_version = qemu.stdout.splitlines()[0] if qemu.stdout else "unknown"
+    except (OSError, subprocess.TimeoutExpired):
+        qemu_version = "unknown"
     return {
         "engine": "native",
         "hornero_qa": __version__,
         "host_kernel": platform.release(),
-        "qemu": qemu.stdout.splitlines()[0] if qemu.stdout else "unknown",
+        "qemu": qemu_version,
         "image": image.resolve().name,
         "outputs": scenario.outputs,
         "resolution": "x".join(map(str, scenario.resolution)),
@@ -387,7 +397,9 @@ def run_once(state: QAState, scenario: Scenario, opts: RunOptions, attempt: int 
         policy = scenario.artifacts
         if engine.alive():
             try:
-                if cls in (None, FailureClass.PRODUCT) and not att.shell_alive():
+                # Only a definite "not running" blames the product; an SSH
+                # transport failure is unknown and must not become a crash.
+                if cls in (None, FailureClass.PRODUCT) and att.shell_alive() is False:
                     verdict, cls = Verdict.FAIL, FailureClass.PRODUCT_CRASH
                     reason = "shell process died during the run; " + reason
                 if verdict != Verdict.PASS or policy.get("screenshots", "always") == "always":

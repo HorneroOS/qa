@@ -28,6 +28,7 @@ class MediaError(ValueError):
 
 def export(bundles: list[Path], out: Path) -> dict[str, Any]:
     items: list[dict[str, Any]] = []
+    seen: dict[str, str] = {}
     for root in bundles:
         b = load_bundle(root)
         run, res = b["run"] or {}, b["result"] or {}
@@ -45,12 +46,18 @@ def export(bundles: list[Path], out: Path) -> dict[str, Any]:
             if digest != sidecar.get("sha256"):
                 raise MediaError(f"{src}: sha256 does not match its sidecar")
             dest = out / run["scenario"] / f"{name}.png"
+            rel = dest.relative_to(out).as_posix()
+            if rel in seen:
+                raise MediaError(
+                    f"{rel}: exported twice ({seen[rel]}, {run['run_id']}); pass one run per scenario"
+                )
+            seen[rel] = run["run_id"]
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(src, dest)
             shutil.copyfile(src.with_suffix(".json"), dest.with_suffix(".json"))
             items.append(
                 {
-                    "file": dest.relative_to(out).as_posix(),
+                    "file": rel,
                     "sha256": digest,
                     "scenario": run["scenario"],
                     "run_id": run["run_id"],

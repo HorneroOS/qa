@@ -40,3 +40,10 @@ def test_refuses_failed_runs_and_tampered_frames(tmp_path: Path, save_png: SaveP
     shot.write_bytes(shot.read_bytes() + b"x")
     with pytest.raises(MediaError, match="sha256"):
         export([root], tmp_path / "o3")
+
+
+def test_refuses_two_runs_of_one_scenario(tmp_path: Path, save_png: SavePng) -> None:
+    a = _bundle(tmp_path, save_png, "r4", "pass")
+    b = _bundle(tmp_path, save_png, "r5", "pass")
+    with pytest.raises(MediaError, match="exported twice"):
+        export([a, b], tmp_path / "o4")

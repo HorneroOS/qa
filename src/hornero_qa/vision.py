@@ -301,8 +301,9 @@ def cut_anchor(
     img = Image.open(frame_path).convert("RGB")
     x, y, w, h = rect
     out = Path(out_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    img.crop((x, y, x + w, y + h)).save(out / f"{anchor_id}.png")
+    png = out / f"{anchor_id}.png"  # ids are namespaced: launcher/search-field
+    png.parent.mkdir(parents=True, exist_ok=True)
+    img.crop((x, y, x + w, y + h)).save(png)
     data = {
         "schema": ANCHOR_SCHEMA,
         "id": anchor_id,

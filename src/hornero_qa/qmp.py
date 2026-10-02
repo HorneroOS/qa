@@ -26,12 +26,16 @@ class QMP:
         self.path = str(path)
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.sock.settimeout(timeout)
-        self.sock.connect(self.path)
         self._buf = b""
-        greeting = self._read()
-        if "QMP" not in greeting:
-            raise QMPError(f"unexpected QMP greeting: {greeting}")
-        self.cmd("qmp_capabilities")
+        try:
+            self.sock.connect(self.path)
+            greeting = self._read()
+            if "QMP" not in greeting:
+                raise QMPError(f"unexpected QMP greeting: {greeting}")
+            self.cmd("qmp_capabilities")
+        except BaseException:
+            self.sock.close()
+            raise
 
     @classmethod
     def wait(cls, path: str | Path, deadline_s: float = 30.0) -> QMP:

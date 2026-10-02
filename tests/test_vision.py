@@ -84,3 +84,10 @@ def test_load_tokens(tmp_path: Path) -> None:
     body = '  "primary": "#C8643C",\n  "surface": "#1B1613"\n'
     qml.write_text("readonly property var _horneroDark: ({\n" + body + "})\n")
     assert load_tokens(qml) == {"primary": "#C8643C", "surface": "#1B1613"}
+
+
+def test_cut_anchor_namespaced_id(tmp_path: Path, save_png: SavePng) -> None:
+    frame = save_png(desktop(), "n.png")
+    path = cut_anchor(frame, tmp_path, "launcher/search-field", (0, 0, 60, 24), ["launcher"])
+    assert path == tmp_path / "launcher" / "search-field.json"
+    assert Anchor.load(path).id == "launcher/search-field"

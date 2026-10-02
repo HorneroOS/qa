@@ -41,3 +41,22 @@ def test_only_product_classes_are_regressions() -> None:
     assert is_regression(FailureClass.PRODUCT) and is_regression(FailureClass.PRODUCT_CRASH)
     for cls in (FailureClass.HARNESS, FailureClass.BOOT, FailureClass.DRIVER, None):
         assert not is_regression(cls)
+
+
+class _Engine:
+    def __init__(self, rc: int) -> None:
+        self.rc = rc
+
+    def probe(self, command: str, timeout: float = 20.0) -> ProbeResult:
+        return ProbeResult(self.rc, "", "")
+
+
+@pytest.mark.parametrize(("rc", "alive"), [(0, True), (1, False), (255, None)])
+def test_shell_liveness_distinguishes_transport_failure(rc: int, alive: bool | None) -> None:
+    from typing import Any, cast
+
+    from hornero_qa.runner import _Attempt
+
+    att = cast(Any, _Attempt.__new__(_Attempt))
+    att.engine = _Engine(rc)
+    assert _Attempt.shell_alive(att) is alive

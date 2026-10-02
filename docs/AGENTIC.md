@@ -78,9 +78,10 @@ taxonomy in `src/hornero_qa/taxonomy.py`.
 
 ## Precedence (enforced by the harness, not the model)
 
-1. Any infra signal (guest died, capture failed, adapter crashed) →
-   `INCONCLUSIVE` with class `harness`/`boot`; the run is repeated, not
-   counted.
+1. Any infra signal (QEMU exited, the guest never booted, capture
+   failed, the adapter crashed) → `INCONCLUSIVE` with class
+   `harness`/`boot`; the run is repeated, not counted. Shell or compositor
+   death inside a healthy guest is a product failure (`product_crash`).
 2. A failed deterministic proof check → `FAIL`. The reviewer may only
    explain it; it can never upgrade it.
 3. No deterministic failure but the driver ended `give_up` or ran out of

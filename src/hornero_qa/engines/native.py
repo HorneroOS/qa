@@ -16,6 +16,7 @@ import subprocess
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import BinaryIO
 
 from hornero_qa.keys import parse_key, text_to_chords
 from hornero_qa.qmp import QMP, QMPError
@@ -64,6 +65,7 @@ class NativeEngine:
         self.ssh_port = _free_port()
         self.unit = f"hornero-qa-{run_dir.name}"
         self.proc: subprocess.Popen[bytes] | None = None
+        self.stderr: BinaryIO | None = None
         self.qmp: QMP | None = None
 
     # ------------------------------------------------------------ lifecycle --
@@ -128,8 +130,8 @@ class NativeEngine:
             "-device",
             "usb-kbd",
         ]
-        stderr = (self.run_dir / "logs" / "qemu.stderr").open("wb")
-        self.proc = subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=stderr)
+        self.stderr = (self.run_dir / "logs" / "qemu.stderr").open("wb")
+        self.proc = subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=self.stderr)
         try:
             self.qmp = QMP.wait(self.qmp_sock, deadline_s=30)
         except QMPError as exc:
@@ -149,6 +151,12 @@ class NativeEngine:
                 self.proc.kill()
                 self.proc.wait()
             self.proc = None
+        # Belt and braces: the scope dies with QEMU, but a half-started run
+        # (QMP never answered) must not leave anything behind.
+        kill_scope(self.unit)
+        if self.stderr is not None:
+            self.stderr.close()
+            self.stderr = None
         shutil.rmtree(self.work, ignore_errors=True)
 
     # ---------------------------------------------------------- observation --
