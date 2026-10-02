@@ -44,6 +44,13 @@ steps:
       contains: "pampa"
       retry_s: 30
   - screenshot: package-only-pampa
+  - probe:
+      run: "horneroctl appearance status --json | jq -r '[.mode,.gtkTheme,.iconTheme,.gtkColorScheme] | join(\"|\")'"
+      equals: "dark|Hornero-Pampa|Papirus-Dark|prefer-dark"
+      retry_s: 10
+  - probe:
+      run: "horneroctl wallpaper current"
+      contains: "/usr/share/hornero/wallpapers/pampa/pampa-01.png"
   - key: ctrl+space
   - wait: {changed: true, stable: 0.4, timeout: 8}
   - probe:
