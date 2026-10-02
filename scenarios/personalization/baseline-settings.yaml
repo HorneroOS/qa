@@ -15,6 +15,13 @@ steps:
       equals: 'true'
       retry_s: 10
   - screenshot: settings-overview
+  - pointer: {x: 0.17, y: 0.62, click: left}
+  - probe:
+      run: "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'"
+      equals: Hornero Settings - Appearance
+      retry_s: 5
+  - wait: {stable: 1.5, timeout: 8}
+  - screenshot: appearance-overview
   - key: escape
   - wait: {changed: true, stable: 0.4, timeout: 5}
 proof:
