@@ -45,8 +45,8 @@ steps:
       retry_s: 30
   - screenshot: package-only-pampa
   - probe:
-      run: "horneroctl appearance status --json | jq -r '[.mode,.gtkTheme,.iconTheme,.gtkColorScheme] | join(\"|\")'"
-      equals: "dark|Hornero-Pampa|Papirus-Dark|prefer-dark"
+      run: "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'"
+      equals: "pampa|dark|Hornero-Pampa|Papirus-Dark|prefer-dark"
       retry_s: 10
   - probe:
       run: "horneroctl wallpaper current"
@@ -70,7 +70,7 @@ proof:
   - note: Installed system catalogue provides both flagship theme packs.
     probe: {run: "horneroctl appearance theme list --full --json | jq -er '.message | fromjson | any(.[]; .id == \"hornero-light\") and any(.[]; .id == \"pampa\")'", equals: "true"}
   - note: Final appearance is Hornero Light with its GTK color policy and icons.
-    probe: {run: "horneroctl appearance status --json | jq -r '[.mode,.gtkTheme,.iconTheme,.gtkColorScheme] | join(\"|\")'", equals: "light|Hornero-Light|Papirus|prefer-light"}
+    probe: {run: "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'", equals: "hornero-light|light|Hornero-Light|Papirus|prefer-light"}
   - note: Shell remains alive after repeated system-pack transitions.
     probe: {run: "pgrep -x qs || pgrep -x quickshell"}
   - screenshot: final

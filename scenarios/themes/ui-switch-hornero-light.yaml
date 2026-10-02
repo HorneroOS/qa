@@ -27,13 +27,13 @@ proof:
   - note: Hornero Light is the active theme.
     probe: {run: "horneroctl appearance theme get", contains: "hornero-light"}
   - note: Theme application resolved the light GTK color policy.
-    probe: {run: "horneroctl appearance status --json | jq -r .gtkColorScheme", equals: "prefer-light"}
+    probe: {run: "horneroctl --json appearance theme get | jq -er '.data.gtk_color_scheme'", equals: "prefer-light"}
   - note: The Shell appearance mode is light.
-    probe: {run: "horneroctl appearance status --json | jq -r .mode", equals: "light"}
+    probe: {run: "horneroctl --json appearance theme get | jq -er '.data.mode'", equals: "light"}
   - note: GTK uses the Hornero Light pack.
-    probe: {run: "horneroctl appearance status --json | jq -r .gtkTheme", equals: "Hornero-Light"}
+    probe: {run: "horneroctl --json appearance theme get | jq -er '.data.gtk_theme'", equals: "Hornero-Light"}
   - note: Icons use the Hornero Light pack.
-    probe: {run: "horneroctl appearance status --json | jq -r .iconTheme", equals: "Papirus"}
+    probe: {run: "horneroctl --json appearance theme get | jq -er '.data.icon_theme'", equals: "Papirus"}
   - note: Shell remains alive after the transaction.
     probe: {run: "pgrep -x qs || pgrep -x quickshell"}
   - screenshot: final
