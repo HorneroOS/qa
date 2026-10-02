@@ -162,7 +162,15 @@ def run_journey(state: QAState, journey: Journey, base: str) -> dict[str, Any]:
     bundle = Bundle.create(state.runs_dir, run_id, meta, journey.text)
     host = urlparse(base).hostname
     failures: list[str] = []
-    pages = _sitemap_pages(base) if journey.pages == "sitemap" else list(journey.pages)
+    infra: list[str] = []
+    if journey.pages == "sitemap":
+        try:
+            pages = _sitemap_pages(base)
+        except Exception as exc:
+            pages = []
+            infra.append(f"sitemap unreadable: {type(exc).__name__}: {str(exc).splitlines()[0]}")
+    else:
+        pages = list(journey.pages)
     with sync_playwright() as pw:
         browser = pw.chromium.launch(executable_path=exe, args=["--disable-quic"])
         try:
@@ -176,8 +184,15 @@ def run_journey(state: QAState, journey: Journey, base: str) -> dict[str, Any]:
                 page.on("pageerror", watch.on_pageerror)
                 for path in pages:
                     watch.reset()
-                    resp = page.goto(urljoin(base, path), wait_until="networkidle")
                     problems: list[str] = []
+                    try:
+                        resp = page.goto(urljoin(base, path), wait_until="networkidle")
+                    except Exception as exc:
+                        msg = f"navigation failed: {type(exc).__name__}: {str(exc).splitlines()[0]}"
+                        rec = {"kind": "web", "where": f"{vp} {path}", "ok": False, "detail": [msg]}
+                        bundle.assertion(rec)
+                        failures.append(f"{vp} {path}: {msg}")
+                        continue
                     if "status" in journey.checks and (resp is None or resp.status >= 400):
                         problems.append(f"HTTP {resp.status if resp else 'no response'}")
                     if "third_party" in journey.checks and watch.external:
@@ -211,21 +226,27 @@ def run_journey(state: QAState, journey: Journey, base: str) -> dict[str, Any]:
             if journey.truth:
                 page = browser.new_page()
                 for name in journey.truth:
+                    unrunnable = False
                     try:
                         ok, why = _truth(name, page, base)
                     except Exception as exc:  # network or API problem: not a site failure
-                        ok, why = False, f"truth check could not run: {type(exc).__name__}: {exc}"
+                        ok, why, unrunnable = (
+                            False,
+                            f"truth check could not run: {type(exc).__name__}: {exc}",
+                            True,
+                        )
                     bundle.assertion({"kind": "truth", "where": name, "ok": ok, "detail": why})
                     if not ok:
-                        failures.append(f"{name}: {why}")
+                        (infra if unrunnable else failures).append(f"{name}: {why}")
         finally:
             browser.close()
-    verdict = "pass" if not failures else "fail"
+    verdict = "pass" if not failures and not infra else "fail"
+    cls = None if verdict == "pass" else ("product" if failures else "harness")
     result = bundle.finish(
         {
             "verdict": verdict,
-            "class": None if verdict == "pass" else "product",
-            "reason": "; ".join(failures)[:2000] or "all checks passed",
+            "class": cls,
+            "reason": "; ".join([*failures, *infra])[:2000] or "all checks passed",
             "pages": len(pages),
         }
     )

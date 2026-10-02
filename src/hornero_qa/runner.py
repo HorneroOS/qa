@@ -23,6 +23,7 @@ from hornero_qa.agentic import (
     DRIVER_IN,
     HISTORY_MAX,
     REVIEW_IN,
+    _masked,
     apply_review,
     run_adapter,
     validate_driver_reply,
@@ -79,6 +80,7 @@ class _Attempt:
     baseline: Array | None = None
     frame_path: Path = Path()
     hidden: Path = Path()
+    ssh_key: Path | None = None
     blank_heads: list[int] = field(default_factory=list)
 
     # ------------------------------------------------------------ helpers --
@@ -355,7 +357,14 @@ class _Attempt:
                     "malformed_left": self.scenario.max_malformed - malformed,
                 },
             }
-            reply = run_adapter(cmd, payload, agent_dir, self.hidden, sandbox=self.opts.sandbox)
+            reply = run_adapter(
+                cmd,
+                payload,
+                agent_dir,
+                self.hidden,
+                sandbox=self.opts.sandbox,
+                masked=_masked(self.ssh_key, self.hidden),
+            )
             reason = reply.error or validate_driver_reply(reply.data or {}, pointer)
             self.bundle.action(
                 "driver", turn=turn, reply=reply.data, refusal=reason, stderr=reply.stderr[-400:]
@@ -482,6 +491,23 @@ def _environment(scenario: Scenario, image: Path) -> dict[str, Any]:
     }
 
 
+def _decide(driver_end: str | None, failed: list[dict[str, Any]]) -> tuple[Verdict, FailureClass | None, str]:
+    """AGENTIC.md precedence: a failed deterministic proof (rule 2) outranks
+    a driver that stopped short (rule 3), so a product regression is never
+    hidden behind a `driver` class when both fire."""
+    if failed:
+        return (
+            Verdict.FAIL,
+            FailureClass.PRODUCT,
+            "; ".join(f"{r['where']}: {r['detail']}" for r in failed),
+        )
+    if driver_end in ("give_up", "limit"):
+        # Precedence 3: the driver stopped short; a reviewer may still
+        # show a product cause with evidence.
+        return Verdict.FAIL, FailureClass.DRIVER, f"driver ended {driver_end}"
+    return Verdict.PASS, None, "all proof checks passed"
+
+
 def run_once(state: QAState, scenario: Scenario, opts: RunOptions, attempt: int = 1) -> dict[str, Any]:
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     run_id = f"{stamp}-{scenario.id.replace('/', '-')}-{attempt}"
@@ -500,7 +526,15 @@ def run_once(state: QAState, scenario: Scenario, opts: RunOptions, attempt: int 
     engine = NativeEngine(
         state, opts.image, bundle.root, scenario.outputs, scenario.resolution, mem_mb=opts.mem_mb
     )
-    att = _Attempt(scenario, engine, bundle, opts, frame_path=engine.work / "frame.png", hidden=state.root)
+    att = _Attempt(
+        scenario,
+        engine,
+        bundle,
+        opts,
+        frame_path=engine.work / "frame.png",
+        hidden=state.root,
+        ssh_key=state.ssh_key,
+    )
     verdict, cls, reason = Verdict.PASS, None, "all proof checks passed"
     driver_end: str | None = None
     try:
@@ -512,14 +546,7 @@ def run_once(state: QAState, scenario: Scenario, opts: RunOptions, attempt: int 
         else:
             att.steps()
         failed = [r for r in att.proof() if not r["ok"]]
-        if driver_end in ("give_up", "limit"):
-            # Precedence 3: the driver stopped short; a reviewer may still
-            # show a product cause with evidence.
-            verdict, cls = Verdict.FAIL, FailureClass.DRIVER
-            reason = f"driver ended {driver_end}"
-        elif failed:
-            verdict, cls = Verdict.FAIL, FailureClass.PRODUCT
-            reason = "; ".join(f"{r['where']}: {r['detail']}" for r in failed)
+        verdict, cls, reason = _decide(driver_end, failed)
     except QAError as exc:
         verdict = (
             Verdict.INCONCLUSIVE
@@ -592,7 +619,15 @@ def _review(
         "taxonomy": [c.value for c in FailureClass],
     }
     review_dir = state.work_dir / f"review-{root.name}"
-    reply = run_adapter(opts.reviewer, payload, review_dir, state.root, sandbox=opts.sandbox, extra_ro=[root])
+    reply = run_adapter(
+        opts.reviewer,
+        payload,
+        review_dir,
+        state.root,
+        sandbox=opts.sandbox,
+        extra_ro=[root],
+        masked=_masked(state.ssh_key, state.root),
+    )
     shutil.rmtree(review_dir, ignore_errors=True)
     problem = reply.error or validate_review(reply.data or {})
     if problem:

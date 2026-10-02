@@ -18,8 +18,10 @@ good behaviour. Every adapter runs under bubblewrap: the whole Hornero QA
 state directory (guest SSH key, QMP sockets, images, other runs) is replaced
 by an empty tmpfs, and only the adapter's own work directory (the current
 frame) is writable. Network stays available so a model-backed adapter can
-reach its API, but without the key the guest cannot be reached. Runs refuse
-to start without `bwrap`.
+reach its API, but without the key the guest cannot be reached. An SSH key
+configured outside the state root (`HORNERO_QA_SSH_KEY`) is masked
+individually, and the SSH agent environment is scrubbed, so neither path
+reaches the forwarded guest port. Runs refuse to start without `bwrap`.
 
 ```sh
 hornero-qa run drawers/dashboard-keyboard \

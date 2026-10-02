@@ -12,8 +12,8 @@ proof:
     probe: {run: "hyprctl monitors -j | jq length", equals: "2", retry_s: 10}
   - note: Every output has the layout's bars (cockpit-clear has two per screen)
     probe:
-      run: "qs ipc call debug bars | jq '[.[] | select(.visible)] | length'"
-      equals: "4"
+      run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | (.geom[0] + .geom[2] / 2) < 1280] | {left: map(select(.)) | length, right: map(select(. == false)) | length}'"
+      equals: '{"left":2,"right":2}'
       retry_s: 10
   - screenshot: both-screens
 budget: {wall_s: 120}

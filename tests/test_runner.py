@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from hornero_qa.engines.native import ProbeResult, qmp_socket_path
-from hornero_qa.runner import SSH_FAILED, _dig, _probe_ok, _q
+from hornero_qa.runner import SSH_FAILED, _decide, _dig, _probe_ok, _q
 from hornero_qa.taxonomy import FailureClass, QAError, is_regression
 
 
@@ -20,6 +20,20 @@ def test_probe_matchers() -> None:
     assert not _probe_ok({"run": "x", "contains": "launcher"}, r("bar\nosd"))[0]
     assert _probe_ok({"run": "x", "not_contains": "dunst"}, r("quickshell"))[0]
     assert _probe_ok({"run": "x", "matches": r"^\d+$"}, r("12"))[0]
+
+
+def test_decide_failed_proof_outranks_driver_give_up() -> None:
+    from hornero_qa.taxonomy import Verdict
+
+    bad = [{"where": "proof 0", "detail": "dashboard still open"}]
+    v, c, why = _decide("give_up", bad)
+    assert (v, c) == (Verdict.FAIL, FailureClass.PRODUCT) and "proof 0" in why
+    v, c, _ = _decide("give_up", [])
+    assert (v, c) == (Verdict.FAIL, FailureClass.DRIVER)
+    v, c, _ = _decide("done", bad)
+    assert (v, c) == (Verdict.FAIL, FailureClass.PRODUCT)
+    v, c, _ = _decide(None, [])
+    assert (v, c) == (Verdict.PASS, None)
 
 
 def test_probe_json_paths() -> None:

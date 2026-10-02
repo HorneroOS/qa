@@ -54,8 +54,26 @@ def resolve_adapter_cmd(cmd: list[str], base: Path | None = None) -> list[str]:
     return out
 
 
+def _masked(key: Path | None, hidden: Path) -> list[Path]:
+    """SSH key paths the sandbox must hide: an externally configured key
+    (`HORNERO_QA_SSH_KEY` outside the state root) stays readable under the
+    read-only `/` bind, and the sandbox shares the network namespace, so an
+    adapter could otherwise SSH to the forwarded guest port. Keys already
+    under the hidden root need no extra mask."""
+    if key is None:
+        return []
+    resolved = key.expanduser()
+    if resolved.is_relative_to(hidden.expanduser()):
+        return []
+    return [resolved] if resolved.exists() else []
+
+
 def sandbox_argv(
-    cmd: list[str], workdir: Path, hidden: Path, extra_ro: list[Path] | None = None
+    cmd: list[str],
+    workdir: Path,
+    hidden: Path,
+    extra_ro: list[Path] | None = None,
+    masked: list[Path] | None = None,
 ) -> list[str]:
     bwrap = shutil.which("bwrap")
     if bwrap is None:
@@ -77,7 +95,21 @@ def sandbox_argv(
     ]
     for path in extra_ro or []:
         argv += ["--ro-bind", str(path), str(path)]
-    return [*argv, "--unshare-pid", "--die-with-parent", "--chdir", str(workdir), "--", *cmd]
+    for path in masked or []:
+        argv += ["--ro-bind", "/dev/null", str(path)]
+    return [
+        *argv,
+        "--unsetenv",
+        "SSH_AUTH_SOCK",
+        "--unsetenv",
+        "SSH_AGENT_PID",
+        "--unshare-pid",
+        "--die-with-parent",
+        "--chdir",
+        str(workdir),
+        "--",
+        *cmd,
+    ]
 
 
 def run_adapter(
@@ -88,10 +120,11 @@ def run_adapter(
     *,
     sandbox: bool = True,
     extra_ro: list[Path] | None = None,
+    masked: list[Path] | None = None,
     timeout: float = ADAPTER_TIMEOUT_S,
 ) -> AdapterReply:
     workdir.mkdir(parents=True, exist_ok=True)
-    argv = sandbox_argv(cmd, workdir, hidden, extra_ro) if sandbox else cmd
+    argv = sandbox_argv(cmd, workdir, hidden, extra_ro, masked) if sandbox else cmd
     try:
         p = subprocess.run(
             argv, input=json.dumps(payload), capture_output=True, text=True, timeout=timeout, cwd=workdir

@@ -37,7 +37,9 @@ stale site fails instead of drifting quietly:
 | `latest_tag_matches_hornero` | "Latest tagged" on `/releases` is not the newest `v*-previewN` tag of HorneroOS/hornero |
 | `no_download_claims` | `/install` links to an image (`.iso`, `.img`, `.qcow2`) |
 
-Set `GITHUB_TOKEN` to avoid the anonymous API rate limit.
+Set `GITHUB_TOKEN` to avoid the anonymous API rate limit. A journey whose
+checks all ran and failed is class `product`; one that could not run its
+checks at all (unreadable sitemap, API/DNS errors) is class `harness`.
 
 ## First findings (2026-10-02)
 

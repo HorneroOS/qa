@@ -10,6 +10,7 @@ import pytest
 from PIL import Image
 
 from hornero_qa.agentic import (
+    _masked,
     apply_review,
     resolve_adapter_cmd,
     run_adapter,
@@ -87,6 +88,22 @@ def test_sandbox_hides_state(tmp_path: Path) -> None:
     argv = sandbox_argv(["true"], tmp_path / "work", tmp_path / "state") if _has_bwrap() else []
     if argv:
         assert ["--tmpfs", str(tmp_path / "state")] == argv[argv.index("--tmpfs") : argv.index("--tmpfs") + 2]
+
+
+def test_sandbox_masks_external_ssh_key_and_agent(tmp_path: Path) -> None:
+    key = tmp_path / "elsewhere" / "id_ed25519"
+    key.parent.mkdir()
+    key.write_text("secret")
+    assert _masked(key, tmp_path / "state") == [key]
+    assert _masked(tmp_path / "state" / "ssh" / "id_ed25519", tmp_path / "state") == []
+    assert _masked(None, tmp_path / "state") == []
+    assert _masked(tmp_path / "missing", tmp_path / "state") == []
+    if not _has_bwrap():
+        return
+    argv = sandbox_argv(["true"], tmp_path / "work", tmp_path / "state", masked=[key])
+    at = argv.index("/dev/null")
+    assert ["--ro-bind", "/dev/null", str(key)] == argv[at - 1 : at + 2]
+    assert "--unsetenv" in argv and "SSH_AUTH_SOCK" in argv and "SSH_AGENT_PID" in argv
 
 
 def _has_bwrap() -> bool:
