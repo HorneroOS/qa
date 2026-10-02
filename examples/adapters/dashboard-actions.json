@@ -1,0 +1,6 @@
+[
+  {"type": "key", "chord": "super+d"},
+  {"type": "wait", "ms": 1500},
+  {"type": "key", "chord": "escape"},
+  {"type": "wait", "ms": 1000}
+]

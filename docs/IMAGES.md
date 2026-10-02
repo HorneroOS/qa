@@ -35,7 +35,7 @@ Image and key files are rejected by repository governance
     "horneroctl": "horneroctl horneroctl-v0.2.0-preview13-dirty (8557401)",
     "horneroctl_sha256": "<64-hex>"
   },
-  "runtime_packages": ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq"],
+  "runtime_packages": ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq", "hyprlock", "gtk3"],
   "aur_runtime_packages": ["python-materialyoucolor"]
 }
 ```

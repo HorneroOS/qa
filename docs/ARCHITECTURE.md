@@ -72,12 +72,20 @@ the action lane; the proof is checked through the observation lane.
 | Engine | Status | Strengths | Limits |
 |---|---|---|---|
 | `native` | **default** | Real HID input via QMP, colour-aware anchors (Oklab probes), sharp failure taxonomy, no container | Single host, no needle editor |
-| `os-autoinst` | evaluated, adapter planned | Mature QEMU automation, needles, video, openQA interop | 1.34 GB container, grayscale matching (blind to colour-only regressions), slower |
+| `os-autoinst` | evaluated; adapter deferred | Mature QEMU automation, needles, video, openQA interop | 1.34 GB container, grayscale matching (blind to colour-only regressions), needle search widens to the full screen (passes position regressions), slower |
 
 Evidence (bake-off 2026-10-01, 20 interleaved runs, same ready image and
 launcher journey): native detected 3/3 injected fault classes, isotovideo
 2/3 (it passed a colour-only regression). Wall time per run: native median
 ~21 s, isotovideo ~36 s. Raw data: `docs/evidence/bakeoff-2026-10-01.tsv`.
+
+**Adapter decision.** No `os-autoinst` adapter ships: on the regression
+classes this project cares about (recolour, displacement) it is weaker than
+the native engine, and it would add a 1.34 GB container to every host. A
+scenario that `requires: {engine: os-autoinst}` is refused as
+`inconclusive`/`harness` instead of being run on another engine. Revisit
+together with openQA, when its interop (video, needle editor, worker
+farms) is worth more than the detection gap.
 
 **Full openQA is not deployed.** Adopt it only when several of these become
 real at once: more than 4 worker slots, multi-host workers, a hardware lab,

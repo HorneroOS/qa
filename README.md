@@ -15,8 +15,8 @@ probes, and writes an evidence bundle for every run.
 
 Native engine, scenario/evidence model, ready-image builder and the first
 product journeys (smoke, layouts, Layout Picker, drawers, notifications,
-lock, themes) run today. Agentic adapters follow the contract in
-[docs/AGENTIC.md](docs/AGENTIC.md). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
+lock, themes, regressions, perf) run today, deterministically or with
+model-agnostic agentic adapters ([docs/AGENTIC.md](docs/AGENTIC.md)). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [docs/SCENARIOS.md](docs/SCENARIOS.md), [docs/IMAGES.md](docs/IMAGES.md) and
 [docs/MEDIA.md](docs/MEDIA.md).
 

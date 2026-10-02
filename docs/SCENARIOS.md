@@ -46,7 +46,7 @@ is a `harness` failure (the scenario's own preparation broke).
 
 | Check | Passes when |
 |---|---|
-| `probe: {run, equals/contains/matches/not_contains/json, retry_s?}` | the matcher holds (no matcher: exit status 0). `json: a.0.b` digs into JSON stdout and compares with `equals` |
+| `probe: {run, equals/contains/matches/not_contains/json, retry_s?, save?}` | the matcher holds (no matcher: exit status 0). `json: a.0.b` digs into JSON stdout and compares with `equals`; `save: name` keeps the full stdout as `logs/<name>` |
 | `anchor: {id, expect, timeout?}` | the anchor (`anchors/<id>.json` + `.png`) matches within its search margin, including colour probes against the shell's design tokens |
 | `screenshot: name` | a non-blank frame was captured on every output |
 

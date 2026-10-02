@@ -32,7 +32,11 @@ CONFIG_REPO = "https://github.com/HorneroOS/config"
 # Packages a Hornero desktop needs at runtime that the base provisioning does
 # not guarantee. dunst is installed on purpose: notification-ownership
 # acceptance must prove the shell wins the bus name with a competitor present.
-RUNTIME_PACKAGES = ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq"]
+# hyprlock is a horneroctl dependency (Control Center can launch it), needed
+# for the cross-locker regression (HorneroOS/shell#24). gtk3 is on every
+# desktop that runs a GTK app (hornero-config optdepends it) and pulls in
+# gsettings-desktop-schemas, which the shell's native GTK theming writes to.
+RUNTIME_PACKAGES = ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq", "hyprlock", "gtk3"]
 # AUR runtime dependencies the Hornero packages declare (hornero-config
 # depends on python-materialyoucolor since HorneroOS/config#46: theme
 # switching regenerates the M3 scheme with it). Installed with the base

@@ -1,0 +1,17 @@
+id: regressions/shell-77-rapid-escape
+purpose: >-
+  Escape pressed 0.7 s after Super+D still closes the dashboard: the first
+  Escape must not be lost while the drawer's focus grab activates
+  (HorneroOS/shell#77). Run with --repeat to measure the miss rate.
+covers: [shell#77]
+instruction: Open the dashboard with Super+D and press Escape almost immediately.
+steps:
+  - key: super+d
+  - pause: 0.7
+  - key: escape
+  - wait: {stable: 0.5, timeout: 5}
+proof:
+  - note: The dashboard is closed after the quick Escape
+    probe: {run: "qs ipc call drawers state dashboard", equals: "false", retry_s: 2}
+  - screenshot: after-quick-escape
+budget: {wall_s: 60}

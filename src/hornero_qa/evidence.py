@@ -76,6 +76,10 @@ class Bundle:
         _dump(dst.with_suffix(".json"), sidecar)
         return dst
 
+    @property
+    def assertions(self) -> list[dict[str, Any]]:
+        return list(self._assertions)
+
     def finish(self, result: dict[str, Any]) -> dict[str, Any]:
         if self._actions:
             self._actions.close()
