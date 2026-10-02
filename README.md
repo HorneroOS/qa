@@ -1,0 +1,40 @@
+# Hornero QA
+
+System-level graphical, end-to-end, visual and agentic acceptance for
+[Hornero OS](https://github.com/HorneroOS).
+
+Hornero QA boots a real Hornero composition (shell + config + horneroctl at
+exact SHAs) in QEMU/KVM, drives it through the keyboard and pointer like a
+user, proves outcomes with screenshots, visual anchors and read-only guest
+probes, and writes an evidence bundle for every run.
+
+> The website says "this is Hornero OS". Hornero QA answers "this exact state
+> existed, ran and was tested".
+
+## Status
+
+Early. The native engine, the scenario/evidence model and the first product
+journeys are being built in the open. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Quick start
+
+Requirements: Linux host with `/dev/kvm`, QEMU, `uv`, and a Hornero QA ready
+image (see [docs/IMAGES.md](docs/IMAGES.md)).
+
+```sh
+uv run hornero-qa doctor            # host checks (KVM, QEMU, image, memory)
+uv run hornero-qa list              # scenarios
+uv run hornero-qa run smoke/desktop-ready
+uv run hornero-qa inspect runs/<run-id>
+```
+
+## What lives here (and what does not)
+
+Product and system acceptance lives here. Unit, component and repo-local
+tests stay in their owning repositories (shell, config, hornero, greeter,
+website). See the boundary table in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#1-boundary).
+
+## License
+
+MIT. Hornero QA integrates GPL tools such as os-autoinst only as external
+processes; no GPL code is copied into this repository.

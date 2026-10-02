@@ -1,0 +1,50 @@
+[project]
+name = "hornero-qa"
+version = "0.1.0"
+description = "System-level graphical, end-to-end, visual and agentic acceptance for Hornero OS"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = [
+  "numpy>=2.0",
+  "pillow>=11.0",
+  "pyyaml>=6.0",
+  "jsonschema>=4.23",
+]
+
+[project.scripts]
+hornero-qa = "hornero_qa.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "mypy>=1.13",
+  "ruff>=0.8",
+  "types-pyyaml>=6.0",
+  "types-jsonschema>=4.23",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hornero_qa"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+strict = true
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

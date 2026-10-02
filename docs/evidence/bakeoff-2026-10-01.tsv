@@ -1,0 +1,23 @@
+ts	label	arm	run_id	pass	failure_type	time_to_desktop_s	latency_open_s	latency_close_s	wall_s	harness_cpu_s	artifact_bytes
+2026-09-30T23:11:07Z	base	native	base-01	True		16.259	0.502,0.465,0.472	0.251,0.477,0.493	24.143	4.01	405020
+2026-09-30T23:11:46Z	base	isotovideo	base-01	True		26.372	0.877,0.878,0.886	2.114,2.129,2.108	37.877		934588
+2026-09-30T23:12:07Z	base	native	base-02	True		15.469	0.444,0.439,0.454	0.173,0.134,0.139	20.478	3.6	406805
+2026-09-30T23:12:44Z	base	isotovideo	base-02	True		24.504	0.879,0.891,0.902	2.106,2.106,2.105	36.077		956527
+2026-09-30T23:13:07Z	base	native	base-03	True		17.105	0.459,0.423,0.415	0.476,0.123,0.13	22.231	3.71	410274
+2026-09-30T23:13:44Z	base	isotovideo	base-03	True		24.607	0.866,0.874,0.895	2.117,2.117,2.104	36.249		913030
+2026-09-30T23:14:05Z	base	native	base-04	True		14.977	0.452,0.463,0.44	0.137,0.136,0.468	19.859	3.8	417687
+2026-10-01T03:37:34Z	base	isotovideo	base-04	True		24.455	0.856	2.126	29.085		512235
+2026-10-01T03:39:13Z	m1	native	m1-01	False	product_launcher_not_shown	12.898	5.163		18.61	4.03	87093
+2026-10-01T03:39:44Z	m1	isotovideo	m1-01	False	launcher_not_shown	23.117			30.856		314635
+2026-10-01T03:40:03Z	m1	native	m1-02	False	product_launcher_not_shown	12.857	5.085		18.503	3.87	86065
+2026-10-01T03:40:32Z	m1	isotovideo	m1-02	False	launcher_not_shown	21.09			28.762		325929
+2026-10-01T03:43:58Z	m2	native	m2-01	False	product_wrong_theme	180.363			180.363	28.0	45623
+2026-10-01T03:44:25Z	m2	isotovideo	m2-01	True		22.105	0.881	2.108	26.72		474184
+2026-10-01T03:47:26Z	m2	native	m2-02	False	product_wrong_theme	180.599			180.599	27.77	45683
+2026-10-01T03:47:52Z	m2	isotovideo	m2-02	True		21.076	0.901	2.104	25.712		501173
+2026-10-01T03:50:50Z	m3	native	m3-01	False	product_launcher_misrendered	12.904	5.058		18.627	3.79	143197
+2026-10-01T03:51:19Z	m3	isotovideo	m3-01	False	launcher_not_shown	21.145			28.814		549684
+2026-10-01T03:51:38Z	m3	native	m3-02	False	product_launcher_misrendered	13.351	5.138		19.222	3.7	143191
+2026-10-01T03:52:09Z	m3	isotovideo	m3-02	False	launcher_not_shown	22.375			30.165		496768
+2026-10-01T04:59:00Z	base-cur	native	base-cur-01	True		16.313	0.476	0.564	18.437	3.15	202036
+2026-10-01T04:59:33Z	base-cur	isotovideo	base-cur-01	True		28.102	0.88	2.104	32.873		531917

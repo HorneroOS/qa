@@ -1,0 +1,24 @@
+# Repo policy for the HorneroOS deterministic PR-governance engine.
+# Merged over safe defaults; see HorneroOS/.github governance/danger.
+
+version: 1
+kind: qa
+visual_paths:
+  - "anchors/**"
+generated_paths: []
+policies:
+  large_threshold: 800
+  forbidden_paths:
+    - "**/.env"
+    - "**/.env.*"
+    - "**/*.pem"
+    - "**/*.key"
+    - "**/id_rsa*"
+    - "**/id_ed25519*"
+    - "**/credentials*"
+    - "**/*secret*"
+    - "**/*.qcow2"
+  risky_paths:
+    - ".github/workflows/**"
+    - "src/hornero_qa/engines/**"
+    - "guest/**"
