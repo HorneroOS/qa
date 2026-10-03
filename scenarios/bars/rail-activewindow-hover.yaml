@@ -1,0 +1,32 @@
+id: bars/rail-activewindow-hover
+purpose: >-
+  A vertical rail keeps the active-window marker compact while its hover card
+  still exposes the real window title and live preview.
+covers: [shell#125]
+setup:
+  layout: hornero-left
+instruction: Open a terminal from Launcher, then hover the active-window marker on Hornero Left.
+steps:
+  - key: ctrl+space
+  - probe:
+      run: "qs ipc call drawers state launcher"
+      equals: "true"
+      retry_s: 5
+  - type: kitty
+  - key: enter
+  - probe:
+      run: "hyprctl activewindow -j | jq -r .class"
+      equals: kitty
+      retry_s: 10
+  - pointer: {x: 0.024, y: 0.49, glide: 8}
+  - probe:
+      run: "qs ipc call debug dump | jq -r .popout.name"
+      equals: activewindow
+      retry_s: 3
+  - screenshot: hornero-left-active-window-hover
+proof:
+  - note: The real active-window popout remains open at the compact rail target
+    probe: {run: "qs ipc call debug dump | jq -r .popout.hasCurrent", equals: "true", retry_s: 3}
+  - screenshot: active-window-popout
+media: [hornero-left-active-window-hover]
+budget: {wall_s: 90}
