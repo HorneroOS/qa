@@ -7,6 +7,13 @@ instruction: >-
   Pampa and apply it. Inspect both results and return to Hornero Light.
 requires:
   resolution: 1280x800
+setup:
+  commands:
+    - >-
+      rm -rf "$HOME/.local/share/hornero/themes"
+      "$HOME/.local/share/hornero/wallpapers"
+      "$HOME/.local/share/dots/themes"
+      "$HOME/.local/share/dots/wallpapers"
 steps:
   - probe:
       run: "test ! -e \"$HOME/.local/share/hornero/themes\" && test ! -e \"$HOME/.local/share/dots/themes\" && test ! -e \"$HOME/.local/share/hornero/wallpapers\" && test ! -e \"$HOME/.local/share/dots/wallpapers\" && echo no-user-catalogue"
