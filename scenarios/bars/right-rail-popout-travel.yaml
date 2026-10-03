@@ -1,0 +1,33 @@
+id: bars/right-rail-popout-travel
+purpose: >-
+  Moving from a right-rail status trigger into its popout must keep the card
+  open across the horizontal gap and preserve focus in the active app.
+requires:
+  resolution: 1280x800
+setup:
+  layout: hornero-right
+instruction: Open Bluetooth from the right rail and move the pointer into its card.
+steps:
+  - key: ctrl+space
+  - type: kitty
+  - key: enter
+  - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty, retry_s: 10}
+  - pointer: {x: 0.976, y: 0.875, glide: 8}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: bluetooth, retry_s: 6}
+  - probe:
+      run: >-
+        qs ipc call debug dump | jq -r '.panels[] | select(.name == "popouts") |
+        (.visible == true and .width > 0 and .height > 0)'
+      equals: "true"
+      retry_s: 3
+  - screenshot: right-rail-popout-open
+  - pointer: {x: 0.85, y: 0.875, glide: 12}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: bluetooth, retry_s: 3}
+  - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty}
+proof:
+  - note: The Bluetooth card stays open while the pointer rests inside it.
+    probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: bluetooth}
+  - note: Hovering preserves keyboard focus in the active application.
+    probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty}
+  - screenshot: pointer-inside-right-rail-popout
+budget: {wall_s: 100}
