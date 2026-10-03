@@ -1,0 +1,34 @@
+id: bars/popout-close-empty-surface
+purpose: >-
+  Closing a status popout removes its visual surface and input region from the
+  bar window.
+requires:
+  resolution: 1280x800
+instruction: Open the Bluetooth status popout, move away, and verify that it disappears completely.
+setup:
+  layout: horizon
+steps:
+  - key: ctrl+space
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - type: kitty
+  - key: enter
+  - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty, retry_s: 10}
+  - pointer: {x: 0.93, y: 0.035, glide: 8}
+  - pointer: {x: 0.93, y: 0.2, glide: 8}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: bluetooth, retry_s: 3}
+  - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty, retry_s: 3}
+  - screenshot: bluetooth-popout-open
+  - pointer: {x: 0.5, y: 0.5, glide: 8}
+  - wait: {stable: 0.5, timeout: 5}
+proof:
+  - note: The popout is closed and its surface no longer occupies the window.
+    probe:
+      run: >-
+        qs ipc call debug dump | jq -r '.panels[] | select(.name == "popouts") |
+        (.visible == false and .width == 0 and .height == 0)'
+      equals: "true"
+      retry_s: 3
+  - note: Closing the pointer-only popout leaves keyboard focus in the app.
+    probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty}
+  - screenshot: closed
+budget: {wall_s: 90}
