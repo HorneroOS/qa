@@ -14,8 +14,16 @@ steps:
   - key: enter
   - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty, retry_s: 10}
   - pointer: {x: 0.93, y: 0.035, glide: 8}
+  - wait: {stable: 0.5, timeout: 5}
   - pointer: {x: 0.93, y: 0.2, glide: 8}
+  - wait: {stable: 0.3, timeout: 4}
   - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: bluetooth, retry_s: 3}
+  - probe:
+      run: >-
+        qs ipc call debug dump | jq -r '.panels[] | select(.name == "popouts") |
+        (.visible == true and .width > 0 and .height > 0)'
+      equals: "true"
+      retry_s: 3
   - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty, retry_s: 3}
   - screenshot: bluetooth-popout-open
   - pointer: {x: 0.5, y: 0.5, glide: 8}
@@ -31,4 +39,4 @@ proof:
   - note: Closing the pointer-only popout leaves keyboard focus in the app.
     probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty}
   - screenshot: closed
-budget: {wall_s: 90}
+budget: {wall_s: 100}
