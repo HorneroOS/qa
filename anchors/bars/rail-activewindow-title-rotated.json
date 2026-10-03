@@ -1,0 +1,49 @@
+{
+  "schema": "hornero.anchor/1",
+  "id": "bars/rail-activewindow-title-rotated",
+  "tags": [
+    "bars",
+    "activewindow"
+  ],
+  "frame": {
+    "width": 1280,
+    "height": 800,
+    "scale": 1
+  },
+  "region": {
+    "x": 20,
+    "y": 346,
+    "w": 18,
+    "h": 68
+  },
+  "margin": 24,
+  "mode": "structure",
+  "mask": [],
+  "thresholds": {
+    "zncc": 0.92,
+    "bad_pixel_frac": 0.03,
+    "bad_pixel_delta": 32
+  },
+  "color_probes": [],
+  "provenance": {
+    "source": "runs/20261003T090534Z-bars-rail-activewindow-baseline-1/screenshots/001-hornero-left-active-window-baseline.png",
+    "run_id": "20261003T090534Z-bars-rail-activewindow-baseline-1",
+    "scenario": "bars/rail-activewindow-baseline",
+    "product": {
+      "shell_sha": "b2f27e66a5b7f2450996c6ae48aefbebc8aaa281",
+      "config_sha": "8bdbcc31bf7703e4dddbff1e758c17d7e399577f",
+      "horneroctl": "horneroctl 0.2.0-preview14 (2b0dcb9)",
+      "horneroctl_sha256": "10c0065b345174c28d899bc0dfe219572b79314a197ec1fbf9f3653352a28e76"
+    },
+    "environment": {
+      "engine": "native",
+      "hornero_qa": "0.1.0",
+      "host_kernel": "7.2.7-arch1-1",
+      "qemu": "QEMU emulator version 11.1.1",
+      "image": "p14pkg6-b2f27e6.qcow2",
+      "outputs": 1,
+      "resolution": "1280x800"
+    },
+    "capture_sha256": "356eeebfd26c3753745514514d2e083a923b1761c45604fc96808d2872da8dda"
+  }
+}
