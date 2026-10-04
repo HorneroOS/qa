@@ -1,0 +1,15 @@
+id: wallpapers/unconfigured-empty-state
+purpose: >-
+  A fresh profile with no wallpaper uses the intentional choose-wallpaper
+  empty state instead of trying to render a CLI diagnostic as an image.
+covers: [shell#93]
+setup:
+  layout: hornero-left
+instruction: Open the desktop with no wallpaper selected and inspect the background prompt.
+steps:
+  - probe: {run: "qs ipc call wallpaper get", equals: "", retry_s: 3}
+  - screenshot: empty-wallpaper-state
+proof:
+  - probe: {run: "pgrep -a qs", contains: qs}
+budget: {wall_s: 90}
+artifacts: {screenshots: always, logs: always}
