@@ -5,6 +5,10 @@ purpose: >-
 covers: [shell#93]
 setup:
   layout: hornero-left
+  # This changes only the throwaway guest overlay, creating a real fresh
+  # profile precondition without using a user-facing product action.
+  commands:
+    - 'rm -f "$HOME/.local/state/hornero/wallpaper/path"'
 instruction: Open the desktop with no wallpaper selected and inspect the background prompt.
 steps:
   - probe: {run: "qs ipc call wallpaper get", equals: "", retry_s: 3}
