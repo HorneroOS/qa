@@ -5,10 +5,10 @@ purpose: >-
 covers: [shell#93]
 setup:
   layout: hornero-left
-  # This changes only the throwaway guest overlay, creating a real fresh
-  # profile precondition without using a user-facing product action.
+  # This changes only the throwaway guest overlay. An empty pointer models an
+  # unconfigured profile while exercising FileView's live update path.
   commands:
-    - 'rm -f "$HOME/.local/state/hornero/wallpaper/path"'
+    - ': > "$HOME/.local/state/hornero/wallpaper/path"'
     - 'rm -f "$HOME/.local/state/dots/wallpaper/path"'
     - 'rm -f "$HOME/.cache/wal/wal"'
 instruction: Open the desktop with no wallpaper selected and inspect the background prompt.
