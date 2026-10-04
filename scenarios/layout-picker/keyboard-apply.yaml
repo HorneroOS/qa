@@ -3,7 +3,7 @@ purpose: >-
   The Layout Picker starts keyboard focus at the active layout even when the
   stationary pointer is over another card; arrows move in catalogue order and
   Enter applies the focused preset.
-covers: [shell#93]
+covers: [shell#93, shell#133]
 setup:
   layout: classic-bottom
 instruction: >-

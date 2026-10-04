@@ -2,7 +2,7 @@ id: wallpapers/unconfigured-empty-state
 purpose: >-
   A fresh profile with no wallpaper uses the intentional choose-wallpaper
   empty state instead of trying to render a CLI diagnostic as an image.
-covers: [shell#93]
+covers: [shell#133]
 setup:
   layout: hornero-left
   # This changes only the throwaway guest overlay, then restarts Quickshell
