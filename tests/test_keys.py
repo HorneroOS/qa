@@ -7,6 +7,7 @@ def test_modifier_chords() -> None:
     assert parse_key("super+shift+b") == ["meta_l", "shift", "b"]
     assert parse_key("CTRL+Space") == ["ctrl", "spc"]
     assert parse_key("escape") == ["esc"]
+    assert parse_key("ctrl+print") == ["ctrl", "print"]
 
 
 def test_text_uses_shift_for_upper_case() -> None:

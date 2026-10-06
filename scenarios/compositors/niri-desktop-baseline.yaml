@@ -1,0 +1,112 @@
+id: compositors/niri-desktop-baseline
+purpose: >-
+  Hornero Desktop starts with real Niri output/workspace/window state while
+  its shared Shell, theme, launcher and layout picker remain usable.
+requires:
+  compositor: niri
+  outputs: 1
+  resolution: 1280x800
+setup:
+  layout: hornero-left
+  theme: hornero-light
+  commands:
+    - mkdir -p ~/Pictures/Screenshots
+instruction: >-
+  Use Hornero Desktop in a Niri session: inspect the rail, switch workspaces,
+  open the launcher and a terminal, then inspect the Layout Picker.
+steps:
+  - key: escape # Dismiss Niri's built-in startup hotkey guide for clean captures.
+  - probe:
+      run: "niri msg --json outputs | jq -er 'length >= 1'"
+      equals: "true"
+      retry_s: 10
+  - probe:
+      run: "niri msg --json workspaces | jq -er '[.[] | select(.is_focused)] | length'"
+      equals: "1"
+      retry_s: 10
+  - probe:
+      run: "gdbus introspect --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --recurse | grep -F org.freedesktop.portal.ScreenCast"
+      contains: "org.freedesktop.portal.ScreenCast"
+      retry_s: 15
+  - probe:
+      run: "qs ipc call wallpaper list | grep -F '/usr/share/hornero/wallpapers/hornero-light/hornero-light-01.png'"
+      contains: "hornero-light-01.png"
+      retry_s: 15
+  - probe:
+      run: "qs ipc call drawers state launcher"
+      equals: "false"
+      retry_s: 5
+  - screenshot: niri-hornero-left
+  - key: super+d
+  - probe: {run: "qs ipc call drawers state launcher", equals: "true", retry_s: 8}
+  - type: kitty
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: niri-launcher
+  - key: enter
+  - probe:
+      run: "niri msg --json focused-window | jq -er '.app_id'"
+      equals: kitty
+      retry_s: 15
+  - screenshot: niri-terminal
+  # Niri maintains one trailing empty workspace. Workspace 2 only exists after
+  # a window occupies workspace 1, so exercise switching after Kitty starts.
+  - key: super+2
+  - probe:
+      run: "niri msg --json workspaces | jq -er '[.[] | select(.is_focused)][0].idx'"
+      equals: "2"
+      retry_s: 5
+  - screenshot: niri-workspace-two
+  - key: super+1
+  - probe:
+      run: "niri msg --json workspaces | jq -er '[.[] | select(.is_focused)][0].idx'"
+      equals: "1"
+      retry_s: 5
+  - screenshot: niri-workspace-one
+  - key: super+shift+b
+  - probe: {run: "qs ipc call drawers state layoutPicker", equals: "true", retry_s: 8}
+  - screenshot: niri-layout-picker
+  - key: escape
+  - probe:
+      run: "qs ipc call controlCenter open appearance"
+      contains: "opened: appearance"
+  - wait: {stable: 0.5, timeout: 8}
+  - screenshot: niri-control-center
+  - probe:
+      run: "qs ipc call controlCenter close; niri msg --json windows | jq -er 'length >= 1'"
+      equals: "true"
+  - probe:
+      run: "qs ipc call lock lock; qs ipc call lock isLocked"
+      equals: "true"
+      retry_s: 5
+  - probe:
+      run: "qs ipc call lock unlock; qs ipc call lock isLocked"
+      equals: "false"
+      retry_s: 5
+  - key: ctrl+print
+  - probe:
+      run: "find ~/Pictures/Screenshots -maxdepth 1 -type f -name 'Screenshot from *' -print -quit | grep -q . && echo true"
+      equals: "true"
+      retry_s: 10
+proof:
+  - note: Niri reports at least one live output.
+    probe: {run: "niri msg --json outputs | jq -er 'length >= 1'", equals: "true"}
+  - note: Niri publishes one focused workspace and one focused window.
+    probe:
+      run: "niri msg --json workspaces | jq -er '[.[] | select(.is_focused)] | length'"
+      equals: "1"
+  - note: The Hornero Shell stays responsive through Niri workspace changes and launcher use.
+    probe: {run: "qs ipc call drawers state launcher", equals: "false"}
+  - note: Hornero Light remains active in the shared Shell appearance system.
+    probe: {run: "horneroctl appearance theme get", contains: "hornero-light"}
+  - note: Factory wallpaper files installed by hornero-config remain browseable without copies in the user home.
+    probe: {run: "qs ipc call wallpaper list | grep -F '/usr/share/hornero/wallpapers/hornero-light/hornero-light-01.png'", contains: "hornero-light-01.png"}
+  - note: Niri exposes Kitty as the active native Wayland window.
+    probe: {run: "niri msg --json focused-window | jq -er '.app_id'", equals: "kitty"}
+  - note: Niri's desktop portal advertises its screencasting interface.
+    probe:
+      run: "gdbus introspect --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --recurse | grep -F org.freedesktop.portal.ScreenCast"
+      contains: "org.freedesktop.portal.ScreenCast"
+  - screenshot: final
+media: [niri-hornero-left, niri-launcher, niri-terminal, niri-workspace-two, niri-layout-picker, niri-control-center]
+budget: {wall_s: 240, max_actions: 22}
+artifacts: {screenshots: always, logs: on-failure}

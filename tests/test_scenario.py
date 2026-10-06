@@ -19,6 +19,12 @@ def test_minimal_defaults() -> None:
     sc = parse(MINIMAL)
     assert sc.wall_s == 180 and sc.max_actions == 60 and sc.max_malformed == 3
     assert sc.resolution == (1280, 800) and sc.outputs == 1
+    assert sc.requires.get("compositor") is None
+
+
+def test_scenario_can_require_niri() -> None:
+    sc = parse(MINIMAL.replace("proof:\n", "requires: {compositor: niri}\nproof:\n"))
+    assert sc.requires["compositor"] == "niri"
 
 
 @pytest.mark.parametrize(
@@ -29,6 +35,7 @@ def test_minimal_defaults() -> None:
         ("steps: [{pause: 9}]", "steps/0/pause"),
         ("covers: [not-an-issue]", "covers/0"),
         ("requires: {outputs: 5}", "requires/outputs"),
+        ("requires: {compositor: labwc}", "requires/compositor"),
         ("bogus: 1", "<root>"),
     ],
 )

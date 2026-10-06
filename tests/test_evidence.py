@@ -20,6 +20,7 @@ def test_bundle_roundtrip(tmp_path: Path, save_png: SavePng) -> None:
     assert side["schema"] == "hornero.qa.screenshot/1"
     assert side["product"] == {"shell_sha": "abc"} and side["run_id"] == "r1"
     assert len(side["sha256"]) == 64
+    assert side["environment"]["captured_resolution"] == "320x200"
 
     loaded = load_bundle(b.root)
     assert loaded["run"]["schema"] == "hornero.qa.run/1"

@@ -13,10 +13,11 @@ probes, and writes an evidence bundle for every run.
 
 ## Status
 
-Native engine, scenario/evidence model, ready-image builder and the first
-product journeys (smoke, layouts, Layout Picker, drawers, notifications,
-lock, themes, regressions, perf) run today, deterministically or with
-model-agnostic agentic adapters ([docs/AGENTIC.md](docs/AGENTIC.md)). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
+Native engine, scenario/evidence model, compositor-specific ready-image
+builder for Hyprland and Niri, and the first product journeys (smoke, layouts,
+Layout Picker, drawers, notifications, lock, themes, regressions, perf) run
+today, deterministically or with model-agnostic agentic adapters
+([docs/AGENTIC.md](docs/AGENTIC.md)). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [docs/SCENARIOS.md](docs/SCENARIOS.md), [docs/IMAGES.md](docs/IMAGES.md) and
 [docs/MEDIA.md](docs/MEDIA.md).
 

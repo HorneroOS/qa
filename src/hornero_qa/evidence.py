@@ -62,6 +62,13 @@ class Bundle:
         self._seq += 1
         dst = self.root / "screenshots" / f"{self._seq:03d}-{name}.png"
         shutil.copyfile(src, dst)
+        with dst.open("rb") as image:
+            header = image.read(24)
+        if len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n":
+            raise ValueError(f"screenshot is not a valid PNG: {dst}")
+        width, height = int.from_bytes(header[16:20], "big"), int.from_bytes(header[20:24], "big")
+        environment = dict(self.run.get("environment", {}))
+        environment["captured_resolution"] = f"{width}x{height}"
         sidecar = {
             "schema": SIDECAR_SCHEMA,
             "file": dst.name,
@@ -71,7 +78,7 @@ class Bundle:
             "captured": _now(),
             "t": self.elapsed(),
             "product": self.run.get("product", {}),
-            "environment": self.run.get("environment", {}),
+            "environment": environment,
         } | (extra or {})
         _dump(dst.with_suffix(".json"), sidecar)
         return dst

@@ -106,8 +106,16 @@ def refresh(
     config_sha: str,
     horneroctl: Path,
     name: str,
+    compositor: str = "hyprland",
     mem_mb: int = 4096,
+    cpus: int = 4,
 ) -> Path:
+    if compositor not in {"hyprland", "niri"}:
+        raise SystemExit(f"unsupported QA compositor {compositor!r}; choose hyprland or niri")
+    if not 1024 <= mem_mb <= 8192:
+        raise SystemExit("--mem-mb must be between 1024 and 8192")
+    if not 1 <= cpus <= 8:
+        raise SystemExit("--cpus must be between 1 and 8")
     if not re.fullmatch(r"[0-9a-f]{40}", config_sha):
         raise SystemExit(f"--config-sha must be a full 40-hex SHA, got {config_sha!r}")
     shell_sha = subprocess.run(
@@ -149,7 +157,7 @@ def refresh(
             "-machine",
             "q35",
             "-smp",
-            "4",
+            str(cpus),
             "-m",
             str(mem_mb),
             "-device",
@@ -189,7 +197,7 @@ def refresh(
             "V_C_ERROR_BUG_REPORT_DISABLED": "1",
         }
         subprocess.run(["bash", str(shell_checkout / "tests/vm/lib/deploy-shell.sh")], env=env, check=True)
-        _mint(state, port, horneroctl)
+        _mint(state, port, horneroctl, compositor)
         # The connection drops while the guest powers off, so ssh may exit
         # 255 even on success: QEMU exiting is the real signal.
         with contextlib.suppress(subprocess.CalledProcessError, subprocess.TimeoutExpired):
@@ -217,7 +225,11 @@ def refresh(
                 "horneroctl": ctl_version.splitlines()[0] if ctl_version else "unknown",
                 "horneroctl_sha256": hashlib.sha256(horneroctl.read_bytes()).hexdigest(),
             },
+            "compositor": compositor,
+            "builder_mem_mb": mem_mb,
+            "builder_cpus": cpus,
             "runtime_packages": RUNTIME_PACKAGES,
+            "compositor_packages": list(_compositor_packages(compositor)),
             "aur_runtime_packages": AUR_RUNTIME_PACKAGES,
             "catalogues": {
                 "shell_presets": "user catalogue seeded from shell presets/",
@@ -231,7 +243,7 @@ def refresh(
     return out
 
 
-def _mint(state: QAState, port: int, horneroctl: Path) -> None:
+def _mint(state: QAState, port: int, horneroctl: Path, compositor: str) -> None:
     """Install the QA session and runtime packages into the builder guest."""
     with tempfile.TemporaryDirectory(dir=state.work_dir) as tmp:
         bundle = Path(tmp) / "guest.tar"
@@ -239,7 +251,8 @@ def _mint(state: QAState, port: int, horneroctl: Path) -> None:
             tar.add(GUEST_DIR, arcname="guest")
         _scp(state, port, bundle, "/tmp/qa-guest.tar")
     _scp(state, port, horneroctl, "/tmp/horneroctl")
-    pkgs = " ".join(RUNTIME_PACKAGES)
+    compositor_packages = _compositor_packages(compositor)
+    pkgs = " ".join((*RUNTIME_PACKAGES, *compositor_packages))
     aur = " ".join(AUR_RUNTIME_PACKAGES)
     _ssh(
         state,
@@ -261,6 +274,8 @@ put 0755 $G/qa-session.sh ~/.local/bin/qa-session.sh
 put 0755 $G/qa-shell.sh ~/.local/bin/qa-shell.sh
 put 0644 $G/bash_profile ~/.bash_profile
 sudo install -Dm0644 $G/autologin.conf /etc/systemd/system/getty@tty1.service.d/autologin.conf
+sudo install -d -m0755 /etc/hornero-qa
+printf '%s\\n' '{compositor}' | sudo tee /etc/hornero-qa/compositor >/dev/null
 python3 - <<'PY'
 import json, pathlib
 p = pathlib.Path.home() / ".config/hornero/shell.json"
@@ -285,10 +300,18 @@ test -d "$HOME/hx-config/packaging"
 (cd "$HOME/hx-config/packaging" && makepkg --syncdeps --install --noconfirm --cleanbuild)
 sudo test -d /usr/share/hornero/themes
 sudo test -d /usr/share/hornero/wallpapers
+if [ '{compositor}' = niri ]; then
+  NIRI_CONFIG="$HOME/.config/niri/config.kdl" niri validate
+fi
 # Keep factory user preferences, but remove recipe/media copies so theme QA
 # proves the installed package path rather than the deploy helper's HOME copy.
 rm -rf "$HOME/.local/share/hornero/themes" "$HOME/.local/share/dots/themes"
 rm -rf "$HOME/.local/share/hornero/wallpapers" "$HOME/.local/share/dots/wallpapers"
+# Resolve the packaged factory artwork through the same per-user path the
+# shell uses for the selected wallpaper. Removing deploy copies above must
+# not leave the desktop rendering a black fallback background.
+install -d "$HOME/.local/share/hornero"
+ln -s /usr/share/hornero/wallpapers "$HOME/.local/share/hornero/wallpapers"
 sudo gpasswd -a "$USER" uucp > /dev/null
 sudo touch /etc/cloud/cloud-init.disabled
 /usr/local/bin/horneroctl welcome set-show-on-login false --yes || true
@@ -297,6 +320,23 @@ rm -rf /tmp/qa /tmp/qa-guest.tar ~/.cache/yay ~/.cache/hornero-shell-build
 sudo pacman -Scc --noconfirm > /dev/null 2>&1 || true
 sync""",
     )
+
+
+def _compositor_packages(compositor: str) -> tuple[str, ...]:
+    if compositor == "hyprland":
+        return ()
+    if compositor == "niri":
+        # Niri's documented screencast path uses the GNOME portal backend;
+        # GTK is its fallback and file-chooser backend.
+        return (
+            "niri",
+            "xwayland-satellite",
+            "grim",
+            "rtkit",
+            "xdg-desktop-portal-gnome",
+            "xdg-desktop-portal-gtk",
+        )
+    raise SystemExit(f"unsupported QA compositor {compositor!r}; choose hyprland or niri")
 
 
 def adopt(state: QAState, image: Path, name: str, ssh_key: Path | None, product: dict[str, str]) -> Path:

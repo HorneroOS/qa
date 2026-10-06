@@ -22,6 +22,7 @@ the deterministic actions that do it (**steps**), and how we know it worked
 |---|---|
 | `layout` | `horneroctl shell preset apply <name> --yes` |
 | `theme` | `horneroctl appearance theme set <name> --yes` |
+| `compositor` requirement | Requires an image sidecar with the same compositor; the runner refuses mismatched images |
 | `commands` | extra guest commands, run in order; any non-zero exit is a `harness` failure |
 
 `layout` and `theme` go through the product CLI, so their failure is a

@@ -37,6 +37,12 @@
             "os-autoinst"
           ]
         },
+        "compositor": {
+          "enum": [
+            "hyprland",
+            "niri"
+          ]
+        },
         "outputs": {
           "type": "integer",
           "minimum": 1,

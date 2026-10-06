@@ -62,16 +62,32 @@ uv run hornero-qa image refresh \
 uv run hornero-qa image info
 ```
 
+Use `--compositor niri` to build a separate Niri image. The builder installs
+Niri, XWayland Satellite, the GNOME screencast portal and GTK portal fallback,
+then records the compositor in the image sidecar. `grim` captures screenshots
+from inside the guest's Wayland session, and `rtkit` satisfies the PipeWire
+realtime service used by the GNOME portal. The QA TTY profile exports the
+source-built Quickshell plugin path into Niri's service environment. The base Arch image and the
+default Hyprland composition remain untouched. Scenarios can require a
+specific compositor; the runner refuses an image with different provenance
+instead of silently testing another session. The first Niri journey is
+`compositors/niri-desktop-baseline`.
+
+The builder defaults to 4 GiB/4 vCPUs. `--mem-mb` (1–8 GiB) and `--cpus`
+(1–8) set explicit guest budgets; QEMU remains inside a user systemd scope
+whose memory cap adds 1.2 GiB for emulator overhead. On a constrained host,
+use `--mem-mb 2048 --cpus 2` and run no other graphical VM at the same time.
+
 The refresh refuses a dirty shell checkout or an abbreviated config SHA. It
 runs QEMU inside `systemd-run --user --scope -p MemoryMax=...`; run one heavy
 job at a time.
 
 What the mint adds on top of the composition:
 
-- `guest/hyprland.conf`: sources the product's `environment`, `input`,
+- Hyprland images use `guest/hyprland.conf`, which sources the product's `environment`, `input`,
   `layout`, `window-rules` and `keybindings` fragments, so product binds are
   exercised as shipped; fixed `Virtual-1`/`Virtual-2` outputs; animations off.
-- tty1 autologin into Hyprland and a serial readiness marker
+- tty1 autologin into the selected compositor and a serial readiness marker
   (`HORNERO-SHELL-READY`). The marker is diagnostic only; readiness is
   proven by the shell's IPC answering.
 - `shell.json` idle timeouts disabled (a locking guest would poison runs).
@@ -86,6 +102,17 @@ What the mint adds on top of the composition:
   materialized user theme and wallpaper copies are removed afterward, so
   appearance acceptance resolves those assets from `/usr/share`.
 - Welcome onboarding marked as seen.
+
+For a Niri image, the disposable guest starts `niri --session` from tty1.
+This follows Niri's documented direct TTY session mode and avoids nesting a
+second login shell inside the QA autologin profile. The package-owned
+`/etc/niri/config.kdl` fallback starts Hornero Shell. Niri evidence is captured
+inside the guest with `grim`, because QEMU's GL display has no pixman surface.
+The image builder records its selected compositor and adds Niri, XWayland
+Satellite, the GNOME screencast portal, and the GTK fallback/file chooser. The
+base Arch image is unchanged. The current Niri scenario covers one output,
+Niri-native workspace/window state, theme selection, Launcher, Kitty, and
+Layout Picker; it does not certify the remaining compositor support matrix.
 
 ## Adopting an existing image
 

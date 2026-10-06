@@ -9,8 +9,10 @@ which composition it shows.
 - Only screenshots named in a scenario's `media:` list are candidates.
 - Only bundles whose `result.json` verdict is `pass` are exported.
 - Every frame carries a `hornero.qa.screenshot/1` sidecar (run id,
-  scenario, product SHAs, environment, SHA-256); export re-hashes the file
-  and refuses a mismatch.
+  scenario, product SHAs, environment, captured pixel resolution,
+  SHA-256); the environment resolution is the requested VM size, while
+  `captured_resolution` records what the compositor actually rendered.
+  Export re-hashes the file and refuses a mismatch.
 - The website consumes media **at build time** from a committed export.
   Pages never fetch from QA runs or this repository at runtime.
 

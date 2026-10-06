@@ -21,6 +21,8 @@ NAMED = {
     "space": "spc",
     "backspace": "backspace",
     "delete": "delete",
+    "print": "print",
+    "printscreen": "print",
     "up": "up",
     "down": "down",
     "left": "left",

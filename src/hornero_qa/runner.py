@@ -132,6 +132,14 @@ class _Attempt:
             raise QAError(
                 FailureClass.HARNESS, f"engine {engine!r} is not available (docs/ARCHITECTURE.md §4)"
             )
+        image_info = read_image_info(self.engine.image)
+        compositor = str(image_info.get("compositor", "hyprland"))
+        required_compositor = self.scenario.requires.get("compositor")
+        if required_compositor and required_compositor != compositor:
+            raise QAError(
+                FailureClass.PROVISIONING,
+                f"scenario requires {required_compositor}, ready image provides {compositor}",
+            )
         self.engine.start()
         if not self.engine.wait_ssh(self.opts.boot_timeout_s):
             cls = (
@@ -144,8 +152,11 @@ class _Attempt:
                 break
             time.sleep(1.0)
         else:
-            if self.probe("pgrep -x Hyprland || pgrep -x Hyprland-bin").rc != 0:
-                raise QAError(FailureClass.PROVISIONING, "Hyprland session never started")
+            process = (
+                "pgrep -x niri" if compositor == "niri" else "pgrep -x Hyprland || pgrep -x Hyprland-bin"
+            )
+            if self.probe(process).rc != 0:
+                raise QAError(FailureClass.PROVISIONING, f"{compositor} session never started")
             if self.probe("pgrep -x qs || pgrep -x quickshell").rc != 0:
                 raise QAError(FailureClass.PRODUCT_CRASH, "shell process not running after session start")
             raise QAError(FailureClass.PRODUCT, "shell running but its IPC never answered")
@@ -482,6 +493,7 @@ def _environment(scenario: Scenario, image: Path) -> dict[str, Any]:
         qemu_version = "unknown"
     return {
         "engine": "native",
+        "compositor": str(read_image_info(image).get("compositor", "hyprland")),
         "hornero_qa": __version__,
         "host_kernel": platform.release(),
         "qemu": qemu_version,
@@ -524,7 +536,13 @@ def run_once(state: QAState, scenario: Scenario, opts: RunOptions, attempt: int 
     state.ensure()
     bundle = Bundle.create(state.runs_dir, run_id, meta, scenario.text)
     engine = NativeEngine(
-        state, opts.image, bundle.root, scenario.outputs, scenario.resolution, mem_mb=opts.mem_mb
+        state,
+        opts.image,
+        bundle.root,
+        scenario.outputs,
+        scenario.resolution,
+        mem_mb=opts.mem_mb,
+        compositor=str(info.get("compositor", "hyprland")),
     )
     att = _Attempt(
         scenario,

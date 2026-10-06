@@ -1,5 +1,8 @@
-# QA ready image: autologin on tty1 goes straight into the Hyprland session.
+# QA ready image: autologin on tty1 starts the selected compositor session.
 [[ -f ~/.bashrc ]] && . ~/.bashrc
-if [[ -z "${WAYLAND_DISPLAY:-}" && "$(tty)" == /dev/tty1 ]]; then
+# niri-session starts a login shell before the compositor. Keep its recursive
+# login shell from launching a second compositor session.
+if [[ -z "${HORNERO_QA_SESSION_STARTED:-}" && -z "${WAYLAND_DISPLAY:-}" && "$(tty)" == /dev/tty1 ]]; then
+    export HORNERO_QA_SESSION_STARTED=1
     exec ~/.local/bin/qa-session.sh
 fi

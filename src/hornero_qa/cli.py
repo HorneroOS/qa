@@ -139,6 +139,9 @@ def _image(state: QAState, args: argparse.Namespace) -> int:
         config_sha=args.config_sha,
         horneroctl=Path(args.horneroctl),
         name=args.name,
+        compositor=args.compositor,
+        mem_mb=args.mem_mb,
+        cpus=args.cpus,
     )
     print(out)
     return EXIT_OK
@@ -233,6 +236,9 @@ def build_parser() -> argparse.ArgumentParser:
     i.add_argument("--config-sha", required=True)
     i.add_argument("--horneroctl", required=True, help="horneroctl binary to install")
     i.add_argument("--name", required=True)
+    i.add_argument("--compositor", choices=["hyprland", "niri"], default="hyprland")
+    i.add_argument("--mem-mb", type=int, default=4096, help="builder guest memory (1024..8192 MiB)")
+    i.add_argument("--cpus", type=int, default=4, help="builder guest CPUs (1..8)")
 
     s = sub.add_parser("anchor", help="visual anchors")
     asub = s.add_subparsers(dest="anchor_cmd", required=True)

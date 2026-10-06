@@ -17,7 +17,7 @@ import subprocess
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import BinaryIO
+from typing import Any, BinaryIO, cast
 
 from hornero_qa.keys import parse_key, text_to_chords
 from hornero_qa.qmp import QMP, QMPError
@@ -62,6 +62,7 @@ class NativeEngine:
         resolution: tuple[int, int] = (1280, 800),
         mem_mb: int = 2048,
         smp: int = 2,
+        compositor: str = "hyprland",
     ) -> None:
         self.state = state
         self.image = image
@@ -70,6 +71,7 @@ class NativeEngine:
         self.resolution = resolution
         self.mem_mb = mem_mb
         self.smp = smp
+        self.compositor = compositor
         self.work = state.work_dir / run_dir.name
         self.overlay = self.work / "disk.qcow2"
         self.qmp_sock = qmp_socket_path(state.work_dir, run_dir.name)
@@ -109,12 +111,16 @@ class NativeEngine:
             "--quiet",
             f"--unit={self.unit}",
             "-p",
-            f"MemoryMax={self.mem_mb + 700}M",
+            # VirGL needs host-side GL memory in addition to guest RAM. Match
+            # the image builder's bounded allowance without unbounded host use.
+            f"MemoryMax={self.mem_mb + 1200}M",
             "--",
             "qemu-system-x86_64",
             "-enable-kvm",
             "-cpu",
             "host",
+            "-name",
+            f"hornero-qa-{self.run_dir.name}",
             "-machine",
             "q35",
             "-smp",
@@ -124,7 +130,11 @@ class NativeEngine:
             "-device",
             # Explicit id: per-head screendump addresses the GPU by device id,
             # and the auto-assigned id is not stable (video0 does not exist).
-            f"virtio-vga,id=hxgpu0,max_outputs={self.outputs},xres={w},yres={h}",
+            (
+                f"virtio-vga-gl,id=hxgpu0,max_outputs={self.outputs},xres={w},yres={h}"
+                if self.compositor == "niri"
+                else f"virtio-vga,id=hxgpu0,max_outputs={self.outputs},xres={w},yres={h}"
+            ),
             "-drive",
             f"file={self.overlay},format=qcow2,if=virtio",
             "-netdev",
@@ -132,7 +142,7 @@ class NativeEngine:
             "-device",
             "virtio-net-pci,netdev=net0",
             "-display",
-            "none",
+            "gtk,gl=on" if self.compositor == "niri" else "none",
             "-serial",
             f"file:{self.serial}",
             "-qmp",
@@ -151,6 +161,12 @@ class NativeEngine:
             self.qmp = QMP.wait(self.qmp_sock, deadline_s=30)
         except QMPError as exc:
             raise QAError(FailureClass.BOOT, f"QEMU did not start: {exc}") from exc
+        if self.compositor == "niri":
+            marker = f"hornero-qa-{self.run_dir.name}"
+            for _ in range(40):
+                if self._find_host_display_client(marker) is not None:
+                    break
+                time.sleep(0.25)
 
     def alive(self) -> bool:
         return self.proc is not None and self.proc.poll() is None
@@ -179,11 +195,72 @@ class NativeEngine:
     def screenshot(self, dest: Path, head: int = 0) -> Path:
         q = self._q()
         dest.parent.mkdir(parents=True, exist_ok=True)
-        if head == 0:
-            q.screendump(dest)
-        else:
-            q.cmd("screendump", filename=str(dest), format="png", device="hxgpu0", head=head)
+        if self.compositor == "niri":
+            # QEMU has no pixman surface for its GTK/VirGL window. Ask the
+            # guest compositor for the capture and transfer that image alone.
+            remote = f"/tmp/hornero-qa-{self.run_dir.name}-frame.png"
+            result = self.probe(f"grim {remote}", timeout=15)
+            if result.rc != 0:
+                raise QAError(
+                    FailureClass.HARNESS,
+                    f"Niri guest screenshot failed: {result.stderr or result.stdout}",
+                )
+            subprocess.run(
+                [
+                    "scp",
+                    "-4",
+                    "-o",
+                    "StrictHostKeyChecking=no",
+                    "-o",
+                    "UserKnownHostsFile=/dev/null",
+                    "-o",
+                    "LogLevel=ERROR",
+                    "-i",
+                    str(self.state.ssh_key),
+                    "-P",
+                    str(self.ssh_port),
+                    f"{self.state.guest_user}@127.0.0.1:{remote}",
+                    str(dest),
+                ],
+                check=True,
+                capture_output=True,
+            )
+            return dest
+        try:
+            if head == 0:
+                q.screendump(dest)
+            else:
+                q.cmd("screendump", filename=str(dest), format="png", device="hxgpu0", head=head)
+        except QMPError:
+            if self.compositor != "niri":
+                raise
+            # VirGL/GL displays have no QEMU pixman surface for QMP screendump;
+            # capture only this QA VM's named GTK window instead of the host root.
+            marker = f"hornero-qa-{self.run_dir.name}"
+            client = self._find_host_display_client(marker)
+            if client is None:
+                raise QAError(FailureClass.HARNESS, "Niri VM display window not found for capture") from None
+            x, y = client["at"]
+            width, height = client["size"]
+            geometry = f"{x},{y} {width}x{height}"
+            subprocess.run(["grim", "-g", geometry, str(dest)], check=True)
         return dest
+
+    @staticmethod
+    def _find_host_display_client(marker: str) -> dict[str, Any] | None:
+        try:
+            clients = json.loads(
+                subprocess.run(
+                    ["hyprctl", "-j", "clients"], capture_output=True, text=True, check=True
+                ).stdout
+            )
+        except (OSError, subprocess.CalledProcessError, json.JSONDecodeError):
+            return None
+        for client in clients:
+            title = f"{client.get('title', '')} {client.get('initialTitle', '')}"
+            if marker in title:
+                return cast(dict[str, Any], client)
+        return None
 
     def probe(self, command: str, timeout: float = 20.0) -> ProbeResult:
         """Read-only guest probe over SSH in the user's session environment."""
@@ -191,6 +268,11 @@ class NativeEngine:
         env = (
             "export LANG=C.UTF-8 LC_ALL=C.UTF-8 XDG_RUNTIME_DIR=/run/user/$(id -u) WAYLAND_DISPLAY=wayland-1 "
             'HYPRLAND_INSTANCE_SIGNATURE="$(ls -t /run/user/$(id -u)/hypr 2>/dev/null | head -1)"; '
+            'niri_pid="$(pgrep -xo niri || true)"; '
+            'if [ -n "$niri_pid" ]; then '
+            'niri_socket="$(find "$XDG_RUNTIME_DIR" -maxdepth 1 -type s '
+            '-name "niri.*.${niri_pid}.sock" -print -quit)"; '
+            'NIRI_SOCKET="${NIRI_SOCKET:-$niri_socket}"; export NIRI_SOCKET; fi; '
         )
         argv = [
             "ssh",
@@ -238,7 +320,15 @@ class NativeEngine:
         logs = self.run_dir / "logs"
         for name, cmd in {
             "quickshell.log": "cat /tmp/qs.log",
+            "shell-status.txt": "horneroctl shell status",
+            "shell-product-logs.txt": "horneroctl shell logs --lines 500",
             "hyprland.log": "cat /tmp/hypr.log",
+            "niri.log": "test ! -f /tmp/niri.log || cat /tmp/niri.log",
+            "user-journal.log": "journalctl --user -b --no-pager -n 400",
+            "niri-units.txt": (
+                "systemctl --user --no-pager status niri.service "
+                "graphical-session.target niri-shutdown.target"
+            ),
             "journal.log": "journalctl -b --no-pager -n 400",
             "processes.txt": "ps -eo pid,comm,args --sort=pid | head -200",
         }.items():
