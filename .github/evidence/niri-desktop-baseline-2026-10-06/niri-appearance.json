@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "007-niri-control-center.png",
+  "sha256": "c215e80571e6dbdb5208dbcf7e2cfb1d271bd33c31a71eb37fc213ea006ca6dd",
+  "run_id": "20261006T062348Z-compositors-niri-desktop-baseline-1",
+  "scenario": "compositors/niri-desktop-baseline",
+  "captured": "2026-10-06T06:25:25Z",
+  "t": 96.842,
+  "product": {
+    "shell_sha": "6679935e0f7cb98693fda4d2036f2118f5023bb2",
+    "config_sha": "9296927170e41b95d2e6cca642c277ef8ca96a73",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview14.2 (fa2bfbc)",
+    "horneroctl_sha256": "ed9972409eccc68aec9eb2da03eaf0a9ea987272631b3af011f78854b212de65"
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "niri",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.2.7-arch1-1",
+    "qemu": "QEMU emulator version 11.1.1",
+    "image": "niri-desktop-baseline-20261006-r8.qcow2",
+    "outputs": 1,
+    "resolution": "1280x800",
+    "captured_resolution": "1111x988"
+  },
+  "step": 27
+}

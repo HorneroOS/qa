@@ -1,0 +1,8 @@
+{
+  "capture": "Actual HorneroOS host GTK3 Thunar window opened on a temporary empty directory",
+  "method": "grim crop from the compositor output",
+  "theme": "Hornero-Dark",
+  "color_scheme": "prefer-dark",
+  "verification": "gsettings and horneroctl appearance status agreed at capture time",
+  "sensitive_home_content_in_frame": false
+}
