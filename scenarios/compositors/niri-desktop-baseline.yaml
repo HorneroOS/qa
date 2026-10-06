@@ -13,7 +13,8 @@ setup:
     - mkdir -p ~/Pictures/Screenshots
 instruction: >-
   Use Hornero Desktop in a Niri session: inspect the rail, switch workspaces,
-  open the launcher and a terminal, then inspect the Layout Picker.
+  open the launcher and a terminal, dismiss the launcher by clicking outside
+  it, then inspect the Layout Picker.
 steps:
   - key: escape # Dismiss Niri's built-in startup hotkey guide for clean captures.
   - probe:
@@ -48,6 +49,16 @@ steps:
       equals: kitty
       retry_s: 15
   - screenshot: niri-terminal
+  - key: super+d
+  - probe: {run: "qs ipc call drawers state launcher", equals: "true", retry_s: 8}
+  # This point is inside the terminal but outside the launcher. Niri's
+  # exclusive top-layer focus must release when the transient is dismissed.
+  - pointer: {x: 0.20, y: 0.20, click: left}
+  - probe: {run: "qs ipc call drawers state launcher", equals: "false", retry_s: 5}
+  - key: super+d
+  - probe: {run: "qs ipc call drawers state launcher", equals: "true", retry_s: 8}
+  - key: escape
+  - probe: {run: "qs ipc call drawers state launcher", equals: "false", retry_s: 5}
   # Niri maintains one trailing empty workspace. Workspace 2 only exists after
   # a window occupies workspace 1, so exercise switching after Kitty starts.
   - key: super+2
@@ -108,5 +119,5 @@ proof:
       contains: "org.freedesktop.portal.ScreenCast"
   - screenshot: final
 media: [niri-hornero-left, niri-launcher, niri-terminal, niri-workspace-two, niri-layout-picker, niri-control-center]
-budget: {wall_s: 240, max_actions: 22}
+budget: {wall_s: 240, max_actions: 30}
 artifacts: {screenshots: always, logs: on-failure}
