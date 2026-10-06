@@ -1,6 +1,8 @@
+---
 id: personalization/baseline-settings
-purpose: Capture the current Settings and Appearance presentation on the post-candidate Preview 14 shell.
-instruction: Open the launcher, select its Settings action, then inspect the current Appearance controls.
+purpose: Capture the current Settings navigation and Appearance presentation.
+instruction: >-
+  Open the launcher, select its Settings action, then inspect the current Appearance controls.
 requires:
   resolution: 1280x800
 steps:
@@ -15,9 +17,10 @@ steps:
       equals: 'true'
       retry_s: 10
   - screenshot: settings-overview
-  - pointer: {x: 0.17, y: 0.62, click: left}
+  - pointer: {x: 0.116, y: 0.46, click: left}
   - probe:
-      run: "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'"
+      run: >-
+        hyprctl clients -j | jq -r '[.[] | select(.title | startswith("Hornero Settings")) | .title][0] // "missing"'
       equals: Hornero Settings - Appearance
       retry_s: 5
   - wait: {stable: 1.5, timeout: 8}
