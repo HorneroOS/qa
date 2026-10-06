@@ -54,6 +54,7 @@ steps:
   # This point is inside the terminal but outside the launcher. Niri's
   # exclusive top-layer focus must release when the transient is dismissed.
   - pointer: {x: 0.20, y: 0.20, click: left}
+  - screenshot: niri-launcher-after-outside-click
   - probe: {run: "qs ipc call drawers state launcher", equals: "false", retry_s: 5}
   - key: super+d
   - probe: {run: "qs ipc call drawers state launcher", equals: "true", retry_s: 8}
