@@ -51,9 +51,13 @@ steps:
   - screenshot: niri-terminal
   - key: super+d
   - probe: {run: "qs ipc call drawers state launcher", equals: "true", retry_s: 8}
-  # This point is inside the terminal but outside the launcher. Niri's
+  - probe:
+      run: "qs ipc call debug focusState | jq -er '{intent, inputRegions}'"
+      contains: "inputRegions"
+      save: niri-input-regions-before-click.json
+  # Click clear desktop space beyond the terminal and launcher. Niri's
   # exclusive top-layer focus must release when the transient is dismissed.
-  - pointer: {x: 0.20, y: 0.20, click: left}
+  - pointer: {x: 0.95, y: 0.45, click: left}
   - screenshot: niri-launcher-after-outside-click
   - probe:
       run: "qs ipc call debug focusState | jq -er '.lastNiriOutsideClick | [.x, .y, .inside, .rect] | @json'"
@@ -123,6 +127,6 @@ proof:
       run: "gdbus introspect --session --dest org.freedesktop.portal.Desktop --object-path /org/freedesktop/portal/desktop --recurse | grep -F org.freedesktop.portal.ScreenCast"
       contains: "org.freedesktop.portal.ScreenCast"
   - screenshot: final
-media: [niri-hornero-left, niri-launcher, niri-terminal, niri-workspace-two, niri-layout-picker, niri-control-center]
+media: [niri-hornero-left, niri-launcher, niri-terminal, niri-launcher-after-outside-click, niri-workspace-two, niri-layout-picker, niri-control-center]
 budget: {wall_s: 240, max_actions: 30}
 artifacts: {screenshots: always, logs: on-failure}
