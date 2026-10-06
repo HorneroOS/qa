@@ -58,6 +58,7 @@ steps:
   - probe:
       run: "qs ipc call debug focusState | jq -er '.lastNiriOutsideClick | [.x, .y, .inside, .rect] | @json'"
       contains: "false"
+      save: niri-outside-click-debug.json
   - probe: {run: "qs ipc call drawers state launcher", equals: "false", retry_s: 5}
   - key: super+d
   - probe: {run: "qs ipc call drawers state launcher", equals: "true", retry_s: 8}
