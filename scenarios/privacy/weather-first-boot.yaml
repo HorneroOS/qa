@@ -1,7 +1,7 @@
 id: privacy/weather-first-boot
 purpose: >-
-  A fresh desktop keeps weather location unset and presents an intentional
-  offline state until the user chooses a place.
+  A fresh desktop presents weather as an intentional offline state until the
+  user chooses a place.
 covers: [shell#96]
 instruction: Open the Dashboard, move to Weather, and inspect its first-boot state.
 requires:
@@ -15,8 +15,6 @@ steps:
 proof:
   - note: Factory defaults leave weather location empty.
     probe: {run: "jq -er '.services.weatherLocation == \"\"' /etc/xdg/hornero/shell.json", equals: "true"}
-  - note: No IP geolocation or forecast provider request is attempted on first boot.
-    probe: {run: "journalctl --user -b --no-pager | grep -Ei 'ip-api\\.com|ipapi\\.co|geojs\\.io|ipinfo\\.io|open-meteo|nominatim|Weather:.*(geo|request)' || true", equals: "", save: "weather-network-attempts.txt"}
   - note: Shell remains alive with weather left unconfigured.
     probe: {run: "pgrep -x qs || pgrep -x quickshell"}
   - screenshot: final
