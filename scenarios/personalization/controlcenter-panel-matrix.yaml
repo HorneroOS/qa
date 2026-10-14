@@ -1,0 +1,233 @@
+id: personalization/controlcenter-panel-matrix
+purpose: Capture every Control Center destination at the same desktop size for visual review.
+covers: [shell#209]
+requires:
+  compositor: hyprland
+  outputs: 1
+  resolution: 1280x800
+instruction: >-
+  Open Settings, then use Find a setting to visit every destination. Pause on
+  each page so its first view can be reviewed as a consistent visual set.
+steps:
+  - key: ctrl+space
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - type: ">Settings"
+  - wait: {stable: 0.4, timeout: 8}
+  - key: enter
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      contains: "Hornero Settings - "
+      retry_s: 10
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Network
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Network
+      retry_s: 8
+  - screenshot: controlcenter-network
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Bluetooth
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Bluetooth
+      retry_s: 8
+  - screenshot: controlcenter-bluetooth
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: VPN
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - VPN
+      retry_s: 8
+  - screenshot: controlcenter-vpn
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Appearance
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Appearance
+      retry_s: 8
+  - screenshot: controlcenter-appearance
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Bars
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Bars
+      retry_s: 8
+  - screenshot: controlcenter-bars
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Layout
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Layout
+      retry_s: 8
+  - screenshot: controlcenter-layout
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Launcher
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Launcher
+      retry_s: 8
+  - screenshot: controlcenter-launcher
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Dashboard
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Dashboard
+      retry_s: 8
+  - screenshot: controlcenter-dashboard
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Companion
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Companion
+      retry_s: 8
+  - screenshot: controlcenter-companion
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Audio
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Audio
+      retry_s: 8
+  - screenshot: controlcenter-audio
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Notifications
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Notifications
+      retry_s: 8
+  - screenshot: controlcenter-notifications
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: On-screen display
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - On-screen display
+      retry_s: 8
+  - screenshot: controlcenter-osd
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: System
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - System
+      retry_s: 8
+  - screenshot: controlcenter-system
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Updates
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Updates
+      retry_s: 8
+  - screenshot: controlcenter-updates
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Terminal
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Terminal
+      retry_s: 8
+  - screenshot: controlcenter-terminal
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Power
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Power
+      retry_s: 8
+  - screenshot: controlcenter-power
+  - key: ctrl+,
+  - wait: {changed: true, stable: 0.3, timeout: 5}
+  - type: Network
+  - wait: {stable: 0.3, timeout: 5}
+  - key: enter
+  - wait: {stable: 0.7, timeout: 8}
+  - probe:
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Network
+      retry_s: 8
+proof:
+  - note: The complete Control Center route matrix was reached through the Settings search interface.
+    probe:
+      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Network")] | length'''
+      equals: "1"
+  - note: The Shell remains alive after visiting the full panel set.
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+media:
+  - controlcenter-network
+  - controlcenter-bluetooth
+  - controlcenter-vpn
+  - controlcenter-appearance
+  - controlcenter-bars
+  - controlcenter-layout
+  - controlcenter-launcher
+  - controlcenter-dashboard
+  - controlcenter-companion
+  - controlcenter-audio
+  - controlcenter-notifications
+  - controlcenter-osd
+  - controlcenter-system
+  - controlcenter-updates
+  - controlcenter-terminal
+  - controlcenter-power
+budget: {wall_s: 360, max_actions: 150}
+artifacts: {screenshots: always, logs: on-failure}
