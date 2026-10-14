@@ -15,8 +15,8 @@ steps:
   - wait: {stable: 0.4, timeout: 8}
   - key: enter
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title | startswith("Hornero Settings - "))] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      contains: "Hornero Settings - "
       retry_s: 10
   - key: ctrl+,
   - wait: {changed: true, stable: 0.3, timeout: 5}
@@ -25,8 +25,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Network")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Network
       retry_s: 8
   - screenshot: controlcenter-network
   - key: ctrl+,
@@ -36,8 +36,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Bluetooth")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Bluetooth
       retry_s: 8
   - screenshot: controlcenter-bluetooth
   - key: ctrl+,
@@ -47,8 +47,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - VPN")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - VPN
       retry_s: 8
   - screenshot: controlcenter-vpn
   - key: ctrl+,
@@ -58,8 +58,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Appearance")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Appearance
       retry_s: 8
   - screenshot: controlcenter-appearance
   - key: ctrl+,
@@ -69,8 +69,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Bars")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Bars
       retry_s: 8
   - screenshot: controlcenter-bars
   - key: ctrl+,
@@ -80,8 +80,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Layout")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Layout
       retry_s: 8
   - screenshot: controlcenter-layout
   - key: ctrl+,
@@ -91,8 +91,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Launcher")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Launcher
       retry_s: 8
   - screenshot: controlcenter-launcher
   - key: ctrl+,
@@ -102,8 +102,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Dashboard")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Dashboard
       retry_s: 8
   - screenshot: controlcenter-dashboard
   - key: ctrl+,
@@ -113,8 +113,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Companion")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Companion
       retry_s: 8
   - screenshot: controlcenter-companion
   - key: ctrl+,
@@ -124,8 +124,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Audio")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Audio
       retry_s: 8
   - screenshot: controlcenter-audio
   - key: ctrl+,
@@ -135,8 +135,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Notifications")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Notifications
       retry_s: 8
   - screenshot: controlcenter-notifications
   - key: ctrl+,
@@ -146,8 +146,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - On-screen display")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - On-screen display
       retry_s: 8
   - screenshot: controlcenter-osd
   - key: ctrl+,
@@ -157,8 +157,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - System")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - System
       retry_s: 8
   - screenshot: controlcenter-system
   - key: ctrl+,
@@ -168,8 +168,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Updates")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Updates
       retry_s: 8
   - screenshot: controlcenter-updates
   - key: ctrl+,
@@ -179,8 +179,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Terminal")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Terminal
       retry_s: 8
   - screenshot: controlcenter-terminal
   - key: ctrl+,
@@ -190,8 +190,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Power")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Power
       retry_s: 8
   - screenshot: controlcenter-power
   - key: ctrl+,
@@ -201,8 +201,8 @@ steps:
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
-      run: 'hyprctl clients -j | jq -r ''[.[] | select(.title == "Hornero Settings - Network")] | length'''
-      equals: "1"
+      run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
+      equals: Hornero Settings - Network
       retry_s: 8
 proof:
   - note: The complete Control Center route matrix was reached through the Settings search interface.
