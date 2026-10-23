@@ -13,6 +13,7 @@ from pathlib import Path
 from hornero_qa import __version__
 from hornero_qa.engines.native import read_image_info
 from hornero_qa.evidence import load_bundle
+from hornero_qa.matrix import generate_matrix, resolve_repo_path
 from hornero_qa.scenario import ScenarioError, discover, load, resolve
 from hornero_qa.state import QAState
 
@@ -120,6 +121,33 @@ def _report(_: QAState, args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _matrix(_: QAState, args: argparse.Namespace) -> int:
+    from hornero_qa.matrix import MatrixError
+
+    repo_root = Path(__file__).resolve().parents[2]
+    output_path = resolve_repo_path(repo_root, Path(args.output))
+    try:
+        generated = generate_matrix(
+            repo_root=repo_root,
+            runs_dir=Path(args.runs_dir),
+        )
+    except MatrixError as exc:
+        print(f"hornero-qa: {exc}", file=sys.stderr)
+        return EXIT_FAIL
+    if args.check:
+        if not output_path.exists() or output_path.read_text(encoding="utf-8") != generated:
+            print(
+                f"scenario matrix is stale: run `hornero-qa matrix --output {args.output}`", file=sys.stderr
+            )
+            return EXIT_FAIL
+        print(f"scenario matrix is current: {output_path}")
+        return EXIT_OK
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(generated, encoding="utf-8")
+    print(output_path)
+    return EXIT_OK
+
+
 def _image(state: QAState, args: argparse.Namespace) -> int:
     from hornero_qa import image
 
@@ -221,6 +249,11 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("report", help="(re)generate a bundle's report.html")
     s.add_argument("bundle")
 
+    s = sub.add_parser("matrix", help="generate or check the scenario execution matrix")
+    s.add_argument("--runs-dir", default="docs/evidence/runs", help="tracked run bundles to include")
+    s.add_argument("--output", default="docs/SCENARIO-MATRIX.md")
+    s.add_argument("--check", action="store_true", help="fail if the checked-in matrix is stale")
+
     s = sub.add_parser("image", help="ready images")
     isub = s.add_subparsers(dest="image_cmd", required=True)
     i = isub.add_parser("info", help="show image provenance")
@@ -268,6 +301,7 @@ COMMANDS = {
     "run": _run,
     "inspect": _inspect,
     "report": _report,
+    "matrix": _matrix,
     "image": _image,
     "anchor": _anchor,
     "media": _media,

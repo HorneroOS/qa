@@ -1,0 +1,225 @@
+scenarios:
+  bars/dock-bottom-popout-travel:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Moving the pointer from
+      a bottom-dock status trigger into its popout must keep the card open across
+      the gap and preserve focus in the active app.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  bars/popout-close-empty-surface:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Closing a status popout
+      removes its visual surface and input region from the bar window.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  bars/rail-activewindow-hover:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: A vertical rail keeps the
+      active-window marker compact while its hover card still exposes the real window
+      title and live preview.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  bars/rail-activewindow-hover-right:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Verify an active-window
+      hover card attaches inward from the right-edge rail.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  bars/right-rail-popout-travel:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Moving from a right-rail
+      status trigger into its popout must keep the card open across the horizontal
+      gap and preserve focus in the active app.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  compositors/niri-desktop-baseline:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Hornero Desktop starts
+      with real Niri output/workspace/window state while its shared Shell, theme,
+      launcher and layout picker remain usable.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  drawers/dashboard-keyboard:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: SUPER+D (the product keybinding)
+      opens the dashboard drawer and Escape closes it again without leaving the drawer
+      stuck open.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  drawers/launcher-keyboard:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: CTRL+Space opens the app
+      launcher through `horneroctl apps launch`, typed text reaches its search field,
+      and Escape closes it.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  drawers/session-keyboard:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: SUPER+X opens the session
+      drawer (lock, logout, reboot, shutdown) and Escape dismisses it without triggering
+      any session action.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  layout-picker/escape-keeps-layout:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: SUPER+SHIFT+B opens the
+      Layout Picker, the picker takes the keyboard, and Escape closes it without changing
+      the active layout.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  layout-picker/keyboard-apply:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: The Layout Picker starts
+      keyboard focus at the active layout even when the stationary pointer is over
+      another card; arrows move in catalogue order and Enter applies the focused preset.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  layouts/apply-cockpit-clear:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Cockpit Clear: transparent
+      top and bottom bars. Applying the preset must switch the active preset and leave
+      exactly the declared bar edges visible.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  layouts/apply-dock-bottom:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Dock Bottom: a single dock-style
+      bottom bar. Applying the preset must switch the active preset and leave exactly
+      the declared bar edges visible.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  layouts/apply-horizon:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Horizon: inset top bar
+      plus a clear bottom workspace strip. Applying the preset must switch the active
+      preset and leave exactly the declared bar edges visible.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  layouts/apply-hornero-left:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: The Hornero original: one
+      attached bar on the left edge. Applying the preset must switch the active preset
+      and leave exactly the declared bar edges visible.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  layouts/apply-islands:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Islands: floating top bar
+      split into islands. Applying the preset must switch the active preset and leave
+      exactly the declared bar edges visible.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  lock/lock-keyboard:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: SUPER+L locks the session
+      with the shell''s own lock screen (the shell owns idle and manual lock).'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  multimonitor/two-outputs:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: With two monitors the desktop
+      comes up on both: Hyprland drives two outputs, the shell draws a bar on each,
+      and the active layout applies to both screens.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  notifications/shell-owns-bus:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: The Hornero shell owns
+      org.freedesktop.Notifications even with dunst installed, and a notification
+      is shown by the shell (dunst is never D-Bus activated).'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  perf/baseline:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Reference performance numbers
+      for the composition under test, measured by the shell''s own scripts/perf-baseline.sh
+      inside the fixed QA machine (2 vCPU, 2 GiB, one 1280x800 output), so numbers
+      are comparable between runs and releases (HorneroOS/shell#47).'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  personalization/baseline-settings:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Capture the current Settings
+      navigation and Appearance presentation.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  personalization/controlcenter-panel-matrix:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Capture every Control Center
+      destination at the same desktop size for visual review.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  privacy/weather-first-boot:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: A fresh desktop presents
+      weather as an intentional offline state until the user chooses a place.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  regressions/shell-24-lock-after-hyprlock:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: The shell must survive
+      a lock request after another locker (hyprlock) died mid-lock in the same session
+      (HorneroOS/shell#24, currently OPEN: the direct IPC call kills the shell with
+      the issue''s wl_display fatal). SIGTERM while holding the ext-session-lock strands
+      the session in Hyprland''s crashed-lockscreen fallback by design (recovery is
+      lua-only: hl.clear_crashed_lockscreen); the crash fallback also swallows the
+      Super+L keybind, so the issue''s direct `qs ipc call lock lock` is the real
+      probe. The contract is survival plus a truthful lock state.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  regressions/shell-77-rapid-escape:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Escape pressed 0.7 s after
+      Super+D still closes the dashboard: the first Escape must not be lost while
+      the drawer''s focus grab activates (HorneroOS/shell#77). Run with --repeat to
+      measure the miss rate.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  smoke/desktop-ready:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: The ready image boots to
+      a Hornero desktop: Hyprland session up, the shell running and answering IPC,
+      at least one bar visible, one output.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  smoke/no-config-errors:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: A fresh desktop shows no
+      Hyprland config-error banner: every product fragment the session sources parses
+      and every dispatcher it binds exists, including binds for optional plugins that
+      are not installed.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  themes/appearance-apply-light:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Apply a theme from Appearance
+      and verify the current-look preview follows the applied state.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  themes/package-only-flagships:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Installed Hornero theme
+      packs apply without a user or dotfiles theme catalogue, including Light and
+      Pampa with matching GTK and icons.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  themes/set-hornero-light:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Switching the official
+      theme to Hornero Light applies natively and the active-theme query agrees afterwards.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  themes/ui-switch-hornero-light:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: A keyboard user can find
+      Hornero Light through the launcher, apply it, and observe one coherent Shell,
+      GTK, icon, and mode state.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
+  wallpapers/unconfigured-empty-state:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: A fresh profile with no
+      wallpaper uses the intentional choose-wallpaper empty state instead of trying
+      to render a CLI diagnostic as an image.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
