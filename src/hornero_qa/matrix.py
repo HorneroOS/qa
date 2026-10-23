@@ -296,7 +296,12 @@ def _collect_bundles(
         if failure_class:
             label += f" ({failure_class})"
         report = root / "report.html"
-        evidence_path = report if report.exists() else result_file
+        report_relative = report.relative_to(repo_root).as_posix()
+        evidence_path = (
+            report
+            if report.exists() and report_relative in tracked_files
+            else result_file
+        )
         executions[str(scenario_id)].append(
             Execution(finished, label, _link(repo_root, evidence_path, "run report"), 3)
         )

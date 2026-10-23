@@ -133,6 +133,8 @@ def test_complete_run_bundle_supplies_the_result_and_date(tmp_path: Path) -> Non
     subprocess.run(
         ["git", "-C", str(repo), "add", str(run_dir.relative_to(repo))], check=True, capture_output=True
     )
+    # Local, untracked report output must not leak into the committed matrix.
+    (run_dir / "report.html").write_text("local report", encoding="utf-8")
 
     matrix = generate_matrix(repo, repo / "docs/evidence/runs")
 
