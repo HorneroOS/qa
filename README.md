@@ -21,6 +21,13 @@ today, deterministically or with model-agnostic agentic adapters
 [docs/SCENARIOS.md](docs/SCENARIOS.md), [docs/IMAGES.md](docs/IMAGES.md) and
 [docs/MEDIA.md](docs/MEDIA.md).
 
+The tracked scenario execution ledger is [docs/SCENARIO-MATRIX.md](docs/SCENARIO-MATRIX.md).
+Regenerate it with `uv run hornero-qa matrix`; CI checks it without starting a VM.
+Record a keep/fix/retire decision for every scenario in
+[docs/scenario-triage.yaml](docs/scenario-triage.yaml). Only complete run bundles
+can produce PASS/FAIL results; screenshot provenance alone is reported as
+unverified evidence.
+
 ## Quick start
 
 Requirements: Linux host with `/dev/kvm`, QEMU, `uv`, and a Hornero QA ready

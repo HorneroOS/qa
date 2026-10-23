@@ -23,5 +23,7 @@ jobs:
         run: uv run mypy
       - name: Pytest
         run: uv run pytest -q
+      - name: Scenario matrix
+        run: uv run hornero-qa matrix --check
       - name: Markdown lint
         run: npx --yes markdownlint-cli2 "**/*.md" "#.venv/**" "#node_modules/**"

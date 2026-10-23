@@ -19,3 +19,10 @@ def test_unknown_scenario_is_usage_error(tmp_path_factory: pytest.TempPathFactor
     img = tmp_path_factory.mktemp("img") / "x.qcow2"
     img.write_bytes(b"")
     assert main(["run", "no/such-scenario", "--image", str(img)]) == 64
+
+
+def test_matrix_check_resolves_output_from_repository_when_called_elsewhere(
+    tmp_path_factory: pytest.TempPathFactory, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(tmp_path_factory.mktemp("outside-repo"))
+    assert main(["matrix", "--check"]) == 0

@@ -1,6 +1,6 @@
 {
   "schema": "hornero.qa.screenshot/1",
-  "file": "007-niri-control-center.png",
+  "file": "niri-appearance.png",
   "sha256": "c215e80571e6dbdb5208dbcf7e2cfb1d271bd33c31a71eb37fc213ea006ca6dd",
   "run_id": "20261006T062348Z-compositors-niri-desktop-baseline-1",
   "scenario": "compositors/niri-desktop-baseline",

@@ -1,6 +1,6 @@
 {
   "schema": "hornero.qa.screenshot/1",
-  "file": "003-appearance-overview.png",
+  "file": "after-appearance.png",
   "sha256": "74125dc8551f5b7c18b7c9567949763de2eb7d7932c0befa74bc6e32f6c584e5",
   "run_id": "20261002T072232Z-personalization-baseline-settings-1",
   "scenario": "personalization/baseline-settings",
