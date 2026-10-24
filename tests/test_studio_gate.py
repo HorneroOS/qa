@@ -32,12 +32,33 @@ def _manifest() -> dict[str, Any]:
                     "approved": False,
                     "notes": "Owner selection required.",
                     "sha256": None,
+                    "manifest": None,
                 },
                 "status": "pending",
                 "evidence": [],
                 "review": {"decision": "pending", "reference": None},
             }
         ],
+    }
+
+
+def _approved_fixture(tmp_path: Path, fixture_id: str = "qemu-audio-v1") -> dict[str, Any]:
+    path = tmp_path / "fixtures/audio.yaml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    contents = (
+        "schema: hornero.qa.studio-fixture/1\n"
+        f"id: {fixture_id}\n"
+        "kind: virtual\n"
+        "hardware: {audio: qemu-virtual}\n"
+        "software: {kernel: pinned, pipewire: pinned}\n"
+    )
+    path.write_text(contents, encoding="utf-8")
+    return {
+        "id": fixture_id,
+        "approved": True,
+        "sha256": hashlib.sha256(contents.encode()).hexdigest(),
+        "manifest": "fixtures/audio.yaml",
+        "notes": "Reviewed fixture.",
     }
 
 
@@ -52,6 +73,7 @@ def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[
     )
     scenario_path = tmp_path / "scenario.yaml"
     scenario_path.write_text(scenario, encoding="utf-8")
+    fixture = _approved_fixture(tmp_path)
     pins = {
         "shell_sha": "a" * 40,
         "config_sha": "b" * 40,
@@ -62,7 +84,7 @@ def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[
         "manifest_sha256": "f" * 64,
         "catalogue_sha256": "1" * 64,
         "hardware_fixture": "qemu-audio-v1",
-        "hardware_fixture_sha256": "2" * 64,
+        "hardware_fixture_sha256": fixture["sha256"],
     }
     bundle = runs_dir / "run-1"
     (bundle / "screenshots").mkdir(parents=True)
@@ -160,12 +182,7 @@ def test_studio_gate_accepts_only_complete_pinned_reviewed_evidence(tmp_path: Pa
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {
-            "id": "qemu-audio-v1",
-            "approved": True,
-            "sha256": "2" * 64,
-            "notes": "Reviewed fixture.",
-        },
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -184,12 +201,7 @@ def test_stale_scenario_and_hardware_provenance_block_evidence(tmp_path: Path) -
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {
-            "id": "qemu-audio-v1",
-            "approved": True,
-            "sha256": "2" * 64,
-            "notes": "Reviewed fixture.",
-        },
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -211,12 +223,7 @@ def test_wrong_hardware_fixture_blocks_otherwise_current_bundle(tmp_path: Path) 
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {
-            "id": "qemu-audio-v1",
-            "approved": True,
-            "sha256": "2" * 64,
-            "notes": "Reviewed fixture.",
-        },
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -236,7 +243,7 @@ def test_changed_image_digest_blocks_otherwise_current_bundle(tmp_path: Path) ->
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -256,7 +263,7 @@ def test_approved_fixture_mismatch_blocks_even_when_run_and_evidence_agree(tmp_p
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {"id": "approved-fixture", "approved": True, "sha256": "3" * 64, "notes": "Approved."},
+        "fixture": _approved_fixture(tmp_path, "approved-fixture"),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -272,12 +279,37 @@ def test_approved_fixture_mismatch_blocks_even_when_run_and_evidence_agree(tmp_p
     )
 
 
+def test_fixture_manifest_content_must_match_approved_digest(tmp_path: Path) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+    fixture = _approved_fixture(tmp_path)
+    (tmp_path / fixture["manifest"]).write_text(
+        "schema: hornero.qa.studio-fixture/1\nid: qemu-audio-v1\nkind: virtual\n"
+        "hardware: {audio: changed}\nsoftware: {kernel: pinned, pipewire: pinned}\n",
+        encoding="utf-8",
+    )
+    data = _manifest()
+    data["items"][0] |= {
+        "fixture": fixture,
+        "status": "accepted",
+        "evidence": [evidence],
+        "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
+    }
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+
+    report = evaluate(manifest, runs_dir)
+
+    assert report["recommendation"] == "blocked"
+    assert any("SHA256 does not match" in reason for reason in report["items"][0]["blocking_reasons"])
+
+
 def test_invalid_screenshot_bytes_and_non_pr_review_link_block(tmp_path: Path) -> None:
     runs_dir = tmp_path / "runs"
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/issues/99"},
@@ -298,7 +330,7 @@ def test_jpeg_with_png_name_and_matching_sidecar_is_rejected(tmp_path: Path) -> 
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -325,7 +357,7 @@ def test_failed_assertion_cannot_be_hidden_by_pass_result(tmp_path: Path) -> Non
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -348,7 +380,7 @@ def test_bundle_must_record_each_scenario_proof_check(tmp_path: Path) -> None:
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -371,7 +403,7 @@ def test_duplicate_proof_assertions_do_not_hide_an_unchecked_criterion(tmp_path:
     evidence, _ = _accepted_run(runs_dir, tmp_path)
     data = _manifest()
     data["items"][0] |= {
-        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "fixture": _approved_fixture(tmp_path),
         "status": "accepted",
         "evidence": [evidence],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
@@ -404,7 +436,13 @@ def test_documentation_review_is_not_misrepresented_as_vm_execution(tmp_path: Pa
     item = data["items"][0]
     item |= {
         "evidence_kind": "review",
-        "fixture": {"id": "studio-doc-review", "approved": True, "sha256": None, "notes": "Review fixture."},
+        "fixture": {
+            "id": "studio-doc-review",
+            "approved": True,
+            "sha256": None,
+            "manifest": None,
+            "notes": "Review fixture.",
+        },
         "status": "accepted",
         "evidence": [{"kind": "review", "reference": "https://github.com/HorneroOS/docs/pull/80"}],
         "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/docs/pull/80"},

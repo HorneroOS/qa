@@ -17,6 +17,18 @@
   "$defs": {
     "sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fixtureManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "id", "kind", "hardware", "software"],
+      "properties": {
+        "schema": {"const": "hornero.qa.studio-fixture/1"},
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["virtual", "physical"]},
+        "hardware": {"type": "object", "minProperties": 1},
+        "software": {"type": "object", "minProperties": 1}
+      }
+    },
     "item": {
       "type": "object",
       "additionalProperties": false,
@@ -37,12 +49,13 @@
         "fixture": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["id", "approved", "notes", "sha256"],
+          "required": ["id", "approved", "notes", "sha256", "manifest"],
           "properties": {
             "id": {"type": ["string", "null"]},
             "approved": {"type": "boolean"},
             "notes": {"type": "string"},
-            "sha256": {"anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]}
+            "sha256": {"anyOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]},
+            "manifest": {"type": ["string", "null"], "minLength": 1}
           }
         },
         "status": {"enum": ["pending", "partial", "unsupported", "failed", "accepted"]},
