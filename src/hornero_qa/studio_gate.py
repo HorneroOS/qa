@@ -12,6 +12,7 @@ from typing import Any
 import jsonschema
 import yaml
 from PIL import Image
+from yaml.constructor import ConstructorError
 
 from hornero_qa.scenario import ScenarioError
 from hornero_qa.scenario import parse as parse_scenario
@@ -35,6 +36,37 @@ PIN_FIELDS = (
 
 class StudioGateError(ValueError):
     """Invalid Studio evidence index or unsafe bundle reference."""
+
+
+class _UniqueKeyLoader(yaml.SafeLoader):
+    """Safe YAML loader that rejects duplicate keys at every mapping depth."""
+
+
+def _construct_unique_mapping(
+    loader: _UniqueKeyLoader, node: yaml.MappingNode, deep: bool = False
+) -> dict[Any, Any]:
+    loader.flatten_mapping(node)
+    mapping: dict[Any, Any] = {}
+    for key_node, value_node in node.value:
+        key = loader.construct_object(key_node, deep=deep)
+        try:
+            duplicate = key in mapping
+        except TypeError as exc:
+            raise ConstructorError(
+                "while constructing a mapping", node.start_mark, "unhashable key", key_node.start_mark
+            ) from exc
+        if duplicate:
+            raise ConstructorError(
+                "while constructing a mapping",
+                node.start_mark,
+                f"duplicate key {key!r}",
+                key_node.start_mark,
+            )
+        mapping[key] = loader.construct_object(value_node, deep=deep)
+    return mapping
+
+
+_UniqueKeyLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _construct_unique_mapping)
 
 
 def _read_object(path: Path) -> dict[str, Any]:
@@ -179,7 +211,7 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
         except (OSError, StudioGateError) as exc:
             return [f"bundle {run_id!r} screenshot cannot be read: {exc}"]
         try:
-            with Image.open(io.BytesIO(payload)) as image:
+            with Image.open(io.BytesIO(payload), formats=["PNG"]) as image:
                 image.verify()
         except (OSError, ValueError):
             return [f"bundle {run_id!r} screenshot {shot.name!r} is not a valid PNG"]
@@ -207,7 +239,7 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
 def evaluate(manifest_path: Path, runs_dir: Path) -> dict[str, Any]:
     """Validate Studio gate inputs and report whether owners can review promotion evidence."""
     try:
-        manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+        manifest = yaml.load(manifest_path.read_text(encoding="utf-8"), Loader=_UniqueKeyLoader)
         schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError, yaml.YAMLError) as exc:
         raise StudioGateError(f"cannot load Studio acceptance index: {exc}") from exc

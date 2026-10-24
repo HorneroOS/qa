@@ -6,11 +6,12 @@ import json
 from pathlib import Path
 from typing import Any
 
+import pytest
 import yaml
 from PIL import Image
 
 from hornero_qa.cli import main
-from hornero_qa.studio_gate import evaluate
+from hornero_qa.studio_gate import StudioGateError, evaluate
 
 
 def _manifest() -> dict[str, Any]:
@@ -136,6 +137,22 @@ def test_pending_or_unsupported_outcome_blocks_preview(tmp_path: Path) -> None:
     assert evaluate(manifest, tmp_path / "runs")["recommendation"] == "blocked"
 
 
+@pytest.mark.parametrize(
+    "text",
+    [
+        "schema: hornero.qa.studio-acceptance/1\nedition_state: planned\nitems: []\nitems: []\n",
+        "schema: hornero.qa.studio-acceptance/1\nedition_state: planned\nitems:\n"
+        "  - id: audio\n    required: true\n    required: false\n",
+    ],
+)
+def test_duplicate_manifest_keys_are_rejected(tmp_path: Path, text: str) -> None:
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(text, encoding="utf-8")
+
+    with pytest.raises(StudioGateError, match="duplicate key"):
+        evaluate(manifest, tmp_path / "runs")
+
+
 def test_studio_gate_accepts_only_complete_pinned_reviewed_evidence(tmp_path: Path) -> None:
     runs_dir = tmp_path / "runs"
     evidence, _ = _accepted_run(runs_dir, tmp_path)
@@ -252,6 +269,33 @@ def test_invalid_screenshot_bytes_and_non_pr_review_link_block(tmp_path: Path) -
     reasons = report["items"][0]["blocking_reasons"]
     assert any("not a valid PNG" in reason for reason in reasons)
     assert any("pull request" in reason for reason in reasons)
+
+
+def test_jpeg_with_png_name_and_matching_sidecar_is_rejected(tmp_path: Path) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+    data = _manifest()
+    data["items"][0] |= {
+        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "status": "accepted",
+        "evidence": [evidence],
+        "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
+    }
+    output = io.BytesIO()
+    Image.new("RGB", (1, 1)).save(output, format="JPEG")
+    jpeg = output.getvalue()
+    shot = runs_dir / "run-1/screenshots/frame.png"
+    shot.write_bytes(jpeg)
+    sidecar = json.loads(shot.with_suffix(".json").read_text(encoding="utf-8"))
+    sidecar["sha256"] = hashlib.sha256(jpeg).hexdigest()
+    shot.with_suffix(".json").write_text(json.dumps(sidecar), encoding="utf-8")
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+
+    report = evaluate(manifest, runs_dir)
+
+    assert report["recommendation"] == "blocked"
+    assert any("not a valid PNG" in reason for reason in report["items"][0]["blocking_reasons"])
 
 
 def test_failed_assertion_cannot_be_hidden_by_pass_result(tmp_path: Path) -> None:
