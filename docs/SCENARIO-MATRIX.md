@@ -22,6 +22,7 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `layouts/apply-hornero-left` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `layouts/apply-islands` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `lock/lock-keyboard` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `multimonitor/mixed-dpi-two-outputs` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `multimonitor/three-outputs` | 2026-10-25 | PASS | [run report](docs/evidence/runs/20261025T034533Z-multimonitor-three-outputs-1/result.json) | keep | Keep this virtual three-output scenario in the Studio acceptance suite; rerun against each pinned release image. |
 | `multimonitor/two-outputs` | 2026-10-25 | PASS | [run report](docs/evidence/runs/20261025T035600Z-multimonitor-two-outputs-1/result.json) | keep | Keep this virtual two-output scenario in the Studio acceptance suite; rerun against each pinned release image. |
 | `multimonitor/virtual-output-disable-reconnect` | 2026-10-25 | PASS | [run report](docs/evidence/runs/20261025T053713Z-multimonitor-virtual-output-disable-reconnect-1/result.json) | keep | Keep as virtual compositor-level coverage; add device or hardware hotplug evidence only after a suitable fixture is approved. |

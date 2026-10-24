@@ -123,6 +123,13 @@ scenarios:
       both heads. This does not verify physical display hotplug.'
     schedule: Keep this virtual two-output scenario in the Studio acceptance suite;
       rerun against each pinned release image.
+  multimonitor/mixed-dpi-two-outputs:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Two virtual outputs use
+      distinct Hyprland display scales while the shell keeps its layout bars visible
+      on both outputs.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
   multimonitor/three-outputs:
     decision: keep
     rationale: 'Retain three-output virtual coverage. The earlier 20261024T160629Z
