@@ -22,7 +22,7 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `layouts/apply-hornero-left` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `layouts/apply-islands` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `lock/lock-keyboard` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `multimonitor/two-outputs` | 2026-10-24 | Incomplete bundle; missing logs/ | [run result](docs/evidence/runs/20261024T165406Z-multimonitor-two-outputs-1/result.json) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `multimonitor/two-outputs` | 2026-10-24 | Incomplete bundle; missing logs/ | [run result](docs/evidence/runs/20261024T173106Z-multimonitor-two-outputs-1/result.json) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `notifications/shell-owns-bus` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `perf/baseline` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `personalization/baseline-settings` | 2026-10-02 | Evidence only; result unavailable | [screenshot evidence](docs/evidence/settings-navigation-2026-10-02/after-appearance.png) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
