@@ -116,7 +116,7 @@ steps:
       run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
       equals: Hornero Settings - Javi
       retry_s: 8
-  - screenshot: controlcenter-companion
+  - screenshot: controlcenter-javi
   - key: ctrl+,
   - wait: {changed: true, stable: 0.3, timeout: 5}
   - type: Audio
@@ -221,7 +221,7 @@ media:
   - controlcenter-layout
   - controlcenter-launcher
   - controlcenter-dashboard
-  - controlcenter-companion
+  - controlcenter-javi
   - controlcenter-audio
   - controlcenter-notifications
   - controlcenter-osd

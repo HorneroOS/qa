@@ -1,9 +1,9 @@
 # Control Center audio on Preview 29
 
 This capture comes from the passing `personalization/controlcenter-panel-matrix`
-run `20261024T195154Z-personalization-controlcenter-panel-matrix-1`. The run
+run `20261024T200300Z-personalization-controlcenter-panel-matrix-1`. The run
 visited the Javi destination and then Audio through the Settings search UI; it
-finished in 153.135 seconds with all 54 actions and proof checks passing.
+finished in 145.623 seconds with all 54 actions and proof checks passing.
 
 | Provenance | Value |
 |---|---|
@@ -24,4 +24,4 @@ surface that Studio audio work should reuse and extend rather than duplicate.
 time, product pins, and environment. `run.json` preserves the scenario and
 image provenance; `result.json` records the verdict and run summary. The full
 local bundle remains under
-`~/.local/share/hornero/qa/runs/20261024T195154Z-personalization-controlcenter-panel-matrix-1/`.
+`~/.local/share/hornero/qa/runs/20261024T200300Z-personalization-controlcenter-panel-matrix-1/`.

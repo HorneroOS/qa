@@ -1,11 +1,11 @@
 {
   "schema": "hornero.qa.screenshot/1",
   "file": "010-controlcenter-audio.png",
-  "sha256": "59ed6004ddda674fdc355c5e2778026a9fbf58da230cc07c03f7d617be725acd",
-  "run_id": "20261024T195154Z-personalization-controlcenter-panel-matrix-1",
+  "sha256": "f7b01e9c281416f98636e638b88cf6152bcb83f5c0f553f23c08a2a0dec8c96c",
+  "run_id": "20261024T200300Z-personalization-controlcenter-panel-matrix-1",
   "scenario": "personalization/controlcenter-panel-matrix",
-  "captured": "2026-10-24T19:53:43Z",
-  "t": 108.914,
+  "captured": "2026-10-24T20:04:44Z",
+  "t": 102.935,
   "product": {
     "shell_sha": "85e35a3a9db252d20a64b02096b7f3432152c30e",
     "config_sha": "76a552f7ec56f00ed52e122150f27639a3a8d70a",
