@@ -1,11 +1,11 @@
 {
   "schema": "hornero.qa.screenshot/1",
-  "file": "002-all-three-screens-h1.png",
-  "sha256": "dd72762bf16dd92e9be90573594e094029219c71c0eea698e13e7e8d3a0d244f",
-  "run_id": "20261024T175312Z-multimonitor-three-outputs-1",
+  "file": "003-all-three-screens-h2.png",
+  "sha256": "4bb94440ec2094910c8581a2658f8ef9d79a33f4c7264b92912b3a270dc641e5",
+  "run_id": "20261024T175842Z-multimonitor-three-outputs-1",
   "scenario": "multimonitor/three-outputs",
-  "captured": "2026-10-24T17:54:24Z",
-  "t": 71.83,
+  "captured": "2026-10-24T17:59:52Z",
+  "t": 70.175,
   "product": {
     "shell_sha": "37a09b31b1cf7f10206b13a20d355e4bf5730cc4",
     "config_sha": "76a552f7ec56f00ed52e122150f27639a3a8d70a",

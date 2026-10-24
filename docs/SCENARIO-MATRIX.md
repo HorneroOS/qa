@@ -22,7 +22,7 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `layouts/apply-hornero-left` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `layouts/apply-islands` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `lock/lock-keyboard` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `multimonitor/three-outputs` | 2026-10-24 | PASS | [run report](docs/evidence/runs/20261024T175312Z-multimonitor-three-outputs-1/result.json) | keep | Keep this virtual three-output scenario in the Studio acceptance suite; rerun against each pinned release image. |
+| `multimonitor/three-outputs` | 2026-10-24 | PASS | [run report](docs/evidence/runs/20261024T175842Z-multimonitor-three-outputs-1/result.json) | keep | Keep this virtual three-output scenario in the Studio acceptance suite; rerun against each pinned release image. |
 | `multimonitor/two-outputs` | 2026-10-24 | Incomplete bundle; missing logs/ | [run result](docs/evidence/runs/20261024T173106Z-multimonitor-two-outputs-1/result.json) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `notifications/shell-owns-bus` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `perf/baseline` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
