@@ -1,0 +1,36 @@
+[32m  INFO[0m: Launching config: "$HOME/.config/quickshell/shell.qml"
+[32m  INFO[0m: Shell ID: "c2c965cc868169c13ac9ef4fd8778557" Path ID "c2c965cc868169c13ac9ef4fd8778557"
+[33m  WARN[0m: QFont::fromString: Invalid description '(empty)'
+[33m  WARN[0m: QFont::fromString: Invalid description '(empty)'
+[32m  INFO[0m: Saving logs to "/run/user/1000/quickshell/by-id/9dtz5fnt/log.qslog"
+MESA-EGL: warning: egl: failed to create dri2 screen
+MESA-EGL: warning: egl: failed to create dri2 screen
+[33m  WARN[97m quickshell.dbus.objectmanager[0m: Failed to create DBusObjectManagerInterface for "org.bluez" "/" : QDBusError("org.freedesktop.DBus.Error.ServiceUnknown", "The name is not activatable")
+[33m  WARN[97m scene[0m: QML Connections at @components/controls/Tooltip.qml[161:5]: Detected function "onHoveredChanged" in Connections element. This is probably intended to be a signal handler but no signal of the target matches the name.
+[33m  WARN[0m: CachingImageManager::sha256sum: failed to open "$HOME/.face"
+[32m  INFO[0m: Configuration Loaded
+[33m  WARN[97m quickshell.dbus[0m: Could not launch service org.freedesktop.UPower: QDBusError(org.freedesktop.DBus.Error.ServiceUnknown, The name is not activatable)
+[33m  WARN[97m quickshell.service.upower[0m: Could not start UPower. The UPower service will not work.
+[33m  WARN[97m scene[0m: QML FileView at @services/Colours.qml[423:5]: Read of $HOME/.cache/hornero/smart-colors/scheme.json failed: File does not exist.
+[33m  WARN[97m scene[0m: QML FileView at @modules/companion/CompanionPersist.qml[92:5]: Read of $HOME/.local/state/hornero/companion/state.json failed: File does not exist.
+[33m  WARN[97m scene[0m: QML FileView at @services/Notifs.qml[168:5]: Read of $HOME/.local/state/hornero/notifs.json failed: File does not exist.
+[33m  WARN[0m: CachingImageManager::createCache: failed to read "$HOME/.face"
+[33m  WARN[97m scene[0m: QML FileView at @modules/welcome/Session.qml[67:5]: Read of /run/user/1000/hornero/welcome/seen-1 failed: File does not exist.
+[33m  WARN[97m scene[0m: QML FileView at @modules/companion/AssistantBridge.qml[355:5]: Read of $HOME/.local/state/hornero/companion/chat-history.json failed: File does not exist.
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "monitor")
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "m")
+[33m  WARN[97m quickshell.dbus[0m: Could not launch service org.freedesktop.UPower.PowerProfiles: QDBusError(org.freedesktop.DBus.Error.ServiceUnknown, The name is not activatable)
+[33m  WARN[97m quickshell.service.powerprofiles[0m: Could not start PowerProfilesDaemon. The PowerProfiles service will not work.
+[33m  WARN[97m quickshell.io.fileview[0m: got operation finished from dropped operation qs::io::FileViewOperation(0x7f9292576020)
+[33m  WARN[97m scene[0m: QML CachingImage at @modules/dashboard/dash/User.qml[37:9]: Cannot open: file://$HOME/.face
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "radio", "wifi")
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "-g", "ACTIVE,SIGNAL,FREQ,SSID,BSSID,SECURITY", "d", "w")
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "-t", "-f", "NAME,TYPE", "connection", "show")
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "-t", "-f", "DEVICE,TYPE,STATE,CONNECTION", "device", "status")
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "-t", "-f", "NAME,TYPE", "connection", "show")
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "radio", "wifi")
+[33m  WARN[97m qt.qpa.services[0m: Failed to register with host portal QDBusError("org.freedesktop.portal.Error.Failed", "Could not register app ID: Connection already associated with an application ID")
+[33m  WARN[0m: Process failed to start, likely because the binary could not be found. Command: QList("nmcli", "-t", "-f", "DEVICE,TYPE,STATE,CONNECTION", "device", "status")
+libpng error: Read Error
+[33m  WARN[97m scene[0m: QML CachingImage at @modules/background/Wallpaper.qml[308:9]: Error decoding: file://$HOME/.cache/hornero/imagecache/[redacted-email]: Unable to read image data
+[33m  WARN[97m scene[0m: QML Connections at @components/controls/Tooltip.qml[161:5]: Detected function "onHoveredChanged" in Connections element. This is probably intended to be a signal handler but no signal of the target matches the name.
