@@ -43,7 +43,9 @@ def _manifest() -> dict[str, Any]:
 def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[str, Any]]:
     scenario = (
         "id: studio/audio\npurpose: Test audio evidence.\n"
-        "instruction: Inspect audio.\nproof:\n  - note: done\n"
+        "instruction: Inspect audio.\nproof:\n"
+        "  - note: Check the declared audio probe.\n"
+        '    probe: {run: "test -e /tmp/audio-ready", equals: ""}\n'
     )
     scenario_path = tmp_path / "scenario.yaml"
     scenario_path.write_text(scenario, encoding="utf-8")
@@ -70,7 +72,7 @@ def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[
     (bundle / "scenario.yaml").write_text(scenario, encoding="utf-8")
     (bundle / "actions.jsonl").write_text('{"t":0.1,"kind":"observe"}\n', encoding="utf-8")
     (bundle / "assertions.json").write_text(
-        '[{"kind":"probe","where":"audio","ok":true,"detail":"healthy"}]\n', encoding="utf-8"
+        '[{"kind":"probe","where":"proof 0","ok":true,"detail":"healthy"}]\n', encoding="utf-8"
     )
     product = pins.copy()
     (bundle / "run.json").write_text(
@@ -269,6 +271,29 @@ def test_failed_assertion_cannot_be_hidden_by_pass_result(tmp_path: Path) -> Non
 
     assert report["recommendation"] == "blocked"
     assert any("failed assertion" in reason for reason in report["items"][0]["blocking_reasons"])
+
+
+def test_bundle_must_record_each_scenario_proof_check(tmp_path: Path) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+    data = _manifest()
+    data["items"][0] |= {
+        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "status": "accepted",
+        "evidence": [evidence],
+        "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
+    }
+    (runs_dir / "run-1/assertions.json").write_text(
+        '[{"kind":"probe","where":"unrelated check","ok":true,"detail":"healthy"}]\n',
+        encoding="utf-8",
+    )
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+
+    report = evaluate(manifest, runs_dir)
+
+    assert report["recommendation"] == "blocked"
+    assert any("do not cover" in reason for reason in report["items"][0]["blocking_reasons"])
 
 
 def test_cli_reports_current_studio_gate_as_blocked(capsys: Any, tmp_path: Path) -> None:

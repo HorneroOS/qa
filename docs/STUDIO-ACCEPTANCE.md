@@ -24,13 +24,22 @@ that producer contract lands, owners can declare pins on an adopted image
 with `hornero-qa image adopt ... --product KEY=VALUE`; the gate does not infer
 values from labels, environment descriptions, or branch names.
 
-For bundle evidence, fixture approval includes a stable fixture ID and SHA256
-of its owner-reviewed fixture manifest. Both values must match the bundle's
-product metadata. The fixture manifest records the reviewed hardware tier and
-its kernel, firmware, driver, and application versions. Review evidence must
-link to a HorneroOS pull request, matching the accepted human review
-reference. A passing result only means the evidence is ready for product and
-installer owner review; it is not a release or edition promotion decision.
+For bundle evidence, fixture approval includes a stable fixture ID and a
+declared SHA256 for its owner-reviewed fixture manifest. Both values must
+match the bundle's product metadata. At this stage the gate does not fetch or
+hash the fixture manifest, so this equality is a declaration check. Review
+evidence must link to a HorneroOS pull request, matching the accepted human
+review reference; the gate does not query GitHub to validate the PR or its
+reviews.
+
+The gate validates that bundle files are present and internally consistent;
+it does not authenticate them. `image adopt --product` records operator
+declarations and does not prove that an image contains the declared commits
+or catalogue. Screenshot sidecars and logs are not signed, and the gate does
+not bind their contents to an immutable bundle digest. Owners must inspect
+the referenced evidence and verify its relevance to the outcome before
+accepting review. `eligible_for_owner_review` only reports readiness for that
+manual inspection. It is not a release or edition promotion decision.
 
 Numeric performance thresholds stay disabled until QA and product owners
 review the fixture, kernel/driver/app versions, measurement method, baseline,
