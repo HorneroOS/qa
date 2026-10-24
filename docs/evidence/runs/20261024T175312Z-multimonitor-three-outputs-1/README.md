@@ -23,9 +23,11 @@ engine. It does not establish physical hotplug or tablet support.
 ## Privacy curation
 
 This tracked bundle contains run metadata, scenario, actions, assertions,
-result, screenshots, and screenshot sidecars. It omits the HTML report and
-guest/compositor/application logs because they contain guest paths, machine or
-boot identifiers, or unrelated configuration. Screenshot sidecar hashes were
-verified against their PNG files. Included text metadata and screenshots were
-reviewed for personal paths, hostnames, email addresses, and machine or boot
-identifiers; none were found.
+result, screenshots, and screenshot sidecars. The scenario retains diagnostic
+logs only on failure; this passing run therefore has no required log artifacts.
+The HTML report and the runner's local diagnostic logs are not included because
+they contain guest paths, machine or boot identifiers, or unrelated
+configuration. Screenshot sidecar hashes were verified against their PNG
+files. Included text metadata and screenshots were reviewed for personal
+paths, hostnames, email addresses, and machine or boot identifiers; none were
+found.
