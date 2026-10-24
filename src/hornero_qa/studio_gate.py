@@ -13,6 +13,9 @@ import jsonschema
 import yaml
 from PIL import Image
 
+from hornero_qa.scenario import ScenarioError
+from hornero_qa.scenario import parse as parse_scenario
+
 SCHEMA_PATH = Path(__file__).parent / "schemas" / "studio_acceptance.schema.json"
 RUN_SCHEMA = "hornero.qa.run/1"
 REQUIRED_BUNDLE_FILES = ("run.json", "result.json", "scenario.yaml", "actions.jsonl", "assertions.json")
@@ -80,17 +83,29 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
     if result.get("class") not in (None, "pass"):
         return [f"bundle {run_id!r} has an invalid PASS result class"]
     try:
-        scenario = yaml.safe_load((root / "scenario.yaml").read_text(encoding="utf-8"))
+        scenario_text = (root / "scenario.yaml").read_text(encoding="utf-8")
+        scenario = parse_scenario(scenario_text)
         actions = [
             json.loads(line)
             for line in (root / "actions.jsonl").read_text(encoding="utf-8").splitlines()
             if line.strip()
         ]
         assertions = json.loads((root / "assertions.json").read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError, yaml.YAMLError) as exc:
+    except (OSError, json.JSONDecodeError, yaml.YAMLError, ScenarioError) as exc:
         return [f"bundle {run_id!r} contains invalid evidence data: {exc}"]
-    if not isinstance(scenario, dict) or scenario.get("id") != entry["scenario"]:
+    if scenario.id != entry["scenario"]:
         return [f"bundle {run_id!r} scenario document has a mismatched ID"]
+    proofs = scenario.proof
+    if not isinstance(proofs, list) or not proofs:
+        return [f"bundle {run_id!r} scenario has no deterministic proof criteria"]
+    proof_kinds: dict[str, str] = {}
+    for index, proof in enumerate(proofs):
+        if not isinstance(proof, dict):
+            return [f"bundle {run_id!r} scenario proof {index} is malformed"]
+        kinds = [key for key in proof if key != "note"]
+        if len(kinds) != 1 or not isinstance(kinds[0], str):
+            return [f"bundle {run_id!r} scenario proof {index} must declare exactly one check"]
+        proof_kinds[f"proof {index}"] = kinds[0]
     if not actions or not all(
         isinstance(action, dict)
         and isinstance(action.get("kind"), str)
@@ -113,6 +128,12 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
         return [f"bundle {run_id!r} has no valid assertion records"]
     if not all(assertion["ok"] for assertion in assertions):
         return [f"bundle {run_id!r} contains a failed assertion despite its PASS result"]
+    recorded_proofs = [assertion for assertion in assertions if assertion["where"].startswith("proof ")]
+    if len(recorded_proofs) != len(proof_kinds) or any(
+        assertion["where"] not in proof_kinds or assertion["kind"] != proof_kinds[assertion["where"]]
+        for assertion in recorded_proofs
+    ):
+        return [f"bundle {run_id!r} assertions do not cover the scenario's declared proof criteria"]
     scenario_path = root / "scenario.yaml"
     if _scenario_digest(scenario_path) != entry["scenario_sha256"]:
         return [f"bundle {run_id!r} uses a stale scenario revision"]
