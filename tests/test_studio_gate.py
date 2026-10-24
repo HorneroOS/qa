@@ -304,6 +304,30 @@ def test_fixture_manifest_content_must_match_approved_digest(tmp_path: Path) -> 
     assert any("SHA256 does not match" in reason for reason in report["items"][0]["blocking_reasons"])
 
 
+def test_fixture_manifest_rejects_symlinked_parent_directory(tmp_path: Path) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+    fixture = _approved_fixture(tmp_path)
+    (tmp_path / "fixtures").rename(tmp_path / "actual-fixtures")
+    (tmp_path / "fixtures").symlink_to("actual-fixtures", target_is_directory=True)
+    data = _manifest()
+    data["items"][0] |= {
+        "fixture": fixture,
+        "status": "accepted",
+        "evidence": [evidence],
+        "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
+    }
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+
+    report = evaluate(manifest, runs_dir)
+
+    assert report["recommendation"] == "blocked"
+    assert any(
+        "fixture manifest path is unsafe" in reason for reason in report["items"][0]["blocking_reasons"]
+    )
+
+
 def test_invalid_screenshot_bytes_and_non_pr_review_link_block(tmp_path: Path) -> None:
     runs_dir = tmp_path / "runs"
     evidence, _ = _accepted_run(runs_dir, tmp_path)
