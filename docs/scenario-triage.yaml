@@ -122,6 +122,15 @@ scenarios:
       and the active layout applies to both screens.'
     schedule: Schedule in the next approved KVM QA window against the pinned ready
       image.
+  multimonitor/mixed-dpi-two-outputs:
+    decision: keep
+    rationale: 'Retain coverage. The earlier 20261024T160425Z run used a QA runner
+      that did not enable the second QEMU scanout, so it did not isolate product
+      behavior. The follow-up 20261024T174334Z run enabled both outputs and verified
+      two bars per screen, but Hyprland reported scale 1.6 after scale 1.5 was
+      requested for Virtual-2. Keep this mismatch open without inferring its cause.'
+    schedule: Investigate the 1.5-to-1.6 scale readback. Preserve the 1.5 expectation
+      until the cause is understood.
   notifications/shell-owns-bus:
     decision: keep
     rationale: 'Retain coverage for this product behavior: The Hornero shell owns
