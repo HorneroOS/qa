@@ -1,0 +1,31 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>multimonitor/two-outputs · Hornero QA</title><style>
+:root{--bg:#f6f1ec;--fg:#2a211c;--muted:#6f625a;--card:#fff;--line:#e3d8cf;
+--pass:#2f7d4f;--fail:#b3412c;--inc:#9a6b12}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1613;--fg:#f1e8e1;--muted:#b3a59b;
+--card:#25201c;--line:#3a312b}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px}
+h1{font-size:1.4rem;margin:0 0 4px}h2{font-size:1.1rem;margin:28px 0 8px}
+.v{display:inline-block;padding:2px 10px;border-radius:999px;color:#fff;font-weight:600}
+.pass{background:var(--pass)}.fail{background:var(--fail)}.inconclusive{background:var(--inc)}
+table{border-collapse:collapse;width:100%;background:var(--card)}
+td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+code,pre{font:13px/1.4 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);padding:8px}
+figure img{width:100%;height:auto;display:block}
+</style></head><body><main>
+<h1>multimonitor/two-outputs <span class="v fail">FAIL</span></h1>
+<p class=muted>20261024T165406Z-multimonitor-two-outputs-1 · attempt 1 · 88.872 s · class <code>product</code></p>
+<p><strong>Reason:</strong> proof 1: stdout &#x27;{&quot;left&quot;:2,&quot;right&quot;:0}&#x27; != &#x27;{&quot;left&quot;:2,&quot;right&quot;:2}&#x27;</p>
+<h2>Instruction</h2><p>Start the desktop with two monitors connected and look at both screens.</p>
+<h2>Proof</h2><table><tr><th></th><th>where</th><th>kind</th><th>note</th><th>detail</th></tr><tr><td>✅</td><td>proof 0</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>❌</td><td>proof 1</td><td>probe</td><td></td><td><code>stdout &#x27;{&quot;left&quot;:2,&quot;right&quot;:0}&#x27; != &#x27;{&quot;left&quot;:2,&quot;right&quot;:2}&#x27;</code></td></tr><tr><td>✅</td><td>proof 2</td><td>screenshot</td><td></td><td><code>[&quot;001-both-screens-h0.png&quot;, &quot;002-both-screens-h1.png&quot;]</code></td></tr></table>
+<h2>Product and environment</h2><table><tr><th>shell_sha</th><td><code>85e35a3a9db252d20a64b02096b7f3432152c30e</code></td></tr><tr><th>config_sha</th><td><code>76a552f7ec56f00ed52e122150f27639a3a8d70a</code></td></tr><tr><th>horneroctl</th><td><code>horneroctl horneroctl-v0.2.0-preview29 (028a52c)</code></td></tr><tr><th>horneroctl_sha256</th><td><code>8e9ffd96d578543d50caa17d9449bb52e79fdf1ae90598fe417f370a263602f5</code></td></tr><tr><th>engine</th><td><code>native</code></td></tr><tr><th>compositor</th><td><code>hyprland</code></td></tr><tr><th>hornero_qa</th><td><code>0.1.0</code></td></tr><tr><th>host_kernel</th><td><code>7.2.9-arch1-1</code></td></tr><tr><th>qemu</th><td><code>QEMU emulator version 11.1.2</code></td></tr><tr><th>image</th><td><code>qa-display-preview29-20261024.qcow2</code></td></tr><tr><th>outputs</th><td><code>2</code></td></tr><tr><th>resolution</th><td><code>1280x800</code></td></tr></table>
+<h2>Screenshots</h2><div class=grid><figure><a href="screenshots/001-both-screens-h0.png"><img loading="lazy" src="screenshots/001-both-screens-h0.png" alt="001-both-screens-h0.png"></a><figcaption class=muted>001-both-screens-h0.png</figcaption></figure><figure><a href="screenshots/002-both-screens-h1.png"><img loading="lazy" src="screenshots/002-both-screens-h1.png" alt="002-both-screens-h1.png"></a><figcaption class=muted>002-both-screens-h1.png</figcaption></figure><figure><a href="screenshots/003-final-h0.png"><img loading="lazy" src="screenshots/003-final-h0.png" alt="003-final-h0.png"></a><figcaption class=muted>003-final-h0.png</figcaption></figure><figure><a href="screenshots/004-final-h1.png"><img loading="lazy" src="screenshots/004-final-h1.png" alt="004-final-h1.png"></a><figcaption class=muted>004-final-h1.png</figcaption></figure></div>
+<h2>Actions</h2><pre>{&quot;t&quot;: 21.642, &quot;kind&quot;: &quot;ready&quot;, &quot;serial&quot;: []}
+{&quot;t&quot;: 42.665, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;horneroctl shell preset apply cockpit-clear --yes&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;applied preset Cockpit Clear (cockpit-clear)&quot;, &quot;stderr&quot;: &quot;&quot;}</pre>
+<p class=muted>Logs: <a href="logs/">logs/</a> · machine-readable: run.json, result.json, assertions.json, actions.jsonl</p>
+</main></body></html>

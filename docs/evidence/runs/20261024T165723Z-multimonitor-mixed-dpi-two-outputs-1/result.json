@@ -1,0 +1,12 @@
+{
+  "run_id": "20261024T165723Z-multimonitor-mixed-dpi-two-outputs-1",
+  "finished": "2026-10-24T16:58:56Z",
+  "wall_s": 93.126,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout 'false' != 'true'; proof 1: stdout '{\"left\":2,\"right\":0}' != '{\"left\":2,\"right\":2}'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}
