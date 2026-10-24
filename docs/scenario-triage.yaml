@@ -122,6 +122,13 @@ scenarios:
       and the active layout applies to both screens.'
     schedule: Schedule in the next approved KVM QA window against the pinned ready
       image.
+  multimonitor/three-outputs:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: A three-output QEMU guest
+      starts the desktop on all configured virtual displays and captures each output
+      for review. This does not claim mixed-DPI or physical hotplug support.'
+    schedule: Schedule in the next approved KVM QA window against the pinned ready
+      image.
   notifications/shell-owns-bus:
     decision: keep
     rationale: 'Retain coverage for this product behavior: The Hornero shell owns
