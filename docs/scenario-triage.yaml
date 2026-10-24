@@ -124,11 +124,12 @@ scenarios:
       image.
   multimonitor/three-outputs:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: A three-output QEMU guest
-      starts the desktop on all configured virtual displays and captures each output
-      for review. This does not claim mixed-DPI or physical hotplug support.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: 'Retain coverage. Run 20261024T160629Z configured three virtual outputs,
+      but Hyprland reported one monitor and the other two captured heads were blank.
+      The runner records FAIL (product); because the guest exposed fewer outputs than
+      configured, this run does not isolate a Studio or Shell regression.'
+    schedule: Verify the native-QEMU output setup and rerun against the pinned ready
+      image before attributing the failure to product behavior.
   notifications/shell-owns-bus:
     decision: keep
     rationale: 'Retain coverage for this product behavior: The Hornero shell owns

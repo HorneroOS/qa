@@ -1,0 +1,12 @@
+{
+  "run_id": "20261024T160629Z-multimonitor-three-outputs-1",
+  "finished": "2026-10-24T16:07:51Z",
+  "wall_s": 81.074,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '1' != '3'; proof 1: blank heads [1, 2]",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}
