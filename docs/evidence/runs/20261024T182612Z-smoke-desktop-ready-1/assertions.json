@@ -1,0 +1,55 @@
+[
+  {
+    "t": 49.335,
+    "kind": "probe",
+    "run": "pgrep -x Hyprland >/dev/null && echo up",
+    "ok": true,
+    "rc": 0,
+    "stdout": "up",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 49.557,
+    "kind": "probe",
+    "run": "qs ipc call drawers list",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bar\nosd\nsession\nlauncher\ndashboard\nutilities\nsidebar\nlayoutPicker",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 49.759,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq length",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 49.989,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq '[.[] | select(.visible)] | length > 0'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 50.297,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-desktop.png"
+    ],
+    "where": "proof 4"
+  }
+]

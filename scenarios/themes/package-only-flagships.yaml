@@ -57,7 +57,7 @@ steps:
       retry_s: 10
   - probe:
       run: "horneroctl wallpaper current"
-      contains: "/usr/share/hornero/wallpapers/pampa/pampa-01.png"
+      contains: "/usr/share/hornero/wallpapers/pampa/pampa-01.jpg"
   - key: ctrl+space
   - wait: {changed: true, stable: 0.4, timeout: 8}
   - probe:

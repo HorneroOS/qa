@@ -1,0 +1,12 @@
+{
+  "run_id": "20261024T182612Z-smoke-desktop-ready-1",
+  "finished": "2026-10-24T18:27:05Z",
+  "wall_s": 52.77,
+  "verdict": "pass",
+  "class": null,
+  "regression": false,
+  "reason": "all proof checks passed",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

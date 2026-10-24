@@ -1,0 +1,66 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>themes/package-only-flagships · Hornero QA</title><style>
+:root{--bg:#f6f1ec;--fg:#2a211c;--muted:#6f625a;--card:#fff;--line:#e3d8cf;
+--pass:#2f7d4f;--fail:#b3412c;--inc:#9a6b12}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1613;--fg:#f1e8e1;--muted:#b3a59b;
+--card:#25201c;--line:#3a312b}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px}
+h1{font-size:1.4rem;margin:0 0 4px}h2{font-size:1.1rem;margin:28px 0 8px}
+.v{display:inline-block;padding:2px 10px;border-radius:999px;color:#fff;font-weight:600}
+.pass{background:var(--pass)}.fail{background:var(--fail)}.inconclusive{background:var(--inc)}
+table{border-collapse:collapse;width:100%;background:var(--card)}
+td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+code,pre{font:13px/1.4 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);padding:8px}
+figure img{width:100%;height:auto;display:block}
+</style></head><body><main>
+<h1>themes/package-only-flagships <span class="v pass">PASS</span></h1>
+<p class=muted>20261024T184648Z-themes-package-only-flagships-1 · attempt 1 · 120.185 s · class <code>-</code></p>
+<p><strong>Reason:</strong> all proof checks passed</p>
+<h2>Instruction</h2><p>Search for Hornero Light in the launcher and apply it. Then search for Pampa and apply it. Inspect both results and return to Hornero Light.</p>
+<h2>Proof</h2><table><tr><th></th><th>where</th><th>kind</th><th>note</th><th>detail</th></tr><tr><td>✅</td><td>step 0</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 1</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 4</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 9</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 13</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 18</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 20</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 21</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 24</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>step 28</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 0</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 1</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 2</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 3</td><td>probe</td><td></td><td><code>rc=0</code></td></tr><tr><td>✅</td><td>proof 4</td><td>screenshot</td><td></td><td><code>[&quot;005-final.png&quot;]</code></td></tr></table>
+<h2>Product and environment</h2><table><tr><th>shell_sha</th><td><code>248f0c9dd020f5b83bad71503ecc488a6d0d6857</code></td></tr><tr><th>config_sha</th><td><code>64557c05ecf368fb3d5ed6ced69bc5e05901edbe</code></td></tr><tr><th>horneroctl</th><td><code>horneroctl horneroctl-v0.2.0-preview30-4-g78ff5f4 (78ff5f4)</code></td></tr><tr><th>horneroctl_sha256</th><td><code>269687cbf66666c7a33ebdaa82bafdf4b912e666405c44b7a9e42173af85f877</code></td></tr><tr><th>engine</th><td><code>native</code></td></tr><tr><th>compositor</th><td><code>hyprland</code></td></tr><tr><th>hornero_qa</th><td><code>0.1.0</code></td></tr><tr><th>host_kernel</th><td><code>7.2.9-arch1-1</code></td></tr><tr><th>qemu</th><td><code>QEMU emulator version 11.1.2</code></td></tr><tr><th>image</th><td><code>preview20-core78ff-shell248f0c9.qcow2</code></td></tr><tr><th>outputs</th><td><code>1</code></td></tr><tr><th>resolution</th><td><code>1280x800</code></td></tr></table>
+<h2>Screenshots</h2><div class=grid><figure><a href="screenshots/001-package-only-hornero-light-search.png"><img loading="lazy" src="screenshots/001-package-only-hornero-light-search.png" alt="001-package-only-hornero-light-search.png"></a><figcaption class=muted>001-package-only-hornero-light-search.png</figcaption></figure><figure><a href="screenshots/002-package-only-hornero-light.png"><img loading="lazy" src="screenshots/002-package-only-hornero-light.png" alt="002-package-only-hornero-light.png"></a><figcaption class=muted>002-package-only-hornero-light.png</figcaption></figure><figure><a href="screenshots/003-package-only-pampa-search.png"><img loading="lazy" src="screenshots/003-package-only-pampa-search.png" alt="003-package-only-pampa-search.png"></a><figcaption class=muted>003-package-only-pampa-search.png</figcaption></figure><figure><a href="screenshots/004-package-only-pampa.png"><img loading="lazy" src="screenshots/004-package-only-pampa.png" alt="004-package-only-pampa.png"></a><figcaption class=muted>004-package-only-pampa.png</figcaption></figure><figure><a href="screenshots/005-final.png"><img loading="lazy" src="screenshots/005-final.png" alt="005-final.png"></a><figcaption class=muted>005-final.png</figcaption></figure><figure><a href="screenshots/006-final.png"><img loading="lazy" src="screenshots/006-final.png" alt="006-final.png"></a><figcaption class=muted>006-final.png</figcaption></figure></div>
+<h2>Actions</h2><pre>{&quot;t&quot;: 17.774, &quot;kind&quot;: &quot;ready&quot;, &quot;serial&quot;: []}
+{&quot;t&quot;: 38.807, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;rm -rf \&quot;$HOME/.local/share/hornero/themes\&quot; \&quot;$HOME/.local/share/hornero/wallpapers\&quot; \&quot;$HOME/.local/share/dots/themes\&quot; \&quot;$HOME/.local/share/dots/wallpapers\&quot;&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 69.529, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 0, &quot;value&quot;: {&quot;run&quot;: &quot;test ! -e \&quot;$HOME/.local/share/hornero/themes\&quot; &amp;&amp; test ! -e \&quot;$HOME/.local/share/dots/themes\&quot; &amp;&amp; test ! -e \&quot;$HOME/.local/share/hornero/wallpapers\&quot; &amp;&amp; test ! -e \&quot;$HOME/.local/share/dots/wallpapers\&quot; &amp;&amp; echo no-user-catalogue&quot;, &quot;equals&quot;: &quot;no-user-catalogue&quot;}, &quot;note&quot;: null}
+{&quot;t&quot;: 69.7, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 1, &quot;value&quot;: {&quot;run&quot;: &quot;horneroctl appearance theme list --full --json | jq -er &#x27;.message | fromjson | any(.[]; .id == \&quot;hornero-light\&quot;) and any(.[]; .id == \&quot;pampa\&quot;)&#x27;&quot;, &quot;equals&quot;: &quot;true&quot;}, &quot;note&quot;: null}
+{&quot;t&quot;: 70.011, &quot;kind&quot;: &quot;key&quot;, &quot;step&quot;: 2, &quot;value&quot;: &quot;ctrl+space&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 70.352, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 3, &quot;value&quot;: {&quot;changed&quot;: true, &quot;stable&quot;: 0.4, &quot;timeout&quot;: 8}, &quot;note&quot;: null}
+{&quot;t&quot;: 78.688, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 3, &quot;ok&quot;: false}
+{&quot;t&quot;: 78.688, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 4, &quot;value&quot;: {&quot;run&quot;: &quot;qs ipc call drawers state launcher&quot;, &quot;equals&quot;: &quot;true&quot;, &quot;retry_s&quot;: 3}, &quot;note&quot;: null}
+{&quot;t&quot;: 79.055, &quot;kind&quot;: &quot;type&quot;, &quot;step&quot;: 5, &quot;value&quot;: &quot;&gt;theme Hornero Light&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 80.086, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 6, &quot;value&quot;: {&quot;changed&quot;: true, &quot;stable&quot;: 0.5, &quot;timeout&quot;: 8}, &quot;note&quot;: null}
+{&quot;t&quot;: 83.637, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 6, &quot;ok&quot;: true}
+{&quot;t&quot;: 83.637, &quot;kind&quot;: &quot;screenshot&quot;, &quot;step&quot;: 7, &quot;value&quot;: &quot;package-only-hornero-light-search&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 84.102, &quot;kind&quot;: &quot;key&quot;, &quot;step&quot;: 8, &quot;value&quot;: &quot;enter&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 84.409, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 9, &quot;value&quot;: {&quot;run&quot;: &quot;horneroctl appearance theme get&quot;, &quot;contains&quot;: &quot;hornero-light&quot;, &quot;retry_s&quot;: 20}, &quot;note&quot;: null}
+{&quot;t&quot;: 84.76, &quot;kind&quot;: &quot;screenshot&quot;, &quot;step&quot;: 10, &quot;value&quot;: &quot;package-only-hornero-light&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 85.045, &quot;kind&quot;: &quot;key&quot;, &quot;step&quot;: 11, &quot;value&quot;: &quot;ctrl+space&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 85.477, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 12, &quot;value&quot;: {&quot;changed&quot;: true, &quot;stable&quot;: 0.4, &quot;timeout&quot;: 8}, &quot;note&quot;: null}
+{&quot;t&quot;: 93.597, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 12, &quot;ok&quot;: false}
+{&quot;t&quot;: 93.683, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 13, &quot;value&quot;: {&quot;run&quot;: &quot;qs ipc call drawers state launcher&quot;, &quot;equals&quot;: &quot;true&quot;, &quot;retry_s&quot;: 3}, &quot;note&quot;: null}
+{&quot;t&quot;: 94.107, &quot;kind&quot;: &quot;type&quot;, &quot;step&quot;: 14, &quot;value&quot;: &quot;&gt;theme Pampa&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 94.817, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 15, &quot;value&quot;: {&quot;changed&quot;: true, &quot;stable&quot;: 0.5, &quot;timeout&quot;: 8}, &quot;note&quot;: null}
+{&quot;t&quot;: 99.363, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 15, &quot;ok&quot;: true}
+{&quot;t&quot;: 99.363, &quot;kind&quot;: &quot;screenshot&quot;, &quot;step&quot;: 16, &quot;value&quot;: &quot;package-only-pampa-search&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 99.673, &quot;kind&quot;: &quot;key&quot;, &quot;step&quot;: 17, &quot;value&quot;: &quot;enter&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 100.066, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 18, &quot;value&quot;: {&quot;run&quot;: &quot;horneroctl appearance theme get&quot;, &quot;contains&quot;: &quot;pampa&quot;, &quot;retry_s&quot;: 30}, &quot;note&quot;: null}
+{&quot;t&quot;: 102.004, &quot;kind&quot;: &quot;screenshot&quot;, &quot;step&quot;: 19, &quot;value&quot;: &quot;package-only-pampa&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 102.344, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 20, &quot;value&quot;: {&quot;run&quot;: &quot;horneroctl --json appearance theme get | jq -er &#x27;[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\&quot;|\&quot;)&#x27;&quot;, &quot;equals&quot;: &quot;pampa|dark|Hornero-Pampa|Papirus-Dark|prefer-dark&quot;, &quot;retry_s&quot;: 10}, &quot;note&quot;: null}
+{&quot;t&quot;: 102.537, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 21, &quot;value&quot;: {&quot;run&quot;: &quot;horneroctl wallpaper current&quot;, &quot;contains&quot;: &quot;/usr/share/hornero/wallpapers/pampa/pampa-01.jpg&quot;}, &quot;note&quot;: null}
+{&quot;t&quot;: 102.725, &quot;kind&quot;: &quot;key&quot;, &quot;step&quot;: 22, &quot;value&quot;: &quot;ctrl+space&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 103.086, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 23, &quot;value&quot;: {&quot;changed&quot;: true, &quot;stable&quot;: 0.4, &quot;timeout&quot;: 8}, &quot;note&quot;: null}
+{&quot;t&quot;: 111.138, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 23, &quot;ok&quot;: false}
+{&quot;t&quot;: 111.138, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 24, &quot;value&quot;: {&quot;run&quot;: &quot;qs ipc call drawers state launcher&quot;, &quot;equals&quot;: &quot;true&quot;, &quot;retry_s&quot;: 3}, &quot;note&quot;: null}
+{&quot;t&quot;: 111.381, &quot;kind&quot;: &quot;type&quot;, &quot;step&quot;: 25, &quot;value&quot;: &quot;&gt;theme Hornero Light&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 112.475, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 26, &quot;value&quot;: {&quot;changed&quot;: true, &quot;stable&quot;: 0.5, &quot;timeout&quot;: 8}, &quot;note&quot;: null}
+{&quot;t&quot;: 117.541, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 26, &quot;ok&quot;: true}
+{&quot;t&quot;: 117.541, &quot;kind&quot;: &quot;key&quot;, &quot;step&quot;: 27, &quot;value&quot;: &quot;enter&quot;, &quot;note&quot;: null}
+{&quot;t&quot;: 117.905, &quot;kind&quot;: &quot;probe&quot;, &quot;step&quot;: 28, &quot;value&quot;: {&quot;run&quot;: &quot;horneroctl appearance theme get&quot;, &quot;contains&quot;: &quot;hornero-light&quot;, &quot;retry_s&quot;: 20}, &quot;note&quot;: null}</pre>
+<p class=muted>Logs: <a href="logs/">logs/</a> · machine-readable: run.json, result.json, assertions.json, actions.jsonl</p>
+</main></body></html>
