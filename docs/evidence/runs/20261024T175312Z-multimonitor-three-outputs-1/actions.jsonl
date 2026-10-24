@@ -1,2 +1,0 @@
-{"t": 19.214, "kind": "ready", "serial": []}
-{"t": 40.099, "kind": "setup", "run": "horneroctl shell preset apply cockpit-clear --yes", "rc": 0, "stdout": "applied preset Cockpit Clear (cockpit-clear)", "stderr": ""}

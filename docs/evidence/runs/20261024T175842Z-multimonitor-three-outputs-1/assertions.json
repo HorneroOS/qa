@@ -1,6 +1,6 @@
 [
   {
-    "t": 71.214,
+    "t": 69.227,
     "kind": "probe",
     "run": "hyprctl monitors -j | jq length",
     "ok": true,
@@ -11,7 +11,7 @@
     "where": "proof 0"
   },
   {
-    "t": 72.131,
+    "t": 70.175,
     "kind": "screenshot",
     "ok": true,
     "detail": [

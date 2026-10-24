@@ -1,7 +1,7 @@
 {
   "schema": "hornero.qa.run/1",
-  "run_id": "20261024T175312Z-multimonitor-three-outputs-1",
-  "started": "2026-10-24T17:53:12Z",
+  "run_id": "20261024T175842Z-multimonitor-three-outputs-1",
+  "started": "2026-10-24T17:58:42Z",
   "scenario": "multimonitor/three-outputs",
   "covers": [],
   "instruction": "Start the desktop with three monitors connected and inspect each screen.",

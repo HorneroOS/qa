@@ -1,7 +1,8 @@
 # Three-output QA runtime evidence
 
-- Run: `20261024T175312Z-multimonitor-three-outputs-1`.
-- Scenario: `multimonitor/three-outputs` from this PR.
+- Run: `20261024T175842Z-multimonitor-three-outputs-1`.
+- Scenario: `multimonitor/three-outputs` from this PR, including the
+  `logs: on-failure` artifact policy captured in the run bundle.
 - Product: Shell `37a09b31b1cf7f10206b13a20d355e4bf5730cc4`, config
   `76a552f7ec56f00ed52e122150f27639a3a8d70a`, and verified
   `horneroctl-v0.2.0-preview29` (SHA-256
@@ -11,9 +12,9 @@
 - QA runner: commit
   `ce62b043b63132dc79c48a0d15e9075ddda06f78` from QA #31, which adds explicit
   QEMU output definitions for each requested scanout.
-- Result: PASS. Hyprland reported three monitors, and screenshots from all
-  three heads were captured and verified nonblank. Each screenshot was reviewed
-  and shows the desktop and its bar.
+- Result: PASS in 71.551 seconds. Hyprland reported three monitors, and
+  screenshots from all three heads were captured and verified nonblank. Each
+  screenshot was reviewed and shows the desktop and its bar.
 
 The earlier run `20261024T160629Z-multimonitor-three-outputs-1` used the QA
 runner before per-head QEMU output definitions and exposed only one guest
