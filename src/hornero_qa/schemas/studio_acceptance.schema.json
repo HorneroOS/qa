@@ -73,11 +73,12 @@
         "pins": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["shell_sha", "config_sha", "horneroctl_sha256", "guest_sha", "iso_sha256", "manifest_sha256", "catalogue_sha256", "hardware_fixture", "hardware_fixture_sha256"],
+          "required": ["shell_sha", "config_sha", "horneroctl_sha256", "image_sha256", "guest_sha", "iso_sha256", "manifest_sha256", "catalogue_sha256", "hardware_fixture", "hardware_fixture_sha256"],
           "properties": {
             "shell_sha": {"$ref": "#/$defs/sha"},
             "config_sha": {"$ref": "#/$defs/sha"},
             "horneroctl_sha256": {"$ref": "#/$defs/digest"},
+            "image_sha256": {"$ref": "#/$defs/digest"},
             "guest_sha": {"$ref": "#/$defs/sha"},
             "iso_sha256": {"$ref": "#/$defs/digest"},
             "manifest_sha256": {"$ref": "#/$defs/digest"},

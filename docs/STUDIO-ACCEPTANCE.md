@@ -18,7 +18,9 @@ fixture and human review. An accepted item needs a complete PASS bundle under
 the QA state `runs/` directory. The bundle must match the reviewed scenario
 digest, contain valid action/assertion records and nonempty logs, and include
 PNG screenshots with matching `hornero.qa.screenshot/1` sidecars and content
-hashes. Every product pin must be present in the runner's copied `product`
+hashes. The runner also hashes the exact QCOW2 image bytes before each set of
+repeated attempts and records that digest in `run.json`; the acceptance pins
+must include the same `image_sha256`. Every other product pin must be present in the runner's copied `product`
 metadata. The current image builder does not produce all Studio pins. Until
 that producer contract lands, owners can declare pins on an adopted image
 with `hornero-qa image adopt ... --product KEY=VALUE`; the gate does not infer

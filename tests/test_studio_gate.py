@@ -56,6 +56,7 @@ def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[
         "shell_sha": "a" * 40,
         "config_sha": "b" * 40,
         "horneroctl_sha256": "c" * 64,
+        "image_sha256": "3" * 64,
         "guest_sha": "d" * 40,
         "iso_sha256": "e" * 64,
         "manifest_sha256": "f" * 64,
@@ -87,6 +88,7 @@ def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[
                 "run_id": "run-1",
                 "scenario": "studio/audio",
                 "started": "2026-10-24T00:00:00Z",
+                "image_sha256": pins["image_sha256"],
                 "product": product,
                 "environment": {},
                 "catalogues": {},
@@ -227,6 +229,26 @@ def test_wrong_hardware_fixture_blocks_otherwise_current_bundle(tmp_path: Path) 
 
     assert report["eligible_for_owner_review"] is False
     assert any("hardware_fixture" in reason for reason in report["items"][0]["blocking_reasons"])
+
+
+def test_changed_image_digest_blocks_otherwise_current_bundle(tmp_path: Path) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+    data = _manifest()
+    data["items"][0] |= {
+        "fixture": {"id": "qemu-audio-v1", "approved": True, "sha256": "2" * 64, "notes": "Reviewed."},
+        "status": "accepted",
+        "evidence": [evidence],
+        "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
+    }
+    data["items"][0]["evidence"][0]["pins"]["image_sha256"] = "4" * 64
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+
+    report = evaluate(manifest, runs_dir)
+
+    assert report["recommendation"] == "blocked"
+    assert any("image_sha256" in reason for reason in report["items"][0]["blocking_reasons"])
 
 
 def test_approved_fixture_mismatch_blocks_even_when_run_and_evidence_agree(tmp_path: Path) -> None:

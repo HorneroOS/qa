@@ -8,6 +8,7 @@ attempts and reports flakiness instead of hiding it.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import platform
 import re
@@ -52,6 +53,14 @@ ANCHORS_DIR = REPO_ROOT / "anchors"
 COLOURS_QML = "~/.config/quickshell/services/Colours.qml"
 POLL_S = 0.25
 SSH_FAILED = 255
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as image:
+        for chunk in iter(lambda: image.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 @dataclass
@@ -520,15 +529,23 @@ def _decide(driver_end: str | None, failed: list[dict[str, Any]]) -> tuple[Verdi
     return Verdict.PASS, None, "all proof checks passed"
 
 
-def run_once(state: QAState, scenario: Scenario, opts: RunOptions, attempt: int = 1) -> dict[str, Any]:
+def run_once(
+    state: QAState,
+    scenario: Scenario,
+    opts: RunOptions,
+    attempt: int = 1,
+    image_sha256: str | None = None,
+) -> dict[str, Any]:
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     run_id = f"{stamp}-{scenario.id.replace('/', '-')}-{attempt}"
+    actual_image_sha256 = image_sha256 or _sha256_file(opts.image)
     info = read_image_info(opts.image)
     meta = {
         "scenario": scenario.id,
         "covers": scenario.covers,
         "instruction": scenario.instruction,
         "attempt": attempt,
+        "image_sha256": actual_image_sha256,
         "product": info.get("product", {}),
         "image": info,
         "environment": _environment(scenario, opts.image),
@@ -660,7 +677,8 @@ def _review(
 
 
 def run(state: QAState, scenario: Scenario, opts: RunOptions) -> dict[str, Any]:
-    results = [run_once(state, scenario, opts, i + 1) for i in range(opts.repeat)]
+    image_sha256 = _sha256_file(opts.image)
+    results = [run_once(state, scenario, opts, i + 1, image_sha256) for i in range(opts.repeat)]
     passed = sum(r["verdict"] == "pass" for r in results)
     return {
         "scenario": scenario.id,
