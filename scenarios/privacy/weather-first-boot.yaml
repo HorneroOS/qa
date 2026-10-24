@@ -20,4 +20,4 @@ proof:
   - screenshot: final
 media: [weather-unconfigured]
 budget: {wall_s: 90, max_actions: 12}
-artifacts: {screenshots: always, logs: always}
+artifacts: {screenshots: always, logs: on-failure}
