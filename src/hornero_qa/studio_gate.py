@@ -100,7 +100,14 @@ def _fixture_manifest_errors(
     candidate = manifest_path.parent / relative
     root = manifest_path.parent.resolve()
     target = candidate.resolve()
-    if candidate.is_symlink() or not target.is_relative_to(root):
+    path_component = manifest_path.parent
+    has_symlink_component = False
+    for part in relative.parts:
+        path_component /= part
+        if path_component.is_symlink():
+            has_symlink_component = True
+            break
+    if has_symlink_component or not target.is_relative_to(root):
         return ["approved fixture manifest path is unsafe"]
     try:
         payload = target.read_bytes()
