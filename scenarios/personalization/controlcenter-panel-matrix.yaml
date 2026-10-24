@@ -108,13 +108,13 @@ steps:
   - screenshot: controlcenter-dashboard
   - key: ctrl+,
   - wait: {changed: true, stable: 0.3, timeout: 5}
-  - type: Companion
+  - type: Javi
   - wait: {stable: 0.3, timeout: 5}
   - key: enter
   - wait: {stable: 0.7, timeout: 8}
   - probe:
       run: 'hyprctl activewindow -j | jq -r ''.title // ""'''
-      equals: Hornero Settings - Companion
+      equals: Hornero Settings - Javi
       retry_s: 8
   - screenshot: controlcenter-companion
   - key: ctrl+,
