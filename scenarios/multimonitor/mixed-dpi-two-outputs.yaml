@@ -12,19 +12,17 @@ setup:
     - hyprctl keyword monitor "Virtual-2,1280x800@60,1280x0,1.5"
 instruction: Start the desktop with two differently scaled virtual outputs and inspect each screen.
 proof:
+  - note: Hyprland version is recorded with the output-scale result
+    probe: {run: "hyprctl version", contains: "Hyprland", retry_s: 10}
   - note: Hyprland reports Virtual-1 at scale 1 and Virtual-2 at scale 1.5
     probe:
-      run: >-
-        hyprctl monitors -j | jq -e '([.[] | select(.name == "Virtual-1" and .scale == 1)] | length == 1) and
-        ([.[] | select(.name == "Virtual-2" and .scale == 1.5)] | length == 1)'
-      equals: "true"
+      run: "hyprctl monitors -j | jq -c '[.[] | {name,scale}] | sort_by(.name)'"
+      equals: '[{"name":"Virtual-1","scale":1},{"name":"Virtual-2","scale":1.5}]'
       retry_s: 10
   - note: Cockpit Clear has two visible bars on each output
     probe:
-      run: >-
-        qs ipc call debug bars | jq -c '[.[] | select(.visible) | (.geom[0] + .geom[2] / 2) < 1280] |
-        {left: map(select(.)) | length, right: map(select(. == false)) | length}'
-      equals: '{"left":2,"right":2}'
+      run: "qs ipc call debug bars | jq -c '[.[] | select(.visible)] | group_by(.screen) | map(length) | sort'"
+      equals: '[2,2]'
       retry_s: 10
   - screenshot: mixed-scale-outputs
 budget: {wall_s: 120}

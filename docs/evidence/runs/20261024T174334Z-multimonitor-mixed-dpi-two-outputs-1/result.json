@@ -1,0 +1,12 @@
+{
+  "run_id": "20261024T174334Z-multimonitor-mixed-dpi-two-outputs-1",
+  "finished": "2026-10-24T17:45:09Z",
+  "wall_s": 94.751,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 1: stdout '[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1.6}]' != '[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1.5}]'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

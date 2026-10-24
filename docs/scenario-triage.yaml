@@ -125,13 +125,13 @@ scenarios:
       rerun against each pinned release image.
   multimonitor/mixed-dpi-two-outputs:
     decision: keep
-    rationale: 'Retain coverage. Run 20261024T160425Z configured two virtual outputs,
-      but the guest did not report the requested 1x/1.5x pair, placed both bars on
-      the left, and returned a blank second head. The runner records FAIL (product);
-      because the guest exposed fewer outputs than configured, this run does not
-      isolate a Shell regression.'
-    schedule: Verify the native-QEMU output setup and rerun against the pinned ready
-      image before attributing the failure to product behavior.
+    rationale: 'Retain coverage. The earlier 20261024T160425Z run used a QA runner
+      that did not enable the second QEMU scanout, so it did not isolate product
+      behavior. The follow-up 20261024T174334Z run enabled both outputs and verified
+      two bars per screen, but Hyprland reported scale 1.6 after scale 1.5 was
+      requested for Virtual-2. Keep this mismatch open without inferring its cause.'
+    schedule: Investigate the 1.5-to-1.6 scale readback. Preserve the 1.5 expectation
+      until the cause is understood.
   multimonitor/three-outputs:
     decision: keep
     rationale: 'Retain three-output virtual coverage. The earlier 20261024T160629Z
