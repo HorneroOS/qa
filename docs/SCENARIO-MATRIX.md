@@ -27,13 +27,13 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `perf/baseline` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `personalization/baseline-settings` | 2026-10-02 | Evidence only; result unavailable | [screenshot evidence](docs/evidence/settings-navigation-2026-10-02/after-appearance.png) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `personalization/controlcenter-panel-matrix` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `privacy/weather-first-boot` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `privacy/weather-first-boot` | 2026-10-24 | PASS | [run report](docs/evidence/runs/20261024T190934Z-privacy-weather-first-boot-1/report.html) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `regressions/shell-24-lock-after-hyprlock` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `regressions/shell-77-rapid-escape` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `smoke/desktop-ready` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `smoke/desktop-ready` | 2026-10-24 | PASS | [run report](docs/evidence/runs/20261024T191340Z-smoke-desktop-ready-1/report.html) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `smoke/no-config-errors` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `themes/appearance-apply-light` | 2026-10-02 | Evidence only; result unavailable | [screenshot evidence](docs/evidence/appearance-current-preview-2026-10-02/after-light.png) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `themes/package-only-flagships` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `themes/package-only-flagships` | 2026-10-24 | PASS | [run report](docs/evidence/runs/20261024T191126Z-themes-package-only-flagships-1/report.html) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `themes/set-hornero-light` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `themes/ui-switch-hornero-light` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `wallpapers/unconfigured-empty-state` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
