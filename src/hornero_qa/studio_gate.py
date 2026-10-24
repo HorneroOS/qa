@@ -129,9 +129,14 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
     if not all(assertion["ok"] for assertion in assertions):
         return [f"bundle {run_id!r} contains a failed assertion despite its PASS result"]
     recorded_proofs = [assertion for assertion in assertions if assertion["where"].startswith("proof ")]
-    if len(recorded_proofs) != len(proof_kinds) or any(
-        assertion["where"] not in proof_kinds or assertion["kind"] != proof_kinds[assertion["where"]]
-        for assertion in recorded_proofs
+    recorded_indices = [assertion["where"] for assertion in recorded_proofs]
+    if (
+        len(set(recorded_indices)) != len(recorded_indices)
+        or set(recorded_indices) != set(proof_kinds)
+        or any(
+            assertion["where"] not in proof_kinds or assertion["kind"] != proof_kinds[assertion["where"]]
+            for assertion in recorded_proofs
+        )
     ):
         return [f"bundle {run_id!r} assertions do not cover the scenario's declared proof criteria"]
     scenario_path = root / "scenario.yaml"
