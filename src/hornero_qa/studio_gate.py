@@ -88,6 +88,38 @@ def _scenario_digest(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _fixture_manifest_errors(
+    fixture: dict[str, Any], manifest_path: Path, schema: dict[str, Any]
+) -> list[str]:
+    reference = fixture.get("manifest")
+    if not isinstance(reference, str):
+        return ["approved fixture has no manifest path"]
+    relative = Path(reference)
+    if relative.is_absolute() or ".." in relative.parts:
+        return ["approved fixture manifest path must stay inside the acceptance directory"]
+    candidate = manifest_path.parent / relative
+    root = manifest_path.parent.resolve()
+    target = candidate.resolve()
+    if candidate.is_symlink() or not target.is_relative_to(root):
+        return ["approved fixture manifest path is unsafe"]
+    try:
+        payload = target.read_bytes()
+    except OSError as exc:
+        return [f"approved fixture manifest cannot be read: {exc}"]
+    if hashlib.sha256(payload).hexdigest() != fixture.get("sha256"):
+        return ["approved fixture manifest SHA256 does not match its content"]
+    try:
+        document = yaml.load(payload.decode("utf-8"), Loader=_UniqueKeyLoader)
+    except (UnicodeDecodeError, yaml.YAMLError) as exc:
+        return [f"approved fixture manifest is invalid YAML: {exc}"]
+    errors = list(jsonschema.Draft202012Validator(schema["$defs"]["fixtureManifest"]).iter_errors(document))
+    if errors:
+        return [f"approved fixture manifest is invalid: {errors[0].message}"]
+    if document["id"] != fixture.get("id"):
+        return ["approved fixture manifest ID does not match the acceptance item"]
+    return []
+
+
 def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
     if entry["kind"] == "review":
         if not REVIEW_URL.fullmatch(entry["reference"]):
@@ -277,6 +309,8 @@ def evaluate(manifest_path: Path, runs_dir: Path) -> dict[str, Any]:
             and not item["fixture"].get("sha256")
         ):
             reasons.append("approved fixture has no pinned manifest SHA256")
+        if required and item["evidence_kind"] == "bundle" and item["fixture"]["approved"]:
+            reasons.extend(_fixture_manifest_errors(item["fixture"], manifest_path, schema))
         if required and item["review"]["decision"] != "accepted":
             reasons.append("human review is not accepted")
         if required and not item["review"]["reference"]:

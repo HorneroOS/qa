@@ -20,19 +20,22 @@ digest, contain valid action/assertion records and nonempty logs, and include
 PNG screenshots with matching `hornero.qa.screenshot/1` sidecars and content
 hashes. The runner also hashes the exact QCOW2 image bytes before each set of
 repeated attempts and records that digest in `run.json`; the acceptance pins
-must include the same `image_sha256`. Every other product pin must be present in the runner's copied `product`
-metadata. The current image builder does not produce all Studio pins. Until
+must include the same `image_sha256`. Every other product pin must be present
+in the runner's copied `product` metadata. The current image builder does not
+produce all Studio pins. Until
 that producer contract lands, owners can declare pins on an adopted image
 with `hornero-qa image adopt ... --product KEY=VALUE`; the gate does not infer
 values from labels, environment descriptions, or branch names.
 
-For bundle evidence, fixture approval includes a stable fixture ID and a
-declared SHA256 for its owner-reviewed fixture manifest. Both values must
-match the bundle's product metadata. At this stage the gate does not fetch or
-hash the fixture manifest, so this equality is a declaration check. Review
-evidence must link to a HorneroOS pull request, matching the accepted human
-review reference; the gate does not query GitHub to validate the PR or its
-reviews.
+For bundle evidence, fixture approval includes a stable fixture ID, a
+relative path, and the SHA256 of its owner-reviewed fixture manifest. The
+gate reads that file, rejects unsafe paths and duplicate YAML keys, validates
+its schema and ID, and checks its content hash. The run must declare the same
+fixture ID and hash. This verifies the recorded fixture specification, but
+does not independently observe the physical hardware or installed software.
+Review evidence must link to a HorneroOS pull request, matching the accepted
+human review reference; the gate does not query GitHub to validate the PR or
+its reviews.
 
 The gate validates that bundle files are present and internally consistent;
 it does not authenticate them. `image adopt --product` records operator
