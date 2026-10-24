@@ -7,13 +7,19 @@
   `76a552f7ec56f00ed52e122150f27639a3a8d70a`, horneroctl SHA256
   `8e9ffd96d578543d50caa17d9449bb52e79fdf1ae90598fe417f370a263602f5`.
 - Image: `qa-display-preview29-20261024`; QEMU 11.1.2; two requested outputs.
-- Result: FAIL (product). The guest reports both outputs, but Hyprland reports
-  scale 1.6 for the configured 1.5 output. Both visible bars also remain on the
-  first output. See the proof records and screenshots.
+- Result: the raw runner marked this FAIL (product). The scale probe reports
+  1.6 for the output configured at 1.5; this needs investigation before it can
+  be called a product failure. The bar probe again returns only the first
+  screen's two bars, while the second screenshot visibly contains its bar.
+  See the proof records and screenshots.
 
 This run verifies that both requested QEMU scanouts reach the guest and that
-the mixed-scale workflow now reaches its product assertions. It does not
-establish mixed-DPI support; the scale and bar-placement failures remain open.
+the mixed-scale workflow reaches its product assertions. It does not establish
+mixed-DPI support. `debug bars` is registered inside each per-screen drawer
+scope and serializes only that scope's `BarSet`; `qs ipc call debug bars`
+therefore does not provide an aggregate across outputs. The Shell diagnostics
+contract needs a per-screen aggregate before the bar-placement assertion can be
+trusted.
 
 ## Privacy curation
 

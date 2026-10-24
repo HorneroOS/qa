@@ -14,8 +14,10 @@
 This run exercises the native engine's per-output QEMU configuration. The
 scenario file was copied unchanged from PR #29 into the isolated verification
 worktree for this run. The run demonstrates that all three virtual heads reach
-the guest and can be captured; it does not establish physical display hotplug,
-tablet behavior, or bar placement on each output.
+the guest and can be captured. The screenshots visibly show a Shell bar on each
+output, but the scenario only automatically checks output count and nonblank
+captures; it does not assert bar placement. It does not establish physical
+display hotplug or tablet behavior.
 
 ## Privacy curation
 
