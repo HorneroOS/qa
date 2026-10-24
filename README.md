@@ -28,6 +28,12 @@ Record a keep/fix/retire decision for every scenario in
 can produce PASS/FAIL results; screenshot provenance alone is reported as
 unverified evidence.
 
+The Studio evidence gate is separate from the scenario execution ledger. It
+fails closed until every required Studio outcome has owner-approved fixtures,
+complete pinned evidence bundles, and human review. It can recommend owner
+review; it never changes Hornero's edition maturity. See
+[docs/STUDIO-ACCEPTANCE.md](docs/STUDIO-ACCEPTANCE.md).
+
 ## Quick start
 
 Requirements: Linux host with `/dev/kvm`, QEMU, `uv`, and a Hornero QA ready
@@ -38,6 +44,7 @@ uv run hornero-qa doctor            # host checks (KVM, QEMU, image, memory)
 uv run hornero-qa list              # scenarios
 uv run hornero-qa run smoke/desktop-ready
 uv run hornero-qa inspect ~/.local/share/hornero/qa/runs/<run-id>
+uv run hornero-qa studio-gate
 ```
 
 ## What lives here (and what does not)

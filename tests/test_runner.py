@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from hornero_qa.engines.native import ProbeResult, qmp_socket_path
-from hornero_qa.runner import SSH_FAILED, _decide, _dig, _probe_ok, _q
+from hornero_qa.runner import SSH_FAILED, _decide, _dig, _probe_ok, _q, _sha256_file
 from hornero_qa.taxonomy import FailureClass, QAError, is_regression
 
 
@@ -20,6 +20,13 @@ def test_probe_matchers() -> None:
     assert not _probe_ok({"run": "x", "contains": "launcher"}, r("bar\nosd"))[0]
     assert _probe_ok({"run": "x", "not_contains": "dunst"}, r("quickshell"))[0]
     assert _probe_ok({"run": "x", "matches": r"^\d+$"}, r("12"))[0]
+
+
+def test_sha256_file_hashes_actual_image_bytes(tmp_path: Path) -> None:
+    image = tmp_path / "ready.qcow2"
+    image.write_bytes(b"qcow2 image fixture")
+
+    assert _sha256_file(image) == "6b01ec90299f2ba95426fd039dfc0372ade34c79f2ea9fe2bdf35b629423dfa2"
 
 
 def test_decide_failed_proof_outranks_driver_give_up() -> None:
