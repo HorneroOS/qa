@@ -1,0 +1,34 @@
+[
+  {
+    "t": 73.718,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq length",
+    "ok": true,
+    "rc": 0,
+    "stdout": "2",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 84.325,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | (.geom[0] + .geom[2] / 2) < 1280] | {left: map(select(.)) | length, right: map(select(. == false)) | length}'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "{\"left\":2,\"right\":0}",
+    "stderr": "",
+    "detail": "stdout '{\"left\":2,\"right\":0}' != '{\"left\":2,\"right\":2}'",
+    "where": "proof 1"
+  },
+  {
+    "t": 85.012,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-both-screens-h0.png",
+      "002-both-screens-h1.png"
+    ],
+    "where": "proof 2"
+  }
+]

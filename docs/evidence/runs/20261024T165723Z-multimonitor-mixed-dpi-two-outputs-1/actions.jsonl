@@ -1,0 +1,4 @@
+{"t": 16.446, "kind": "ready", "serial": []}
+{"t": 37.323, "kind": "setup", "run": "horneroctl shell preset apply cockpit-clear --yes", "rc": 0, "stdout": "applied preset Cockpit Clear (cockpit-clear)", "stderr": ""}
+{"t": 37.575, "kind": "setup", "run": "hyprctl keyword monitor \"Virtual-1,1280x800@60,0x0,1\"", "rc": 0, "stdout": "ok", "stderr": ""}
+{"t": 37.871, "kind": "setup", "run": "hyprctl keyword monitor \"Virtual-2,1280x800@60,1280x0,1.5\"", "rc": 0, "stdout": "ok", "stderr": ""}

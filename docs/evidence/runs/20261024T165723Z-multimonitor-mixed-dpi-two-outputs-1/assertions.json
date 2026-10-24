@@ -1,0 +1,34 @@
+[
+  {
+    "t": 78.958,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -e '([.[] | select(.name == \"Virtual-1\" and .scale == 1)] | length == 1) and ([.[] | select(.name == \"Virtual-2\" and .scale == 1.5)] | length == 1)'",
+    "ok": false,
+    "rc": 1,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "stdout 'false' != 'true'",
+    "where": "proof 0"
+  },
+  {
+    "t": 89.217,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | (.geom[0] + .geom[2] / 2) < 1280] | {left: map(select(.)) | length, right: map(select(. == false)) | length}'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "{\"left\":2,\"right\":0}",
+    "stderr": "",
+    "detail": "stdout '{\"left\":2,\"right\":0}' != '{\"left\":2,\"right\":2}'",
+    "where": "proof 1"
+  },
+  {
+    "t": 89.855,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-mixed-scale-outputs-h0.png",
+      "002-mixed-scale-outputs-h1.png"
+    ],
+    "where": "proof 2"
+  }
+]

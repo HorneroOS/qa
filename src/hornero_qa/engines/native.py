@@ -50,6 +50,23 @@ def qmp_socket_path(work_dir: Path, run_name: str) -> Path:
     return work_dir / f"qmp-{digest}.sock"
 
 
+def _virtio_gpu_device(outputs: int, resolution: tuple[int, int], *, virgl: bool) -> str:
+    """Build a QEMU GPU device with every requested scanout enabled."""
+    width, height = resolution
+    device: dict[str, Any] = {
+        "driver": "virtio-vga-gl" if virgl else "virtio-vga",
+        "id": "hxgpu0",
+        "max_outputs": outputs,
+        "xres": width,
+        "yres": height,
+    }
+    if outputs > 1:
+        device["outputs"] = [
+            {"name": f"Hornero-{head + 1}", "xres": width, "yres": height} for head in range(outputs)
+        ]
+    return json.dumps(device, separators=(",", ":"))
+
+
 class NativeEngine:
     name = "native"
 
@@ -128,13 +145,9 @@ class NativeEngine:
             "-m",
             str(self.mem_mb),
             "-device",
-            # Explicit id: per-head screendump addresses the GPU by device id,
-            # and the auto-assigned id is not stable (video0 does not exist).
-            (
-                f"virtio-vga-gl,id=hxgpu0,max_outputs={self.outputs},xres={w},yres={h}"
-                if self.compositor == "niri"
-                else f"virtio-vga,id=hxgpu0,max_outputs={self.outputs},xres={w},yres={h}"
-            ),
+            # QEMU only enables the primary scanout from xres/yres. Explicit
+            # per-head resolutions enable additional displays in the guest.
+            _virtio_gpu_device(self.outputs, (w, h), virgl=self.compositor == "niri"),
             "-drive",
             f"file={self.overlay},format=qcow2,if=virtio",
             "-netdev",
