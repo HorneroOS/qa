@@ -16,3 +16,4 @@ proof:
     screenshot: desktop
 media: [desktop]
 budget: {wall_s: 60}
+artifacts: {screenshots: always, logs: on-failure}

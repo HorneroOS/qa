@@ -1,0 +1,165 @@
+[
+  {
+    "t": 70.762,
+    "kind": "probe",
+    "run": "test ! -e \"$HOME/.local/share/hornero/themes\" && test ! -e \"$HOME/.local/share/dots/themes\" && test ! -e \"$HOME/.local/share/hornero/wallpapers\" && test ! -e \"$HOME/.local/share/dots/wallpapers\" && echo no-user-catalogue",
+    "ok": true,
+    "rc": 0,
+    "stdout": "no-user-catalogue",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 70.943,
+    "kind": "probe",
+    "run": "horneroctl appearance theme list --full --json | jq -er '.message | fromjson | any(.[]; .id == \"hornero-light\") and any(.[]; .id == \"pampa\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 1"
+  },
+  {
+    "t": 79.819,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 4"
+  },
+  {
+    "t": 90.01,
+    "kind": "probe",
+    "run": "horneroctl appearance theme get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "current theme: hornero-light (mode=light, gtk=Hornero-Light)",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 9"
+  },
+  {
+    "t": 99.174,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 13"
+  },
+  {
+    "t": 109.731,
+    "kind": "probe",
+    "run": "horneroctl appearance theme get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "current theme: pampa (mode=dark, gtk=Hornero-Pampa)",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 18"
+  },
+  {
+    "t": 110.202,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "pampa|dark|Hornero-Pampa|Papirus-Dark|prefer-dark",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 20"
+  },
+  {
+    "t": 110.505,
+    "kind": "probe",
+    "run": "horneroctl wallpaper current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "/usr/share/hornero/wallpapers/pampa/pampa-01.jpg",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 21"
+  },
+  {
+    "t": 119.347,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 24"
+  },
+  {
+    "t": 126.323,
+    "kind": "probe",
+    "run": "horneroctl appearance theme get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "current theme: hornero-light (mode=light, gtk=Hornero-Light)",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 28"
+  },
+  {
+    "t": 126.615,
+    "kind": "probe",
+    "run": "test ! -e \"$HOME/.local/share/hornero/themes\" && test ! -e \"$HOME/.local/share/dots/themes\" && test ! -e \"$HOME/.local/share/hornero/wallpapers\" && test ! -e \"$HOME/.local/share/dots/wallpapers\" && echo clean",
+    "ok": true,
+    "rc": 0,
+    "stdout": "clean",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 126.905,
+    "kind": "probe",
+    "run": "horneroctl appearance theme list --full --json | jq -er '.message | fromjson | any(.[]; .id == \"hornero-light\") and any(.[]; .id == \"pampa\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 127.199,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-light|light|Hornero-Light|Papirus|prefer-light",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 127.509,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": true,
+    "rc": 0,
+    "stdout": "468",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 3"
+  },
+  {
+    "t": 127.83,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "005-final.png"
+    ],
+    "where": "proof 4"
+  }
+]

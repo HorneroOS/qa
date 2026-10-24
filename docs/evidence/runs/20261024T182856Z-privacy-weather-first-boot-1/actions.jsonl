@@ -1,8 +1,0 @@
-{"t": 20.941, "kind": "ready", "serial": []}
-{"t": 41.55, "kind": "key", "step": 0, "value": "super+d", "note": null}
-{"t": 41.92, "kind": "wait", "step": 1, "value": {"stable": 0.5, "timeout": 8}, "note": null}
-{"t": 50.26, "kind": "wait_result", "step": 1, "ok": false}
-{"t": 50.26, "kind": "pointer", "step": 2, "value": {"x": 0.67, "y": 0.08, "click": "left"}, "note": null}
-{"t": 50.516, "kind": "wait", "step": 3, "value": {"stable": 0.5, "timeout": 8}, "note": null}
-{"t": 58.838, "kind": "wait_result", "step": 3, "ok": false}
-{"t": 58.838, "kind": "screenshot", "step": 4, "value": "weather-unconfigured", "note": null}
