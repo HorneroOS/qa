@@ -1,6 +1,6 @@
 # Mixed-scale two-output QA evidence
 
-- Run: `20261024T174334Z-multimonitor-two-outputs-1`.
+- Run: `20261024T174334Z-multimonitor-mixed-dpi-two-outputs-1`.
 - Scenario: `multimonitor/mixed-dpi-two-outputs` in this PR. It requests
   `Virtual-1` at scale 1 and `Virtual-2` at scale 1.5, and groups visible bars
   by the Shell IPC `screen` field.
