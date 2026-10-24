@@ -122,6 +122,16 @@ scenarios:
       and the active layout applies to both screens.'
     schedule: Schedule in the next approved KVM QA window against the pinned ready
       image.
+  multimonitor/three-outputs:
+    decision: keep
+    rationale: 'Retain coverage. The earlier 20261024T160629Z run configured three
+      outputs but the QEMU device exposed only one scanout. With explicit per-head
+      output definitions in QA runner commit ce62b043b63132dc79c48a0d15e9075ddda06f78,
+      run 20261024T175842Z reported three Hyprland monitors and produced nonblank
+      captures from all three heads. This verifies virtual three-output desktop bring-up
+      for the pinned Preview 29 image; it does not verify physical hotplug.'
+    schedule: Keep this virtual three-output scenario in the Studio acceptance suite;
+      rerun against each pinned release image.
   notifications/shell-owns-bus:
     decision: keep
     rationale: 'Retain coverage for this product behavior: The Hornero shell owns

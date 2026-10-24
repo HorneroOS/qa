@@ -1,0 +1,24 @@
+[
+  {
+    "t": 69.227,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq length",
+    "ok": true,
+    "rc": 0,
+    "stdout": "3",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 70.175,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-all-three-screens-h0.png",
+      "002-all-three-screens-h1.png",
+      "003-all-three-screens-h2.png"
+    ],
+    "where": "proof 1"
+  }
+]

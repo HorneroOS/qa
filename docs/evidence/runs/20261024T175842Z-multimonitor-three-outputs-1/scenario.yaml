@@ -1,0 +1,14 @@
+id: multimonitor/three-outputs
+purpose: >-
+  With three virtual monitors the desktop reaches all outputs and the shell
+  renders a nonblank desktop on each one.
+requires: {outputs: 3}
+setup:
+  layout: cockpit-clear
+instruction: Start the desktop with three monitors connected and inspect each screen.
+proof:
+  - note: The compositor reports all three configured outputs
+    probe: {run: "hyprctl monitors -j | jq length", equals: "3", retry_s: 10}
+  - screenshot: all-three-screens
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: on-failure}
