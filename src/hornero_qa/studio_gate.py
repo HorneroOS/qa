@@ -91,14 +91,28 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
         return [f"bundle {run_id!r} contains invalid evidence data: {exc}"]
     if not isinstance(scenario, dict) or scenario.get("id") != entry["scenario"]:
         return [f"bundle {run_id!r} scenario document has a mismatched ID"]
-    if not actions or not all(isinstance(action, dict) for action in actions):
+    if not actions or not all(
+        isinstance(action, dict)
+        and isinstance(action.get("kind"), str)
+        and isinstance(action.get("t"), (int, float))
+        for action in actions
+    ):
         return [f"bundle {run_id!r} has no valid action records"]
     if (
         not isinstance(assertions, list)
         or not assertions
-        or not all(isinstance(assertion, dict) for assertion in assertions)
+        or not all(
+            isinstance(assertion, dict)
+            and isinstance(assertion.get("kind"), str)
+            and isinstance(assertion.get("where"), str)
+            and isinstance(assertion.get("ok"), bool)
+            and isinstance(assertion.get("detail"), str)
+            for assertion in assertions
+        )
     ):
         return [f"bundle {run_id!r} has no valid assertion records"]
+    if not all(assertion["ok"] for assertion in assertions):
+        return [f"bundle {run_id!r} contains a failed assertion despite its PASS result"]
     scenario_path = root / "scenario.yaml"
     if _scenario_digest(scenario_path) != entry["scenario_sha256"]:
         return [f"bundle {run_id!r} uses a stale scenario revision"]
