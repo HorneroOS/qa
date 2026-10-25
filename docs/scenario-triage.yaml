@@ -117,11 +117,12 @@ scenarios:
       image.
   multimonitor/two-outputs:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: With two monitors the desktop
-      comes up on both: Hyprland drives two outputs, the shell draws a bar on each,
-      and the active layout applies to both screens.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: 'Retain two-output Studio coverage. Run 20261025T035600Z against
+      studio-shell320 found exactly the two configured Virtual outputs, reported
+      two Hyprland monitors, verified two visible Shell bars per screen, and captured
+      both heads. This does not verify physical display hotplug.'
+    schedule: Keep this virtual two-output scenario in the Studio acceptance suite;
+      rerun against each pinned release image.
   multimonitor/three-outputs:
     decision: keep
     rationale: 'Retain three-output virtual coverage. The earlier 20261024T160629Z

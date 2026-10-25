@@ -23,7 +23,7 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `layouts/apply-islands` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `lock/lock-keyboard` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `multimonitor/three-outputs` | 2026-10-25 | PASS | [run report](docs/evidence/runs/20261025T034533Z-multimonitor-three-outputs-1/result.json) | keep | Keep this virtual three-output scenario in the Studio acceptance suite; rerun against each pinned release image. |
-| `multimonitor/two-outputs` | 2026-10-24 | Incomplete bundle; missing logs/ | [run result](docs/evidence/runs/20261024T173106Z-multimonitor-two-outputs-1/result.json) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `multimonitor/two-outputs` | 2026-10-25 | PASS | [run report](docs/evidence/runs/20261025T035600Z-multimonitor-two-outputs-1/result.json) | keep | Keep this virtual two-output scenario in the Studio acceptance suite; rerun against each pinned release image. |
 | `notifications/shell-owns-bus` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `perf/baseline` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `personalization/baseline-settings` | 2026-10-02 | Evidence only; result unavailable | [screenshot evidence](docs/evidence/settings-navigation-2026-10-02/after-appearance.png) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
