@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "013-controlcenter-system.png",
+  "sha256": "830e8637e0c2c11c419e34abc3dffd45650fab425e6aebd77fbc1ab49dbed852",
+  "run_id": "20261025T060015Z-personalization-controlcenter-panel-matrix-1",
+  "scenario": "personalization/controlcenter-panel-matrix",
+  "captured": "2026-10-25T06:02:22Z",
+  "t": 127.437,
+  "product": {
+    "shell_sha": "fa4f5741e246ad04d96874b1de1f442965c11e47",
+    "config_sha": "76a552f7ec56f00ed52e122150f27639a3a8d70a",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview29 (028a52c)",
+    "horneroctl_sha256": "8e9ffd96d578543d50caa17d9449bb52e79fdf1ae90598fe417f370a263602f5"
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.2.9-arch1-1",
+    "qemu": "QEMU emulator version 11.1.2",
+    "image": "studio-shell320.qcow2",
+    "outputs": 1,
+    "resolution": "1280x800",
+    "captured_resolution": "1280x800"
+  },
+  "step": 109
+}

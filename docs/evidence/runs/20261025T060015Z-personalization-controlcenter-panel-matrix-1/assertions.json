@@ -1,0 +1,231 @@
+[
+  {
+    "t": 49.341,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Network",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 54.874,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Network",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 12"
+  },
+  {
+    "t": 61.707,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Bluetooth",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 20"
+  },
+  {
+    "t": 66.689,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - VPN",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 28"
+  },
+  {
+    "t": 73.089,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Appearance",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 36"
+  },
+  {
+    "t": 79.139,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Bars",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 44"
+  },
+  {
+    "t": 84.381,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Layout",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 52"
+  },
+  {
+    "t": 89.903,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Launcher",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 60"
+  },
+  {
+    "t": 94.612,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Dashboard",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 68"
+  },
+  {
+    "t": 98.997,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Javi",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 76"
+  },
+  {
+    "t": 104.614,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Audio",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 84"
+  },
+  {
+    "t": 110.439,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Notifications",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 92"
+  },
+  {
+    "t": 115.43,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - On-screen display",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 100"
+  },
+  {
+    "t": 127.344,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - System",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 108"
+  },
+  {
+    "t": 134.923,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Updates",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 116"
+  },
+  {
+    "t": 139.839,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Terminal",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 124"
+  },
+  {
+    "t": 145.139,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Power",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 132"
+  },
+  {
+    "t": 150.408,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r '.title // \"\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Network",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 140"
+  },
+  {
+    "t": 150.724,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq -r '[.[] | select(.title == \"Hornero Settings - Network\")] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 151.044,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": true,
+    "rc": 0,
+    "stdout": "431",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 1"
+  },
+  {
+    "t": 151.139,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "017-final.png"
+    ],
+    "where": "proof 2"
+  }
+]

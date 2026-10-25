@@ -26,7 +26,7 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `notifications/shell-owns-bus` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `perf/baseline` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `personalization/baseline-settings` | 2026-10-02 | Evidence only; result unavailable | [screenshot evidence](docs/evidence/settings-navigation-2026-10-02/after-appearance.png) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `personalization/controlcenter-panel-matrix` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `personalization/controlcenter-panel-matrix` | 2026-10-25 | PASS | [run report](docs/evidence/runs/20261025T060015Z-personalization-controlcenter-panel-matrix-1/result.json) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `privacy/weather-first-boot` | 2026-10-24 | PASS | [run report](docs/evidence/runs/20261024T190934Z-privacy-weather-first-boot-1/report.html) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `regressions/shell-24-lock-after-hyprlock` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `regressions/shell-77-rapid-escape` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
