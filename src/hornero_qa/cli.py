@@ -16,6 +16,8 @@ from hornero_qa.evidence import load_bundle
 from hornero_qa.matrix import generate_matrix, resolve_repo_path
 from hornero_qa.scenario import ScenarioError, discover, load, resolve
 from hornero_qa.state import QAState
+from hornero_qa.studio_gate import StudioGateError, run_bundle_digest
+from hornero_qa.studio_gate import evaluate as evaluate_studio_gate
 
 EXIT_OK, EXIT_FAIL, EXIT_INCONCLUSIVE, EXIT_USAGE = 0, 1, 2, 64
 
@@ -202,6 +204,24 @@ def _media(_: QAState, args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _studio_gate(state: QAState, args: argparse.Namespace) -> int:
+    try:
+        runs_dir = Path(args.runs_dir) if args.runs_dir else state.runs_dir
+        if args.bundle_digest:
+            print(run_bundle_digest(runs_dir, args.bundle_digest))
+            return EXIT_OK
+        report = evaluate_studio_gate(Path(args.manifest), runs_dir)
+    except StudioGateError as exc:
+        print(f"hornero-qa: {exc}", file=sys.stderr)
+        return EXIT_FAIL
+    print(json.dumps(report, indent=2) if args.json else report["summary"])
+    if not args.json:
+        for item in report["items"]:
+            if item["blocking_reasons"]:
+                print(f"- {item['id']}: " + "; ".join(item["blocking_reasons"]))
+    return EXIT_OK if report["eligible_for_owner_review"] else EXIT_FAIL
+
+
 def _web(state: QAState, args: argparse.Namespace) -> int:
     from hornero_qa.web import DEFAULT_BASE, JOURNEY_DIR, discover_journeys, load_journey, run_journey
 
@@ -291,6 +311,19 @@ def build_parser() -> argparse.ArgumentParser:
     m = msub.add_parser("export", help="export `media` screenshots of passing runs with provenance")
     m.add_argument("bundles", nargs="+")
     m.add_argument("--out", required=True)
+
+    s = sub.add_parser(
+        "studio-gate",
+        help="check the Studio evidence matrix without changing edition maturity",
+    )
+    s.add_argument("--manifest", default="docs/studio-acceptance.yaml")
+    s.add_argument("--runs-dir", help="evidence bundles directory (default: QA state runs)")
+    s.add_argument(
+        "--bundle-digest",
+        metavar="RUN_ID",
+        help="print the SHA256 to pin for an archived evidence bundle",
+    )
+    s.add_argument("--json", action="store_true", help="print machine-readable gate results")
     return p
 
 
@@ -305,6 +338,7 @@ COMMANDS = {
     "image": _image,
     "anchor": _anchor,
     "media": _media,
+    "studio-gate": _studio_gate,
     "web": _web,
 }
 
@@ -317,6 +351,6 @@ def main(argv: list[str] | None = None) -> int:
         return EXIT_OK
     try:
         return COMMANDS[args.cmd](QAState.default(), args)
-    except ScenarioError as exc:
+    except (ScenarioError, StudioGateError) as exc:
         print(f"hornero-qa: {exc}", file=sys.stderr)
         return EXIT_USAGE

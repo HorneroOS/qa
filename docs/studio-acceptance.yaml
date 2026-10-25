@@ -1,0 +1,135 @@
+schema: hornero.qa.studio-acceptance/1
+edition_state: planned
+items:
+  - id: clean-install-first-boot
+    outcome: Clean supported install and first boot with reviewed firmware and compositor paths.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [installer#11, installer#12, installer#20, installer#21, installer#22, installer#23, qa#19, qa#23]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Panda Foss and QA owners must name and approve the disposable VM/firmware fixture."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: selection-parity
+    outcome: Installer, horneroctl, and Control Center resolve the same selected apps and workload state.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [hornero#284, hornero#285, hornero#286, installer#20, qa#23, shell#313]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Pin a disposable install fixture after the canonical catalogue and resolver contract lands."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: professional-audio-midi
+    outcome: Audio graph health, device routing, MIDI workflow, suspend/resume, reconnect, and safe restoration.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [config#97, installer#22, qa#21, shell#314]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Name supported audio interfaces and MIDI fixtures only after owner calibration."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: obs-wayland-capture
+    outcome: OBS capture and Wayland portal path works without exposing stream credentials or user media.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [hornero#285, qa#22, qa#25]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Select a disposable virtual capture fixture and approved OBS profile after catalogue review."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: video-export
+    outcome: Supported video editing can export a generated, redistributable sample project with declared encoders.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [hornero#285, qa#22, qa#25]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Select a licensed sample project and named CPU/GPU encoder fixture."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: blender-gpu
+    outcome: Blender reports the tested render backend and completes a generated render on declared GPU/software fallback tiers.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [installer#21, qa#22, qa#25]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Approve named GPU models, driver/kernel versions, and a redistributable render fixture."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: design-photo-tablet-displays
+    outcome: Design/photo, game-development, maker/CAD, tablet, mixed-DPI, and output-hotplug workflows meet reviewed acceptance.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [qa#25]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Name pen/tablet and multi-display fixtures after package and hardware support review."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: storage-recovery
+    outcome: Project, cache, and scratch paths recover safely from low space, missing volumes, cancellation, and partial renders.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [config#100, installer#23, hornero#286, qa#26]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Use disposable filesystem fixtures; never a personal disk or project."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: companion-safety
+    outcome: Companion actions require approval, preserve denial/cancellation, protect private data, and stop real jobs safely.
+    required: false
+    condition: when-enabled
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [hornero#289, qa#27, shell#316]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Use a local mock service and generated project assets; no external account or user media."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: documentation
+    outcome: Support matrix, workflows, licensing, setup, recovery, and first-project guidance match tested product behavior.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: review
+    owner_issues: [docs#76, docs#77, docs#78, docs#79]
+    fixture: {id: documentation-review, approved: false, sha256: null, manifest: null, notes: "Docs, product, QA, and installer owners must review against accepted evidence."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: multi-display
+    outcome: Shell behavior remains usable across the declared multi-output and HiDPI support matrix.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [qa#25]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Extend the existing two-output scenario only after resolution and scale fixtures are reviewed."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
+  - id: measured-performance
+    outcome: Named creative workflows meet owner-reviewed repeatable performance and resource-pressure recovery gates.
+    required: true
+    condition: always
+    enabled: null
+    evidence_kind: bundle
+    owner_issues: [qa#26, hornero#287]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Research numbers remain proposals until hardware baseline, methodology, and repeatability are reviewed."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}
