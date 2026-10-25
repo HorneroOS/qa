@@ -1,0 +1,32 @@
+id: install/desktop-uefi-unencrypted
+purpose: >-
+  A Desktop installation on UEFI with unencrypted storage,
+  from the candidate Preview ISO, reaches an authenticated Hornero desktop
+  whose installed composition matches the canonical resolved choice.
+covers: [installer#11, qa#19]
+instruction: >-
+  Boot the candidate ISO in a disposable VM (UEFI firmware,
+  blank target disk), launch the graphical installer, choose
+  HorneroOS Desktop — Hyprland,
+  without encryption,
+  create the QA user, let installation finish, reboot with the ISO detached,
+  authenticate at the
+  greeter, and leave the installed desktop running for the proofs.
+proof:
+  - note: Installed Hyprland session is running after authenticating at the greeter
+    probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
+  - note: Hornero Shell answers IPC
+    probe: {run: "qs ipc call drawers list", contains: launcher}
+  - note: No Hyprland config errors on the installed system
+    probe: {run: "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'", equals: "0"}
+  - note: Installed profile metadata names the installed edition
+    probe: {run: "jq -r .edition.edition /usr/lib/hornero/system-profile.json", equals: desktop}
+  - note: horneroctl system info agrees with the installed profile
+    probe: {run: "horneroctl system info --json | jq -r .data.edition", equals: desktop}
+  - note: Installer package cache was cleaned (R11 contract)
+    probe: {run: "ls /var/cache/pacman/pkg 2>/dev/null | wc -l", equals: "0"}
+  - note: Desktop frame (non-blank) for the record
+    screenshot: installed-desktop
+media: [installed-desktop]
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}

@@ -1,4 +1,68 @@
 scenarios:
+  install/desktop-uefi-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, UEFI, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
+  install/desktop-uefi-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, UEFI, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
+  install/desktop-bios-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, BIOS, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
+  install/desktop-bios-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, BIOS, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
+  install/studio-uefi-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, UEFI, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
+  install/studio-uefi-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, UEFI, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
+  install/studio-bios-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, BIOS, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
+  install/studio-bios-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, BIOS, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. Not yet executed: needs the candidate ISO and an
+      install-capable QA engine run.'
+    schedule: Execute against the first candidate ISO build (same SHA-256
+      across the whole install matrix) once installer#29/#30 land.
   bars/dock-bottom-popout-travel:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Moving the pointer from
