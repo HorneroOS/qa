@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
@@ -15,6 +16,7 @@ import yaml
 from hornero_qa.scenario import ScenarioError, discover, load
 
 TRIAGE_PATH = Path("docs/scenario-triage.yaml")
+MATRIX_PATH = Path("docs/SCENARIO-MATRIX.md")
 EVIDENCE_ROOTS = (Path("docs/evidence"), Path(".github/evidence"))
 SCREENSHOT_SCHEMA = "hornero.qa.screenshot/1"
 APPEARANCE_SCHEMA = "hornero.appearance-evidence/1"
@@ -81,9 +83,10 @@ def _sha256(path: Path) -> str:
 
 def _link(repo_root: Path, path: Path, label: str) -> str:
     try:
-        relative = path.resolve().relative_to(repo_root.resolve()).as_posix()
+        root_relative = path.resolve().relative_to(repo_root.resolve())
     except ValueError as exc:
         raise MatrixError(f"evidence must be inside the repository: {path}") from exc
+    relative = Path(os.path.relpath(root_relative, MATRIX_PATH.parent)).as_posix()
     return f"[{label}]({relative})"
 
 

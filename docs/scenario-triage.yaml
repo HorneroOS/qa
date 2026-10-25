@@ -123,6 +123,15 @@ scenarios:
       both heads. This does not verify physical display hotplug.'
     schedule: Keep this virtual two-output scenario in the Studio acceptance suite;
       rerun against each pinned release image.
+  multimonitor/mixed-dpi-two-outputs:
+    decision: keep
+    rationale: 'Retain virtual mixed-scale coverage. The setup first requires one
+      Virtual-1 and one Virtual-2, and the scenario requires Hyprland. Hyprland
+      adjusts scales that produce fractional logical dimensions: 1280x800 at 1.5
+      reads back as 1.6. The 1920x1080 fixture supports 1.5 exactly and passed
+      output, bar, and screenshot proofs. This does not establish physical hotplug
+      or general mixed-DPI support.'
+    schedule: Extend to approved physical monitor and HiDPI fixtures when available.
   multimonitor/three-outputs:
     decision: keep
     rationale: 'Retain three-output virtual coverage. The earlier 20261024T160629Z

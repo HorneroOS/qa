@@ -74,9 +74,37 @@ def test_sidecar_is_unverified_and_missing_evidence_is_never_executed(tmp_path: 
     matrix = generate_matrix(repo, repo / "docs/evidence/runs")
 
     assert "2026-10-02 | Evidence only; result unavailable" in matrix
-    assert "[screenshot evidence](docs/evidence/old-run/frame-latest.png)" in matrix
+    assert "[screenshot evidence](evidence/old-run/frame-latest.png)" in matrix
     assert "Never executed" in matrix
     assert " | PASS | " not in matrix
+
+
+def test_github_evidence_link_is_relative_to_the_matrix_document(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    evidence = repo / ".github/evidence/manual"
+    evidence.mkdir(parents=True)
+    image = evidence / "frame.png"
+    image.write_bytes(b"PNG fixture")
+    (evidence / "frame.json").write_text(
+        json.dumps(
+            {
+                "schema": "hornero.qa.screenshot/1",
+                "scenario": "smoke/with-evidence",
+                "captured": "2026-10-02T08:30:00Z",
+                "run_id": "manual-run",
+                "file": image.name,
+                "sha256": hashlib.sha256(image.read_bytes()).hexdigest(),
+            }
+        ),
+        encoding="utf-8",
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "add", ".github/evidence/manual"], check=True, capture_output=True
+    )
+
+    matrix = generate_matrix(repo, repo / "docs/evidence/runs")
+
+    assert "[screenshot evidence](../.github/evidence/manual/frame.png)" in matrix
 
 
 def test_untracked_sidecars_do_not_change_the_committed_matrix(tmp_path: Path) -> None:
@@ -139,7 +167,7 @@ def test_complete_run_bundle_supplies_the_result_and_date(tmp_path: Path) -> Non
     matrix = generate_matrix(repo, repo / "docs/evidence/runs")
 
     assert "2026-10-03 | PASS" in matrix
-    assert "[run report](docs/evidence/runs/run-1/result.json)" in matrix
+    assert "[run report](evidence/runs/run-1/result.json)" in matrix
     assert "2026-10-02 | Evidence only" not in matrix
 
 

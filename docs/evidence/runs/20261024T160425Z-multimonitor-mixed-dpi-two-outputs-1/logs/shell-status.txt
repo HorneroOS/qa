@@ -1,0 +1,3 @@
+compositor: hyprland
+quickshell-cli: /usr/bin/qs
+config: $HOME/.config/quickshell/shell.qml
