@@ -35,9 +35,6 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `regressions/shell-77-rapid-escape` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `smoke/desktop-ready` | 2026-10-24 | PASS | [run report](evidence/runs/20261024T191340Z-smoke-desktop-ready-1/report.html) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `smoke/no-config-errors` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `studio/audio-mode-opt-in` | — | Never executed | — | keep | Blocked until a pinned image ships the merged horneroctl Studio contracts (HorneroOS/hornero#302); then schedule in the next approved KVM QA window. |
-| `studio/jobs-approval-privacy` | — | Never executed | — | keep | Blocked until a pinned image ships the merged horneroctl Studio contracts (HorneroOS/hornero#301/#303); then schedule in the next approved KVM QA window. |
-| `studio/selection-parity` | — | Never executed | — | keep | Blocked until a pinned image ships the merged horneroctl Studio contracts (HorneroOS/hornero#299); then schedule in the next approved KVM QA window. |
 | `themes/appearance-apply-light` | 2026-10-02 | Evidence only; result unavailable | [screenshot evidence](evidence/appearance-current-preview-2026-10-02/after-light.png) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `themes/package-only-flagships` | 2026-10-24 | PASS | [run report](evidence/runs/20261024T191126Z-themes-package-only-flagships-1/report.html) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `themes/set-hornero-light` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
