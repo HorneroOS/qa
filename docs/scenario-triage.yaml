@@ -125,10 +125,10 @@ scenarios:
       rerun against each pinned release image.
   multimonitor/mixed-dpi-two-outputs:
     decision: keep
-    rationale: 'Retain virtual mixed-scale coverage. Hyprland adjusts scales that
-      produce fractional logical dimensions: 1280x800 at 1.5 does not divide into
-      integer logical pixels and reads back as 1.6. The reviewed QEMU fixture uses
-      1920x1080 at 1.5 (1280x720 logical), preserving the intended scale and passing
+    rationale: 'Retain virtual mixed-scale coverage. The setup first requires one
+      Virtual-1 and one Virtual-2, and the scenario requires Hyprland. Hyprland
+      adjusts scales that produce fractional logical dimensions: 1280x800 at 1.5
+      reads back as 1.6. The 1920x1080 fixture supports 1.5 exactly and passed
       output, bar, and screenshot proofs. This does not establish physical hotplug
       or general mixed-DPI support.'
     schedule: Extend to approved physical monitor and HiDPI fixtures when available.

@@ -4,10 +4,13 @@ purpose: >-
   display scales: Hyprland reports both scales, the active layout draws bars on
   both outputs, and both output captures contain desktop content.
 covers: [qa#25]
-requires: {outputs: 2}
+requires: {outputs: 2, compositor: hyprland}
 setup:
   layout: cockpit-clear
   commands:
+    - >-
+      hyprctl monitors all -j | jq -e '([.[] | select(.name == "Virtual-1")] | length == 1) and
+      ([.[] | select(.name == "Virtual-2")] | length == 1)'
     - hyprctl keyword monitor "Virtual-1,1280x800@60,0x0,1"
     - hyprctl keyword monitor "Virtual-2,1920x1080@60,1280x0,1.5"
 instruction: Start the desktop with two differently scaled virtual outputs and inspect each screen.
