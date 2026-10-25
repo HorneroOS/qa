@@ -219,6 +219,33 @@ scenarios:
       are not installed.'
     schedule: Schedule in the next approved KVM QA window against the pinned ready
       image.
+  studio/audio-mode-opt-in:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Studio audio modes stay
+      safe by default: Balanced is the recorded default, Low Latency refuses
+      without explicit opt-in, and restore with nothing recorded is a harmless
+      no-op (HorneroOS/hornero#287 contract).'
+    schedule: Blocked until a pinned image ships the merged horneroctl Studio
+      contracts (HorneroOS/hornero#302); then schedule in the next approved KVM
+      QA window.
+  studio/jobs-approval-privacy:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Studio render jobs
+      require explicit submission through allow-listed adapters only: unknown
+      adapters and missing inputs are refused, job ids cannot traverse out of
+      the user job store, and no background execution happens.'
+    schedule: Blocked until a pinned image ships the merged horneroctl Studio
+      contracts (HorneroOS/hornero#301/#303); then schedule in the next approved
+      KVM QA window.
+  studio/selection-parity:
+    decision: keep
+    rationale: 'Retain coverage for this product behavior: Post-install Studio
+      selection behaves as recorded intent only: a fresh system reports no
+      selection, unknown catalogue IDs are rejected, and doctor reports health
+      without installing or changing anything.'
+    schedule: Blocked until a pinned image ships the merged horneroctl Studio
+      contracts (HorneroOS/hornero#299); then schedule in the next approved KVM
+      QA window.
   themes/appearance-apply-light:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Apply a theme from Appearance

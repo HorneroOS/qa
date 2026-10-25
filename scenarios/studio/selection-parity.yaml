@@ -1,0 +1,20 @@
+id: studio/selection-parity
+purpose: >-
+  Post-install Studio selection behaves as recorded intent only: a fresh
+  system reports no selection, unknown catalogue IDs are rejected, and
+  doctor reports health without installing or changing anything.
+covers: [qa#23, hornero#285, hornero#286]
+instruction: Open a terminal and review the recorded Studio selection and health report.
+proof:
+  - note: A fresh system records no Studio selection
+    probe: {run: "horneroctl studio selection show", contains: "No Studio selection recorded"}
+  - note: Unknown specialization IDs are rejected, never recorded
+    probe: {run: "horneroctl studio selection set --specialization qa-bogus-id >/dev/null 2>&1 && echo allowed || echo refused", equals: refused}
+  - note: The refused change leaves the selection untouched
+    probe: {run: "horneroctl studio selection show", contains: "No Studio selection recorded"}
+  - note: Doctor completes as a read-only report
+    probe: {run: "horneroctl studio doctor", contains: "studio doctor"}
+  - note: Doctor sees the recorded audio mode contract, not invented latency
+    probe: {run: "horneroctl studio doctor", contains: "studio-audio-mode"}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}
