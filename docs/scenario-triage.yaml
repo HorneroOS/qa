@@ -132,6 +132,15 @@ scenarios:
       each screen, and captured all heads. This does not verify physical hotplug.'
     schedule: Keep this virtual three-output scenario in the Studio acceptance suite;
       rerun against each pinned release image.
+  multimonitor/virtual-output-disable-reconnect:
+    decision: keep
+    rationale: 'Run 20261025T051602Z disabled Virtual-2 at the Hyprland compositor,
+      observed one active monitor while the synthetic Kitty window remained mapped
+      to an active output, then restored both named outputs and captured nonblank
+      heads. This is a compositor-level simulation, not QEMU device or physical
+      display hotplug.'
+    schedule: Keep as virtual compositor-level coverage; add device or hardware
+      hotplug evidence only after a suitable fixture is approved.
   notifications/shell-owns-bus:
     decision: keep
     rationale: 'Retain coverage for this product behavior: The Hornero shell owns

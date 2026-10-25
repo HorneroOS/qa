@@ -1,0 +1,78 @@
+[
+  {
+    "t": 46.718,
+    "kind": "probe",
+    "run": "hyprctl binds -j | jq -c '[.[] | select(.key == \"Z\" or .key == \"X\")]'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "ming\":false,\"auto_consuming\":false,\"has_description\":false,\"modmask\":12,\"submap\":\"\",\"submap_universal\":\"false\",\"key\":\"Z\",\"keycode\":0,\"catch_all\":false,\"description\":\"\",\"allow_input_capture\":false,\"dispatcher\":\"exec\",\"arg\":\"sh /tmp/hornero-qa-display-off\"},{\"locked\":false,\"mouse\":false,\"release\":false,\"repeat\":false,\"longPress\":false,\"non_consuming\":false,\"auto_consuming\":false,\"has_description\":false,\"modmask\":12,\"submap\":\"\",\"submap_universal\":\"false\",\"key\":\"X\",\"keycode\":0,\"catch_all\":false,\"description\":\"\",\"allow_input_capture\":false,\"dispatcher\":\"exec\",\"arg\":\"sh /tmp/hornero-qa-display-on\"}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 2"
+  },
+  {
+    "t": 46.908,
+    "kind": "probe",
+    "run": "cat /tmp/hornero-qa-display-off.result",
+    "ok": true,
+    "rc": 0,
+    "stdout": "ok",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 3"
+  },
+  {
+    "t": 47.102,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq length",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 4"
+  },
+  {
+    "t": 47.3,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson clients \"$(hyprctl clients -j)\" '($monitors | map(.id)) as $ids | [$clients[] | select(.title == \"Hornero QA Critical Window\" and (.monitor as $monitor | $ids | index($monitor) != null))] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 50.878,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -e '([.[] | select(.name == \"Virtual-1\")] | length == 1) and ([.[] | select(.name == \"Virtual-2\")] | length == 1)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 51.151,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson clients \"$(hyprctl clients -j)\" '($monitors | map(.id)) as $ids | [$clients[] | select(.title == \"Hornero QA Critical Window\" and (.monitor as $monitor | $ids | index($monitor) != null))] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 51.697,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-reconnected-desktop-h0.png",
+      "004-reconnected-desktop-h1.png"
+    ],
+    "where": "proof 2"
+  }
+]
