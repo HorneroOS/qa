@@ -15,12 +15,13 @@
   The two-output assertion and screenshot captures pass, and visible bars group
   as `[2,2]` across the two screens.
 
-This confirms that the earlier scale discrepancy reproduces with both QEMU
-heads enabled and the screen-aware Shell diagnostic. Its cause remains
-unresolved; this run does not establish whether the scale difference comes
-from the compositor, virtual display mode, or monitor reconfiguration. Keep the
-acceptance expectation at 1.5 until the cause is understood. It does not
-establish physical hotplug or general mixed-DPI support.
+This run confirms that the fixed `1280x800` mode adjusts the requested scale.
+Hyprland requires integer logical dimensions: at 1280x800, scale 1.5 produces
+fractional pixels, so the compositor selects the nearest valid scale, 1.6.
+The follow-up run
+[`20261025T031825Z`](../20261025T031825Z-multimonitor-mixed-dpi-two-outputs-1/README.md)
+uses 1920x1080 at scale 1.5 (1280x720 logical) and passes. This virtual result
+does not establish physical hotplug or general mixed-DPI support.
 
 ## Privacy curation
 

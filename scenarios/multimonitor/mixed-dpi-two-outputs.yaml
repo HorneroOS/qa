@@ -9,7 +9,7 @@ setup:
   layout: cockpit-clear
   commands:
     - hyprctl keyword monitor "Virtual-1,1280x800@60,0x0,1"
-    - hyprctl keyword monitor "Virtual-2,1280x800@60,1280x0,1.5"
+    - hyprctl keyword monitor "Virtual-2,1920x1080@60,1280x0,1.5"
 instruction: Start the desktop with two differently scaled virtual outputs and inspect each screen.
 proof:
   - note: Hyprland version is recorded with the output-scale result
@@ -26,3 +26,4 @@ proof:
       retry_s: 10
   - screenshot: mixed-scale-outputs
 budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: on-failure}
