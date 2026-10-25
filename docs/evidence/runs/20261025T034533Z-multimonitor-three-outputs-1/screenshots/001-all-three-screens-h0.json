@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "001-all-three-screens-h0.png",
+  "sha256": "243691b1be6925eae6fcb2d68904ec5a8a27fcf57f31d1442b89ff626d5b149e",
+  "run_id": "20261025T034533Z-multimonitor-three-outputs-1",
+  "scenario": "multimonitor/three-outputs",
+  "captured": "2026-10-25T03:46:45Z",
+  "t": 71.232,
+  "product": {
+    "shell_sha": "fa4f5741e246ad04d96874b1de1f442965c11e47",
+    "config_sha": "76a552f7ec56f00ed52e122150f27639a3a8d70a",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview29 (028a52c)",
+    "horneroctl_sha256": "8e9ffd96d578543d50caa17d9449bb52e79fdf1ae90598fe417f370a263602f5"
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.2.9-arch1-1",
+    "qemu": "QEMU emulator version 11.1.2",
+    "image": "studio-shell320.qcow2",
+    "outputs": 3,
+    "resolution": "1280x800",
+    "captured_resolution": "1280x800"
+  },
+  "proof": true
+}
