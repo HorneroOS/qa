@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "005-reconnected-desktop-h0.png",
+  "sha256": "bc4205b5b101b804841bc22e32655f0950e70a7f3e43e81006a77222884da80b",
+  "run_id": "20261025T053713Z-multimonitor-virtual-output-disable-reconnect-1",
+  "scenario": "multimonitor/virtual-output-disable-reconnect",
+  "captured": "2026-10-25T05:38:03Z",
+  "t": 50.627,
+  "product": {
+    "shell_sha": "fa4f5741e246ad04d96874b1de1f442965c11e47",
+    "config_sha": "76a552f7ec56f00ed52e122150f27639a3a8d70a",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview29 (028a52c)",
+    "horneroctl_sha256": "8e9ffd96d578543d50caa17d9449bb52e79fdf1ae90598fe417f370a263602f5"
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.2.9-arch1-1",
+    "qemu": "QEMU emulator version 11.1.2",
+    "image": "studio-shell320.qcow2",
+    "outputs": 2,
+    "resolution": "1280x800",
+    "captured_resolution": "1280x800"
+  },
+  "proof": true
+}

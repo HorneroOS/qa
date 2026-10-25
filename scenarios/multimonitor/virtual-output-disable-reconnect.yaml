@@ -2,7 +2,8 @@ id: multimonitor/virtual-output-disable-reconnect
 covers: [qa#25]
 purpose: >-
   On a disposable two-output guest, simulate a compositor-level output removal
-  and reconnection, and verify a synthetic critical window survives both transitions.
+  and reconnection, and verify a synthetic critical window remains recoverable
+  through workspace navigation and visible after both transitions.
 requires: {outputs: 2, compositor: hyprland}
 setup:
   layout: cockpit-clear
@@ -24,8 +25,12 @@ setup:
       exit 1
     - >-
       jq -n --argjson monitors "$(hyprctl monitors -j)" --argjson clients "$(hyprctl clients -j)"
-      '([ $monitors[] | select(.name == "Virtual-2") | .id ][0]) as $expected |
-      [$clients[] | select(.title == "Hornero QA Critical Window" and .monitor == $expected)] | length'
+      '[$monitors[] | {monitor: .id, workspace: .activeWorkspace.id}] as $active |
+      [$clients[] as $client |
+      select($client.title == "Hornero QA Critical Window" and $client.monitor ==
+      ($monitors[] | select(.name == "Virtual-2") | .id) and $client.mapped == true and
+      ($client.hidden // false) == false) |
+      select(any($active[]; .monitor == $client.monitor and .workspace == $client.workspace.id))] | length'
       | grep -qx 1
     - >-
       printf '%s\n' '#!/bin/sh' 'hyprctl keyword monitor "Virtual-2,disable"
@@ -41,8 +46,14 @@ setup:
     - hyprctl keyword bind 'CTRL ALT, X, exec, sh /tmp/hornero-qa-display-on'
     - >-
       hyprctl binds -j | jq -e 'any(.[]; .key == "Z") and any(.[]; .key == "X")'
-instruction: Disable Virtual-2, verify the critical window remains available, then reconnect Virtual-2.
+instruction: Disable Virtual-2, switch to the preserved critical-window workspace on the remaining output, then reconnect Virtual-2.
 steps:
+  - probe:
+      run: hyprctl version
+      save: compositor-version.txt
+  - probe:
+      run: kitty --version
+      save: window-client-version.txt
   - screenshot: before-output-disable
   - key: ctrl+alt+z
   - probe:
@@ -62,12 +73,47 @@ steps:
       save: disconnected-monitors.json
   - probe:
       run: >-
+        jq -n --argjson monitors "$(hyprctl monitors -j)"
+        --argjson workspaces "$(hyprctl workspaces -j)"
+        --argjson clients "$(hyprctl clients -j)"
+        '{monitors: [$monitors[] | {id, name, activeWorkspace}],
+        workspaces: [$workspaces[] | {id, name, monitor, windows}],
+        critical_window: [$clients[] | select(.title == "Hornero QA Critical Window") |
+        {address, mapped, hidden, monitor, workspace}]}'
+      save: disconnected-window-state.json
+  - probe:
+      run: >-
         jq -n --argjson monitors "$(hyprctl monitors -j)" --argjson clients "$(hyprctl clients -j)"
-        '($monitors | map(.id)) as $ids |
-        [$clients[] | select(.title == "Hornero QA Critical Window" and (.monitor as $monitor | $ids | index($monitor) != null))] | length'
+        '[$monitors[] | .id] as $active_monitors |
+        [$clients[] as $client |
+        select($client.title == "Hornero QA Critical Window" and $client.mapped == true and
+        ($active_monitors | index($client.monitor) != null))] | length'
+      equals: "1"
+      retry_s: 5
+      save: disconnected-window-preserved.json
+  - key: super+2
+  - probe:
+      run: >-
+        jq -n --argjson monitors "$(hyprctl monitors -j)"
+        --argjson workspaces "$(hyprctl workspaces -j)"
+        --argjson clients "$(hyprctl clients -j)"
+        '{monitors: [$monitors[] | {id, name, activeWorkspace}],
+        workspaces: [$workspaces[] | {id, name, monitor, windows}],
+        critical_window: [$clients[] | select(.title == "Hornero QA Critical Window") |
+        {address, mapped, hidden, monitor, workspace}]}'
+      save: disconnected-window-visible-state.json
+  - probe:
+      run: >-
+        jq -n --argjson monitors "$(hyprctl monitors -j)" --argjson clients "$(hyprctl clients -j)"
+        '[$monitors[] | {monitor: .id, workspace: .activeWorkspace.id}] as $active |
+        [$clients[] as $client |
+        select($client.title == "Hornero QA Critical Window" and $client.mapped == true and
+        ($client.hidden // false) == false) |
+        select(any($active[]; .monitor == $client.monitor and .workspace == $client.workspace.id))] | length'
       equals: "1"
       retry_s: 5
       save: disconnected-window-on-active-output.json
+  - screenshot: critical-window-visible-on-remaining-output
   - key: ctrl+alt+x
   - note: Allow the re-enabled virtual head to repaint before the final capture.
   - pause: 3
@@ -79,12 +125,26 @@ proof:
         ([.[] | select(.name == "Virtual-2")] | length == 1)'
       equals: "true"
       retry_s: 10
-  - note: The synthetic critical window survives the output transitions
+  - note: Record active monitor/workspace and critical-window state after reconnect
+    probe:
+      run: >-
+        jq -n --argjson monitors "$(hyprctl monitors -j)"
+        --argjson workspaces "$(hyprctl workspaces -j)"
+        --argjson clients "$(hyprctl clients -j)"
+        '{monitors: [$monitors[] | {id, name, activeWorkspace}],
+        workspaces: [$workspaces[] | {id, name, monitor, windows}],
+        critical_window: [$clients[] | select(.title == "Hornero QA Critical Window") |
+        {address, mapped, hidden, monitor, workspace}]}'
+      save: reconnected-window-state.json
+  - note: The synthetic critical window remains visible on an active workspace
     probe:
       run: >-
         jq -n --argjson monitors "$(hyprctl monitors -j)" --argjson clients "$(hyprctl clients -j)"
-        '($monitors | map(.id)) as $ids |
-        [$clients[] | select(.title == "Hornero QA Critical Window" and (.monitor as $monitor | $ids | index($monitor) != null))] | length'
+        '[$monitors[] | {monitor: .id, workspace: .activeWorkspace.id}] as $active |
+        [$clients[] as $client |
+        select($client.title == "Hornero QA Critical Window" and $client.mapped == true and
+        ($client.hidden // false) == false) |
+        select(any($active[]; .monitor == $client.monitor and .workspace == $client.workspace.id))] | length'
       equals: "1"
       retry_s: 5
   - screenshot: reconnected-desktop
