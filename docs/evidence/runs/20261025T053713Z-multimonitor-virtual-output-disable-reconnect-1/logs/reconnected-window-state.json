@@ -1,0 +1,46 @@
+{
+  "monitors": [
+    {
+      "id": 0,
+      "name": "Virtual-1",
+      "activeWorkspace": {
+        "id": 3,
+        "name": "3"
+      }
+    },
+    {
+      "id": 1,
+      "name": "Virtual-2",
+      "activeWorkspace": {
+        "id": 2,
+        "name": "2"
+      }
+    }
+  ],
+  "workspaces": [
+    {
+      "id": 2,
+      "name": "2",
+      "monitor": "Virtual-2",
+      "windows": 1
+    },
+    {
+      "id": 3,
+      "name": "3",
+      "monitor": "Virtual-1",
+      "windows": 0
+    }
+  ],
+  "critical_window": [
+    {
+      "address": "0x55f545b75230",
+      "mapped": true,
+      "hidden": false,
+      "monitor": 1,
+      "workspace": {
+        "id": 2,
+        "name": "2"
+      }
+    }
+  ]
+}

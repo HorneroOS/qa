@@ -117,11 +117,31 @@ scenarios:
       image.
   multimonitor/two-outputs:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: With two monitors the desktop
-      comes up on both: Hyprland drives two outputs, the shell draws a bar on each,
-      and the active layout applies to both screens.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: 'Retain two-output Studio coverage. Run 20261025T035600Z against
+      studio-shell320 found exactly the two configured Virtual outputs, reported
+      two Hyprland monitors, verified two visible Shell bars per screen, and captured
+      both heads. This does not verify physical display hotplug.'
+    schedule: Keep this virtual two-output scenario in the Studio acceptance suite;
+      rerun against each pinned release image.
+  multimonitor/three-outputs:
+    decision: keep
+    rationale: 'Retain three-output virtual coverage. The earlier 20261024T160629Z
+      run exposed only one scanout because the QEMU device lacked per-head output
+      definitions. With QA #31 merged, run 20261025T034533Z found all three named
+      outputs, reported three Hyprland monitors, verified two visible Shell bars on
+      each screen, and captured all heads. This does not verify physical hotplug.'
+    schedule: Keep this virtual three-output scenario in the Studio acceptance suite;
+      rerun against each pinned release image.
+  multimonitor/virtual-output-disable-reconnect:
+    decision: keep
+    rationale: 'Run 20261025T053713Z disabled Virtual-2 at the Hyprland compositor.
+      Hyprland preserved the Kitty window on workspace 2 on Virtual-1 while
+      workspace 1 remained active; the QMP user action SUPER+2 made the window
+      visible, and reconnect restored workspace 2 on Virtual-2. Both outputs and
+      the visible window were captured. This is a compositor-level simulation,
+      not QEMU device or physical display hotplug.'
+    schedule: Keep as virtual compositor-level coverage; add device or hardware
+      hotplug evidence only after a suitable fixture is approved.
   notifications/shell-owns-bus:
     decision: keep
     rationale: 'Retain coverage for this product behavior: The Hornero shell owns

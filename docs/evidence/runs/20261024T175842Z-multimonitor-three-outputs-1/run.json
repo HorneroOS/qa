@@ -1,0 +1,59 @@
+{
+  "schema": "hornero.qa.run/1",
+  "run_id": "20261024T175842Z-multimonitor-three-outputs-1",
+  "started": "2026-10-24T17:58:42Z",
+  "scenario": "multimonitor/three-outputs",
+  "covers": [],
+  "instruction": "Start the desktop with three monitors connected and inspect each screen.",
+  "attempt": 1,
+  "product": {
+    "shell_sha": "37a09b31b1cf7f10206b13a20d355e4bf5730cc4",
+    "config_sha": "76a552f7ec56f00ed52e122150f27639a3a8d70a",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview29 (028a52c)",
+    "horneroctl_sha256": "8e9ffd96d578543d50caa17d9449bb52e79fdf1ae90598fe417f370a263602f5"
+  },
+  "image": {
+    "schema": "hornero.qa.image/1",
+    "name": "studio-shell-debug-preview29-20261024",
+    "built": "2026-10-24T17:28:27Z",
+    "base": "arch-provisioned-yay-20261024.qcow2",
+    "product": {
+      "shell_sha": "37a09b31b1cf7f10206b13a20d355e4bf5730cc4",
+      "config_sha": "76a552f7ec56f00ed52e122150f27639a3a8d70a",
+      "horneroctl": "horneroctl horneroctl-v0.2.0-preview29 (028a52c)",
+      "horneroctl_sha256": "8e9ffd96d578543d50caa17d9449bb52e79fdf1ae90598fe417f370a263602f5"
+    },
+    "compositor": "hyprland",
+    "builder_mem_mb": 2048,
+    "builder_cpus": 2,
+    "runtime_packages": [
+      "papirus-icon-theme",
+      "qt6ct",
+      "dunst",
+      "libnotify",
+      "jq",
+      "hyprlock",
+      "gtk3"
+    ],
+    "compositor_packages": [],
+    "aur_runtime_packages": [
+      "python-materialyoucolor",
+      "python-pywal16"
+    ],
+    "catalogues": {
+      "shell_presets": "user catalogue seeded from shell presets/",
+      "themes": "hornero-config system package; user copies removed",
+      "wallpapers": "hornero-config system package; user copies removed"
+    }
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.2.9-arch1-1",
+    "qemu": "QEMU emulator version 11.1.2",
+    "image": "studio-shell-debug-preview29-20261024.qcow2",
+    "outputs": 3,
+    "resolution": "1280x800"
+  }
+}

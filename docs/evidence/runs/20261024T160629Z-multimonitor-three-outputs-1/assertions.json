@@ -1,0 +1,20 @@
+[
+  {
+    "t": 77.571,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq length",
+    "ok": false,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "stdout '1' != '3'",
+    "where": "proof 0"
+  },
+  {
+    "t": 77.96,
+    "kind": "screenshot",
+    "ok": false,
+    "detail": "blank heads [1, 2]",
+    "where": "proof 1"
+  }
+]

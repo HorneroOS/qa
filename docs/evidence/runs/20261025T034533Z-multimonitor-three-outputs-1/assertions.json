@@ -1,0 +1,35 @@
+[
+  {
+    "t": 70.608,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq length",
+    "ok": true,
+    "rc": 0,
+    "stdout": "3",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 70.915,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible)] | group_by(.screen) | map(length) | sort'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[2,2,2]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 71.91,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-all-three-screens-h0.png",
+      "002-all-three-screens-h1.png",
+      "003-all-three-screens-h2.png"
+    ],
+    "where": "proof 2"
+  }
+]

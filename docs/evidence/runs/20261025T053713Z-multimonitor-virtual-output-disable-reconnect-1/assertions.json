@@ -1,0 +1,144 @@
+[
+  {
+    "t": 42.946,
+    "kind": "probe",
+    "run": "hyprctl version",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hyprland 0.56.2 built from branch v0.56.2 at commit efb50993780079460b0cbed1363e2166a2de1d9f clean ([gha] Nix: update inputs).\nDate: Wed Aug 5 14:13:21 2026\nTag: v0.56.2, commits: 7661\n\nLibraries:\nHyprgraphics: built against 0.5.1, system has 0.5.1\nHyprutils: built against 0.14.2, system has 0.14.3\nHyprcursor: built against 0.1.13, system has 0.1.13\nHyprlang: built against 0.6.8, system has 0.6.8\nAquamarine: built against 0.15.1, system has 0.15.1\n\nVersion ABI string: efb50993780079460b0cbed1363e2166a2de1d9f_aq_0.15_hu_0.14_hg_0.5_hc_0.1_hlg_0.6\nno flags were set",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "step 0"
+  },
+  {
+    "t": 43.14,
+    "kind": "probe",
+    "run": "kitty --version",
+    "ok": true,
+    "rc": 0,
+    "stdout": "kitty 0.49.2 created by Kovid Goyal",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "step 1"
+  },
+  {
+    "t": 44.285,
+    "kind": "probe",
+    "run": "hyprctl binds -j | jq -c '[.[] | select(.key == \"Z\" or .key == \"X\")]'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "ming\":false,\"auto_consuming\":false,\"has_description\":false,\"modmask\":12,\"submap\":\"\",\"submap_universal\":\"false\",\"key\":\"Z\",\"keycode\":0,\"catch_all\":false,\"description\":\"\",\"allow_input_capture\":false,\"dispatcher\":\"exec\",\"arg\":\"sh /tmp/hornero-qa-display-off\"},{\"locked\":false,\"mouse\":false,\"release\":false,\"repeat\":false,\"longPress\":false,\"non_consuming\":false,\"auto_consuming\":false,\"has_description\":false,\"modmask\":12,\"submap\":\"\",\"submap_universal\":\"false\",\"key\":\"X\",\"keycode\":0,\"catch_all\":false,\"description\":\"\",\"allow_input_capture\":false,\"dispatcher\":\"exec\",\"arg\":\"sh /tmp/hornero-qa-display-on\"}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 4"
+  },
+  {
+    "t": 44.476,
+    "kind": "probe",
+    "run": "cat /tmp/hornero-qa-display-off.result",
+    "ok": true,
+    "rc": 0,
+    "stdout": "ok",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 44.656,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq length",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 6"
+  },
+  {
+    "t": 44.861,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson workspaces \"$(hyprctl workspaces -j)\" --argjson clients \"$(hyprctl clients -j)\" '{monitors: [$monitors[] | {id, name, activeWorkspace}], workspaces: [$workspaces[] | {id, name, monitor, windows}], critical_window: [$clients[] | select(.title == \"Hornero QA Critical Window\") | {address, mapped, hidden, monitor, workspace}]}'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "{\n  \"monitors\": [\n    {\n      \"id\": 0,\n      \"name\": \"Virtual-1\",\n      \"activeWorkspace\": {\n        \"id\": 1,\n        \"name\": \"1\"\n      }\n    }\n  ],\n  \"workspaces\": [\n    {\n      \"id\": 1,\n      \"name\": \"1\",\n      \"monitor\": \"Virtual-1\",\n      \"windows\": 0\n    },\n    {\n      \"id\": 2,\n      \"name\": \"2\",\n      \"monitor\": \"Virtual-1\",\n      \"windows\": 1\n    }\n  ],\n  \"critical_window\": [\n    {\n      \"address\": \"0x55f545b75230\",\n      \"mapped\": true,\n      \"hidden\": false,\n      \"monitor\": 0,\n      \"workspace\": {\n        \"id\": 2,\n        \"name\": \"2\"\n      }\n    }\n  ]\n}",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "step 7"
+  },
+  {
+    "t": 45.061,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson clients \"$(hyprctl clients -j)\" '[$monitors[] | .id] as $active_monitors | [$clients[] as $client | select($client.title == \"Hornero QA Critical Window\" and $client.mapped == true and ($active_monitors | index($client.monitor) != null))] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 8"
+  },
+  {
+    "t": 45.69,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson workspaces \"$(hyprctl workspaces -j)\" --argjson clients \"$(hyprctl clients -j)\" '{monitors: [$monitors[] | {id, name, activeWorkspace}], workspaces: [$workspaces[] | {id, name, monitor, windows}], critical_window: [$clients[] | select(.title == \"Hornero QA Critical Window\") | {address, mapped, hidden, monitor, workspace}]}'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "{\n  \"monitors\": [\n    {\n      \"id\": 0,\n      \"name\": \"Virtual-1\",\n      \"activeWorkspace\": {\n        \"id\": 2,\n        \"name\": \"2\"\n      }\n    }\n  ],\n  \"workspaces\": [\n    {\n      \"id\": 2,\n      \"name\": \"2\",\n      \"monitor\": \"Virtual-1\",\n      \"windows\": 1\n    }\n  ],\n  \"critical_window\": [\n    {\n      \"address\": \"0x55f545b75230\",\n      \"mapped\": true,\n      \"hidden\": false,\n      \"monitor\": 0,\n      \"workspace\": {\n        \"id\": 2,\n        \"name\": \"2\"\n      }\n    }\n  ]\n}",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "step 10"
+  },
+  {
+    "t": 46.03,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson clients \"$(hyprctl clients -j)\" '[$monitors[] | {monitor: .id, workspace: .activeWorkspace.id}] as $active | [$clients[] as $client | select($client.title == \"Hornero QA Critical Window\" and $client.mapped == true and ($client.hidden // false) == false) | select(any($active[]; .monitor == $client.monitor and .workspace == $client.workspace.id))] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 11"
+  },
+  {
+    "t": 49.902,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -e '([.[] | select(.name == \"Virtual-1\")] | length == 1) and ([.[] | select(.name == \"Virtual-2\")] | length == 1)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 50.113,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson workspaces \"$(hyprctl workspaces -j)\" --argjson clients \"$(hyprctl clients -j)\" '{monitors: [$monitors[] | {id, name, activeWorkspace}], workspaces: [$workspaces[] | {id, name, monitor, windows}], critical_window: [$clients[] | select(.title == \"Hornero QA Critical Window\") | {address, mapped, hidden, monitor, workspace}]}'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "     \"id\": 3,\n        \"name\": \"3\"\n      }\n    },\n    {\n      \"id\": 1,\n      \"name\": \"Virtual-2\",\n      \"activeWorkspace\": {\n        \"id\": 2,\n        \"name\": \"2\"\n      }\n    }\n  ],\n  \"workspaces\": [\n    {\n      \"id\": 2,\n      \"name\": \"2\",\n      \"monitor\": \"Virtual-2\",\n      \"windows\": 1\n    },\n    {\n      \"id\": 3,\n      \"name\": \"3\",\n      \"monitor\": \"Virtual-1\",\n      \"windows\": 0\n    }\n  ],\n  \"critical_window\": [\n    {\n      \"address\": \"0x55f545b75230\",\n      \"mapped\": true,\n      \"hidden\": false,\n      \"monitor\": 1,\n      \"workspace\": {\n        \"id\": 2,\n        \"name\": \"2\"\n      }\n    }\n  ]\n}",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 1"
+  },
+  {
+    "t": 50.336,
+    "kind": "probe",
+    "run": "jq -n --argjson monitors \"$(hyprctl monitors -j)\" --argjson clients \"$(hyprctl clients -j)\" '[$monitors[] | {monitor: .id, workspace: .activeWorkspace.id}] as $active | [$clients[] as $client | select($client.title == \"Hornero QA Critical Window\" and $client.mapped == true and ($client.hidden // false) == false) | select(any($active[]; .monitor == $client.monitor and .workspace == $client.workspace.id))] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 50.885,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "005-reconnected-desktop-h0.png",
+      "006-reconnected-desktop-h1.png"
+    ],
+    "where": "proof 3"
+  }
+]

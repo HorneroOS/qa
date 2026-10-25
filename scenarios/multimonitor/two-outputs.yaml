@@ -1,11 +1,16 @@
 id: multimonitor/two-outputs
+covers: [qa#25]
 purpose: >-
   With two monitors the desktop comes up on both: Hyprland drives two
   outputs, the shell draws a bar on each, and the active layout applies to
   both screens.
-requires: {outputs: 2}
+requires: {outputs: 2, compositor: hyprland}
 setup:
   layout: cockpit-clear
+  commands:
+    - >-
+      hyprctl monitors all -j | jq -e '([.[] | select(.name == "Virtual-1")] | length == 1) and
+      ([.[] | select(.name == "Virtual-2")] | length == 1)'
 instruction: Start the desktop with two monitors connected and look at both screens.
 proof:
   - note: Hyprland drives two outputs
@@ -17,3 +22,4 @@ proof:
       retry_s: 10
   - screenshot: both-screens
 budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: on-failure}
