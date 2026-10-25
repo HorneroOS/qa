@@ -83,6 +83,7 @@
         "reference": {"type": "string", "format": "uri", "pattern": "^https://github\\.com/HorneroOS/"},
         "scenario": {"type": "string", "minLength": 1},
         "scenario_sha256": {"$ref": "#/$defs/digest"},
+        "bundle_sha256": {"$ref": "#/$defs/digest"},
         "pins": {
           "type": "object",
           "additionalProperties": false,
@@ -103,7 +104,7 @@
       },
       "oneOf": [
         {
-          "required": ["kind", "run_id", "scenario", "scenario_sha256", "pins"],
+          "required": ["kind", "run_id", "scenario", "scenario_sha256", "bundle_sha256", "pins"],
           "properties": {"kind": {"const": "bundle"}}
         },
         {

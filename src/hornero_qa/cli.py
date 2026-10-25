@@ -16,7 +16,7 @@ from hornero_qa.evidence import load_bundle
 from hornero_qa.matrix import generate_matrix, resolve_repo_path
 from hornero_qa.scenario import ScenarioError, discover, load, resolve
 from hornero_qa.state import QAState
-from hornero_qa.studio_gate import StudioGateError
+from hornero_qa.studio_gate import StudioGateError, run_bundle_digest
 from hornero_qa.studio_gate import evaluate as evaluate_studio_gate
 
 EXIT_OK, EXIT_FAIL, EXIT_INCONCLUSIVE, EXIT_USAGE = 0, 1, 2, 64
@@ -207,6 +207,9 @@ def _media(_: QAState, args: argparse.Namespace) -> int:
 def _studio_gate(state: QAState, args: argparse.Namespace) -> int:
     try:
         runs_dir = Path(args.runs_dir) if args.runs_dir else state.runs_dir
+        if args.bundle_digest:
+            print(run_bundle_digest(runs_dir, args.bundle_digest))
+            return EXIT_OK
         report = evaluate_studio_gate(Path(args.manifest), runs_dir)
     except StudioGateError as exc:
         print(f"hornero-qa: {exc}", file=sys.stderr)
@@ -315,6 +318,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     s.add_argument("--manifest", default="docs/studio-acceptance.yaml")
     s.add_argument("--runs-dir", help="evidence bundles directory (default: QA state runs)")
+    s.add_argument(
+        "--bundle-digest",
+        metavar="RUN_ID",
+        help="print the SHA256 to pin for an archived evidence bundle",
+    )
     s.add_argument("--json", action="store_true", help="print machine-readable gate results")
     return p
 

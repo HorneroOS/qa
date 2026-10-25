@@ -37,11 +37,22 @@ Review evidence must link to a HorneroOS pull request, matching the accepted
 human review reference; the gate does not query GitHub to validate the PR or
 its reviews.
 
+Before adding an accepted bundle to the index, compute its deterministic content
+digest with `uv run hornero-qa studio-gate --bundle-digest <run-id>` (use
+`--runs-dir` for an archived evidence directory). Add the printed SHA256 as
+`bundle_sha256` beside that bundle's `run_id`. The digest covers every regular
+file by relative path and content, including screenshots, sidecars, logs,
+actions, assertions, scenario, run metadata, and result. The gate rejects a
+missing digest, changed file, or symlink found in the bundle. The digest lets a
+reviewer compare the bundle with the expected bytes recorded in the current
+index. Reviewers must inspect the exact index commit and evidence together; the
+gate does not verify which index revision was reviewed. The digest is not a
+signature and does not authenticate who produced the bundle.
+
 The gate validates that bundle files are present and internally consistent;
 it does not authenticate them. `image adopt --product` records operator
 declarations and does not prove that an image contains the declared commits
-or catalogue. Screenshot sidecars and logs are not signed, and the gate does
-not bind their contents to an immutable bundle digest. Owners must inspect
+or catalogue. Screenshot sidecars and logs are not signed. Owners must inspect
 the referenced evidence and verify its relevance to the outcome before
 accepting review. `eligible_for_owner_review` only reports readiness for that
 manual inspection. It is not a release or edition promotion decision.

@@ -11,7 +11,7 @@ import yaml
 from PIL import Image
 
 from hornero_qa.cli import main
-from hornero_qa.studio_gate import StudioGateError, evaluate
+from hornero_qa.studio_gate import StudioGateError, bundle_digest, evaluate
 
 
 def _manifest() -> dict[str, Any]:
@@ -140,6 +140,7 @@ def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[
         "run_id": "run-1",
         "scenario": "studio/audio",
         "scenario_sha256": hashlib.sha256(scenario.encode()).hexdigest(),
+        "bundle_sha256": bundle_digest(bundle),
         "pins": pins,
     }
     return evidence, pins
@@ -194,6 +195,72 @@ def test_studio_gate_accepts_only_complete_pinned_reviewed_evidence(tmp_path: Pa
 
     assert report["eligible_for_owner_review"] is True
     assert report["recommendation"] == "ready_for_owner_review"
+
+
+def test_bundle_content_change_after_review_blocks_evidence(tmp_path: Path) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+    data = _manifest()
+    data["items"][0] |= {
+        "fixture": _approved_fixture(tmp_path),
+        "status": "accepted",
+        "evidence": [evidence],
+        "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
+    }
+    (runs_dir / "run-1/logs/pw-dump.txt").write_text("changed after review", encoding="utf-8")
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+
+    report = evaluate(manifest, runs_dir)
+
+    assert report["recommendation"] == "blocked"
+    assert any("content SHA256 does not match" in reason for reason in report["items"][0]["blocking_reasons"])
+
+
+def test_bundle_evidence_requires_content_digest(tmp_path: Path) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+    del evidence["bundle_sha256"]
+    data = _manifest()
+    data["items"][0] |= {
+        "fixture": _approved_fixture(tmp_path),
+        "status": "accepted",
+        "evidence": [evidence],
+        "review": {"decision": "accepted", "reference": "https://github.com/HorneroOS/qa/pull/99"},
+    }
+    manifest = tmp_path / "acceptance.yaml"
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+
+    with pytest.raises(StudioGateError, match="not valid under any of the given schemas"):
+        evaluate(manifest, runs_dir)
+
+
+def test_bundle_digest_rejects_symlinks(tmp_path: Path) -> None:
+    bundle = tmp_path / "run-1"
+    bundle.mkdir()
+    outside = tmp_path / "outside.log"
+    outside.write_text("private", encoding="utf-8")
+    (bundle / "leak.log").symlink_to(outside)
+
+    with pytest.raises(StudioGateError, match="bundle contains a symlink"):
+        bundle_digest(bundle)
+
+
+def test_cli_bundle_digest_rejects_traversal(tmp_path: Path, capsys: Any) -> None:
+    code = main(["studio-gate", "--runs-dir", str(tmp_path), "--bundle-digest", "../outside"])
+
+    assert code == 1
+    assert "invalid bundle ID" in capsys.readouterr().err
+
+
+def test_cli_prints_bundle_digest_for_acceptance_index(tmp_path: Path, capsys: Any) -> None:
+    runs_dir = tmp_path / "runs"
+    evidence, _ = _accepted_run(runs_dir, tmp_path)
+
+    code = main(["studio-gate", "--runs-dir", str(runs_dir), "--bundle-digest", "run-1"])
+
+    assert code == 0
+    assert capsys.readouterr().out.strip() == evidence["bundle_sha256"]
 
 
 def test_stale_scenario_and_hardware_provenance_block_evidence(tmp_path: Path) -> None:

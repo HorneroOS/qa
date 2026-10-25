@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,7 @@ from hornero_qa.scenario import parse as parse_scenario
 SCHEMA_PATH = Path(__file__).parent / "schemas" / "studio_acceptance.schema.json"
 RUN_SCHEMA = "hornero.qa.run/1"
 REQUIRED_BUNDLE_FILES = ("run.json", "result.json", "scenario.yaml", "actions.jsonl", "assertions.json")
+RUN_ID_PATTERN = r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}"
 REVIEW_URL = re.compile(r"^https://github\.com/HorneroOS/[A-Za-z0-9_.-]+/pull/[1-9][0-9]*$")
 PIN_FIELDS = (
     "shell_sha",
@@ -88,6 +90,59 @@ def _scenario_digest(path: Path) -> str:
     return digest.hexdigest()
 
 
+def bundle_digest(bundle_path: Path) -> str:
+    """Return a stable SHA256 over every regular file in an evidence bundle."""
+    if bundle_path.is_symlink() or not bundle_path.is_dir():
+        raise StudioGateError(f"{bundle_path}: expected a real evidence bundle directory")
+
+    files: list[tuple[str, Path]] = []
+
+    def fail_walk(error: OSError) -> None:
+        raise StudioGateError(f"{bundle_path}: cannot read evidence bundle: {error}") from error
+
+    for current, directories, names in os.walk(bundle_path, followlinks=False, onerror=fail_walk):
+        current_path = Path(current)
+        for name in directories:
+            if (current_path / name).is_symlink():
+                raise StudioGateError(f"{current_path / name}: bundle contains a symlink")
+        for name in names:
+            path = current_path / name
+            if path.is_symlink():
+                raise StudioGateError(f"{path}: bundle contains a symlink")
+            if not path.is_file():
+                raise StudioGateError(f"{path}: bundle entries must be regular files")
+            files.append((path.relative_to(bundle_path).as_posix(), path))
+
+    if not files:
+        raise StudioGateError(f"{bundle_path}: evidence bundle is empty")
+
+    digest = hashlib.sha256()
+    digest.update(b"hornero.qa.bundle/1\0")
+    for relative, path in sorted(files):
+        file_digest = hashlib.sha256()
+        try:
+            with path.open("rb") as stream:
+                for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                    file_digest.update(chunk)
+        except OSError as exc:
+            raise StudioGateError(f"{path}: cannot read evidence bundle file: {exc}") from exc
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(file_digest.hexdigest().encode("ascii"))
+        digest.update(b"\n")
+    return digest.hexdigest()
+
+
+def run_bundle_digest(runs_dir: Path, run_id: str) -> str:
+    """Return a bundle digest addressed by a safe run ID below ``runs_dir``."""
+    if not re.fullmatch(RUN_ID_PATTERN, run_id):
+        raise StudioGateError(f"invalid bundle ID {run_id!r}")
+    bundle_path = runs_dir / run_id
+    if bundle_path.is_symlink() or not bundle_path.resolve().is_relative_to(runs_dir.resolve()):
+        raise StudioGateError(f"bundle {run_id!r} escapes the evidence directory")
+    return bundle_digest(bundle_path)
+
+
 def _fixture_manifest_errors(
     fixture: dict[str, Any], manifest_path: Path, schema: dict[str, Any]
 ) -> list[str]:
@@ -133,7 +188,7 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
             return ["review evidence must link to a HorneroOS pull request"]
         return []
     run_id = entry["run_id"]
-    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", run_id):
+    if not re.fullmatch(RUN_ID_PATTERN, run_id):
         return [f"invalid bundle ID {run_id!r}"]
     root = (runs_dir / run_id).resolve()
     base = runs_dir.resolve()
@@ -274,6 +329,12 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
     ]
     if not log_files:
         return [f"bundle {run_id!r} has no log artifact"]
+    try:
+        actual_bundle_digest = bundle_digest(root)
+    except StudioGateError as exc:
+        return [str(exc)]
+    if actual_bundle_digest != entry["bundle_sha256"]:
+        return [f"bundle {run_id!r} content SHA256 does not match the acceptance index"]
     return []
 
 
