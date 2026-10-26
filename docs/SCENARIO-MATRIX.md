@@ -14,14 +14,14 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `drawers/dashboard-keyboard` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `drawers/launcher-keyboard` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `drawers/session-keyboard` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
-| `install/desktop-bios-encrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
-| `install/desktop-bios-unencrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
-| `install/desktop-uefi-encrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
-| `install/desktop-uefi-unencrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
-| `install/studio-bios-encrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
-| `install/studio-bios-unencrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
-| `install/studio-uefi-encrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
-| `install/studio-uefi-unencrypted` | — | Never executed | — | keep | Execute against the first candidate ISO build (same SHA-256 across the whole install matrix) once installer#29/#30 land. |
+| `install/desktop-bios-encrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
+| `install/desktop-bios-unencrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
+| `install/desktop-uefi-encrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
+| `install/desktop-uefi-unencrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
+| `install/studio-bios-encrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
+| `install/studio-bios-unencrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
+| `install/studio-uefi-encrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
+| `install/studio-uefi-unencrypted` | — | Never executed | — | keep | Executed; re-run after hornero#310 fix and ISO rebuild. |
 | `layout-picker/escape-keeps-layout` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `layout-picker/keyboard-apply` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `layouts/apply-cockpit-clear` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
