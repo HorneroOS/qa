@@ -1,4 +1,52 @@
 scenarios:
+  install/desktop-uefi-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, UEFI, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-uefi-encrypted/RESULT.md'
+    schedule: 'Delta smoke re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097: PASS. Other Desktop cells carried over per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed).'
+  install/desktop-uefi-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, UEFI, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-uefi-unencrypted/RESULT.md'
+    schedule: 'Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta.'
+  install/desktop-bios-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, BIOS, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-bios-encrypted/RESULT.md'
+    schedule: 'Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta.'
+  install/desktop-bios-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (desktop, BIOS, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-bios-unencrypted/RESULT.md'
+    schedule: 'Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta.'
+  install/studio-uefi-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, UEFI, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-uefi-encrypted/RESULT.md'
+    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-uefi-encrypted/RESULT.md'
+  install/studio-uefi-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, UEFI, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-uefi-unencrypted/RESULT.md'
+    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-uefi-unencrypted/RESULT.md'
+  install/studio-bios-encrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, BIOS, encrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-bios-encrypted/RESULT.md'
+    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-bios-encrypted/RESULT.md'
+  install/studio-bios-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
+      (studio, BIOS, unencrypted): guards HorneroOS/installer#11
+      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-bios-unencrypted/RESULT.md'
+    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-bios-unencrypted/RESULT.md'
   bars/dock-bottom-popout-travel:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Moving the pointer from
