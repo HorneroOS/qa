@@ -1,0 +1,17 @@
+HYPR=up
+QS=launcher
+CFGERR=2
+ED=gaming
+SYS=gaming
+CLEAN=0
+SEL=True
+DOC=gaming doctor
+TOOLS=present
+STEAM=absent
+horneroctl horneroctl-v0.2.0-preview35 (2ea9e36)
+shell: ca8f5ca735ffbb8581537ac5b5f1a1d74082fcb0
+config: 811ecd73fd201de30cf333af53ccfa7cdb966740
+manifest: hornero-0.2.0-preview23
+release: 0.2.0-preview23
+CTLSHA=fc5b645ee31c8e0490b0387b8ef108bfdb8321c9d13620f2f8efbf9a703d1e55
+PROF=4e0e43c69650f289c332236a863d0c744ae3e9a74c9ffc54cd85074088e8b464

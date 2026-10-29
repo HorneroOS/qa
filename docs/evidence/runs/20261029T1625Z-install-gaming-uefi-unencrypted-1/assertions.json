@@ -1,0 +1,79 @@
+[
+  {
+    "t": 900,
+    "kind": "probe",
+    "ok": true,
+    "detail": "HYPR=up",
+    "where": "proof 0"
+  },
+  {
+    "t": 905,
+    "kind": "probe",
+    "ok": true,
+    "detail": "QS=launcher",
+    "where": "proof 1"
+  },
+  {
+    "t": 910,
+    "kind": "probe",
+    "ok": true,
+    "detail": "CFGERR=2",
+    "where": "proof 2"
+  },
+  {
+    "t": 915,
+    "kind": "probe",
+    "ok": true,
+    "detail": "ED=gaming",
+    "where": "proof 3"
+  },
+  {
+    "t": 920,
+    "kind": "probe",
+    "ok": true,
+    "detail": "SYS=gaming",
+    "where": "proof 4"
+  },
+  {
+    "t": 925,
+    "kind": "probe",
+    "ok": true,
+    "detail": "CLEAN=0",
+    "where": "proof 5"
+  },
+  {
+    "t": 930,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": "installed-desktop frame captured (001-installed-desktop.png)",
+    "where": "proof 6"
+  },
+  {
+    "t": 935,
+    "kind": "probe",
+    "ok": true,
+    "detail": "SEL=True",
+    "where": "proof 7"
+  },
+  {
+    "t": 940,
+    "kind": "probe",
+    "ok": true,
+    "detail": "DOC=gaming doctor",
+    "where": "proof 8"
+  },
+  {
+    "t": 945,
+    "kind": "probe",
+    "ok": true,
+    "detail": "TOOLS=present",
+    "where": "proof 9"
+  },
+  {
+    "t": 950,
+    "kind": "probe",
+    "ok": true,
+    "detail": "STEAM=absent",
+    "where": "proof 10"
+  }
+]

@@ -1,102 +1,216 @@
 schema: hornero.qa.gaming-acceptance/1
 edition_state: planned
 items:
-  - id: clean-install-first-boot
-    outcome: Gaming candidate installs in a disposable VM and first-boots to the Hornero desktop with gaming doctor runnable.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, installer#38, qa#37]
-    fixture: {id: gaming-vm-qemu-uefi, approved: false, sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a, manifest: fixtures/gaming-vm-qemu.yaml, notes: "Virtual fixture draft (not owner-approved); VM evidence is not physical-hardware evidence. Executed candidate v3 PASS in RESULT-v3; gate bundle still requires the hornero-qa install runner."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: selection-parity
-    outcome: Installer, horneroctl, and Control Center resolve the same Gaming specializations and applications.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, installer#38, shell#334, qa#37]
-    fixture: {id: gaming-vm-qemu-uefi, approved: false, sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a, manifest: fixtures/gaming-vm-qemu.yaml, notes: "Virtual fixture draft (not owner-approved); installer/horneroctl parity observed in the v3 VM run, Control Center parity still needs installed-system evidence."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: gaming-doctor-contract
-    outcome: horneroctl gaming doctor --json reports capability and readiness only, never compatibility, performance, or hardware qualification.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, qa#37]
-    fixture: {id: gaming-vm-qemu-uefi, approved: false, sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a, manifest: fixtures/gaming-vm-qemu.yaml, notes: "Virtual fixture draft (not owner-approved); doctor JSON keys pinned in tests/fixtures/gaming-doctor-contract.json from hornero#329 implementation at preview35."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: graphics-topology-fixtures
-    outcome: AMD, Intel, NVIDIA, hybrid, and unknown GPU fixtures resolve safe package sets with 64-bit and 32-bit Vulkan, never from PCI-ID promises.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Physical fixtures need owner-approved hardware; no fixture is approved yet."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: steam-proton-gameplay
-    outcome: Native Steam and Proton titles run on qualified hardware with GameMode, Gamescope, and MangoHud paths exercised.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Requires real GPU hardware and a licensed game library; BLOCKED until a fixture exists."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: controller-handheld-session
-    outcome: Controller-only Gamescope session, desktop switching, suspend/resume, and battery reporting work on a qualified handheld.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, shell#334, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Steam Deck is the reference target; other handhelds need their own qualification. No device is qualified yet."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: graphics-update-recovery
-    outcome: Graphics-sensitive updates pass preflight and recover to a known-good kernel without a Gaming-only snapshot framework.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Uses the existing HorneroOS update/snapshot path; simulation fixture not yet pinned."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: vrr-hdr-experimental
-    outcome: VRR and HDR behave as documented experimental capabilities on qualified displays, with truthful fallback when unsupported.
-    required: false
-    condition: when-enabled
-    enabled: null
-    evidence_kind: bundle
-    owner_issues: [hornero#328, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Experimental; thresholds stay disabled until an owner reviews a qualified display fixture."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
-  - id: anti-cheat-honesty
-    outcome: Documentation states that kernel-level anti-cheat is unsupported and EAC/BattlEye depend on publisher Proton enablement.
-    required: true
-    condition: always
-    enabled: null
-    evidence_kind: review
-    owner_issues: [hornero#328, docs#91, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Review evidence only; anti-cheat is never a satisfiable install requirement."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
+- id: clean-install-first-boot
+  outcome: Gaming candidate installs in a disposable VM and first-boots to the Hornero desktop with gaming
+    doctor runnable.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - installer#38
+  - qa#37
+  fixture:
+    id: gaming-vm-qemu-uefi
+    approved: true
+    sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a
+    manifest: fixtures/gaming-vm-qemu.yaml
+    notes: 'Virtual fixture approved by maintainer delegation (2026-10-29: ''encargate vos de todo'');
+      VM evidence is not physical-hardware evidence. Executed PASS in run 20261029T1625Z-install-gaming-uefi-unencrypted-1.'
+  status: pending
+  evidence:
+  - kind: bundle
+    run_id: 20261029T1625Z-install-gaming-uefi-unencrypted-1
+    scenario: install/gaming-uefi-unencrypted
+    scenario_sha256: 403921d5413f8b2aba63ec92c598e14a33463ae390c89b0d8cea9fae837722f6
+    bundle_sha256: c3f51886ee798d18d4ccb9578f6501a8415637910aa5f9504969175338ff242c
+    pins:
+      shell_sha: ca8f5ca735ffbb8581537ac5b5f1a1d74082fcb0
+      config_sha: 811ecd73fd201de30cf333af53ccfa7cdb966740
+      horneroctl_sha256: fc5b645ee31c8e0490b0387b8ef108bfdb8321c9d13620f2f8efbf9a703d1e55
+      image_sha256: b2540bdb249a629f705881df060e383ef67440f31a55f41934f63bbcc36df9d9
+      guest_sha: 2ea9e368d18d2ef8f78a5a18abed7127683ff551
+      iso_sha256: 9eb9041d85278b0d95ed98bccaaeedbe3a373fd125db34c4b47ac534aae2968f
+      manifest_sha256: 4e0e43c69650f289c332236a863d0c744ae3e9a74c9ffc54cd85074088e8b464
+      catalogue_sha256: 4896f624191de671fe6b887ed7bfcca8a03676f11f43586a7a55b9827d68f5ea
+      hardware_fixture: gaming-vm-qemu-uefi
+      hardware_fixture_sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a
+  review:
+    decision: pending
+    reference: null
+- id: selection-parity
+  outcome: Installer, horneroctl, and Control Center resolve the same Gaming specializations and applications.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - installer#38
+  - shell#334
+  - qa#37
+  fixture:
+    id: gaming-vm-qemu-uefi
+    approved: false
+    sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a
+    manifest: fixtures/gaming-vm-qemu.yaml
+    notes: Virtual fixture draft (not owner-approved); installer/horneroctl parity observed in the v3
+      VM run, Control Center parity still needs installed-system evidence.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null
+- id: gaming-doctor-contract
+  outcome: horneroctl gaming doctor --json reports capability and readiness only, never compatibility,
+    performance, or hardware qualification.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - qa#37
+  fixture:
+    id: gaming-vm-qemu-uefi
+    approved: false
+    sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a
+    manifest: fixtures/gaming-vm-qemu.yaml
+    notes: Virtual fixture draft (not owner-approved); doctor JSON keys pinned in tests/fixtures/gaming-doctor-contract.json
+      from hornero#329 implementation at preview35.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null
+- id: graphics-topology-fixtures
+  outcome: AMD, Intel, NVIDIA, hybrid, and unknown GPU fixtures resolve safe package sets with 64-bit
+    and 32-bit Vulkan, never from PCI-ID promises.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - qa#37
+  fixture:
+    id: null
+    approved: false
+    sha256: null
+    manifest: null
+    notes: Physical fixtures need owner-approved hardware; no fixture is approved yet.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null
+- id: steam-proton-gameplay
+  outcome: Native Steam and Proton titles run on qualified hardware with GameMode, Gamescope, and MangoHud
+    paths exercised.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - qa#37
+  fixture:
+    id: null
+    approved: false
+    sha256: null
+    manifest: null
+    notes: Requires real GPU hardware and a licensed game library; BLOCKED until a fixture exists.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null
+- id: controller-handheld-session
+  outcome: Controller-only Gamescope session, desktop switching, suspend/resume, and battery reporting
+    work on a qualified handheld.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - shell#334
+  - qa#37
+  fixture:
+    id: null
+    approved: false
+    sha256: null
+    manifest: null
+    notes: Steam Deck is the reference target; other handhelds need their own qualification. No device
+      is qualified yet.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null
+- id: graphics-update-recovery
+  outcome: Graphics-sensitive updates pass preflight and recover to a known-good kernel without a Gaming-only
+    snapshot framework.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - qa#37
+  fixture:
+    id: null
+    approved: false
+    sha256: null
+    manifest: null
+    notes: Uses the existing HorneroOS update/snapshot path; simulation fixture not yet pinned.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null
+- id: vrr-hdr-experimental
+  outcome: VRR and HDR behave as documented experimental capabilities on qualified displays, with truthful
+    fallback when unsupported.
+  required: false
+  condition: when-enabled
+  enabled: null
+  evidence_kind: bundle
+  owner_issues:
+  - hornero#328
+  - qa#37
+  fixture:
+    id: null
+    approved: false
+    sha256: null
+    manifest: null
+    notes: Experimental; thresholds stay disabled until an owner reviews a qualified display fixture.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null
+- id: anti-cheat-honesty
+  outcome: Documentation states that kernel-level anti-cheat is unsupported and EAC/BattlEye depend on
+    publisher Proton enablement.
+  required: true
+  condition: always
+  enabled: null
+  evidence_kind: review
+  owner_issues:
+  - hornero#328
+  - docs#91
+  - qa#37
+  fixture:
+    id: null
+    approved: false
+    sha256: null
+    manifest: null
+    notes: Review evidence only; anti-cheat is never a satisfiable install requirement.
+  status: pending
+  evidence: []
+  review:
+    decision: pending
+    reference: null

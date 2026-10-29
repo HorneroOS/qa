@@ -1,0 +1,43 @@
+id: install/gaming-uefi-unencrypted
+purpose: >-
+  A Gaming candidate installation on UEFI with unencrypted storage,
+  from the candidate Gaming ISO, reaches an authenticated Hornero desktop
+  whose installed composition matches the canonical resolved choice.
+  Gaming remains planned: this scenario proves the candidate path only,
+  never a release or hardware qualification.
+covers: [installer#38, qa#39]
+instruction: >-
+  Boot the candidate Gaming ISO (HORNEROS_INSTALLER_CANDIDATE_GAMING=1) in a
+  disposable VM (UEFI firmware, blank target disk), launch the graphical
+  installer, choose the Gaming "Desktop Gaming (Planned candidate)"
+  specialization when prompted, create the QA user, let installation
+  finish, reboot with the ISO detached, authenticate at the greeter, and
+  leave the installed desktop running for the proofs.
+  Steam is an explicit application opt-in and must not be installed by
+  the group selection.
+proof:
+  - note: Installed Hyprland session is running after authenticating at the greeter
+    probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
+  - note: Hornero Shell answers IPC
+    probe: {run: "qs -c hornero ipc call drawers list", contains: launcher}
+  - note: No Hyprland config errors on the installed system
+    probe: {run: "hyprctl configerrors | wc -c", equals: "2"}
+  - note: Installed profile metadata names the installed edition
+    probe: {run: "python3 -c \"import json;print(json.load(open('/usr/lib/hornero/system-profile.json'))['edition']['edition'])\"", equals: gaming}
+  - note: horneroctl system info agrees with the installed profile
+    probe: {run: "horneroctl system info --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['edition'])\"", equals: gaming}
+  - note: Installer package repository removed from pacman.conf (cleanup contract)
+    probe: {run: "grep -c hornero-installer /etc/pacman.conf; true", equals: "0"}
+  - note: Desktop frame (non-blank) for the record
+    screenshot: installed-desktop
+  - note: Gaming selection persisted as canonical installed metadata
+    probe: {run: "python3 -c \"import json;print(len(json.load(open('/usr/lib/hornero/system-profile.json'))['edition']['gamingSelection']['specializations']) > 0)\"", equals: "True"}
+  - note: horneroctl gaming doctor answers with its JSON contract on the installed system
+    probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['command'])\"", equals: "gaming doctor"}
+  - note: Gaming platform tools from the canonical composition are installed
+    probe: {run: "pacman -Qq gamescope gamemode mangohud >/dev/null && echo present || echo absent", equals: present}
+  - note: Steam was not installed by group selection (explicit opt-in only)
+    probe: {run: "pacman -Qq steam >/dev/null 2>&1 && echo present || echo absent", equals: absent}
+media: [installed-desktop]
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}
