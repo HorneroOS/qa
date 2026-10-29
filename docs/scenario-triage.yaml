@@ -29,6 +29,12 @@ scenarios:
       (studio, UEFI, encrypted): guards HorneroOS/installer#11
       and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-uefi-encrypted/RESULT.md'
     schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-uefi-encrypted/RESULT.md'
+  install/gaming-uefi-unencrypted:
+    decision: keep
+    rationale: 'Install-to-first-boot acceptance for the candidate Gaming ISO
+      (gaming, UEFI, unencrypted): guards HorneroOS/installer#38
+      and HorneroOS/qa#39. EXECUTED 2026-10-29 in a disposable QEMU VM against candidate ISO sha256 665fefdbc3291dadf4bbf2d0f984fefaeb17d832ebc539dea7c3deb67979693a via the manual install harness (hornero-qa runner has no install engine yet): FAIL (installer candidate bugs: missing multilib and gaming profile package; fixed in HorneroOS/installer#41). Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/RESULT.md'
+    schedule: 'Re-execute on the rebuilt candidate ISO after HorneroOS/installer#41 merges; update this entry with the new ISO sha256 and verdict.'
   install/studio-uefi-unencrypted:
     decision: keep
     rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
