@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "002-proofs.png",
+  "sha256": "804bdcf43873c878e42bc593ea6a8715cce6e7e9616a0b0dce890c7d395d091c",
+  "run_id": "20261029T1625Z-install-gaming-uefi-unencrypted-1",
+  "scenario": "install/gaming-uefi-unencrypted",
+  "captured": "2026-10-29T16:42:00Z",
+  "t": 1000,
+  "product": {
+    "shell_sha": "ca8f5ca735ffbb8581537ac5b5f1a1d74082fcb0",
+    "config_sha": "811ecd73fd201de30cf333af53ccfa7cdb966740",
+    "horneroctl_sha256": "fc5b645ee31c8e0490b0387b8ef108bfdb8321c9d13620f2f8efbf9a703d1e55",
+    "guest_sha": "2ea9e368d18d2ef8f78a5a18abed7127683ff551",
+    "iso_sha256": "9eb9041d85278b0d95ed98bccaaeedbe3a373fd125db34c4b47ac534aae2968f",
+    "manifest_sha256": "4e0e43c69650f289c332236a863d0c744ae3e9a74c9ffc54cd85074088e8b464",
+    "catalogue_sha256": "4896f624191de671fe6b887ed7bfcca8a03676f11f43586a7a55b9827d68f5ea",
+    "hardware_fixture": "gaming-vm-qemu-uefi",
+    "hardware_fixture_sha256": "48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a"
+  },
+  "environment": {
+    "engine": "manual-qmp-install-harness",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "resolution": "1280x800",
+    "firmware": "uefi-ovmf"
+  }
+}

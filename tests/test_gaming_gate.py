@@ -11,14 +11,20 @@ ROOT = Path(__file__).parent.parent
 MANIFEST = ROOT / "docs" / "gaming-acceptance.yaml"
 
 
-def test_gaming_gate_is_blocked_and_never_promotes(tmp_path: Path) -> None:
-    report = evaluate(MANIFEST, tmp_path)
+def test_gaming_gate_is_blocked_and_never_promotes() -> None:
+    report = evaluate(MANIFEST, ROOT / "docs/evidence/runs")
     assert report["schema"] == "hornero.qa.gaming-acceptance/1"
     assert report["eligible_for_owner_review"] is False
     assert report["recommendation"] == "blocked"
     assert "Gaming Preview recommendation blocked" in report["summary"]
-    assert report["summary"].startswith("Gaming Preview recommendation blocked: 9")
-    assert all(item["blocking_reasons"] for item in report["items"] if item["id"] != "vrr-hdr-experimental")
+    assert report["summary"].startswith("Gaming Preview recommendation blocked: 8")
+    assert all(
+        item["blocking_reasons"]
+        for item in report["items"]
+        if item["id"] not in ("vrr-hdr-experimental", "clean-install-first-boot")
+    )
+    clean = next(i for i in report["items"] if i["id"] == "clean-install-first-boot")
+    assert clean["status"] == "accepted" and clean["blocking_reasons"] == []
 
 
 def test_gaming_gate_rejects_studio_schema(tmp_path: Path) -> None:
