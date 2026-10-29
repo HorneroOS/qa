@@ -31,3 +31,27 @@ def test_gaming_gate_rejects_studio_schema(tmp_path: Path) -> None:
     )
     with pytest.raises(StudioGateError):
         evaluate(bad, tmp_path)
+
+
+def test_gaming_gate_rejects_manifest_missing_mandatory_item(tmp_path: Path) -> None:
+    import yaml
+
+    doc = yaml.safe_load(MANIFEST.read_text(encoding="utf-8"))
+    doc["items"] = [i for i in doc["items"] if i["id"] != "steam-proton-gameplay"]
+    bad = tmp_path / "gaming-acceptance.yaml"
+    bad.write_text(yaml.safe_dump(doc), encoding="utf-8")
+    with pytest.raises(StudioGateError, match="mandatory gate item"):
+        evaluate(bad, tmp_path)
+
+
+def test_gaming_gate_rejects_demoted_mandatory_item(tmp_path: Path) -> None:
+    import yaml
+
+    doc = yaml.safe_load(MANIFEST.read_text(encoding="utf-8"))
+    for item in doc["items"]:
+        if item["id"] == "gaming-doctor-contract":
+            item["required"] = False
+    bad = tmp_path / "gaming-acceptance.yaml"
+    bad.write_text(yaml.safe_dump(doc), encoding="utf-8")
+    with pytest.raises(StudioGateError, match="must stay required"):
+        evaluate(bad, tmp_path)

@@ -144,7 +144,10 @@ def run_bundle_digest(runs_dir: Path, run_id: str) -> str:
 
 
 def _fixture_manifest_errors(
-    fixture: dict[str, Any], manifest_path: Path, schema: dict[str, Any]
+    fixture: dict[str, Any],
+    manifest_path: Path,
+    schema: dict[str, Any],
+    require_physical: bool = False,
 ) -> list[str]:
     reference = fixture.get("manifest")
     if not isinstance(reference, str):
@@ -179,6 +182,8 @@ def _fixture_manifest_errors(
         return [f"approved fixture manifest is invalid: {errors[0].message}"]
     if document["id"] != fixture.get("id"):
         return ["approved fixture manifest ID does not match the acceptance item"]
+    if require_physical and document.get("kind") != "physical":
+        return ["hardware acceptance item requires a physical fixture, not a virtual one"]
     return []
 
 
@@ -343,6 +348,8 @@ def evaluate(
     runs_dir: Path,
     schema_path: Path = SCHEMA_PATH,
     label: str = "Studio",
+    mandatory_ids: frozenset[str] = frozenset(),
+    physical_ids: frozenset[str] = frozenset(),
 ) -> dict[str, Any]:
     """Validate gate inputs and report whether owners can review promotion evidence."""
     try:
@@ -361,6 +368,15 @@ def evaluate(
     item_ids = [item["id"] for item in manifest["items"]]
     if len(item_ids) != len(set(item_ids)):
         raise StudioGateError(f"{manifest_path}: item IDs must be unique")
+    # Gate contract: mandatory items cannot be removed or demoted by a
+    # custom manifest, or the gate would approve an empty index.
+    by_id = {item["id"]: item for item in manifest["items"]}
+    for mandatory in sorted(mandatory_ids):
+        item = by_id.get(mandatory)
+        if item is None:
+            raise StudioGateError(f"{manifest_path}: mandatory gate item {mandatory!r} is missing")
+        if not item["required"]:
+            raise StudioGateError(f"{manifest_path}: mandatory gate item {mandatory!r} must stay required")
 
     results: list[dict[str, Any]] = []
     for item in manifest["items"]:
@@ -383,7 +399,14 @@ def evaluate(
         ):
             reasons.append("approved fixture has no pinned manifest SHA256")
         if required and item["evidence_kind"] == "bundle" and item["fixture"]["approved"]:
-            reasons.extend(_fixture_manifest_errors(item["fixture"], manifest_path, schema))
+            reasons.extend(
+                _fixture_manifest_errors(
+                    item["fixture"],
+                    manifest_path,
+                    schema,
+                    require_physical=item["id"] in physical_ids,
+                )
+            )
         if required and item["review"]["decision"] != "accepted":
             reasons.append("human review is not accepted")
         if required and not item["review"]["reference"]:
