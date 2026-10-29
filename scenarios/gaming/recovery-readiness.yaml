@@ -1,0 +1,20 @@
+id: gaming/recovery-readiness
+purpose: >-
+  Graphics-sensitive updates stay on the existing HorneroOS
+  update/snapshot path: gaming doctor probes recovery readiness
+  (LTS fallback kernel or snapshot tool), reports it honestly, and
+  never asserts a recovery path that is not present. No Gaming-only
+  snapshot framework is created.
+covers: [qa#39, hornero#328]
+instruction: >-
+  On an installed Gaming system, open a terminal and inspect the
+  gaming doctor recovery reporting without changing anything.
+proof:
+  - note: Doctor JSON exposes the recovery-readiness capability check
+    probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['recovery-readiness'])\"", equals: ok}
+  - note: Doctor never claims hardware qualification in its human output
+    probe: {run: "horneroctl gaming doctor | grep -ci qualified; true", equals: "0"}
+  - note: Recovery detail names the system update/snapshot path, not a Gaming-only framework
+    probe: {run: "horneroctl gaming doctor | grep -c \"system update/snapshot path\"; true", equals: "1"}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}
