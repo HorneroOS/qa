@@ -3,9 +3,10 @@ purpose: >-
   On any GPU topology (AMD, Intel, NVIDIA, hybrid or unknown), the
   installed Gaming composition exposes hardware-neutral Vulkan
   capability probes: 64-bit and 32-bit loader presence and ICD
-  registration are reported as capability only, and no vendor driver
-  is promised from PCI IDs. Physical topology qualification stays a
-  hardware gate item and is not claimed by this scenario.
+  registration are reported as capability only, consistently with
+  the on-disk registry, and no vendor driver is promised from PCI
+  IDs. Physical topology qualification stays a hardware gate item
+  and is not claimed by this scenario.
 covers: [qa#39, hornero#328]
 instruction: >-
   On an installed Gaming system, open a terminal and inspect the
@@ -15,8 +16,8 @@ proof:
     probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys;print('vulkan-icd' in json.load(sys.stdin)['data'])\"", equals: "True"}
   - note: Doctor JSON exposes the 32-bit Vulkan loader capability check
     probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys;print('vulkan-32bit-loader' in json.load(sys.stdin)['data'])\"", equals: "True"}
-  - note: ICD registration report matches the on-disk ICD registry
-    probe: {run: "ls /usr/share/vulkan/icd.d >/dev/null 2>&1 && echo registered || echo unregistered", contains: registered}
+  - note: ICD report is consistent with the on-disk ICD registry
+    probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys,os;d=json.load(sys.stdin)['data'];reg=os.path.isdir('/usr/share/vulkan/icd.d') and len(os.listdir('/usr/share/vulkan/icd.d'))>0;print(d['vulkan-icd']=='ok' if reg else d['vulkan-icd']=='fail')\"", equals: "True"}
   - note: Vulkan diagnostics tooling from the canonical composition is present
     probe: {run: "command -v vulkaninfo >/dev/null && echo present || echo absent", equals: present}
 budget: {wall_s: 60}
