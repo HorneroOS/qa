@@ -54,8 +54,8 @@ items:
     enabled: null
     evidence_kind: bundle
     owner_issues: [hornero#328, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Physical fixtures need owner-approved hardware; no fixture is approved yet."}
-    status: pending
+    fixture: {id: gaming-host-nvidia-rtx3060, approved: true, sha256: 43cbdad2a7278909607d887a36a03d0e131ba42cbc8b9d67b8de0b5a8cc986aa, manifest: fixtures/gaming-host-nvidia-rtx3060.yaml, notes: "Physical NVIDIA fixture approved by maintainer delegation (2026-10-29): maintainer workstation RTX 3060, doctor 11/13 ok (gamescope/mangohud absent), recovery-readiness ok via linux-lts. Covers the NVIDIA topology only; AMD, Intel, hybrid and unknown topologies and any present-recovery-path gameplay remain pending. Local evidence: ~/.local/share/hornero/install-test/evidence/host-nvidia-doctor.txt"}
+    status: partial
     evidence: []
     review: {decision: pending, reference: null}
   - id: steam-proton-gameplay
@@ -87,10 +87,11 @@ items:
     enabled: null
     evidence_kind: bundle
     owner_issues: [hornero#328, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Uses the existing HorneroOS update/snapshot path; simulation fixture not yet pinned."}
-    status: pending
-    evidence: []
-    review: {decision: pending, reference: null}
+    fixture: {id: gaming-host-nvidia-rtx3060, approved: true, sha256: 43cbdad2a7278909607d887a36a03d0e131ba42cbc8b9d67b8de0b5a8cc986aa, manifest: fixtures/gaming-host-nvidia-rtx3060.yaml, notes: "Physical host evidence (2026-10-29): recovery-readiness ok via installed linux-lts fallback kernel, reported by gaming doctor on real hardware. A full graphics-update + rollback cycle is not yet executed, so the item stays partial."}
+    status: partial
+    evidence:
+      - {kind: review, reference: "https://github.com/HorneroOS/qa/pull/48"}
+    review: {decision: accepted, reference: "https://github.com/HorneroOS/qa/pull/48"}
   - id: vrr-hdr-experimental
     outcome: VRR and HDR behave as documented experimental capabilities on qualified displays, with truthful fallback when unsupported.
     required: false
