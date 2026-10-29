@@ -13,11 +13,11 @@ from pathlib import Path
 from hornero_qa import __version__
 from hornero_qa.engines.native import read_image_info
 from hornero_qa.evidence import load_bundle
+from hornero_qa.gaming_gate import evaluate as evaluate_gaming_gate
 from hornero_qa.matrix import generate_matrix, resolve_repo_path
 from hornero_qa.scenario import ScenarioError, discover, load, resolve
 from hornero_qa.state import QAState
 from hornero_qa.studio_gate import StudioGateError, run_bundle_digest
-from hornero_qa.gaming_gate import evaluate as evaluate_gaming_gate
 from hornero_qa.studio_gate import evaluate as evaluate_studio_gate
 
 EXIT_OK, EXIT_FAIL, EXIT_INCONCLUSIVE, EXIT_USAGE = 0, 1, 2, 64
