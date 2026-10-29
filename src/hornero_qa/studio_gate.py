@@ -338,13 +338,18 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
     return []
 
 
-def evaluate(manifest_path: Path, runs_dir: Path) -> dict[str, Any]:
-    """Validate Studio gate inputs and report whether owners can review promotion evidence."""
+def evaluate(
+    manifest_path: Path,
+    runs_dir: Path,
+    schema_path: Path = SCHEMA_PATH,
+    label: str = "Studio",
+) -> dict[str, Any]:
+    """Validate gate inputs and report whether owners can review promotion evidence."""
     try:
         manifest = yaml.load(manifest_path.read_text(encoding="utf-8"), Loader=_UniqueKeyLoader)
-        schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError, yaml.YAMLError) as exc:
-        raise StudioGateError(f"cannot load Studio acceptance index: {exc}") from exc
+        raise StudioGateError(f"cannot load {label} acceptance index: {exc}") from exc
     errors = sorted(
         jsonschema.Draft202012Validator(schema).iter_errors(manifest),
         key=lambda err: list(err.path),
@@ -414,10 +419,10 @@ def evaluate(manifest_path: Path, runs_dir: Path) -> dict[str, Any]:
         "eligible_for_owner_review": eligible,
         "recommendation": "ready_for_owner_review" if eligible else "blocked",
         "summary": (
-            "Studio evidence is complete for product/installer owner review. "
+            f"{label} evidence is complete for product/installer owner review. "
             "QA does not set edition maturity."
             if eligible
-            else f"Studio Preview recommendation blocked: {blockers} required evidence "
+            else f"{label} Preview recommendation blocked: {blockers} required evidence "
             "gate(s) are incomplete."
         ),
         "items": results,
