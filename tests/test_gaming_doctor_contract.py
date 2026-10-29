@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 FIXTURE = Path(__file__).parent / "fixtures" / "gaming-doctor-contract.json"
 
@@ -23,8 +24,10 @@ FORBIDDEN_CLAIM_KEYS = {
 }
 
 
-def _contract() -> dict:
-    return json.loads(FIXTURE.read_text(encoding="utf-8"))
+def _contract() -> dict[str, Any]:
+    value: Any = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    assert isinstance(value, dict)
+    return value
 
 
 def test_doctor_command_name() -> None:
