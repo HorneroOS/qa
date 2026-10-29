@@ -17,7 +17,7 @@ def test_gaming_gate_is_blocked_and_never_promotes(tmp_path: Path) -> None:
     assert report["eligible_for_owner_review"] is False
     assert report["recommendation"] == "blocked"
     assert "Gaming Preview recommendation blocked" in report["summary"]
-    assert report["summary"].startswith("Gaming Preview recommendation blocked: 9")
+    assert report["summary"].startswith("Gaming Preview recommendation blocked: 8")
     assert all(item["blocking_reasons"] for item in report["items"] if item["id"] != "vrr-hdr-experimental")
 
 
