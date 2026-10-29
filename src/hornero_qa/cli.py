@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import argparse
+from collections.abc import Callable
 import json
 import os
 import shlex
 import shutil
 import sys
 from pathlib import Path
+from typing import Any
 
 from hornero_qa import __version__
 from hornero_qa.engines.native import read_image_info
@@ -205,7 +207,11 @@ def _media(_: QAState, args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
-def _gate(state: QAState, args: argparse.Namespace, evaluate_gate) -> int:
+def _gate(
+    state: QAState,
+    args: argparse.Namespace,
+    evaluate_gate: Callable[[Path, Path], dict[str, Any]],
+) -> int:
     try:
         runs_dir = Path(args.runs_dir) if args.runs_dir else state.runs_dir
         if args.bundle_digest:
