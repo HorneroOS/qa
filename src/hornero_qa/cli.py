@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import argparse
-from collections.abc import Callable
 import json
 import os
 import shlex
 import shutil
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
