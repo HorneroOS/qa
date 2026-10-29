@@ -8,7 +8,7 @@ items:
     enabled: null
     evidence_kind: bundle
     owner_issues: [hornero#328, installer#38, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Disposable VM fixture only; VM evidence is not physical-hardware evidence."}
+    fixture: {id: gaming-vm-qemu-uefi, approved: false, sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a, manifest: fixtures/gaming-vm-qemu.yaml, notes: "Virtual fixture draft (not owner-approved); VM evidence is not physical-hardware evidence. Executed candidate v3 PASS in RESULT-v3; gate bundle still requires the hornero-qa install runner."}
     status: pending
     evidence: []
     review: {decision: pending, reference: null}
@@ -19,7 +19,7 @@ items:
     enabled: null
     evidence_kind: bundle
     owner_issues: [hornero#328, installer#38, shell#334, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Pin after the canonical gaming resolver and candidate installer path land."}
+    fixture: {id: gaming-vm-qemu-uefi, approved: false, sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a, manifest: fixtures/gaming-vm-qemu.yaml, notes: "Virtual fixture draft (not owner-approved); installer/horneroctl parity observed in the v3 VM run, Control Center parity still needs installed-system evidence."}
     status: pending
     evidence: []
     review: {decision: pending, reference: null}
@@ -30,7 +30,7 @@ items:
     enabled: null
     evidence_kind: bundle
     owner_issues: [hornero#328, qa#37]
-    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Contract fixture pins the doctor JSON keys from hornero#329."}
+    fixture: {id: gaming-vm-qemu-uefi, approved: false, sha256: 48eb786dcdd9fdc8ef2bb2724ecc47c8873ac1fc730007a8765b2fc82ff26a8a, manifest: fixtures/gaming-vm-qemu.yaml, notes: "Virtual fixture draft (not owner-approved); doctor JSON keys pinned in tests/fixtures/gaming-doctor-contract.json from hornero#329 implementation at preview35."}
     status: pending
     evidence: []
     review: {decision: pending, reference: null}
