@@ -1,0 +1,21 @@
+schema: hornero.qa.studio-fixture/1
+id: gaming-host-nvidia-rtx3060
+kind: physical
+hardware:
+  platform: x86_64-desktop
+  gpu: NVIDIA GeForce RTX 3060 (GA106)
+  gpu_driver: nvidia 615.78.08 (nvidia-utils + lib32-nvidia-utils)
+  vulkan_icd: nvidia_icd.json (Vulkan 1.4.351)
+  vulkan_32bit_loader: present (/usr/lib32/libvulkan.so.1)
+  kernel_fallback: linux-lts present in /boot
+  notes: >-
+    Maintainer workstation used as the NVIDIA physical topology
+    fixture (2026-10-29). No Steam library is installed, so Proton
+    gameplay is NOT covered by this fixture. No controller was
+    connected during the run.
+software:
+  horneroctl: horneroctl-v0.2.0-preview35 (2ea9e36), GPG-verified release binary
+  steam: installed (explicit opt-in application)
+  gamemode: gamemode + lib32-gamemode installed
+  gamescope: not installed (doctor reports fail)
+  mangohud: not installed (doctor reports fail)
