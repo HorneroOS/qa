@@ -1,0 +1,20 @@
+schema: hornero.qa.studio-fixture/1
+id: gaming-vm-qemu-uefi
+kind: virtual
+hardware:
+  platform: qemu-kvm-x86_64
+  firmware: uefi-ovmf
+  cpu: host-passthrough-4vcpu
+  memory: 4GiB
+  disk: virtio-64GiB-blank
+  gpu: virtio-vga-llvmpipe
+  notes: >-
+    Disposable VM fixture only. VM evidence is not physical-hardware
+    evidence and never qualifies AMD, Intel, NVIDIA, hybrid or handheld
+    hardware.
+software:
+  installer_commit: 066bca315c220508f2201428a9e66e3878e1461b
+  hornero_commit: 2ea9e368d18d2ef8f78a5a18abed7127683ff551
+  horneroctl: horneroctl-v0.2.0-preview35
+  iso_sha256: 9eb9041d85278b0d95ed98bccaaeedbe3a373fd125db34c4b47ac534aae2968f
+  scenario: install/gaming-uefi-unencrypted

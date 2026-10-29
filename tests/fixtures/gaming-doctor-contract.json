@@ -1,0 +1,20 @@
+{
+  "source": "HorneroOS/hornero cli/modules/hornero_core/gaming.v gaming_doctor_checks() at 2ea9e368d18d2ef8f78a5a18abed7127683ff551 (horneroctl-v0.2.0-preview35), observed on an installed system in RESULT-v3 (candidate ISO 9eb9041d85278b0d95ed98bccaaeedbe3a373fd125db34c4b47ac534aae2968f)",
+  "command": "gaming doctor",
+  "data_keys": [
+    "controllers",
+    "gamemode",
+    "gamescope",
+    "gaming-selection",
+    "mangohud",
+    "pipewire",
+    "recovery-readiness",
+    "steam",
+    "vulkan-32bit-loader",
+    "vulkan-icd",
+    "vulkan-tools",
+    "wireplumber",
+    "xdg-desktop-portal"
+  ],
+  "data_values": ["fail", "ok"]
+}
