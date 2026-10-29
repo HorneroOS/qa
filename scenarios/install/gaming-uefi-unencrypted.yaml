@@ -21,19 +21,19 @@ proof:
   - note: Hornero Shell answers IPC
     probe: {run: "qs -c hornero ipc call drawers list", contains: launcher}
   - note: No Hyprland config errors on the installed system
-    probe: {run: "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'", equals: "0"}
+    probe: {run: "hyprctl configerrors | wc -c", equals: "2"}
   - note: Installed profile metadata names the installed edition
-    probe: {run: "jq -r .edition.edition /usr/lib/hornero/system-profile.json", equals: gaming}
+    probe: {run: "python3 -c \"import json;print(json.load(open('/usr/lib/hornero/system-profile.json'))['edition']['edition'])\"", equals: gaming}
   - note: horneroctl system info agrees with the installed profile
-    probe: {run: "horneroctl system info --json | jq -r .data.edition", equals: gaming}
+    probe: {run: "horneroctl system info --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['edition'])\"", equals: gaming}
   - note: Installer package repository removed from pacman.conf (cleanup contract)
     probe: {run: "grep -c hornero-installer /etc/pacman.conf; true", equals: "0"}
   - note: Desktop frame (non-blank) for the record
     screenshot: installed-desktop
   - note: Gaming selection persisted as canonical installed metadata
-    probe: {run: "jq -r '.edition.gamingSelection.specializations | length > 0' /usr/lib/hornero/system-profile.json", equals: "true"}
+    probe: {run: "python3 -c \"import json;print(len(json.load(open('/usr/lib/hornero/system-profile.json'))['edition']['gamingSelection']['specializations']) > 0)\"", equals: "True"}
   - note: horneroctl gaming doctor answers with its JSON contract on the installed system
-    probe: {run: "horneroctl gaming doctor --json | jq -r .command", equals: "gaming doctor"}
+    probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['command'])\"", equals: "gaming doctor"}
   - note: Gaming platform tools from the canonical composition are installed
     probe: {run: "pacman -Qq gamescope gamemode mangohud >/dev/null && echo present || echo absent", equals: present}
   - note: Steam was not installed by group selection (explicit opt-in only)

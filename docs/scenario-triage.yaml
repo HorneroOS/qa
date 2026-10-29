@@ -34,7 +34,7 @@ scenarios:
     rationale: 'Install-to-first-boot acceptance for the candidate Gaming ISO
       (gaming, UEFI, unencrypted): guards HorneroOS/installer#38
       and HorneroOS/qa#39. EXECUTED 2026-10-29 in a disposable QEMU VM against candidate ISO sha256 665fefdbc3291dadf4bbf2d0f984fefaeb17d832ebc539dea7c3deb67979693a via the manual install harness (hornero-qa runner has no install engine yet): FAIL (installer candidate bugs: missing multilib and gaming profile package; fixed in HorneroOS/installer#41). Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/RESULT.md'
-    schedule: 'Re-execute on the rebuilt candidate ISO after HorneroOS/installer#41 merges; update this entry with the new ISO sha256 and verdict.'
+    schedule: 'Re-executed 2026-10-29 on rebuilt candidate ISO sha256 f61420aea2d58ccc3a0e06f00f8e57e1d9dc03c22bae4d3ed22eba52a971f656 (installer b677419): install completes, all proofs pass except horneroctl gaming doctor (installed horneroctl-bin preview33 predates the Gaming CLI; HorneroOS/hornero#330). Re-execute after the horneroctl release and pin refresh. Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/RESULT-v2.md'
   install/studio-uefi-unencrypted:
     decision: keep
     rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
