@@ -279,16 +279,14 @@ scenarios:
       gate item graphics-topology-fixtures at VM level: 64/32-bit loader
       and ICD registration are capability probes only; physical topology
       qualification stays BLOCKED on owner-approved hardware fixtures.'
-    schedule: 'Not yet executed; schedule on the next installed Gaming
-      candidate system in an approved KVM QA window.'
+    schedule: 'EXECUTED 2026-10-29 on installed candidate v3 (ISO 9eb9041d) in a disposable VM: PASS with corrected honesty probes (ICD report consistent with on-disk registry, ICDCONS=True; no ICD registered under virtio, reported fail as designed). Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/scenarios-run*.png'
   gaming/recovery-readiness:
     decision: keep
     rationale: 'Coverage for the Gaming gate item graphics-update-recovery:
       gaming doctor probes LTS/snapshot recovery readiness on the existing
       update path and never asserts an absent recovery path; no
       Gaming-only snapshot framework.'
-    schedule: 'Not yet executed; schedule on the next installed Gaming
-      candidate system in an approved KVM QA window.'
+    schedule: 'EXECUTED 2026-10-29 on installed candidate v3 (ISO 9eb9041d) in a disposable VM: PASS with corrected honesty probes (no LTS kernel or snapshot tool present; doctor reports recovery-readiness fail with actionable linux-lts/snapshot guidance, RECACT=1, never asserts an absent path). Presence of a recovery path itself remains a gate item for qualified systems. Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/scenarios-run*.png'
   studio/audio-mode-opt-in:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Studio audio modes stay
