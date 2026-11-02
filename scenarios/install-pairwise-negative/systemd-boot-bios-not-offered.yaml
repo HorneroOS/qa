@@ -1,0 +1,18 @@
+id: install-pairwise-negative/systemd-boot-bios-not-offered
+purpose: >-
+  NOT RUN until a candidate ISO exists. On a BIOS-booted installer,
+  systemd-boot is never offered, so an unbootable systemd-boot/BIOS
+  combination cannot be selected; GRUB remains available.
+covers: [installer#11, qa#19]
+requires: {firmware: bios, bootloader: grub, kernels: [linux], primaryKernel: linux, encryption: none, edition: desktop, capabilities: {bluetooth: true}, isoRequired: true}
+instruction: >-
+  Using the existing VM harness (~/.local/share/hornero/install-test/run-install-vm.sh
+  <name> bios 40 iso), boot the candidate ISO in legacy BIOS mode, launch the
+  graphical installer, and open the bootloader choice. Confirm systemd-boot is
+  absent (or refused with the message that systemd-boot needs UEFI), choose GRUB,
+  and cancel out of the installer without partitioning.
+proof:
+  - note: Bootloader choice on BIOS shows GRUB and no selectable systemd-boot
+    screenshot: bios-bootloader-choice
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}

@@ -1,0 +1,99 @@
+id: install-pairwise/gaming-linux-lts-systemd-boot-uefi-none-bt-on
+purpose: 'NOT RUN until a candidate ISO exists. A gaming installation (kernels linux-lts;
+  primary linux-lts; systemd-boot on uefi; encryption none; bluetooth enabled) from
+  the candidate ISO, rebooted into the installed system, matches the canonical resolved
+  choice: kernel and initramfs images, boot entries, ESP size, LUKS state, edition
+  composition and capability services. This never qualifies physical hardware.'
+covers:
+- installer#11
+- qa#19
+requires:
+  firmware: uefi
+  bootloader: systemd-boot
+  kernels:
+  - linux-lts
+  primaryKernel: linux-lts
+  encryption: none
+  edition: gaming
+  specializations: []
+  capabilities:
+    bluetooth: true
+  isoRequired: true
+instruction: Using the existing VM harness (~/.local/share/hornero/install-test/run-install-vm.sh
+  <name> uefi 40 iso), boot the candidate ISO in a disposable VM, launch the graphical
+  installer, choose edition gaming, kernels linux-lts (primary linux-lts), bootloader
+  systemd-boot, encryption none, bluetooth enabled; create the QA user, let installation
+  finish, reboot with the ISO detached (run-install-vm.sh <name> uefi 40 noiso), unlock
+  LUKS if prompted and authenticate at the greeter. Then reboot once more into the
+  installed system and leave the installed desktop running for the proofs.
+proof:
+- note: Installed Hyprland session is running after authenticating at the greeter
+  probe:
+    run: pgrep -x Hyprland >/dev/null && echo up
+    equals: up
+- note: Installed profile metadata names the installed edition
+  probe:
+    run: python3 -c "import json;print(json.load(open('/usr/lib/hornero/system-profile.json'))['edition']['edition'])"
+    equals: gaming
+- note: horneroctl system info agrees with the installed profile
+  probe:
+    run: horneroctl system info --json | python3 -c "import json,sys;print(json.load(sys.stdin)['data']['edition'])"
+    equals: gaming
+- note: Installer package repository removed from pacman.conf (cleanup contract)
+  probe:
+    run: grep -c hornero-installer /etc/pacman.conf; true
+    equals: '0'
+- note: Firmware of the installed boot matches the declared firmware
+  probe:
+    run: '[ -d /sys/firmware/efi ] && echo uefi || echo bios'
+    equals: uefi
+- note: Kernel linux-lts image, initramfs, fallback initramfs and headers are installed
+  probe:
+    run: test -f /boot/vmlinuz-linux-lts && test -f /boot/initramfs-linux-lts.img
+      && test -f /boot/initramfs-linux-lts-fallback.img && pacman -Qq linux-lts linux-lts-headers
+      >/dev/null && echo ok
+    equals: ok
+- note: Running kernel is the LTS primary/fallback
+  probe:
+    run: uname -r
+    contains: lts
+- note: systemd-boot loader and an entry covering every installed kernel exist
+  probe:
+    run: test -f /boot/loader/loader.conf && grep -rq vmlinuz-linux-lts /boot/loader/entries/
+      && echo ok
+    equals: ok
+- note: ESP at /boot is vfat and at least the resolver-recommended 1024 MiB
+  probe:
+    run: python3 -c "import os; s=os.statvfs('/boot'); print('ok' if s.f_blocks*s.f_frsize
+      >= 1024*1024*1024 else 'small')"
+    equals: ok
+- note: No LUKS container on the installed storage
+  probe:
+    run: lsblk -o FSTYPE -rn | grep -q crypto_LUKS && echo luks || echo none
+    equals: none
+- note: 'Bluetooth capability on: bluez stack installed and bluetooth.service enabled'
+  probe:
+    run: pacman -Qq bluez bluez-utils >/dev/null && systemctl is-enabled bluetooth.service
+    equals: enabled
+- note: Bluetooth doctor (Bluetooth workstream contract) reports the service ok
+  probe:
+    run: horneroctl hardware bluetooth doctor --json | python3 -c "import json,sys;print(json.load(sys.stdin)['data']['bluetooth-service'])"
+    equals: ok
+- note: Gaming platform tools from the canonical composition are installed
+  probe:
+    run: pacman -Qq gamescope gamemode mangohud >/dev/null && echo present || echo
+      absent
+    equals: present
+- note: Steam was not installed by group selection (explicit opt-in only)
+  probe:
+    run: pacman -Qq steam >/dev/null 2>&1 && echo present || echo absent
+    equals: absent
+- note: Desktop frame (non-blank) for the record
+  screenshot: installed-desktop
+media:
+- installed-desktop
+budget:
+  wall_s: 3600
+artifacts:
+  screenshots: always
+  logs: always
