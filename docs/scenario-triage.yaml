@@ -1,4 +1,96 @@
 scenarios:
+  install-pairwise-negative/cancel-during-install:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise-negative/systemd-boot-bios-not-offered:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise-negative/wrong-luks-passphrase:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-dual-primary-linux-systemd-boot-uefi-luks-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-dual-primary-lts-grub-bios-luks-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-dual-primary-lts-grub-uefi-luks-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-linux-grub-bios-luks-bt-off:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-linux-grub-bios-luks-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-linux-grub-uefi-luks-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-linux-grub-uefi-none-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-linux-lts-systemd-boot-uefi-none-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/desktop-linux-systemd-boot-uefi-luks-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/gaming-dual-primary-linux-grub-bios-none-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/gaming-dual-primary-lts-systemd-boot-uefi-luks-bt-off:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/gaming-linux-grub-bios-none-bt-off:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/gaming-linux-grub-uefi-luks-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/gaming-linux-lts-systemd-boot-uefi-none-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/gaming-linux-systemd-boot-uefi-none-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/studio-dual-primary-linux-systemd-boot-uefi-none-bt-off:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/studio-dual-primary-lts-grub-uefi-none-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/studio-linux-grub-uefi-luks-bt-on-studio-complete:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/studio-linux-lts-grub-bios-luks-bt-off:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+  install-pairwise/studio-linux-systemd-boot-uefi-none-bt-on:
+    decision: keep
+    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
+    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
   install/desktop-uefi-encrypted:
     decision: keep
     rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO

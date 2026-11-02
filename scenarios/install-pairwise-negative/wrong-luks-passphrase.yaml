@@ -1,0 +1,22 @@
+id: install-pairwise-negative/wrong-luks-passphrase
+purpose: >-
+  NOT RUN until a candidate ISO exists. A wrong LUKS passphrase at
+  reboot is refused without unlocking or damaging the volume; the
+  correct passphrase then boots into the installed desktop.
+covers: [installer#11, qa#19]
+requires: {firmware: uefi, bootloader: grub, kernels: [linux], primaryKernel: linux, encryption: luks, edition: desktop, capabilities: {bluetooth: true}, isoRequired: true}
+instruction: >-
+  Install Desktop with LUKS via the existing VM harness
+  (~/.local/share/hornero/install-test/run-install-vm.sh <name> uefi 40 iso),
+  reboot with the ISO detached, enter a wrong passphrase once and confirm the
+  volume does not unlock, then enter the correct passphrase and authenticate
+  at the greeter, leaving the installed desktop running for the proofs.
+proof:
+  - note: Installed Hyprland session is running after the correct passphrase
+    probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
+  - note: Root storage is still LUKS after the refused attempt
+    probe: {run: "lsblk -o FSTYPE -rn | grep -q crypto_LUKS && echo ok", equals: ok}
+  - note: Wrong-passphrase refusal for the record
+    screenshot: luks-wrong-passphrase
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}

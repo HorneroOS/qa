@@ -51,6 +51,68 @@
         "resolution": {
           "type": "string",
           "pattern": "^[0-9]+x[0-9]+$"
+        },
+        "firmware": {
+          "enum": [
+            "uefi",
+            "bios"
+          ]
+        },
+        "bootloader": {
+          "enum": [
+            "grub",
+            "systemd-boot"
+          ]
+        },
+        "kernels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "linux",
+              "linux-lts"
+            ]
+          }
+        },
+        "primaryKernel": {
+          "enum": [
+            "linux",
+            "linux-lts"
+          ]
+        },
+        "encryption": {
+          "enum": [
+            "none",
+            "luks"
+          ]
+        },
+        "edition": {
+          "enum": [
+            "desktop",
+            "studio",
+            "gaming"
+          ]
+        },
+        "specializations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bluetooth": {
+              "type": "boolean"
+            }
+          }
+        },
+        "isoRequired": {
+          "type": "boolean"
         }
       }
     },

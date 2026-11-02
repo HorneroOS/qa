@@ -1,0 +1,82 @@
+id: install-pairwise/desktop-linux-grub-bios-luks-bt-off
+purpose: 'NOT RUN until a candidate ISO exists. A desktop installation (kernels linux;
+  primary linux; grub on bios; encryption luks; bluetooth disabled) from the candidate
+  ISO, rebooted into the installed system, matches the canonical resolved choice:
+  kernel and initramfs images, boot entries, ESP size, LUKS state, edition composition
+  and capability services. This never qualifies physical hardware.'
+covers:
+- installer#11
+- qa#19
+requires:
+  firmware: bios
+  bootloader: grub
+  kernels:
+  - linux
+  primaryKernel: linux
+  encryption: luks
+  edition: desktop
+  specializations: []
+  capabilities:
+    bluetooth: false
+  isoRequired: true
+instruction: Using the existing VM harness (~/.local/share/hornero/install-test/run-install-vm.sh
+  <name> bios 40 iso), boot the candidate ISO in a disposable VM, launch the graphical
+  installer, choose edition desktop, kernels linux (primary linux), bootloader grub,
+  encryption luks, bluetooth disabled; create the QA user, let installation finish,
+  reboot with the ISO detached (run-install-vm.sh <name> bios 40 noiso), unlock LUKS
+  if prompted and authenticate at the greeter. Then reboot once more into the installed
+  system and leave the installed desktop running for the proofs.
+proof:
+- note: Installed Hyprland session is running after authenticating at the greeter
+  probe:
+    run: pgrep -x Hyprland >/dev/null && echo up
+    equals: up
+- note: Installed profile metadata names the installed edition
+  probe:
+    run: python3 -c "import json;print(json.load(open('/usr/lib/hornero/system-profile.json'))['edition']['edition'])"
+    equals: desktop
+- note: horneroctl system info agrees with the installed profile
+  probe:
+    run: horneroctl system info --json | python3 -c "import json,sys;print(json.load(sys.stdin)['data']['edition'])"
+    equals: desktop
+- note: Installer package repository removed from pacman.conf (cleanup contract)
+  probe:
+    run: grep -c hornero-installer /etc/pacman.conf; true
+    equals: '0'
+- note: Firmware of the installed boot matches the declared firmware
+  probe:
+    run: '[ -d /sys/firmware/efi ] && echo uefi || echo bios'
+    equals: bios
+- note: Kernel linux image, initramfs, fallback initramfs and headers are installed
+  probe:
+    run: test -f /boot/vmlinuz-linux && test -f /boot/initramfs-linux.img && test
+      -f /boot/initramfs-linux-fallback.img && pacman -Qq linux linux-headers >/dev/null
+      && echo ok
+    equals: ok
+- note: Running kernel is not the LTS kernel
+  probe:
+    run: uname -r
+    not_contains: lts
+- note: GRUB config has a menuentry covering every installed kernel
+  probe:
+    run: grep -q menuentry /boot/grub/grub.cfg && grep -q vmlinuz-linux /boot/grub/grub.cfg
+      && echo ok
+    equals: ok
+- note: Root storage is LUKS with a crypttab entry (LUKS/openswap contract preserved)
+  probe:
+    run: lsblk -o FSTYPE -rn | grep -q crypto_LUKS && grep -q . /etc/crypttab && echo
+      ok
+    equals: ok
+- note: 'Bluetooth capability off: bluez stack absent and bluetooth.service not enabled'
+  probe:
+    run: pacman -Qq bluez bluez-utils >/dev/null 2>&1 && echo present || echo absent
+    equals: absent
+- note: Desktop frame (non-blank) for the record
+  screenshot: installed-desktop
+media:
+- installed-desktop
+budget:
+  wall_s: 3600
+artifacts:
+  screenshots: always
+  logs: always
