@@ -280,6 +280,17 @@ scenarios:
       and ICD registration are capability probes only; physical topology
       qualification stays BLOCKED on owner-approved hardware fixtures.'
     schedule: 'EXECUTED 2026-10-29 on installed candidate v3 (ISO 9eb9041d) in a disposable VM: PASS with corrected honesty probes (ICD report consistent with on-disk registry, ICDCONS=True; no ICD registered under virtio, reported fail as designed). Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/scenarios-run*.png'
+  gaming/gpu-driver-coherence:
+    decision: keep
+    rationale: 'VM-safe coverage for HorneroOS/hornero#342 gpu-driver-coherence:
+      gaming doctor must report running-kernel/module-tree/vendor-driver
+      coherence as ok/fail only, never ok when the running kernel has no
+      module tree, and must install or change nothing. Physical GPU
+      qualification stays BLOCKED on owner-approved hardware fixtures.'
+    schedule: 'NOT TESTED: blocked until a horneroctl tag ships the
+      gpu-driver-coherence doctor check (absent from the pinned preview35
+      contract in tests/fixtures/gaming-doctor-contract.json); then schedule
+      in the next approved KVM QA window. No VM or hardware PASS is claimed.'
   gaming/recovery-readiness:
     decision: keep
     rationale: 'Coverage for the Gaming gate item graphics-update-recovery:
