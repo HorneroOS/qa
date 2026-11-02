@@ -1,0 +1,21 @@
+id: connectivity/bluetooth-no-adapter
+purpose: >-
+  In a guest with no Bluetooth adapter (the default QEMU topology),
+  bluetooth doctor reports the missing adapter honestly as fail for
+  adapter and powered while the unit and tools stay ok, and the shell
+  shows a no-adapter state instead of claiming Bluetooth works. This
+  never qualifies physical hardware.
+instruction: >-
+  On an installed system with no Bluetooth adapter, inspect the
+  bluetooth doctor report without changing anything.
+proof:
+  - note: Doctor JSON exposes the adapter check
+    probe: {run: "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print('adapter' in json.load(sys.stdin)['data'])\"", equals: "True"}
+  - note: No adapter is reported fail, never ok
+    probe: {run: "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['adapter'])\"", equals: fail}
+  - note: The service itself is not blamed for missing hardware
+    probe: {run: "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['bluetooth-service'])\"", equals: ok}
+  - note: Repeated doctor runs agree, so the report changes nothing
+    probe: {run: "a=$(horneroctl hardware bluetooth doctor --json); b=$(horneroctl hardware bluetooth doctor --json); [ \"$a\" = \"$b\" ] && echo stable || echo changed", equals: stable}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}

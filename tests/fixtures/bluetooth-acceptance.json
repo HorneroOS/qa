@@ -1,0 +1,32 @@
+{
+  "source": "Design contract only (NOT observed evidence): HorneroOS Bluetooth workstream design T1/T2/T4. Pins what sibling repos must ship; QA does not claim any of it is shipped or executed yet.",
+  "status": "not-tested",
+  "catalogue": {
+    "packages_required_desktop": ["bluez", "bluez-utils"],
+    "packages_forbidden": ["blueman"],
+    "editions_inheriting_desktop": ["desktop", "studio", "gaming"],
+    "provenance_licenses": {"bluez": ["GPL-2.0-or-later"], "bluez-utils": ["GPL-2.0-or-later"]}
+  },
+  "service_enablement": {
+    "unit": "bluetooth.service",
+    "installer_action": "enable",
+    "installer_mandatory": false,
+    "systemd_preset": "enable bluetooth.service",
+    "preset_file": "90-hornero-bluetooth.preset"
+  },
+  "power_persistence": {
+    "mechanism": "rfkill",
+    "persisted_by": "systemd-rfkill.service",
+    "main_conf_autoenable": true,
+    "forbidden": ["AutoEnable=false", "login-restore-state-file", "non-atomic-main-conf-rewrite"]
+  },
+  "security_invariants": {
+    "just_works_repairing": "never",
+    "permanent_discoverability": false,
+    "discoverable_timeout_s": 120,
+    "auto_accept_pairing": false,
+    "passwordless_polkit": false,
+    "global_usb_autosuspend_disable": false,
+    "polling": false
+  }
+}

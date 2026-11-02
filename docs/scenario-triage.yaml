@@ -450,3 +450,15 @@ scenarios:
       to render a CLI diagnostic as an image.'
     schedule: Schedule in the next approved KVM QA window against the pinned ready
       image.
+  connectivity/bluetooth-no-adapter:
+    decision: keep
+    rationale: 'Hardware-free no-adapter coverage: in the default QEMU topology bluetooth doctor must report adapter/powered fail while bluetooth-service and bluez-tools stay ok, never conflating missing hardware with a down service. Physical pairing, A2DP/HFP audio, codec negotiation, autosuspend quirks, hotplug and suspend/resume power persistence are NOT TESTED (no vhci or hardware lab exists).'
+    schedule: 'NOT TESTED: blocked until a horneroctl tag ships hardware bluetooth doctor (absent from the contract pinned in tests/fixtures/bluetooth-doctor-contract.json); then schedule in the next approved KVM QA window. No VM or hardware PASS is claimed.'
+  connectivity/bluetooth-service-down:
+    decision: keep
+    rationale: 'Hardware-free service-down coverage: with bluetooth.service stopped, doctor must report bluetooth-service fail while adapter presence comes from sysfs, distinguishing a down service from missing hardware. Physical pairing/audio/suspend checks are NOT TESTED.'
+    schedule: 'NOT TESTED: blocked until a horneroctl tag ships hardware bluetooth doctor (absent from the contract pinned in tests/fixtures/bluetooth-doctor-contract.json); then schedule in the next approved KVM QA window. No VM or hardware PASS is claimed.'
+  connectivity/bluetooth-power-toggle:
+    decision: keep
+    rationale: 'Hardware-free no-adapter power coverage: a power request with no adapter must fail gracefully and doctor must still report adapter/powered fail, never a false success. Real-hardware power persistence across reboot/suspend is NOT TESTED.'
+    schedule: 'NOT TESTED: blocked until a horneroctl tag ships hardware bluetooth doctor (absent from the contract pinned in tests/fixtures/bluetooth-doctor-contract.json); then schedule in the next approved KVM QA window. No VM or hardware PASS is claimed.'

@@ -1,0 +1,16 @@
+id: connectivity/bluetooth-power-toggle
+purpose: >-
+  In a guest with no Bluetooth adapter, asking for a power change
+  fails gracefully with a no-adapter report instead of a false
+  success, and a later doctor run still reports the adapter as
+  absent. Power persistence on real hardware stays NOT TESTED.
+instruction: >-
+  On a system with no Bluetooth adapter, request a bluetooth power
+  change and then inspect the doctor report.
+proof:
+  - note: Doctor reports no adapter after the refused power request
+    probe: {run: "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['adapter'])\"", equals: fail}
+  - note: Powered never claims ok without an adapter
+    probe: {run: "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['powered'])\"", equals: fail}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}

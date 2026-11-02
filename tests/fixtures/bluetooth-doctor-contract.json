@@ -1,0 +1,62 @@
+{
+  "source": "Design contract only (NOT observed evidence): HorneroOS Bluetooth workstream design T6, horneroctl hardware bluetooth doctor. No horneroctl tag ships this command yet, so every state below is NOT TESTED on a guest or hardware; fixtures pin the expected JSON shape so a future shipped doctor is checked against it, never the reverse.",
+  "status": "not-tested",
+  "command": "hardware bluetooth doctor",
+  "invocation": "horneroctl hardware bluetooth doctor --json",
+  "data_values": ["fail", "ok"],
+  "data_keys": [
+    "adapter",
+    "agent",
+    "bluetooth-service",
+    "bluez-tools",
+    "btusb-kernel",
+    "main-conf-autoenable",
+    "powered",
+    "rfkill",
+    "wireplumber-bluez"
+  ],
+  "states": {
+    "adapter": {
+      "exit": 0,
+      "data": {
+        "adapter": "ok",
+        "agent": "ok",
+        "bluetooth-service": "ok",
+        "bluez-tools": "ok",
+        "btusb-kernel": "ok",
+        "main-conf-autoenable": "ok",
+        "powered": "ok",
+        "rfkill": "ok",
+        "wireplumber-bluez": "ok"
+      }
+    },
+    "no-adapter": {
+      "exit": 1,
+      "data": {
+        "adapter": "fail",
+        "agent": "fail",
+        "bluetooth-service": "ok",
+        "bluez-tools": "ok",
+        "btusb-kernel": "ok",
+        "main-conf-autoenable": "ok",
+        "powered": "fail",
+        "rfkill": "ok",
+        "wireplumber-bluez": "fail"
+      }
+    },
+    "rfkill-blocked": {
+      "exit": 1,
+      "data": {
+        "adapter": "ok",
+        "agent": "ok",
+        "bluetooth-service": "ok",
+        "bluez-tools": "ok",
+        "btusb-kernel": "ok",
+        "main-conf-autoenable": "ok",
+        "powered": "fail",
+        "rfkill": "fail",
+        "wireplumber-bluez": "fail"
+      }
+    }
+  }
+}
