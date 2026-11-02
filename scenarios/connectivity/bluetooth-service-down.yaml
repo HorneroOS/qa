@@ -1,0 +1,18 @@
+id: connectivity/bluetooth-service-down
+purpose: >-
+  With bluetooth.service stopped, bluetooth doctor distinguishes a
+  down service from missing hardware: bluetooth-service reports fail
+  while adapter presence is reported from sysfs, not from the bus.
+  This never qualifies physical hardware.
+setup:
+  commands: ["systemctl stop bluetooth.service"]
+instruction: >-
+  Stop the Bluetooth service, then inspect the bluetooth doctor
+  report without starting anything.
+proof:
+  - note: Doctor still emits its JSON contract while the service is down
+    probe: {run: "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print('bluetooth-service' in json.load(sys.stdin)['data'])\"", equals: "True"}
+  - note: A stopped service is reported fail
+    probe: {run: "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['bluetooth-service'])\"", equals: fail}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}
