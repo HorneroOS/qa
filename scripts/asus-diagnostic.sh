@@ -13,6 +13,8 @@ echo "== gpu drivers =="; lsmod | grep -iE 'nvidia|i915|xe' ; nvidia-smi 2>&1 | 
 echo "== vulkan =="; vulkaninfo --summary 2>/dev/null | grep -E 'deviceName|driverName|apiVersion' | head -8
 echo "== displays =="; ls /sys/class/drm/*/status 2>/dev/null; for f in /sys/class/drm/*/modes; do echo "$f: $(head -1 $f 2>/dev/null)"; done 2>/dev/null | head -5
 echo "== block/NVMe =="; lsblk -d -o NAME,MODEL,SIZE,TRAN; lsblk -o NAME,FSTYPE,LABEL,MOUNTPOINTS | head -20
+echo "== storage controller (Intel VMD/RST hides NVMe when enabled) =="; lspci -nn | grep -iE 'sata|raid|vmd|non-volatile'; ls /dev/nvme* 2>/dev/null || echo "no /dev/nvme* nodes: check Intel VMD/RST setting in firmware (do not delete partitions)"
+echo "== kernel coherence =="; echo "running: $(uname -r)"; echo "installed: $(ls /usr/lib/modules 2>/dev/null | tr '\n' ' ')"; cat /sys/module/nvidia/version 2>/dev/null || echo "nvidia module: not loaded"; df -h /boot 2>/dev/null | tail -1
 echo "== secure boot =="; mokutil --sb-state 2>&1 | head -2; bootctl status 2>/dev/null | grep -E 'Secure Boot|Firmware' | head -3
 echo "== audio =="; aplay -l 2>/dev/null | grep card; pactl info 2>/dev/null | grep -E 'Server Name|Default S|Sample' ; wpctl status 2>/dev/null | head -20
 echo "== video devices =="; ls -l /dev/video* 2>/dev/null; v4l2-ctl --list-devices 2>/dev/null | head -15
