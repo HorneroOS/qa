@@ -1,7 +1,11 @@
 """Pin the VM-safe connectivity/bluetooth scenarios.
 
 All three scenarios run against the default QEMU topology (no
-adapter). The doctor shipped in v0.2.0-preview30 and passed on installed Desktop/Studio VMs with honest no-adapter results (Preview 30 release checklist, HorneroOS/hornero); the probe scenarios here are still scheduled for the next approved KVM QA window and no hardware PASS is claimed.
+adapter). The doctor shipped in v0.2.0-preview30 and passed on installed
+Desktop/Studio VMs with honest no-adapter results (Preview 30
+release checklist, HorneroOS/hornero); the probe scenarios here
+are still scheduled for the next approved KVM QA window and no
+hardware PASS is claimed.
 These tests pin only their honesty contract.
 """
 

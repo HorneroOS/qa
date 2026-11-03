@@ -1,6 +1,10 @@
 """Pin the horneroctl bluetooth doctor JSON contract (design T6).
 
-The doctor shipped in v0.2.0-preview30 and passed on installed Desktop/Studio VMs with honest no-adapter results (Preview 30 release checklist, HorneroOS/hornero); the probe scenarios here are still scheduled for the next approved KVM QA window and no hardware PASS is claimed. The fixtures
+The doctor shipped in v0.2.0-preview30 and passed on installed
+Desktop/Studio VMs with honest no-adapter results (Preview 30
+release checklist, HorneroOS/hornero); the probe scenarios here
+are still scheduled for the next approved KVM QA window and no
+hardware PASS is claimed. The fixtures
 pin the expected shape (adapter / no-adapter / rfkill-blocked) so the
 shipped doctor keeps being checked against them, never the reverse.
 """
