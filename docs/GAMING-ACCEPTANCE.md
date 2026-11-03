@@ -3,8 +3,10 @@
 `gaming-acceptance.yaml` is QA's evidence index for Gaming promotion
 decisions (HorneroOS/hornero#328, HorneroOS/qa#37). It mirrors the Studio
 gate: QA reports evidence and never changes product maturity or publishes
-a Preview claim. Gaming stays `planned` until every required item is
-accepted and the maintainer approves promotion.
+a Preview claim. The catalogue promoted Gaming to `preview` and it
+ships in the signed Preview 29/30 ISOs (VM-validated only); this gate
+still tracks the remaining hardware/promotion evidence below and does
+not by itself change product maturity.
 
 Run the local gate with:
 

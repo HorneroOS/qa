@@ -1,9 +1,12 @@
 """Pin the horneroctl bluetooth doctor JSON contract (design T6).
 
-No horneroctl tag ships ``hardware bluetooth doctor`` yet and no guest
-or hardware run exists, so this is NOT TESTED evidence: the fixtures
-pin the expected shape (adapter / no-adapter / rfkill-blocked) so a
-future shipped doctor is checked against them, never the reverse.
+The doctor shipped in v0.2.0-preview30 and passed on installed
+Desktop/Studio VMs with honest no-adapter results (Preview 30
+release checklist, HorneroOS/hornero); the probe scenarios here
+are still scheduled for the next approved KVM QA window and no
+hardware PASS is claimed. The fixtures
+pin the expected shape (adapter / no-adapter / rfkill-blocked) so the
+shipped doctor keeps being checked against them, never the reverse.
 """
 
 from __future__ import annotations
