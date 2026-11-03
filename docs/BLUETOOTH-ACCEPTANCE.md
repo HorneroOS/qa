@@ -1,9 +1,8 @@
 # Bluetooth acceptance (hardware-free)
 
-Status: **NOT TESTED on any guest or physical hardware.** No horneroctl
-tag ships `hardware bluetooth doctor` yet. This document and the tests
-below pin the expected contracts so a future shipped implementation is
-checked against them, never the reverse. Nothing here is a PASS.
+Status: **the doctor shipped; the QA-harness scenarios are NOT TESTED
+yet.** The doctor shipped in v0.2.0-preview30 and passed on installed Desktop/Studio VMs with honest no-adapter results (Preview 30 release checklist, HorneroOS/hornero); the probe scenarios here are still scheduled for the next approved KVM QA window and no hardware PASS is claimed. This document and the tests
+below pin the expected contracts; nothing here is a hardware PASS.
 
 ## Automated without hardware (this repo)
 
