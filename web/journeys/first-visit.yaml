@@ -1,16 +1,14 @@
 id: web/first-visit
 purpose: >-
-  A first-time visitor can go from the home page to real captures, the
-  layouts, and an honest answer about installing.
+  A first-time visitor can go from the home page to the install page
+  with the current Preview ISO, and find the layout captures.
 pages: []
 viewports: [phone, desktop]
 steps:
-  - visit: /
-  - expect_text: One desktop
-  - click: {role: link, name: See it running}
-  - expect_url: /showroom
-  - click: {role: link, name: Layouts, exact: true}
-  - expect_url: /layouts
+  - visit: /en/
+  - expect_text: A Linux desktop
+  - click: {role: link, name: Download the Preview ISO, exact: true}
+  - expect_url: /en/install
+  - expect_text: horneroos-2026.10-preview31-x86_64.iso
+  - visit: /en/layouts
   - expect_text: Cockpit Clear
-  - click: {role: link, name: Install, exact: true}
-  - expect_text: Not installable yet
