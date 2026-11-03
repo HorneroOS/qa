@@ -3,13 +3,13 @@ purpose: >-
   A Gaming candidate installation on UEFI with unencrypted storage,
   from the candidate Gaming ISO, reaches an authenticated Hornero desktop
   whose installed composition matches the canonical resolved choice.
-  Gaming remains planned: this scenario proves the candidate path only,
-  never a release or hardware qualification.
+  Gaming is a Preview edition in the shared ISO: this scenario proves
+  the VM install path only, never a hardware qualification.
 covers: [installer#38, qa#39]
 instruction: >-
   Boot the candidate Gaming ISO (HORNEROS_INSTALLER_CANDIDATE_GAMING=1) in a
   disposable VM (UEFI firmware, blank target disk), launch the graphical
-  installer, choose the Gaming "Desktop Gaming (Planned candidate)"
+  installer, choose the Gaming "Desktop Gaming"
   specialization when prompted, create the QA user, let installation
   finish, reboot with the ISO detached, authenticate at the greeter, and
   leave the installed desktop running for the proofs.
