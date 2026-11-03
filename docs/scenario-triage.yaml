@@ -390,6 +390,18 @@ scenarios:
       update path and never asserts an absent recovery path; no
       Gaming-only snapshot framework.'
     schedule: 'EXECUTED 2026-10-29 on installed candidate v3 (ISO 9eb9041d) in a disposable VM: PASS with corrected honesty probes (no LTS kernel or snapshot tool present; doctor reports recovery-readiness fail with actionable linux-lts/snapshot guidance, RECACT=1, never asserts an absent path). Presence of a recovery path itself remains a gate item for qualified systems. Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/scenarios-run*.png'
+  recovery/doctor-honesty:
+    decision: keep
+    rationale: 'Coverage for hornero#179 recovery honesty: recovery doctor
+      probes backend/layout/snapper readiness read-only and must keep
+      reporting snapshot_backend=none with a failing backend check until
+      the disposable-VM restore proof in SNAPSHOT_BACKEND_CONTRACT.md
+      passes; config snapshots are never presented as OS rollback and no
+      restore/create verb exists before that proof.'
+    schedule: 'NOT TESTED: blocked until a horneroctl tag ships the recovery
+      doctor command (absent from Preview31); then schedule in the next
+      approved KVM QA window on an installed image. No VM or hardware PASS
+      is claimed.'
   studio/audio-mode-opt-in:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Studio audio modes stay
