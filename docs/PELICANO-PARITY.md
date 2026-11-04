@@ -63,6 +63,30 @@ Preview 24 needed post-install packages, drivers, LTS, and dotfiles.
 | SSH/Git identity, aliases | No (personal) | yes | dotfiles (personal) | Never migrate to OS |
 | OBS production profile | No (personal) | yes | dotfiles (personal) | Keep secret-free template only in docs |
 
+## Addendum — read-only SSH diagnostic, 2026-11-04 (Preview 33)
+
+Maintainer-authorized read-only session (`qa/scripts/asus-diagnostic.sh`
+run from `/tmp` on `pelicano.local`, remote artifacts removed; no
+configuration changed). Observed facts, not a clean-ISO certification:
+
+| Check | Observed | Class |
+|---|---|---|
+| Running kernel | Linux 6.18.60-1-lts (also installed: 7.2.14-arch1-1) | AUTOMATED-VERIFIED (read-only probe) |
+| NVIDIA driver coherence | 615.78.08 kernel module + userspace on RTX 5070 Ti (GB205M); `nvidia-smi` healthy | AUTOMATED-VERIFIED |
+| Vulkan ICD | NVIDIA device visible, apiVersion 1.4.351 | AUTOMATED-VERIFIED (ICD registration only; rendering workloads NOT SPECIFICALLY TESTED) |
+| FFmpeg NVENC | h264/hevc/av1 test encodes passed in the same SSH session (probe output not retained in the diagnostic file) | Operator-observed; OBS NVENC remains NOT SPECIFICALLY TESTED |
+| Studio doctor | `horneroctl studio doctor`: all 5 checks passed | AUTOMATED-VERIFIED |
+| Audio graph | PipeWire 1.6.10 + WirePlumber up; Scarlett NOT CONNECTED during the session | AUTOMATED-VERIFIED (stack only) |
+| Internal display | eDP 2560x1600 mode present (card1-eDP-1) | AUTOMATED-VERIFIED |
+| Secure Boot | disabled | AUTOMATED-VERIFIED |
+| Storage | 1 TB WD SN5000S, LUKS + Btrfs subvolumes; `/boot` at 62% of 511 MiB | AUTOMATED-VERIFIED; watch ESP headroom |
+| Package freshness | Machine lags the published channel (observed `hornero-config 0.3.17-1`, `horneroctl-bin 0.2.0_preview39-1` vs published 0.3.18-1 / preview40-1 at the time) | Maintainer action: normal full upgrade |
+
+Still NOT SPECIFICALLY TESTED on hardware: OBS NVENC recording/stream
+finalization, HDMI capture and output, Bluetooth pairing (Intel BE200
+adapter present), suspend/resume, external displays and refresh modes,
+Scarlett routing, clean-ISO installation on this machine.
+
 ## Outstanding specialized qualification (not goal blockers)
 
 NVENC encode proof, Vulkan correctness, HDMI capture stability,
