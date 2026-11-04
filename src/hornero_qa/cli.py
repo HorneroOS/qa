@@ -145,13 +145,26 @@ def _import(_: QAState, args: argparse.Namespace) -> int:
             print(f"hornero-qa: --product expects KEY=VALUE, got {item!r}", file=sys.stderr)
             return EXIT_USAGE
         key, value = item.split("=", 1)
+        if key in product:
+            print(f"hornero-qa: --product must not override reserved key {key!r}", file=sys.stderr)
+            return EXIT_USAGE
         product[key] = value
     repo_root = Path(__file__).resolve().parents[2]
+    from hornero_qa.scenario import SCENARIO_DIR
+
+    scenario_path = resolve(args.scenario)
+    if not scenario_path.resolve().is_relative_to(SCENARIO_DIR.resolve()):
+        print(
+            f"hornero-qa: --scenario must be a registered scenario under scenarios/, got {args.scenario!r}",
+            file=sys.stderr,
+        )
+        return EXIT_USAGE
     try:
         bundle = import_evidence(
             ImportRequest(
                 source=Path(args.source),
-                scenario=load(resolve(args.scenario)),
+                scenario=load(scenario_path),
+                failure_class=args.failure_class,
                 verdict=args.verdict,
                 reason=args.reason,
                 product=product,
@@ -365,6 +378,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="explicit operator verdict; never inferred from RESULT.md prose",
     )
     s.add_argument("--reason", required=True, help="why this verdict, recorded in result.json")
+    s.add_argument(
+        "--failure-class",
+        choices=["product", "product_crash", "driver", "harness", "provisioning", "boot", "timeout", "inconclusive"],
+        help="explicit failure class for a fail verdict; never derived from the verdict alone",
+    )
     s.add_argument("--iso", required=True, help="ISO file name the manual run installed")
     s.add_argument("--iso-sha256", required=True, help="full SHA-256 of that ISO")
     s.add_argument("--product", action="append", default=[], metavar="KEY=VALUE", help="extra provenance")

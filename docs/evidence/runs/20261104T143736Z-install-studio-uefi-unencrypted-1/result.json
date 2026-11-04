@@ -5,7 +5,7 @@
   "verdict": "inconclusive",
   "class": "inconclusive",
   "regression": false,
-  "reason": "Imported manual preview32 evidence (ISO b8cd0f86): RESULT.md and screenshots document install completion, graphical login, OOTB versions and horneroctl studio doctor 5/5, but do not record every scenario proof probe (shell IPC, Hyprland config errors, installed edition profile/system-info, pacman.conf cleanup, REAPER absence); the probes screenshot also shows studio-selection: no selection recorded, which does not establish the persisted-selection proof. Inconclusive, not a proof-complete PASS.",
+  "reason": "Manual install on the signed preview32 ISO: RESULT.md/screenshots document install, login and versions/doctors, but not every scenario proof probe is recorded (shell IPC, config errors, edition profile/system-info, pacman.conf cleanup, persisted selections).",
   "actions": 2,
   "driver_end": null,
   "review": null

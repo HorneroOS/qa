@@ -161,3 +161,90 @@ def test_import_cli_roundtrip_and_unknown_scenario(
     bad = list(argv)
     bad[bad.index("install/desktop-uefi-unencrypted")] = "install/no-such-scenario"
     assert main(bad) == 64
+
+
+def test_import_cli_rejects_reserved_product_keys(tmp_path: Path) -> None:
+    src = _source(tmp_path)
+    argv = [
+        "import",
+        str(src),
+        "--scenario",
+        "install/desktop-uefi-unencrypted",
+        "--verdict",
+        "pass",
+        "--reason",
+        "operator executed every scenario proof; see RESULT.md",
+        "--iso",
+        "horneroos-test.iso",
+        "--iso-sha256",
+        ISO_SHA,
+        "--product",
+        f"iso_sha256={'c' * 64}",
+        "--runs-dir",
+        str(tmp_path / "runs"),
+    ]
+    assert main(argv) == 64
+    assert not list((tmp_path / "runs").glob("*")) if (tmp_path / "runs").exists() else True
+
+
+def test_import_cli_rejects_unregistered_scenario_path(tmp_path: Path) -> None:
+    src = _source(tmp_path)
+    rogue = tmp_path / "rogue.yaml"
+    registered = resolve("install/desktop-uefi-unencrypted")
+    rogue.write_text(registered.read_text(encoding="utf-8"), encoding="utf-8")
+    argv = [
+        "import",
+        str(src),
+        "--scenario",
+        str(rogue),
+        "--verdict",
+        "pass",
+        "--reason",
+        "operator executed every scenario proof; see RESULT.md",
+        "--iso",
+        "horneroos-test.iso",
+        "--iso-sha256",
+        ISO_SHA,
+        "--runs-dir",
+        str(tmp_path / "runs"),
+    ]
+    assert main(argv) == 64
+
+
+def test_import_rejects_png_without_ihdr(tmp_path: Path) -> None:
+    src = _source(tmp_path)
+    (src / "00-live.png").write_bytes(b"\x89PNG\r\n\x1a\n" + b"\x00" * 16)
+    with pytest.raises(EvidenceImportError, match="not a valid PNG"):
+        import_evidence(_request(tmp_path, src))
+
+
+def test_import_sorts_screenshots_naturally(tmp_path: Path) -> None:
+    src = _source(tmp_path)
+    for png in src.glob("*.png"):
+        png.unlink()
+    Image.fromarray(desktop()).save(src / "10-ten.png")
+    Image.fromarray(desktop(seed=3)).save(src / "2-two.png")
+    root = import_evidence(_request(tmp_path, src))
+    assert load_bundle(root)["screenshots"] == ["001-two.png", "002-ten.png"]
+    source_map = (root / "logs" / "source-map.md").read_text()
+    assert "screenshots/001-two.png | 2-two.png" in source_map
+
+
+def test_import_failure_class_is_never_derived_from_verdict(tmp_path: Path) -> None:
+    src = _source(tmp_path)
+    root = import_evidence(_request(tmp_path, src, verdict="fail", reason="install failed"))
+    result = load_bundle(root)["result"]
+    assert result["class"] is None
+    assert result["regression"] is False
+
+    root = import_evidence(
+        _request(tmp_path, src, verdict="fail", reason="guest healthy, proof failed", failure_class="product", attempt=2)
+    )
+    result = load_bundle(root)["result"]
+    assert result["class"] == "product"
+    assert result["regression"] is True
+
+    with pytest.raises(EvidenceImportError, match="pass verdict"):
+        import_evidence(_request(tmp_path, src, verdict="pass", failure_class="harness", attempt=3))
+    with pytest.raises(EvidenceImportError, match="unknown failure class"):
+        import_evidence(_request(tmp_path, src, verdict="fail", failure_class="nope", attempt=3))

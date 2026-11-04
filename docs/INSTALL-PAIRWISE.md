@@ -94,6 +94,17 @@ scenario proof probe. `RESULT.md` is copied unchanged to
 `logs/RESULT.md`; the single recorded assertion points at it and no
 per-probe results are invented.
 
+Preconditions and notes:
+
+- Without `--started`/`--finished`, the run window comes from the
+  screenshots' modification times, and the matrix shows it as the
+  last execution date. Copy evidence with timestamps preserved
+  (`cp -p`, `rsync -t`) or pass both flags explicitly.
+- Bundled screenshots are renumbered; `logs/source-map.md` maps each
+  bundled name to the source file `RESULT.md` cites.
+- A `fail` verdict records no failure class (and no regression)
+  unless `--failure-class` is given explicitly.
+
 Regenerate the declarations after changing the factor model:
 
 ```sh
