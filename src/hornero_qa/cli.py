@@ -380,7 +380,16 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--reason", required=True, help="why this verdict, recorded in result.json")
     s.add_argument(
         "--failure-class",
-        choices=["product", "product_crash", "driver", "harness", "provisioning", "boot", "timeout", "inconclusive"],
+        choices=[
+            "product",
+            "product_crash",
+            "driver",
+            "harness",
+            "provisioning",
+            "boot",
+            "timeout",
+            "inconclusive",
+        ],
         help="explicit failure class for a fail verdict; never derived from the verdict alone",
     )
     s.add_argument("--iso", required=True, help="ISO file name the manual run installed")

@@ -238,7 +238,14 @@ def test_import_failure_class_is_never_derived_from_verdict(tmp_path: Path) -> N
     assert result["regression"] is False
 
     root = import_evidence(
-        _request(tmp_path, src, verdict="fail", reason="guest healthy, proof failed", failure_class="product", attempt=2)
+        _request(
+            tmp_path,
+            src,
+            verdict="fail",
+            reason="guest healthy, proof failed",
+            failure_class="product",
+            attempt=2,
+        )
     )
     result = load_bundle(root)["result"]
     assert result["class"] == "product"
