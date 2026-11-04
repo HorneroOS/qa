@@ -25,9 +25,9 @@ proof:
     probe: {run: "pacman -Q polkit-gnome >/dev/null 2>&1 && echo installed", equals: "installed"}
   - note: Agent binary exists at the path both compositors autostart
     probe: {run: "test -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 && echo present", equals: "present"}
-  - note: Agent process is running in the graphical session (registered with the polkit authority for this session)
-    probe: {run: "pgrep -f polkit-gnome-authentication-agent-1 >/dev/null && echo running", equals: "running"}
-  - note: No passwordless polkit shortcut was introduced to make this pass (no blanket allow rules shipped by HorneroOS packages)
+  - note: Agent process is running for the logged-in guest user (bracketed pattern so the probe's own shell cannot self-match; -u binds it to this user — polkit registration itself is proven by the manual pkexec round-trip in the instruction)
+    probe: {run: "pgrep -u \"$(id -u)\" -f '[p]olkit-gnome-authentication-agent-1' >/dev/null && echo running", equals: "running"}
+  - note: No passwordless polkit shortcut was introduced to make this pass (on a fresh install, any blanket `return polkit.Result.YES` in either rules directory is forbidden)
     probe: {run: "grep -rl 'return polkit.Result.YES' /etc/polkit-1/rules.d /usr/share/polkit-1/rules.d 2>/dev/null | wc -l", equals: "0"}
 budget: {wall_s: 60}
 artifacts: {screenshots: on-failure, logs: on-failure}
