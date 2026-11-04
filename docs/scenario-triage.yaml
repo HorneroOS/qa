@@ -410,6 +410,23 @@ scenarios:
       doctor command (absent from Preview31); then schedule in the next
       approved KVM QA window on an installed image. No VM or hardware PASS
       is claimed.'
+  recovery/polkit-agent:
+    decision: keep
+    rationale: 'Regression coverage for hornero#366: fresh installs shipped
+      no registered polkit authentication agent (the Hyprland autostart
+      referenced the polkit-gnome binary while the package was missing
+      from the edition catalogue), so every pkexec flow failed with
+      "No session for cookie". Root cause and the session-agent fix were
+      proven in disposable VMs (scen366c: baseline pkexec FAIL 127,
+      session agent PASS incl. horneroctl package upgrade reaching
+      pacman and stopping correctly on a fake db.lck). The scenario
+      probes the automatable contract (package, binary, live agent
+      process, no passwordless rules); the interactive pkexec password
+      round-trip stays a manual confirmation in the run evidence.'
+    schedule: 'NOT TESTED on an image containing hornero#367 + config#119:
+      schedule with the next candidate fresh-install re-verification
+      tracked on hornero#366. Manual differential evidence exists
+      (scen366c) but is not a runner PASS for this cell.'
   studio/audio-mode-opt-in:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Studio audio modes stay
