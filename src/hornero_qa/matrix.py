@@ -13,7 +13,7 @@ from typing import Any
 
 import yaml
 
-from hornero_qa.scenario import ScenarioError, discover, load
+from hornero_qa.scenario import Scenario, ScenarioError, discover, load
 
 TRIAGE_PATH = Path("docs/scenario-triage.yaml")
 MATRIX_PATH = Path("docs/SCENARIO-MATRIX.md")
@@ -310,8 +310,10 @@ def _escape(value: str) -> str:
     return value.replace("|", "\\|").replace("\n", " ").replace("\r", " ")
 
 
-def generate_matrix(repo_root: Path, runs_dir: Path) -> str:
-    """Return the committed matrix, failing closed on missing triage or malformed evidence."""
+def _collect(
+    repo_root: Path, runs_dir: Path
+) -> tuple[list[Scenario], dict[str, dict[str, str]], dict[str, list[Execution]]]:
+    """Scenarios, triage, and tracked executions, failing closed like the matrix."""
     scenario_paths = discover(repo_root / "scenarios")
     scenarios = [load(path) for path in scenario_paths]
     scenario_ids = {scenario.id for scenario in scenarios}
@@ -321,6 +323,56 @@ def generate_matrix(repo_root: Path, runs_dir: Path) -> str:
     executions = _collect_sidecars(repo_root, scenario_ids)
     resolved_runs = runs_dir if runs_dir.is_absolute() else repo_root / runs_dir
     _collect_bundles(repo_root, resolved_runs, scenario_ids, executions)
+    return scenarios, triage, executions
+
+
+def _latest(history: list[Execution]) -> Execution | None:
+    if not history:
+        return None
+    return max(history, key=lambda item: (item.timestamp, item.quality, item.evidence))
+
+
+def stale_scenarios(
+    repo_root: Path, runs_dir: Path, *, max_age_days: int, today: date
+) -> list[tuple[str, str, str]]:
+    """Keep-decision scenarios with no execution or one older than max_age_days.
+
+    Returns (scenario_id, last_execution_iso_or_dash, result) sorted by id.
+    Age is measured in whole days between the latest tracked execution date
+    and `today`; an execution exactly max_age_days old is still fresh.
+    """
+    if max_age_days < 0:
+        raise MatrixError("max_age_days must be >= 0")
+    scenarios, triage, executions = _collect(repo_root, runs_dir)
+    stale: list[tuple[str, str, str]] = []
+    for scenario in scenarios:
+        if triage[scenario.id]["decision"] != "keep":
+            continue
+        latest = _latest(executions[scenario.id])
+        if latest is None:
+            stale.append((scenario.id, "—", "Never executed"))
+        elif (today - latest.timestamp.date()).days > max_age_days:
+            stale.append((scenario.id, latest.timestamp.date().isoformat(), latest.result))
+    return sorted(stale)
+
+
+def staleness_report(repo_root: Path, runs_dir: Path, *, max_age_days: int, today: date) -> str:
+    """Human-readable staleness alarm (qa#17): header plus one line per stale lane."""
+    stale = stale_scenarios(repo_root, runs_dir, max_age_days=max_age_days, today=today)
+    header = (
+        f"Evidence staleness as of {today.isoformat()} "
+        f"(keep lanes with no tracked execution in the last {max_age_days} days): "
+        f"{len(stale)} stale"
+    )
+    lines = [header]
+    for scenario_id, last_execution, result in stale:
+        lines.append(f"- {scenario_id}: last={last_execution} result={result}")
+    return "\n".join(lines)
+
+
+def generate_matrix(repo_root: Path, runs_dir: Path) -> str:
+    """Return the committed matrix, failing closed on missing triage or malformed evidence."""
+    scenarios, triage, executions = _collect(repo_root, runs_dir)
 
     lines = [
         "# Scenario execution matrix",

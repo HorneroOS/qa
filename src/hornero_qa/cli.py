@@ -9,6 +9,7 @@ import shlex
 import shutil
 import sys
 from collections.abc import Callable
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -16,7 +17,7 @@ from hornero_qa import __version__
 from hornero_qa.engines.native import read_image_info
 from hornero_qa.evidence import load_bundle
 from hornero_qa.gaming_gate import evaluate as evaluate_gaming_gate
-from hornero_qa.matrix import generate_matrix, resolve_repo_path
+from hornero_qa.matrix import generate_matrix, resolve_repo_path, stale_scenarios, staleness_report
 from hornero_qa.scenario import ScenarioError, discover, load, resolve
 from hornero_qa.state import QAState
 from hornero_qa.studio_gate import StudioGateError, run_bundle_digest
@@ -130,6 +131,29 @@ def _matrix(_: QAState, args: argparse.Namespace) -> int:
     from hornero_qa.matrix import MatrixError
 
     repo_root = Path(__file__).resolve().parents[2]
+    if getattr(args, "stale_days", None) is not None:
+        if args.check:
+            print("hornero-qa: --stale-days cannot be combined with --check", file=sys.stderr)
+            return EXIT_USAGE
+        try:
+            stale = stale_scenarios(
+                repo_root,
+                Path(args.runs_dir),
+                max_age_days=args.stale_days,
+                today=datetime.now(UTC).date(),
+            )
+            print(
+                staleness_report(
+                    repo_root,
+                    Path(args.runs_dir),
+                    max_age_days=args.stale_days,
+                    today=datetime.now(UTC).date(),
+                )
+            )
+        except MatrixError as exc:
+            print(f"hornero-qa: {exc}", file=sys.stderr)
+            return EXIT_FAIL
+        return EXIT_FAIL if stale else EXIT_OK
     output_path = resolve_repo_path(repo_root, Path(args.output))
     try:
         generated = generate_matrix(
@@ -288,6 +312,13 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--runs-dir", default="docs/evidence/runs", help="tracked run bundles to include")
     s.add_argument("--output", default="docs/SCENARIO-MATRIX.md")
     s.add_argument("--check", action="store_true", help="fail if the checked-in matrix is stale")
+    s.add_argument(
+        "--stale-days",
+        type=int,
+        default=None,
+        metavar="N",
+        help="report keep lanes with no tracked execution in the last N days; fail if any (docs/CADENCE.md)",
+    )
 
     s = sub.add_parser("image", help="ready images")
     isub = s.add_subparsers(dest="image_cmd", required=True)

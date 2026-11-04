@@ -3,12 +3,13 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+from datetime import date
 from pathlib import Path
 
 import pytest
 import yaml
 
-from hornero_qa.matrix import MatrixError, generate_matrix
+from hornero_qa.matrix import MatrixError, generate_matrix, stale_scenarios, staleness_report
 
 SOURCE_SCENARIO = Path(__file__).parents[1] / "scenarios/smoke/desktop-ready.yaml"
 
@@ -302,3 +303,45 @@ def test_matrix_rejects_missing_triage(tmp_path: Path) -> None:
 
     with pytest.raises(MatrixError, match="missing triage for: smoke/never-run"):
         generate_matrix(repo, repo / "docs/evidence/runs")
+
+
+def _sidecar(repo: Path, captured: str) -> None:
+    evidence = repo / "docs/evidence/run"
+    evidence.mkdir(parents=True)
+    image = evidence / "frame.png"
+    image.write_bytes(b"PNG fixture")
+    (evidence / "frame.json").write_text(
+        json.dumps(
+            {
+                "schema": "hornero.qa.screenshot/1",
+                "scenario": "smoke/with-evidence",
+                "captured": captured,
+                "run_id": "run",
+                "file": image.name,
+                "sha256": hashlib.sha256(image.read_bytes()).hexdigest(),
+            }
+        ),
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "-C", str(repo), "add", "docs/evidence/run"], check=True, capture_output=True)
+
+
+def test_staleness_flags_never_run_and_old_evidence_only(tmp_path: Path) -> None:
+    repo = _repo(tmp_path)
+    _sidecar(repo, "2026-10-02T08:30:00Z")
+    runs = repo / "docs/evidence/runs"
+
+    # 18 days after the sidecar: evidence lane is fresh, never-run is stale.
+    assert stale_scenarios(repo, runs, max_age_days=45, today=date(2026, 10, 20)) == [
+        ("smoke/never-run", "—", "Never executed")
+    ]
+    # Exactly at the threshold the evidence is still fresh.
+    assert stale_scenarios(repo, runs, max_age_days=45, today=date(2026, 11, 16)) == [
+        ("smoke/never-run", "—", "Never executed")
+    ]
+    # Past the threshold both lanes are stale, sorted by id.
+    stale = stale_scenarios(repo, runs, max_age_days=45, today=date(2026, 11, 17))
+    assert [row[0] for row in stale] == ["smoke/never-run", "smoke/with-evidence"]
+    report = staleness_report(repo, runs, max_age_days=45, today=date(2026, 11, 17))
+    assert "2 stale" in report
+    assert "- smoke/with-evidence: last=2026-10-02" in report
