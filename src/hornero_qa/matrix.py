@@ -13,7 +13,7 @@ from typing import Any
 
 import yaml
 
-from hornero_qa.scenario import ScenarioError, discover, load
+from hornero_qa.scenario import Scenario, ScenarioError, discover, load
 
 TRIAGE_PATH = Path("docs/scenario-triage.yaml")
 MATRIX_PATH = Path("docs/SCENARIO-MATRIX.md")
@@ -310,7 +310,9 @@ def _escape(value: str) -> str:
     return value.replace("|", "\\|").replace("\n", " ").replace("\r", " ")
 
 
-def _collect(repo_root: Path, runs_dir: Path):
+def _collect(
+    repo_root: Path, runs_dir: Path
+) -> tuple[list[Scenario], dict[str, dict[str, str]], dict[str, list[Execution]]]:
     """Scenarios, triage, and tracked executions, failing closed like the matrix."""
     scenario_paths = discover(repo_root / "scenarios")
     scenarios = [load(path) for path in scenario_paths]
