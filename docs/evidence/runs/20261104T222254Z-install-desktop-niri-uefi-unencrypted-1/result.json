@@ -1,0 +1,12 @@
+{
+  "run_id": "20261104T222254Z-install-desktop-niri-uefi-unencrypted-1",
+  "finished": "2026-11-04T22:40:47Z",
+  "wall_s": 1073,
+  "verdict": "fail",
+  "class": null,
+  "regression": false,
+  "reason": "Installed Niri desktop is unusable on the reference VM: niri reports zero outputs (Error::DeviceMissing importing virtio-gpu) and the desktop frame is black, although install, greeter authentication, session processes, Shell IPC and installed profile are correct. Root cause unattributed pending HorneroOS/config#121; physical hardware NOT TESTED.",
+  "actions": 2,
+  "driver_end": null,
+  "review": null
+}

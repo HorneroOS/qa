@@ -1,0 +1,23 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "002-erase.png",
+  "sha256": "463dd025b350d1d5164841a436ee9eba28c75a3f088f0942acf5591e2d2b3eeb",
+  "run_id": "20261104T222254Z-install-desktop-niri-uefi-unencrypted-1",
+  "scenario": "install/desktop-niri-uefi-unencrypted",
+  "captured": "2026-11-04T22:21:29Z",
+  "t": 0,
+  "product": {
+    "iso": "horneroos-2026.10-preview32-x86_64.iso",
+    "iso_sha256": "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec",
+    "installer_sha": "329e66831ad5a31e48c466771f015ef05568e571",
+    "product_sha": "a44964197c456fa44faeaff675206705c7bbdf1b"
+  },
+  "environment": {
+    "engine": "manual-qmp-install-harness",
+    "hornero_qa": "0.1.0",
+    "source_dir": "preview32-desktop-niri-uefi",
+    "imported_via": "hornero-qa import",
+    "captured_resolution": "1280x800"
+  },
+  "source_file": "01-erase.png"
+}
