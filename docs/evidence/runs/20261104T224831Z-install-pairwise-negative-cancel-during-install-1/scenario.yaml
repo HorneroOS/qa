@@ -1,0 +1,20 @@
+id: install-pairwise-negative/cancel-during-install
+purpose: >-
+  NOT RUN until a candidate ISO exists. Cancelling the installer
+  mid-installation leaves no bootable installed system and no installed
+  profile on the target disk; the live ISO still boots normally.
+covers: [installer#11, qa#19]
+requires: {firmware: uefi, bootloader: grub, kernels: [linux], primaryKernel: linux, encryption: none, edition: desktop, capabilities: {bluetooth: true}, isoRequired: true}
+instruction: >-
+  Using the existing VM harness (~/.local/share/hornero/install-test/run-install-vm.sh
+  <name> uefi 40 iso), boot the candidate ISO, start a Desktop installation,
+  cancel it while packages are being installed, then reboot with the ISO
+  detached and confirm the target does not boot into an installed system.
+  Reattach the ISO and leave the live session running for the proofs.
+proof:
+  - note: No installed system profile exists after the cancelled install
+    probe: {run: "test ! -e /usr/lib/hornero/system-profile.json && echo live-only || echo installed", equals: live-only}
+  - note: Cancellation state for the record
+    screenshot: cancelled-install
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}

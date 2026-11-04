@@ -1,0 +1,12 @@
+{
+  "run_id": "20261104T224831Z-install-pairwise-negative-cancel-during-install-1",
+  "finished": "2026-11-04T23:04:10Z",
+  "wall_s": 939,
+  "verdict": "fail",
+  "class": null,
+  "regression": false,
+  "reason": "Scenario purpose contradicted on the signed preview32 ISO: cancelling at 56% during the packages job does not cancel \u2014 the pacman transaction completes after Calamares quits (pacman.log hooks finish ~18s after confirmation) and the target boots to the greeter with the created user and system profile present. Live-session cleanup itself was clean (no stale mounts/processes/swap). Tracked as HorneroOS/installer#93; no failure class attributed.",
+  "actions": 2,
+  "driver_end": null,
+  "review": null
+}

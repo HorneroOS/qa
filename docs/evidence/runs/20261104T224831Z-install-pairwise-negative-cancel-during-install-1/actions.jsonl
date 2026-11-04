@@ -1,0 +1,2 @@
+{"t": 0, "kind": "manual-run", "source": "preview32-cancel-during-install"}
+{"t": 939, "kind": "import", "tool": "hornero-qa import", "result_md": "logs/RESULT.md", "screenshots": 16}

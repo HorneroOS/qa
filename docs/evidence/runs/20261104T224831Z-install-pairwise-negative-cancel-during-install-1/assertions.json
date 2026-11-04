@@ -1,0 +1,10 @@
+[
+  {
+    "t": 939,
+    "kind": "manual",
+    "ok": false,
+    "where": "manual-import",
+    "note": "Operator-supplied verdict for the manual run; see RESULT.md. No scenario proof probe results are recorded by the importer.",
+    "detail": "logs/RESULT.md"
+  }
+]

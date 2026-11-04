@@ -1,0 +1,24 @@
+{
+  "schema": "hornero.qa.run/1",
+  "run_id": "20261104T224831Z-install-pairwise-negative-cancel-during-install-1",
+  "started": "2026-11-04T22:48:31Z",
+  "scenario": "install-pairwise-negative/cancel-during-install",
+  "covers": [
+    "installer#11",
+    "qa#19"
+  ],
+  "instruction": "Using the existing VM harness (~/.local/share/hornero/install-test/run-install-vm.sh <name> uefi 40 iso), boot the candidate ISO, start a Desktop installation, cancel it while packages are being installed, then reboot with the ISO detached and confirm the target does not boot into an installed system. Reattach the ISO and leave the live session running for the proofs.",
+  "attempt": 1,
+  "product": {
+    "iso": "horneroos-2026.10-preview32-x86_64.iso",
+    "iso_sha256": "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec",
+    "installer_sha": "329e66831ad5a31e48c466771f015ef05568e571",
+    "product_sha": "a44964197c456fa44faeaff675206705c7bbdf1b"
+  },
+  "environment": {
+    "engine": "manual-qmp-install-harness",
+    "hornero_qa": "0.1.0",
+    "source_dir": "preview32-cancel-during-install",
+    "imported_via": "hornero-qa import"
+  }
+}
