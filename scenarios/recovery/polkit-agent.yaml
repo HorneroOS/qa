@@ -1,0 +1,33 @@
+id: recovery/polkit-agent
+purpose: >-
+  A polkit authentication agent is registered in the graphical session
+  out of the box, so pkexec-backed flows (including
+  `horneroctl package upgrade`) can authenticate instead of failing
+  with "No session for cookie" (hornero#366, proven root cause in a
+  disposable VM: the Hyprland autostart referenced the polkit-gnome
+  agent binary while the package was not in the edition catalogue).
+  The package comes from the catalogue desktop set (hornero#367);
+  Hyprland starts it from autostart.lua and Niri from
+  spawn-at-startup (config#119). The interactive password round-trip
+  itself (`pkexec whoami` -> root) cannot be typed by the harness and
+  stays a manual confirmation recorded in the run evidence; these
+  probes cover the automatable contract: package, binary and a
+  live agent process in the logged-in session.
+covers: [hornero#366, hornero#62]
+instruction: >-
+  On a freshly installed HorneroOS system, log into the graphical
+  session (Hyprland or Niri), open a terminal and inspect the polkit
+  agent without installing anything by hand. Then run
+  `pkexec whoami` manually and confirm the graphical prompt
+  authenticates and prints `root`; record that in the run evidence.
+proof:
+  - note: polkit-gnome package is installed by the catalogue composition
+    probe: {run: "pacman -Q polkit-gnome >/dev/null 2>&1 && echo installed", equals: "installed"}
+  - note: Agent binary exists at the path both compositors autostart
+    probe: {run: "test -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 && echo present", equals: "present"}
+  - note: Agent process is running in the graphical session (registered with the polkit authority for this session)
+    probe: {run: "pgrep -f polkit-gnome-authentication-agent-1 >/dev/null && echo running", equals: "running"}
+  - note: No passwordless polkit shortcut was introduced to make this pass (no blanket allow rules shipped by HorneroOS packages)
+    probe: {run: "grep -rl 'return polkit.Result.YES' /etc/polkit-1/rules.d /usr/share/polkit-1/rules.d 2>/dev/null | wc -l", equals: "0"}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}
