@@ -1,0 +1,31 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>install/gaming-uefi-unencrypted · Hornero QA</title><style>
+:root{--bg:#f6f1ec;--fg:#2a211c;--muted:#6f625a;--card:#fff;--line:#e3d8cf;
+--pass:#2f7d4f;--fail:#b3412c;--inc:#9a6b12}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1613;--fg:#f1e8e1;--muted:#b3a59b;
+--card:#25201c;--line:#3a312b}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px}
+h1{font-size:1.4rem;margin:0 0 4px}h2{font-size:1.1rem;margin:28px 0 8px}
+.v{display:inline-block;padding:2px 10px;border-radius:999px;color:#fff;font-weight:600}
+.pass{background:var(--pass)}.fail{background:var(--fail)}.inconclusive{background:var(--inc)}
+table{border-collapse:collapse;width:100%;background:var(--card)}
+td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+code,pre{font:13px/1.4 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);padding:8px}
+figure img{width:100%;height:auto;display:block}
+</style></head><body><main>
+<h1>install/gaming-uefi-unencrypted <span class="v inconclusive">INCONCLUSIVE</span></h1>
+<p class=muted>20261104T145453Z-install-gaming-uefi-unencrypted-1 · attempt 1 · 480 s · class <code>inconclusive</code></p>
+<p><strong>Reason:</strong> Imported manual preview32 evidence (ISO b8cd0f86): RESULT.md and screenshots document install completion, graphical login, gaming tools present and Steam absent; horneroctl gaming doctor reported 12/14 with expected GPU-less VM FAILs (no Vulkan ICD, no LTS fallback kernel/snapshot tool). The scenario doctor proof only requires the doctor JSON command contract, but other proofs are not recorded (shell IPC, Hyprland config errors, installed edition profile/system-info, pacman.conf cleanup, persisted gaming selection; doctor shows gaming-selection: no selection recorded). Inconclusive, never a silent PASS.</p>
+<h2>Instruction</h2><p>Boot the candidate Gaming ISO (HORNEROS_INSTALLER_CANDIDATE_GAMING=1) in a disposable VM (UEFI firmware, blank target disk), launch the graphical installer, choose the Gaming &quot;Desktop Gaming&quot; specialization when prompted, create the QA user, let installation finish, reboot with the ISO detached, authenticate at the greeter, and leave the installed desktop running for the proofs. Steam is an explicit application opt-in and must not be installed by the group selection.</p>
+<h2>Proof</h2><table><tr><th></th><th>where</th><th>kind</th><th>note</th><th>detail</th></tr><tr><td>❌</td><td>manual-import</td><td>manual</td><td>Operator-supplied verdict for the manual run; see RESULT.md. No scenario proof probe results are recorded by the importer.</td><td><code>logs/RESULT.md</code></td></tr></table>
+<h2>Product and environment</h2><table><tr><th>iso</th><td><code>horneroos-2026.10-preview32-x86_64.iso</code></td></tr><tr><th>iso_sha256</th><td><code>b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec</code></td></tr><tr><th>installer_sha</th><td><code>329e66831ad5a31e48c466771f015ef05568e571</code></td></tr><tr><th>product_sha</th><td><code>a44964197c456fa44faeaff675206705c7bbdf1b</code></td></tr><tr><th>engine</th><td><code>manual-qmp-install-harness</code></td></tr><tr><th>hornero_qa</th><td><code>0.1.0</code></td></tr><tr><th>source_dir</th><td><code>preview32-gaming</code></td></tr><tr><th>imported_via</th><td><code>hornero-qa import</code></td></tr></table>
+<h2>Screenshots</h2><div class=grid><figure><a href="screenshots/001-live.png"><img loading="lazy" src="screenshots/001-live.png" alt="001-live.png"></a><figcaption class=muted>001-live.png</figcaption></figure><figure><a href="screenshots/002-edition.png"><img loading="lazy" src="screenshots/002-edition.png" alt="002-edition.png"></a><figcaption class=muted>002-edition.png</figcaption></figure><figure><a href="screenshots/003-gaming-selected.png"><img loading="lazy" src="screenshots/003-gaming-selected.png" alt="003-gaming-selected.png"></a><figcaption class=muted>003-gaming-selected.png</figcaption></figure><figure><a href="screenshots/004-installing.png"><img loading="lazy" src="screenshots/004-installing.png" alt="004-installing.png"></a><figcaption class=muted>004-installing.png</figcaption></figure><figure><a href="screenshots/005-progress.png"><img loading="lazy" src="screenshots/005-progress.png" alt="005-progress.png"></a><figcaption class=muted>005-progress.png</figcaption></figure><figure><a href="screenshots/006-probes.png"><img loading="lazy" src="screenshots/006-probes.png" alt="006-probes.png"></a><figcaption class=muted>006-probes.png</figcaption></figure></div>
+<h2>Actions</h2><pre>{&quot;t&quot;: 0, &quot;kind&quot;: &quot;manual-run&quot;, &quot;source&quot;: &quot;preview32-gaming&quot;}
+{&quot;t&quot;: 480, &quot;kind&quot;: &quot;import&quot;, &quot;tool&quot;: &quot;hornero-qa import&quot;, &quot;result_md&quot;: &quot;logs/RESULT.md&quot;, &quot;screenshots&quot;: 6}</pre>
+<p class=muted>Logs: <a href="logs/">logs/</a> · machine-readable: run.json, result.json, assertions.json, actions.jsonl</p>
+</main></body></html>

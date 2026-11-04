@@ -1,0 +1,23 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "003-gaming-selected.png",
+  "sha256": "6047d46983f407eac2b09bc4e287decfa55104b5c4c1cdf6739e93f8355d12ea",
+  "run_id": "20261104T145453Z-install-gaming-uefi-unencrypted-1",
+  "scenario": "install/gaming-uefi-unencrypted",
+  "captured": "2026-11-04T14:55:48Z",
+  "t": 55,
+  "product": {
+    "iso": "horneroos-2026.10-preview32-x86_64.iso",
+    "iso_sha256": "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec",
+    "installer_sha": "329e66831ad5a31e48c466771f015ef05568e571",
+    "product_sha": "a44964197c456fa44faeaff675206705c7bbdf1b"
+  },
+  "environment": {
+    "engine": "manual-qmp-install-harness",
+    "hornero_qa": "0.1.0",
+    "source_dir": "preview32-gaming",
+    "imported_via": "hornero-qa import",
+    "captured_resolution": "1280x800"
+  },
+  "source_file": "02-gaming-selected.png"
+}

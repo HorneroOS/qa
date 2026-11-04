@@ -1,0 +1,12 @@
+{
+  "run_id": "20261104T145453Z-install-gaming-uefi-unencrypted-1",
+  "finished": "2026-11-04T15:02:53Z",
+  "wall_s": 480,
+  "verdict": "inconclusive",
+  "class": "inconclusive",
+  "regression": false,
+  "reason": "Imported manual preview32 evidence (ISO b8cd0f86): RESULT.md and screenshots document install completion, graphical login, gaming tools present and Steam absent; horneroctl gaming doctor reported 12/14 with expected GPU-less VM FAILs (no Vulkan ICD, no LTS fallback kernel/snapshot tool). The scenario doctor proof only requires the doctor JSON command contract, but other proofs are not recorded (shell IPC, Hyprland config errors, installed edition profile/system-info, pacman.conf cleanup, persisted gaming selection; doctor shows gaming-selection: no selection recorded). Inconclusive, never a silent PASS.",
+  "actions": 2,
+  "driver_end": null,
+  "review": null
+}

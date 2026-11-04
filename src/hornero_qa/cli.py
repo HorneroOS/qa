@@ -127,6 +127,50 @@ def _report(_: QAState, args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _parse_time(value: str | None) -> datetime | None:
+    if value is None:
+        return None
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        raise ValueError(f"timestamp must include a timezone: {value!r}")
+    return parsed.astimezone(UTC)
+
+
+def _import(_: QAState, args: argparse.Namespace) -> int:
+    from hornero_qa.importer import EvidenceImportError, ImportRequest, import_evidence
+
+    product: dict[str, str] = {"iso": args.iso, "iso_sha256": args.iso_sha256}
+    for item in args.product:
+        if "=" not in item or not item.split("=", 1)[0]:
+            print(f"hornero-qa: --product expects KEY=VALUE, got {item!r}", file=sys.stderr)
+            return EXIT_USAGE
+        key, value = item.split("=", 1)
+        product[key] = value
+    repo_root = Path(__file__).resolve().parents[2]
+    try:
+        bundle = import_evidence(
+            ImportRequest(
+                source=Path(args.source),
+                scenario=load(resolve(args.scenario)),
+                verdict=args.verdict,
+                reason=args.reason,
+                product=product,
+                runs_dir=resolve_repo_path(repo_root, Path(args.runs_dir)),
+                attempt=args.attempt,
+                engine=args.engine,
+                started=_parse_time(args.started),
+                finished=_parse_time(args.finished),
+            )
+        )
+    except (EvidenceImportError, ValueError) as exc:
+        if isinstance(exc, ScenarioError):
+            raise
+        print(f"hornero-qa: {exc}", file=sys.stderr)
+        return EXIT_USAGE
+    print(bundle)
+    return EXIT_OK
+
+
 def _matrix(_: QAState, args: argparse.Namespace) -> int:
     from hornero_qa.matrix import MatrixError
 
@@ -308,6 +352,28 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("report", help="(re)generate a bundle's report.html")
     s.add_argument("bundle")
 
+    s = sub.add_parser(
+        "import",
+        help="import one manual evidence directory (RESULT.md + PNGs) as a tracked run bundle",
+    )
+    s.add_argument("source", help="local evidence directory containing RESULT.md and *.png screenshots")
+    s.add_argument("--scenario", required=True, help="scenario id under scenarios/ (validated)")
+    s.add_argument(
+        "--verdict",
+        required=True,
+        choices=["pass", "fail", "inconclusive"],
+        help="explicit operator verdict; never inferred from RESULT.md prose",
+    )
+    s.add_argument("--reason", required=True, help="why this verdict, recorded in result.json")
+    s.add_argument("--iso", required=True, help="ISO file name the manual run installed")
+    s.add_argument("--iso-sha256", required=True, help="full SHA-256 of that ISO")
+    s.add_argument("--product", action="append", default=[], metavar="KEY=VALUE", help="extra provenance")
+    s.add_argument("--runs-dir", default="docs/evidence/runs", help="tracked run bundles directory")
+    s.add_argument("--attempt", type=int, default=1)
+    s.add_argument("--engine", default="manual", help="how the manual run was executed")
+    s.add_argument("--started", help="run start (ISO, with timezone; default: earliest screenshot mtime)")
+    s.add_argument("--finished", help="run end (ISO, with timezone; default: latest screenshot mtime)")
+
     s = sub.add_parser("matrix", help="generate or check the scenario execution matrix")
     s.add_argument("--runs-dir", default="docs/evidence/runs", help="tracked run bundles to include")
     s.add_argument("--output", default="docs/SCENARIO-MATRIX.md")
@@ -393,6 +459,7 @@ COMMANDS = {
     "run": _run,
     "inspect": _inspect,
     "report": _report,
+    "import": _import,
     "matrix": _matrix,
     "image": _image,
     "anchor": _anchor,

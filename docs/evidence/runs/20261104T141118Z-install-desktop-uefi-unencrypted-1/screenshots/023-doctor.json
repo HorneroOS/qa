@@ -1,0 +1,23 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "023-doctor.png",
+  "sha256": "a9ebbe5941f7e98752ca1c6a5d85bed0560240c71f7525f1a696479f3f4ae8aa",
+  "run_id": "20261104T141118Z-install-desktop-uefi-unencrypted-1",
+  "scenario": "install/desktop-uefi-unencrypted",
+  "captured": "2026-11-04T14:34:44Z",
+  "t": 1405,
+  "product": {
+    "iso": "horneroos-2026.10-preview32-x86_64.iso",
+    "iso_sha256": "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec",
+    "installer_sha": "329e66831ad5a31e48c466771f015ef05568e571",
+    "product_sha": "a44964197c456fa44faeaff675206705c7bbdf1b"
+  },
+  "environment": {
+    "engine": "manual-qmp-install-harness",
+    "hornero_qa": "0.1.0",
+    "source_dir": "preview32-desktop",
+    "imported_via": "hornero-qa import",
+    "captured_resolution": "1280x800"
+  },
+  "source_file": "22-doctor.png"
+}

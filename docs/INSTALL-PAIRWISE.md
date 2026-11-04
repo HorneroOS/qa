@@ -70,6 +70,30 @@ representative composition packages, proprietary opt-in absences
 cover cancellation during install, a wrong LUKS passphrase, and
 systemd-boot not being offered on BIOS.
 
+## Importing manual install evidence
+
+A manual run leaves a local evidence directory (`RESULT.md` + PNG
+screenshots). Convert one directory into a tracked bundle under
+`docs/evidence/runs/` with `hornero-qa import`:
+
+```sh
+uv run hornero-qa import ~/.local/share/hornero/install-test/evidence/<dir> \
+  --scenario install/desktop-uefi-unencrypted \
+  --verdict inconclusive --reason "<why this verdict>" \
+  --iso horneroos-<version>-x86_64.iso --iso-sha256 <full-sha256> \
+  --product installer_sha=<sha> --product product_sha=<sha> \
+  --engine manual-qmp-install-harness
+git add docs/evidence/runs/<generated-bundle>
+uv run hornero-qa matrix
+```
+
+The scenario id is validated against `scenarios/`. The verdict is an
+explicit operator decision and is never parsed from `RESULT.md` prose:
+use `inconclusive` when the manual checklist does not record every
+scenario proof probe. `RESULT.md` is copied unchanged to
+`logs/RESULT.md`; the single recorded assertion points at it and no
+per-probe results are invented.
+
 Regenerate the declarations after changing the factor model:
 
 ```sh
