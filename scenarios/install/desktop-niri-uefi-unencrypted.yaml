@@ -1,0 +1,33 @@
+id: install/desktop-niri-uefi-unencrypted
+purpose: >-
+  A Desktop installation with the experimental Niri compositor on UEFI with
+  unencrypted storage, from the candidate Preview ISO, reaches an
+  authenticated Hornero desktop on a real output whose installed
+  composition matches the canonical resolved choice.
+covers: [installer#11, qa#19, config#121]
+instruction: >-
+  Boot the candidate ISO in a disposable VM (UEFI firmware,
+  blank target disk), launch the graphical installer, choose
+  HorneroOS Desktop — Niri (Experimental),
+  without encryption,
+  create the QA user, let installation finish, reboot with the ISO detached,
+  authenticate at the
+  greeter, and leave the installed desktop running for the proofs.
+proof:
+  - note: Installed Niri session is running after authenticating at the greeter
+    probe: {run: "pgrep -x niri >/dev/null && echo up", equals: up}
+  - note: Niri reports at least one connected output
+    probe: {run: "niri msg --json outputs | python3 -c \"import json,sys;print(len(json.load(sys.stdin)))\"", equals: "1"}
+  - note: Hornero Shell answers IPC
+    probe: {run: "qs -c hornero ipc call drawers list", contains: launcher}
+  - note: Installed profile metadata names the installed edition and compositor
+    probe: {run: "python3 -c \"import json;p=json.load(open('/usr/lib/hornero/system-profile.json'))['edition'];print(p['edition']+'/'+p['compositor'])\"", equals: desktop/niri}
+  - note: horneroctl system info agrees with the installed profile
+    probe: {run: "horneroctl system info --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['edition'])\"", equals: desktop}
+  - note: Installer package repository removed from pacman.conf (cleanup contract)
+    probe: {run: "grep -c hornero-installer /etc/pacman.conf; true", equals: "0"}
+  - note: Desktop frame (non-blank) for the record
+    screenshot: installed-desktop
+media: [installed-desktop]
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}
