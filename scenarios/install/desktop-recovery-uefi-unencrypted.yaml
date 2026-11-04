@@ -1,0 +1,36 @@
+id: install/desktop-recovery-uefi-unencrypted
+purpose: >-
+  A Desktop installation with the opt-in Btrfs snapshot stack
+  (Recovery candidate profile) on UEFI without encryption reaches an
+  authenticated desktop whose snapper configuration is registered,
+  whose top-level /.snapshots store is mounted, and whose retention
+  timers are enabled — the layout the snapshot backend contract
+  (hornero#179) requires before any rollback claim. The destructive
+  @-replacement restore itself stays a manual disposable-VM
+  procedure; this scenario proves only the installed readiness.
+covers: [hornero#179, installer#11, qa#19]
+instruction: >-
+  Boot a recovery-candidate ISO in a disposable VM (UEFI firmware,
+  blank target disk), launch the graphical installer, choose
+  HorneroOS Desktop — Recovery candidate (Btrfs snapshots) with an
+  unencrypted Btrfs target, create the QA user, let installation
+  finish, reboot with the ISO detached, authenticate at the greeter,
+  and leave the installed desktop running for the proofs.
+proof:
+  - note: Installed Hyprland session is running after authenticating at the greeter
+    probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
+  - note: Snapper root configuration is registered for discovery
+    probe: {run: "grep -c '^SNAPPER_CONFIGS=\"root\"' /etc/conf.d/snapper; true", equals: "1"}
+  - note: Top-level snapshots store is mounted at /.snapshots
+    probe: {run: "findmnt -no FSTYPE /.snapshots", equals: btrfs}
+  - note: Snapper timeline and cleanup timers are enabled
+    probe: {run: "systemctl is-enabled snapper-timeline.timer snapper-cleanup.timer | grep -c enabled; true", equals: "2"}
+  - note: grub-btrfs snapshot menu daemon is enabled
+    probe: {run: "systemctl is-enabled grub-btrfsd.service", equals: enabled}
+  - note: Installer package repository removed from pacman.conf (cleanup contract)
+    probe: {run: "grep -c hornero-installer /etc/pacman.conf; true", equals: "0"}
+  - note: Desktop frame (non-blank) for the record
+    screenshot: installed-desktop
+media: [installed-desktop]
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}

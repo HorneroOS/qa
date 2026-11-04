@@ -141,4 +141,17 @@ def test_negative_scenarios_are_declared_not_run() -> None:
 
 def test_existing_install_scenarios_retained() -> None:
     ids = {load(p).id for p in (ROOT / "scenarios" / "install").glob("*.yaml")}
-    assert len(ids) == 9
+    # The nine pre-pairwise cells stay; later cells (recovery profiles)
+    # may be added without dropping any of them.
+    original = {
+        "install/desktop-bios-encrypted",
+        "install/desktop-bios-unencrypted",
+        "install/desktop-uefi-encrypted",
+        "install/desktop-uefi-unencrypted",
+        "install/gaming-uefi-unencrypted",
+        "install/studio-bios-encrypted",
+        "install/studio-bios-unencrypted",
+        "install/studio-uefi-encrypted",
+        "install/studio-uefi-unencrypted",
+    }
+    assert original <= ids

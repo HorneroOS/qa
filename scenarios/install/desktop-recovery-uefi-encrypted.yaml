@@ -1,0 +1,36 @@
+id: install/desktop-recovery-uefi-encrypted
+purpose: >-
+  The Recovery candidate profile on UEFI with LUKS encryption:
+  unlock at boot, authenticated desktop, and the same registered
+  snapper layout as the unencrypted cell, with the Btrfs store on
+  the encrypted mapper. Kernel and initramfs stay on the
+  unencrypted /boot and are outside any rollback claim
+  (hornero#179 contract); the destructive @-replacement restore
+  stays a manual disposable-VM procedure.
+covers: [hornero#179, installer#11, qa#19]
+instruction: >-
+  Boot a recovery-candidate ISO in a disposable VM (UEFI firmware,
+  blank target disk), launch the graphical installer, choose
+  HorneroOS Desktop — Recovery candidate (Btrfs snapshots) with
+  LUKS encryption enabled, create the QA user, let installation
+  finish, reboot with the ISO detached, unlock LUKS at the
+  initramfs prompt, authenticate at the greeter, and leave the
+  installed desktop running for the proofs.
+proof:
+  - note: Installed Hyprland session is running after LUKS unlock and greeter login
+    probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
+  - note: Root filesystem sits on a device-mapper crypt device
+    probe: {run: "findmnt -no SOURCE / | grep -c mapper; true", equals: "1"}
+  - note: Snapper root configuration is registered for discovery
+    probe: {run: "grep -c '^SNAPPER_CONFIGS=\"root\"' /etc/conf.d/snapper; true", equals: "1"}
+  - note: Top-level snapshots store is mounted at /.snapshots
+    probe: {run: "findmnt -no FSTYPE /.snapshots", equals: btrfs}
+  - note: Snapper timeline and cleanup timers are enabled
+    probe: {run: "systemctl is-enabled snapper-timeline.timer snapper-cleanup.timer | grep -c enabled; true", equals: "2"}
+  - note: Installer package repository removed from pacman.conf (cleanup contract)
+    probe: {run: "grep -c hornero-installer /etc/pacman.conf; true", equals: "0"}
+  - note: Desktop frame (non-blank) for the record
+    screenshot: installed-desktop
+media: [installed-desktop]
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}
