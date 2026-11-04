@@ -74,3 +74,22 @@ the as-written failure is preserved above and in 19-probes-1.png.
 Once HorneroOS/qa#63 makes the install probes jq-free (or Desktop
 ships `jq`), this scenario can be re-run for a formal PASS without
 repeating the installation evidence gathered here.
+
+## Addendum — formal probe re-execution after qa#65 (2026-11-04)
+
+HorneroOS/qa#65 landed the jq-free install probes (#63 closed). The
+same installed disk was booted again (23-reluks.png), unlocked and
+authenticated, and all six scenario probes were executed **exactly
+as written** in the updated `scenarios/install/desktop-uefi-encrypted.yaml`:
+
+- `pgrep -x Hyprland >/dev/null && echo up` → `up`
+- `qs -c hornero ipc call drawers list` → contains `launcher`
+- `hyprctl configerrors -j | python3 -c "…len([e for e in … if len(e)>0])"` → `0`
+- profile `.edition.edition` (python3) → `desktop`
+- `horneroctl system info --json` `.data.edition` (python3) → `desktop`
+- `grep -c hornero-installer /etc/pacman.conf` → `0`
+
+Evidence: 26-formal-1.png, 27-formal-2.png. With the proofs now
+passing as written on the system installed in this run, the run is
+recorded as **PASS**; the original INCONCLUSIVE phase above is kept
+verbatim for the record.

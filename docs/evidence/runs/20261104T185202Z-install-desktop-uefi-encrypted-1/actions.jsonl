@@ -1,2 +1,2 @@
 {"t": 0, "kind": "manual-run", "source": "preview32-desktop-uefi-luks"}
-{"t": 10217, "kind": "import", "tool": "hornero-qa import", "result_md": "logs/RESULT.md", "screenshots": 25}
+{"t": 11583, "kind": "import", "tool": "hornero-qa import", "result_md": "logs/RESULT.md", "screenshots": 28}
