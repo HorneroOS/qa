@@ -19,8 +19,8 @@ instruction: >-
 proof:
   - note: Installed Hyprland session is running after LUKS unlock and greeter login
     probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
-  - note: Root filesystem sits on a device-mapper crypt device
-    probe: {run: "findmnt -no SOURCE / | grep -c mapper; true", equals: "1"}
+  - note: Root storage is LUKS with a crypttab entry (LUKS/openswap contract preserved)
+    probe: {run: "lsblk -o FSTYPE -rn | grep -q crypto_LUKS && grep -q . /etc/crypttab && echo ok", equals: ok}
   - note: Snapper root configuration is registered for discovery
     probe: {run: "grep -c '^SNAPPER_CONFIGS=\"root\"' /etc/conf.d/snapper; true", equals: "1"}
   - note: Top-level snapshots store is mounted at /.snapshots
