@@ -30,3 +30,5 @@ directories of the same session, imported as separate bundles.
 | screenshots/021-probes-2.png | 20-probes-2.png |
 | screenshots/022-probes-3.png | 21-probes-3.png |
 | screenshots/023-installed-desktop.png | 22-installed-desktop.png |
+| screenshots/024-reluks.png | 23-reluks.png |
+| screenshots/025-pathscoped.png | 24-pathscoped.png |

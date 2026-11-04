@@ -39,8 +39,8 @@ SHA-256: `b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec`
 | 1 | `pgrep -x Hyprland` → `up` | PASS — output `up` (19-probes-1.png) |
 | 2 | `qs -c hornero ipc call drawers list` contains `launcher` | PASS — list: bar, osd, session, **launcher**, dashboard, utilities, sidebar, layoutPicker (19-probes-1.png) |
 | 3 | `hyprctl configerrors -j \| jq …` equals `0` | NOT EXECUTABLE AS WRITTEN — `zsh: command not found: jq` (19-probes-1.png). Equivalent `hyprctl configerrors` printed nothing (no config errors) (20-probes-2.png) |
-| 4 | `jq -r .edition.edition /usr/lib/hornero/system-profile.json` equals `desktop` | jq missing as written; equivalent grep shows `"edition": "desktop"` (20-probes-2.png) |
-| 5 | `horneroctl system info --json \| jq -r .data.edition` equals `desktop` | jq missing as written; equivalent grep shows `"edition":"desktop"` (21-probes-3.png) |
+| 4 | `jq -r .edition.edition /usr/lib/hornero/system-profile.json` equals `desktop` | jq missing as written; path-scoped equivalent `python3 -c "import json;print(json.load(open('/usr/lib/hornero/system-profile.json'))['edition']['edition'])"` prints `desktop` (24-pathscoped.png) |
+| 5 | `horneroctl system info --json \| jq -r .data.edition` equals `desktop` | jq missing as written; path-scoped equivalent `horneroctl system info --json \| python3 -c "import json,sys;print(json.load(sys.stdin)['data']['edition'])"` prints `desktop` (24-pathscoped.png) |
 | 6 | `grep -c hornero-installer /etc/pacman.conf` equals `0` | PASS — output `0` (20-probes-2.png) |
 
 `jq` is absent from the installed system because the canonical catalogue
@@ -63,8 +63,14 @@ probes jq-free.
 
 ## Verdict (operator)
 
-PASS for the scenario purpose — install with LUKS, reboot without ISO,
-LUKS unlock, greeter authentication and every asserted system fact are
-proven. Two probes ran through documented jq-free equivalents because
-`jq` is not part of the Desktop composition; the as-written failure is
-preserved above and in 19-probes-1.png.
+INCONCLUSIVE as a formal scenario execution. The installation itself
+succeeded end to end — install with LUKS, reboot without ISO, LUKS
+unlock, greeter authentication and every asserted system fact are
+proven (three of them through the documented jq-free equivalents
+above). But `pass` in this repository means the scenario proofs pass
+as written, and three probes (3, 4 and 5) are not executable as
+written on a Desktop composition because `jq` is not shipped there;
+the as-written failure is preserved above and in 19-probes-1.png.
+Once HorneroOS/qa#63 makes the install probes jq-free (or Desktop
+ships `jq`), this scenario can be re-run for a formal PASS without
+repeating the installation evidence gathered here.
