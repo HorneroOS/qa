@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -42,6 +43,68 @@ VM_MIB = 4096  # Calamares enforces a 4 GiB guest minimum; never lower it.
 VM_CPUS = 4
 DISK_GIB = 60
 BASE = Path.home() / ".local/share/hornero/install-test"
+# installer#94 (disable-cancel-during-exec), merged 2026-11-05.
+MITIGATION_REVISION = "cf72bbc764dc5940f179c13b8a9e915a9511e2e1"
+
+
+def run_config() -> dict[str, int]:
+    """Execution configuration that must stay identical across --resume."""
+    return {"vm_mib": VM_MIB, "vm_cpus": VM_CPUS, "disk_gib": DISK_GIB}
+
+
+def attempt_vm_name(cell_name: str, attempt: int) -> str:
+    return f"p33off-{cell_name}-a{attempt}"
+
+
+def sidecar_installer_revision(iso_path: Path) -> str | None:
+    """installerRevision recorded by the build next to the ISO, if any."""
+    sidecar = iso_path.with_name(iso_path.name + ".manifest.json")
+    if not sidecar.is_file():
+        return None
+    try:
+        data: dict = json.loads(sidecar.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    revision = data.get("installerRevision")
+    return revision if isinstance(revision, str) and revision else None
+
+
+def cancel_mitigation_proven(iso_path: Path, installer_repo: Path | None) -> tuple[bool, str]:
+    """Artifact-level proof that the ISO contains installer#94.
+
+    Provenance comes from the build-generated sidecar manifest's
+    installerRevision — never from the ISO filename. The revision must
+    be the mitigation commit itself or a descendant of it; ancestry is
+    verified against an installer checkout when one is provided.
+    """
+    revision = sidecar_installer_revision(iso_path)
+    if revision is None:
+        return False, "no sidecar manifest with installerRevision next to the ISO"
+    if revision == MITIGATION_REVISION:
+        return True, f"sidecar installerRevision is the mitigation commit {revision[:12]}"
+    if installer_repo is None:
+        return False, (
+            f"sidecar installerRevision {revision[:12]} is not the mitigation commit and "
+            "no --installer-repo checkout was provided to verify ancestry"
+        )
+    probe = subprocess.run(
+        ["git", "-C", str(installer_repo), "merge-base", "--is-ancestor", MITIGATION_REVISION, revision],
+        capture_output=True,
+        timeout=30,
+    )
+    if probe.returncode == 0:
+        return True, f"sidecar installerRevision {revision[:12]} descends from the mitigation commit"
+    if probe.returncode == 1:
+        return False, f"sidecar installerRevision {revision[:12]} does NOT contain the mitigation commit"
+    return False, "git ancestry check failed (unknown revision or not an installer checkout)"
+
+
+def final_exit_code(manifest: Manifest, selected: list[str]) -> int:
+    """0 only when every selected cell reached `executed`."""
+    for name in selected:
+        if manifest.data["cells"].get(name, {}).get("status") != "executed":
+            return 1
+    return 0
 
 
 def now() -> str:
@@ -80,10 +143,19 @@ class Manifest:
         return self.data["cells"].setdefault(name, {"status": "pending"})
 
 
-def launch_vm(name: str, firmware: str, *, with_iso: bool, iso_path: Path) -> None:
-    """Launch one harness-faithful VM (same devices/DNS as run-install-vm.sh)."""
+def launch_vm(name: str, firmware: str, *, with_iso: bool, iso_path: Path, fresh_disk: bool = False) -> None:
+    """Launch one harness-faithful VM (same devices/DNS as run-install-vm.sh).
+
+    `fresh_disk=True` (every new install attempt) recreates the qcow2 and
+    UEFI vars from scratch: a partially installed disk is never silently
+    reused for a retry. The previous attempt's evidence is preserved by
+    the caller under its own attempt directory.
+    """
     disk = BASE / f"{name}.qcow2"
     sock = BASE / f"{name}.qmp"
+    if fresh_disk:
+        disk.unlink(missing_ok=True)
+        (BASE / f"{name}-vars.fd").unlink(missing_ok=True)
     if not disk.exists():
         subprocess.run(["qemu-img", "create", "-q", "-f", "qcow2", str(disk), f"{DISK_GIB}G"], check=True)
     sock.unlink(missing_ok=True)
@@ -167,16 +239,19 @@ def run_cell(manifest: Manifest, cell: Cell, iso_path: Path, iso_sha: str) -> No
     if record.get("status") == "executed":
         print(f"[cell:{cell.name}] already executed — checkpoint respected, skipping")
         return
-    vm_name = f"p33off-{cell.name}"
-    evidence = manifest.dir / "evidence" / cell.name
+    attempt = int(record.get("attempts", 0)) + 1
+    vm_name = attempt_vm_name(cell.name, attempt)
+    evidence = manifest.dir / "evidence" / cell.name / f"attempt-{attempt}"
     evidence.mkdir(parents=True, exist_ok=True)
-    record.update(status="running", started=now(), vm=vm_name, scenario=cell.scenario)
+    history: list = record.setdefault("history", [])
+    history.append({"attempt": attempt, "started": now(), "vm": vm_name, "disk": f"{vm_name}.qcow2"})
+    record.update(status="running", started=now(), vm=vm_name, scenario=cell.scenario, attempts=attempt)
     manifest.save()
     sock = BASE / f"{vm_name}.qmp"
     typed: list[str] = []
     try:
         preflight_or_exit(manifest.dir, f"{cell.name}:install")
-        launch_vm(vm_name, cell.firmware, with_iso=True, iso_path=iso_path)
+        launch_vm(vm_name, cell.firmware, with_iso=True, iso_path=iso_path, fresh_disk=True)
         q = QMP.wait(sock, deadline_s=30)
         drive_install(Driver(q, evidence), cell)
         q.quit()
@@ -197,9 +272,11 @@ def run_cell(manifest: Manifest, cell: Cell, iso_path: Path, iso_sha: str) -> No
     except Exception as exc:  # evidence preserved; manifest records the failure
         record.update(status="failed", finished=now(), error=f"{type(exc).__name__}: {exc}")
     finally:
+        if history:
+            history[-1].update(status=record.get("status"), finished=now())
         write_result_draft(cell, evidence, iso_path.name, iso_sha, typed)
         manifest.save()
-        print(f"[cell:{cell.name}] -> {record.get('status')}")
+        print(f"[cell:{cell.name}] attempt {attempt} -> {record.get('status')}")
 
 
 def run_cancel_contract(manifest: Manifest, iso_path: Path, iso_sha: str) -> None:
@@ -211,16 +288,23 @@ def run_cancel_contract(manifest: Manifest, iso_path: Path, iso_sha: str) -> Non
     if record.get("status") == "executed":
         print(f"[cell:{name}] already executed — skipping")
         return
-    evidence = manifest.dir / "evidence" / name
+    attempt = int(record.get("attempts", 0)) + 1
+    evidence = manifest.dir / "evidence" / name / f"attempt-{attempt}"
     evidence.mkdir(parents=True, exist_ok=True)
-    record.update(status="running", started=now(), scenario="install-pairwise-negative/cancel-during-install")
+    record.setdefault("history", []).append({"attempt": attempt, "started": now()})
+    record.update(
+        status="running",
+        started=now(),
+        scenario="install-pairwise-negative/cancel-during-install",
+        attempts=attempt,
+    )
     manifest.save()
     cell = Cell(name, "install-pairwise-negative/cancel-during-install", "uefi", False, "desktop-hyprland")
     try:
         # (1) Install-step screenshot: after Install Now, Cancel must be disabled.
         preflight_or_exit(manifest.dir, "cancel:install-step")
-        vm = "p33off-cancel-a"
-        launch_vm(vm, "uefi", with_iso=True, iso_path=iso_path)
+        vm = f"p33off-cancel-a{attempt}"
+        launch_vm(vm, "uefi", with_iso=True, iso_path=iso_path, fresh_disk=True)
         q = QMP.wait(BASE / f"{vm}.qmp", deadline_s=30)
         d = Driver(q, evidence)
         time.sleep(75)
@@ -247,8 +331,8 @@ def run_cancel_contract(manifest: Manifest, iso_path: Path, iso_sha: str) -> Non
         time.sleep(3)
         # (2) View-step cancel on a fresh disk: Summary -> Cancel -> confirm quit.
         preflight_or_exit(manifest.dir, "cancel:view-step")
-        vm = "p33off-cancel-b"
-        launch_vm(vm, "uefi", with_iso=True, iso_path=iso_path)
+        vm = f"p33off-cancel-b{attempt}"
+        launch_vm(vm, "uefi", with_iso=True, iso_path=iso_path, fresh_disk=True)
         q = QMP.wait(BASE / f"{vm}.qmp", deadline_s=30)
         d = Driver(q, evidence)
         time.sleep(75)
@@ -291,15 +375,22 @@ def run_failure_cleanup(manifest: Manifest, iso_path: Path, iso_sha: str) -> Non
     if record.get("status") == "executed":
         print(f"[cell:{name}] already executed — skipping")
         return
-    evidence = manifest.dir / "evidence" / name
+    attempt = int(record.get("attempts", 0)) + 1
+    evidence = manifest.dir / "evidence" / name / f"attempt-{attempt}"
     evidence.mkdir(parents=True, exist_ok=True)
-    record.update(status="running", started=now(), scenario="(offline-only; no tracked scenario yet)")
+    record.setdefault("history", []).append({"attempt": attempt, "started": now()})
+    record.update(
+        status="running",
+        started=now(),
+        scenario="(offline-only; no tracked scenario yet)",
+        attempts=attempt,
+    )
     manifest.save()
     cell = Cell(name, "offline/failure-cleanup", "uefi", False, "desktop-hyprland")
     try:
         preflight_or_exit(manifest.dir, "failure-cleanup")
-        vm = "p33off-failure"
-        launch_vm(vm, "uefi", with_iso=True, iso_path=iso_path)
+        vm = attempt_vm_name(name, attempt)
+        launch_vm(vm, "uefi", with_iso=True, iso_path=iso_path, fresh_disk=True)
         q = QMP.wait(BASE / f"{vm}.qmp", deadline_s=30)
         d = Driver(q, evidence)
         time.sleep(75)
@@ -378,6 +469,12 @@ def main(argv: list[str]) -> int:
     )
     parser.add_argument("--state-dir", type=Path, default=None)
     parser.add_argument("--resume", action="store_true", help="respect checkpoints in manifest.json")
+    parser.add_argument(
+        "--installer-repo",
+        type=Path,
+        default=None,
+        help="installer checkout used to verify cancel-contract ancestry (or $INSTALLER_REPO)",
+    )
     args = parser.parse_args(argv)
 
     iso_path = args.iso.resolve()
@@ -394,11 +491,32 @@ def main(argv: list[str]) -> int:
         return 2
     print(f"hashing ISO (one pass)… state={state_dir}")
     iso_sha = sha256_of(iso_path)
-    manifest.data["iso"] = {"path": str(iso_path), "name": iso_path.name, "sha256": iso_sha}
-    sidecar = iso_path.with_name(iso_path.name + ".manifest.json")
-    if sidecar.is_file():
-        manifest.data["iso"]["sidecar_manifest"] = json.loads(sidecar.read_text(encoding="utf-8"))
-    manifest.save()
+    # The ISO identity and execution config are immutable within a run:
+    # --resume must never mix checkpoints/evidence from different ISOs.
+    existing = manifest.data.get("iso")
+    if existing:
+        if not args.resume:
+            print("state dir already pins an ISO; use --resume or a fresh --state-dir")
+            return 2
+        if existing.get("sha256") != iso_sha:
+            print(
+                f"refusing --resume: state dir pins ISO sha256 {existing.get('sha256')}, "
+                f"but --iso hashes to {iso_sha}. Use a fresh --state-dir for a different ISO."
+            )
+            return 2
+        if manifest.data.get("config") != run_config():
+            print(
+                f"refusing --resume: execution config changed "
+                f"({manifest.data.get('config')} -> {run_config()}); use a fresh --state-dir."
+            )
+            return 2
+    else:
+        manifest.data["iso"] = {"path": str(iso_path), "name": iso_path.name, "sha256": iso_sha}
+        manifest.data["config"] = run_config()
+        sidecar = iso_path.with_name(iso_path.name + ".manifest.json")
+        if sidecar.is_file():
+            manifest.data["iso"]["sidecar_manifest"] = json.loads(sidecar.read_text(encoding="utf-8"))
+        manifest.save()
     print(f"ISO {iso_path.name} sha256={iso_sha}")
 
     selected = [c.strip() for c in args.cells.split(",") if c.strip()]
@@ -407,6 +525,30 @@ def main(argv: list[str]) -> int:
     if unknown:
         print(f"unknown cells: {unknown}")
         return 2
+    if "cancel-contract" in selected:
+        installer_repo = args.installer_repo or (
+            Path(os.environ["INSTALLER_REPO"]) if os.environ.get("INSTALLER_REPO") else None
+        )
+        proven, reason = cancel_mitigation_proven(iso_path, installer_repo)
+        record = manifest.cell("cancel-contract")
+        if record.get("status") == "executed":
+            print("[cancel-gate] already executed in this run — checkpoint respected")
+        elif proven:
+            record["mitigation_provenance"] = reason
+            manifest.save()
+            print(f"[cancel-gate] applicable: {reason}")
+        else:
+            record.update(status="not-applicable", finished=now(), gate_reason=reason)
+            manifest.save()
+            write_summary(manifest)
+            print(
+                f"[cancel-gate] cancel-contract NOT applicable to this artifact: {reason}. "
+                "It is recorded as not-applicable (not executed, not PASS). "
+                "Other cells can still run by selecting them explicitly without cancel-contract."
+            )
+            selected.remove("cancel-contract")
+            if not selected:
+                return 1
     for name in selected:
         if name == "cancel-contract":
             run_cancel_contract(manifest, iso_path, iso_sha)
@@ -421,6 +563,11 @@ def main(argv: list[str]) -> int:
         "next: review evidence, then import verdicts with hornero-qa import "
         "(see docs/OFFLINE-QUALIFICATION.md)."
     )
+    code = final_exit_code(manifest, selected)
+    gated = manifest.data["cells"].get("cancel-contract", {}).get("status") == "not-applicable"
+    if code != 0 or gated:
+        print("one or more selected cells did not reach `executed`; exiting nonzero (evidence preserved).")
+        return 1
     return 0
 
 
