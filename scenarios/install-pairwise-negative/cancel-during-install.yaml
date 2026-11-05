@@ -1,19 +1,30 @@
 id: install-pairwise-negative/cancel-during-install
 purpose: >-
-  NOT RUN until a candidate ISO exists. Cancelling the installer
-  mid-installation leaves no bootable installed system and no installed
-  profile on the target disk; the live ISO still boots normally.
-covers: [installer#11, qa#19]
+  NOT RUN until an ISO built with the installer#94 mitigation exists.
+  The provisional installer's cancellation contract is explicit and safe:
+  cancelling during the view steps (before the Install step) quits the
+  installer with no disk writes, and the Cancel button is disabled during
+  the Install (exec) step because the single pacman transaction cannot be
+  aborted deterministically (installer#93). A target whose installation
+  was cancelled before exec does not boot into an installed system and
+  carries no installed profile; the live ISO still boots normally.
+covers: [installer#11, qa#19, installer#93]
 requires: {firmware: uefi, bootloader: grub, kernels: [linux], primaryKernel: linux, encryption: none, edition: desktop, capabilities: {bluetooth: true}, isoRequired: true}
 instruction: >-
   Using the existing VM harness (~/.local/share/hornero/install-test/run-install-vm.sh
-  <name> uefi 40 iso), boot the candidate ISO, start a Desktop installation,
-  cancel it while packages are being installed, then reboot with the ISO
-  detached and confirm the target does not boot into an installed system.
-  Reattach the ISO and leave the live session running for the proofs.
+  <name> uefi 40 iso) with an ISO built after the installer#93 mitigation,
+  boot the candidate ISO and drive Calamares to the Install step of a
+  Desktop installation. Record that the Cancel button is disabled during
+  the Install (exec) step. Stop the VM, start over, and this time cancel
+  from a view step (e.g. Summary, before confirming the install). Then
+  reboot with the ISO detached and confirm the target does not boot into
+  an installed system. Reattach the ISO and leave the live session
+  running for the proofs.
 proof:
-  - note: No installed system profile exists after the cancelled install
+  - note: No installed system profile exists after the view-step cancellation
     probe: {run: "test ! -e /usr/lib/hornero/system-profile.json && echo live-only || echo installed", equals: live-only}
+  - note: Cancel button disabled during the Install (exec) step
+    screenshot: cancel-disabled-during-exec
   - note: Cancellation state for the record
     screenshot: cancelled-install
 budget: {wall_s: 3600}
