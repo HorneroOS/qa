@@ -1,0 +1,23 @@
+{
+  "schema": "hornero.qa.run/1",
+  "run_id": "20261105T145606Z-install-desktop-uefi-unencrypted-1",
+  "started": "2026-11-05T14:56:06Z",
+  "scenario": "install/desktop-uefi-unencrypted",
+  "covers": [
+    "installer#11",
+    "qa#19"
+  ],
+  "instruction": "Boot the candidate ISO in a disposable VM (UEFI firmware, blank target disk), launch the graphical installer, choose HorneroOS Desktop \u2014 Hyprland, without encryption, create the QA user, let installation finish, reboot with the ISO detached, authenticate at the greeter, and leave the installed desktop running for the proofs.",
+  "attempt": 1,
+  "product": {
+    "iso": "horneroos-2026.10-preview32-x86_64.iso",
+    "iso_sha256": "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec",
+    "offline_run": "smoke-preview32-r2"
+  },
+  "environment": {
+    "engine": "offline-qualification",
+    "hornero_qa": "0.1.0",
+    "source_dir": "attempt-1",
+    "imported_via": "hornero-qa import"
+  }
+}

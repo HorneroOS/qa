@@ -1,0 +1,22 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "044-installing.png",
+  "sha256": "277b74bc658794d18048f71b860b8e12330e67cdda7b707a5860e506906385ae",
+  "run_id": "20261105T145606Z-install-desktop-uefi-unencrypted-1",
+  "scenario": "install/desktop-uefi-unencrypted",
+  "captured": "2026-11-05T15:26:14Z",
+  "t": 1807,
+  "product": {
+    "iso": "horneroos-2026.10-preview32-x86_64.iso",
+    "iso_sha256": "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec",
+    "offline_run": "smoke-preview32-r2"
+  },
+  "environment": {
+    "engine": "offline-qualification",
+    "hornero_qa": "0.1.0",
+    "source_dir": "attempt-1",
+    "imported_via": "hornero-qa import",
+    "captured_resolution": "1280x800"
+  },
+  "source_file": "35-installing.png"
+}
