@@ -20,8 +20,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-from hornero_qa.qmp import QMP  # noqa: E402
-from hornero_qa.scenario import load, resolve  # noqa: E402
+from hornero_qa.qmp import QMP
+from hornero_qa.scenario import load, resolve
 
 _SHIFT = {
     "!": "1", "@": "2", "#": "3", "$": "4", "%": "5", "^": "6", "&": "7",
@@ -102,11 +102,17 @@ class Cell:
 
 
 CELLS: dict[str, Cell] = {
-    "desktop-uefi": Cell("desktop-uefi", "install/desktop-uefi-unencrypted", "uefi", False, "desktop-hyprland"),
+    "desktop-uefi": Cell(
+        "desktop-uefi", "install/desktop-uefi-unencrypted", "uefi", False, "desktop-hyprland"
+    ),
     "studio-uefi": Cell("studio-uefi", "install/studio-uefi-unencrypted", "uefi", False, "studio-hyprland"),
     "gaming-uefi": Cell("gaming-uefi", "install/gaming-uefi-unencrypted", "uefi", False, "gaming-hyprland"),
-    "desktop-bios-luks": Cell("desktop-bios-luks", "install/desktop-bios-encrypted", "bios", True, "desktop-hyprland"),
-    "studio-uefi-luks": Cell("studio-uefi-luks", "install/studio-uefi-encrypted", "uefi", True, "studio-hyprland"),
+    "desktop-bios-luks": Cell(
+        "desktop-bios-luks", "install/desktop-bios-encrypted", "bios", True, "desktop-hyprland"
+    ),
+    "studio-uefi-luks": Cell(
+        "studio-uefi-luks", "install/studio-uefi-encrypted", "uefi", True, "studio-hyprland"
+    ),
 }
 
 

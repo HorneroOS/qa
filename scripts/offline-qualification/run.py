@@ -23,7 +23,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import shutil
 import subprocess
 import sys
@@ -34,9 +33,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-from drive import CELLS, TEST_PASSWORD, Cell, Driver, drive_first_boot_probes, drive_install  # noqa: E402
-from hornero_qa.qmp import QMP  # noqa: E402
-from preflight import assert_floor, live_check  # noqa: E402
+from drive import CELLS, TEST_PASSWORD, Cell, Driver, drive_first_boot_probes, drive_install
+from preflight import assert_floor, live_check
+
+from hornero_qa.qmp import QMP
 
 VM_MIB = 4096  # Calamares enforces a 4 GiB guest minimum; never lower it.
 VM_CPUS = 4
@@ -99,7 +99,10 @@ def launch_vm(name: str, firmware: str, *, with_iso: bool, iso_path: Path) -> No
     cdargs = ""
     boot = "order=d,menu=on"
     if with_iso:
-        cdargs = f"-drive file={iso_path},format=raw,if=none,id=cd0,readonly=on -device ide-cd,drive=cd0,bootindex=0"
+        cdargs = (
+            f"-drive file={iso_path},format=raw,if=none,id=cd0,readonly=on "
+            "-device ide-cd,drive=cd0,bootindex=0"
+        )
         boot = "order=c"
     (BASE / "fake-resolv.conf").write_text("nameserver 1.1.1.1\nnameserver 8.8.8.8\n", encoding="utf-8")
     inner = (
@@ -131,7 +134,9 @@ def preflight_or_exit(state_dir: Path, label: str) -> None:
         raise SystemExit(3)
 
 
-def write_result_draft(cell: Cell, evidence: Path, iso_name: str, iso_sha: str, typed_probes: list[str]) -> None:
+def write_result_draft(
+    cell: Cell, evidence: Path, iso_name: str, iso_sha: str, typed_probes: list[str]
+) -> None:
     shots = sorted(p.name for p in evidence.glob("*.png"))
     lines = [
         f"# {cell.name} — offline qualification run (DRAFT, verdict pending operator review)",
@@ -379,7 +384,9 @@ def main(argv: list[str]) -> int:
     if not iso_path.is_file():
         print(f"ISO not found: {iso_path}")
         return 2
-    state_dir = args.state_dir or (Path.home() / "hornero-p33-offline" / datetime.now(UTC).strftime("run-%Y%m%dT%H%M%SZ"))
+    state_dir = args.state_dir or (
+        Path.home() / "hornero-p33-offline" / datetime.now(UTC).strftime("run-%Y%m%dT%H%M%SZ")
+    )
     state_dir.mkdir(parents=True, exist_ok=True)
     manifest = Manifest(state_dir)
     if not args.resume and manifest.data["cells"]:
@@ -410,7 +417,10 @@ def main(argv: list[str]) -> int:
         write_summary(manifest)
     write_summary(manifest)
     print(f"done. summary: {state_dir / 'SUMMARY.md'}")
-    print("next: review evidence, then import verdicts with hornero-qa import (see docs/OFFLINE-QUALIFICATION.md).")
+    print(
+        "next: review evidence, then import verdicts with hornero-qa import "
+        "(see docs/OFFLINE-QUALIFICATION.md)."
+    )
     return 0
 
 

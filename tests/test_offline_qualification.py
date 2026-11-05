@@ -33,19 +33,11 @@ run = _load("run")
 MEMINFO_OK = "MemTotal:       16000000 kB\nMemAvailable:   11000000 kB\n"
 MEMINFO_LOW = "MemTotal:       16000000 kB\nMemAvailable:    6000000 kB\n"
 VMSTAT_QUIET = (
-    "procs ---swap---\n r b si so bi bo\n"
-    " 1 0 0 0 5 5 0 0 0 0 0 0 0 0 0 0\n"
-    " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
+    "procs ---swap---\n r b si so bi bo\n 1 0 0 0 5 5 0 0 0 0 0 0 0 0 0 0\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
 )
 # vmstat columns: r b swpd free buff cache si so ...
-VMSTAT_QUIET = (
-    " 1 0 100 200 300 400 0 0 1 2 3 4 5 6 7 8\n"
-    " 0 0 100 200 300 400 0 0 0 0 0 0 0 0 0 0\n"
-)
-VMSTAT_SWAPPING = (
-    " 1 0 100 200 300 400 0 0 1 2 3 4 5 6 7 8\n"
-    " 0 0 100 200 300 400 12 3 0 0 0 0 0 0 0 0\n"
-)
+VMSTAT_QUIET = " 1 0 100 200 300 400 0 0 1 2 3 4 5 6 7 8\n 0 0 100 200 300 400 0 0 0 0 0 0 0 0 0 0\n"
+VMSTAT_SWAPPING = " 1 0 100 200 300 400 0 0 1 2 3 4 5 6 7 8\n 0 0 100 200 300 400 12 3 0 0 0 0 0 0 0 0\n"
 PS_CLEAN = "python3 run.py\nbash\n"
 PS_QEMU = "qemu-system-x86_64 -m 4096 -name hornero-install-x\n"
 
@@ -111,7 +103,9 @@ def test_manifest_checkpoint_roundtrip(tmp_path: Path) -> None:
     assert on_disk["run_id"] == tmp_path.name
 
 
-def test_runner_refuses_dirty_state_without_resume(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_runner_refuses_dirty_state_without_resume(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     iso = tmp_path / "fake.iso"
     iso.write_bytes(b"x")
     manifest = run.Manifest(tmp_path / "state")
