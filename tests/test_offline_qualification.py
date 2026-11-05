@@ -97,6 +97,53 @@ def test_cells_map_to_registered_scenarios_and_rows() -> None:
         assert cell.firmware in {"uefi", "bios"}
 
 
+class _RecordingDriver:
+    """Fake Driver for drive_install: records actions, never touches QMP."""
+
+    def __init__(self) -> None:
+        self.clicks: list[tuple[float, float]] = []
+        self.typed: list[str] = []
+
+    def shot(self, name: str) -> None:
+        pass
+
+    def click(self, x: float, y: float, wait_s: float = 2.0) -> None:
+        self.clicks.append((x, y))
+
+    def type(self, text: str, wait_s: float = 0.5) -> None:
+        self.typed.append(text)
+
+    def key(self, chord: str, wait_s: float = 1.0) -> None:
+        pass
+
+
+def test_unencrypted_drive_clicks_encrypt_checkbox_center(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Preview 32 attempt-1 frames (02-partitions.png, 1280x800) place the
+    # "Encrypt system" checkbox centre at ~(271, 572) px = (0.212, 0.715).
+    # The old click (0.215, 0.686) landed ~23 px above it, leaving encryption
+    # checked with empty/mismatched passphrases and Next disabled.
+    monkeypatch.setattr(drive.time, "sleep", lambda *_a, **_k: None)
+    fake = _RecordingDriver()
+    drive.drive_install(fake, drive.CELLS["desktop-uefi"], install_timeout_s=0)
+    assert (0.212, 0.715) in fake.clicks
+    assert (0.215, 0.686) not in fake.clicks
+    # Only the Users-page fields are typed; no passphrase pair precedes them.
+    assert fake.typed == ["Hornero Test", "hornero", "hornero-test", drive.TEST_PASSWORD, drive.TEST_PASSWORD]
+    # No offline flow may keep the proven-missing coordinate.
+    for script in ("drive.py", "run.py"):
+        assert "0.215, 0.686" not in (SCRIPTS / script).read_text(encoding="utf-8")
+
+
+def test_encrypted_drive_types_luks_passphrase_twice(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(drive.time, "sleep", lambda *_a, **_k: None)
+    fake = _RecordingDriver()
+    drive.drive_install(fake, drive.CELLS["desktop-bios-luks"], install_timeout_s=0)
+    # LUKS and user passwords share the fixture string; the first two typed
+    # values are the passphrase + confirmation on the Partitions page.
+    assert fake.typed[:2] == [drive.LUKS_PASSPHRASE, drive.LUKS_PASSPHRASE]
+    assert (0.212, 0.715) not in fake.clicks
+
+
 def test_manifest_checkpoint_roundtrip(tmp_path: Path) -> None:
     manifest = run.Manifest(tmp_path)
     manifest.cell("desktop-uefi").update(status="executed")

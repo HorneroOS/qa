@@ -34,7 +34,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
-from drive import CELLS, TEST_PASSWORD, Cell, Driver, drive_first_boot_probes, drive_install
+from drive import (
+    CELLS,
+    ENCRYPT_SYSTEM_CHECKBOX,
+    TEST_PASSWORD,
+    Cell,
+    Driver,
+    drive_first_boot_probes,
+    drive_install,
+)
 from preflight import assert_floor, live_check
 
 from hornero_qa.qmp import QMP
@@ -315,7 +323,7 @@ def run_cancel_contract(manifest: Manifest, iso_path: Path, iso_sha: str) -> Non
         d.click(0.864, 0.941, wait_s=3)
         d.click(0.864, 0.941, wait_s=6)
         d.click(0.298, 0.108, wait_s=4)
-        d.click(0.215, 0.686, wait_s=3)
+        d.click(*ENCRYPT_SYSTEM_CHECKBOX, wait_s=3)  # uncheck Encrypt system
         d.click(0.864, 0.941, wait_s=3)
         d.click(0.288, 0.095, wait_s=0.5)
         for value in ("Hornero Test", "hornero", "hornero-test", TEST_PASSWORD, TEST_PASSWORD):
@@ -400,7 +408,7 @@ def run_failure_cleanup(manifest: Manifest, iso_path: Path, iso_sha: str) -> Non
         d.click(0.864, 0.941, wait_s=3)
         d.click(0.864, 0.941, wait_s=6)
         d.click(0.298, 0.108, wait_s=4)
-        d.click(0.215, 0.686, wait_s=3)
+        d.click(*ENCRYPT_SYSTEM_CHECKBOX, wait_s=3)  # uncheck Encrypt system
         d.click(0.864, 0.941, wait_s=3)
         d.click(0.288, 0.095, wait_s=0.5)
         for value in ("Hornero Test", "hornero", "hornero-test", TEST_PASSWORD, TEST_PASSWORD):
