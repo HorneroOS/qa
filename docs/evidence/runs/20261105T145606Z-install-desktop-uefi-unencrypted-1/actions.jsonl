@@ -1,0 +1,2 @@
+{"t": 0, "kind": "manual-run", "source": "attempt-1"}
+{"t": 1979, "kind": "import", "tool": "hornero-qa import", "result_md": "logs/RESULT.md", "screenshots": 45}
