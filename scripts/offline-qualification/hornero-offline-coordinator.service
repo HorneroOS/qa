@@ -1,0 +1,20 @@
+[Unit]
+Description=HorneroOS Preview 33 post-execution evidence coordinator
+Documentation=file:%h/hornero-qa/docs/OFFLINE-QUALIFICATION.md
+
+[Service]
+Type=exec
+WorkingDirectory=%h/hornero-qa
+Environment=PYTHONUNBUFFERED=1
+ExecStart=%h/hornero-qa/.venv/bin/python %h/hornero-qa/scripts/offline-qualification/coordinator.py --worker-status-file %h/hornero-p33-offline/smoke-preview32.worker.json --status-file %h/hornero-p33-offline/smoke-preview32.coordinator.json --lock-file %h/hornero-p33-offline/smoke-preview32.coordinator.lock --log-file %h/hornero-p33-offline/smoke-preview32.review.log --prompt-file %h/hornero-p33-offline/POST-SMOKE-PROMPT.md --workspace %h/.ai-workspace --muse-bin %h/.local/bin/muse --poll-seconds 60 --max-wait-seconds 172800 --review-timeout-seconds 21600
+Restart=no
+TimeoutStopSec=120
+KillMode=control-group
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

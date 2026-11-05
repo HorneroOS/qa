@@ -79,8 +79,34 @@ def ps_output() -> str:
     return result.stdout
 
 
-def list_muse_processes() -> list[dict[str, Any]]:
-    return find_muse_processes(ps_output(), own_pid=os.getpid())
+def list_muse_processes(
+    target_pids: set[int] | None = None,
+) -> list[dict[str, Any]]:
+    processes = find_muse_processes(ps_output(), own_pid=os.getpid())
+    if target_pids is None:
+        return processes
+    return [item for item in processes if int(item["pid"]) in target_pids]
+
+
+def read_pid_file(path: Path) -> set[int]:
+    pids: set[int] = set()
+    for token in path.read_text(encoding="utf-8").replace(",", " ").split():
+        pid = int(token)
+        if pid <= 0:
+            raise ValueError(f"PID must be positive: {pid}")
+        pids.add(pid)
+    if not pids:
+        raise ValueError(f"PID file is empty: {path}")
+    return pids
+
+
+def resolve_wait_pids(args: argparse.Namespace) -> set[int] | None:
+    if not args.wait_for_pid and args.wait_for_pid_file is None:
+        return None
+    pids = set(args.wait_for_pid)
+    if args.wait_for_pid_file is not None:
+        pids.update(read_pid_file(args.wait_for_pid_file.resolve()))
+    return pids
 
 
 def _option_value(tokens: list[str], option: str) -> str | None:
@@ -229,6 +255,7 @@ def wait_until_ready(
     state_dir: Path,
     poll_seconds: float,
     max_wait_seconds: float,
+    target_pids: set[int] | None = None,
     process_provider: Callable[[], list[dict[str, Any]]] = list_muse_processes,
     preflight_runner: Callable[[int, Path], tuple[bool, str]] = run_preflight,
     sleeper: Callable[[float], bool] = sleep_interruptibly,
@@ -243,7 +270,7 @@ def wait_until_ready(
         if wait_for_muse:
             processes = process_provider()
             if processes:
-                phase = "waiting-for-muse-exit"
+                phase = "waiting-for-target-muse-exit" if target_pids is not None else "waiting-for-muse-exit"
                 if phase != last_phase:
                     status.update(phase, muse_processes=processes)
                     last_phase = phase
@@ -345,6 +372,11 @@ def execute(args: argparse.Namespace) -> int:
     if not args.iso.is_file():
         print(f"ISO not found: {args.iso}", file=sys.stderr)
         return 2
+    try:
+        target_pids = resolve_wait_pids(args)
+    except (OSError, ValueError) as exc:
+        print(f"invalid Muse wait target: {exc}", file=sys.stderr)
+        return 2
     with exclusive_lock(args.lock_file) as acquired:
         if not acquired:
             print("offline worker already running for this state; duplicate refused", file=sys.stderr)
@@ -356,6 +388,10 @@ def execute(args: argparse.Namespace) -> int:
             cells=args.cells,
         )
         try:
+            status.update(
+                "armed",
+                target_pids=sorted(target_pids) if target_pids is not None else "all-muse",
+            )
             if not verify_expected_iso(status, args.iso, args.expected_sha256):
                 return 3
             readiness = wait_until_ready(
@@ -365,6 +401,8 @@ def execute(args: argparse.Namespace) -> int:
                 state_dir=args.state_dir,
                 poll_seconds=args.poll_seconds,
                 max_wait_seconds=args.max_wait_seconds,
+                target_pids=target_pids,
+                process_provider=lambda: list_muse_processes(target_pids),
             )
             if readiness == "interrupted":
                 status.update("interrupted")
@@ -431,6 +469,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         run_parser.add_argument("--log-file", required=True, type=Path)
         run_parser.add_argument("--installer-repo", type=Path, default=None)
         run_parser.add_argument("--expected-sha256", default=None)
+        run_parser.add_argument("--wait-for-pid", action="append", type=int, default=[])
+        run_parser.add_argument("--wait-for-pid-file", type=Path, default=None)
         run_parser.add_argument("--poll-seconds", type=float, default=60.0)
         run_parser.add_argument("--max-wait-seconds", type=float, default=86400.0)
         run_parser.add_argument("--no-wait-for-muse", action="store_true")

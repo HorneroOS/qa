@@ -44,10 +44,18 @@ QA PASS verdict.
 The checked-in unit
 `scripts/offline-qualification/hornero-offline-qualification.service`
 is preconfigured for the persistent `~/hornero-qa` checkout and the
-Preview 32 single-cell smoke. Once an agent has installed and started
-that unit, the maintainer's only required action is to close Muse
-Code completely. The worker survives that exit because systemd owns
-its process and control group.
+Preview 32 single-cell smoke. The arming agent writes the exact
+execution-owned Muse PID to `smoke-preview32.muse.pid`; the worker
+waits only for that PID, never for unrelated Muse sessions. Once an
+agent has installed and started that unit, the maintainer normally
+only needs to close that Muse session. The worker survives the
+exit because systemd owns its process and control group.
+
+A separate `coordinator.py` service waits for the worker's terminal
+state and starts one new headless `muse exec` review using a
+persisted prompt. Muse `resume` is interactive, so this is a new
+bounded review run, not a claim that the original session resumed
+itself. It cannot start during the qualification VM.
 
 Status can be inspected later with:
 

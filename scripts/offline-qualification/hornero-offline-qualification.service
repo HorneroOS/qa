@@ -6,7 +6,7 @@ Documentation=file:%h/hornero-qa/docs/OFFLINE-QUALIFICATION.md
 Type=exec
 WorkingDirectory=%h/hornero-qa
 Environment=PYTHONUNBUFFERED=1
-ExecStart=%h/hornero-qa/.venv/bin/python %h/hornero-qa/scripts/offline-qualification/worker.py --iso %h/.local/share/hornero/iso/preview32/horneroos-2026.10-preview32-x86_64.iso --expected-sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec --cells desktop-uefi --state-dir %h/hornero-p33-offline/smoke-preview32 --status-file %h/hornero-p33-offline/smoke-preview32.worker.json --lock-file %h/hornero-p33-offline/smoke-preview32.worker.lock --log-file %h/hornero-p33-offline/smoke-preview32.runner.log --poll-seconds 60 --max-wait-seconds 86400
+ExecStart=%h/hornero-qa/.venv/bin/python %h/hornero-qa/scripts/offline-qualification/worker.py --iso %h/.local/share/hornero/iso/preview32/horneroos-2026.10-preview32-x86_64.iso --expected-sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec --cells desktop-uefi --state-dir %h/hornero-p33-offline/smoke-preview32 --status-file %h/hornero-p33-offline/smoke-preview32.worker.json --lock-file %h/hornero-p33-offline/smoke-preview32.worker.lock --log-file %h/hornero-p33-offline/smoke-preview32.runner.log --wait-for-pid-file %h/hornero-p33-offline/smoke-preview32.muse.pid --poll-seconds 60 --max-wait-seconds 86400
 Restart=no
 TimeoutStopSec=120
 KillMode=control-group

@@ -32,6 +32,7 @@ preflight = _load("preflight")
 drive = _load("drive")
 run = _load("run")
 worker = _load("worker")
+coordinator = _load("coordinator")
 
 MEMINFO_OK = "MemTotal:       16000000 kB\nMemAvailable:   11000000 kB\n"
 MEMINFO_LOW = "MemTotal:       16000000 kB\nMemAvailable:    6000000 kB\n"
@@ -438,6 +439,83 @@ def test_worker_execute_rejects_iso_hash_mismatch(tmp_path: Path, monkeypatch: p
     assert data["reason"] == "ISO SHA-256 mismatch"
 
 
+def test_worker_targets_only_execution_owned_muse_pid(tmp_path: Path) -> None:
+    ps_text = """\
+364422 /home/u/.local/bin/muse-bin-1.4.14 --yolo resume this-session
+2489940 /home/u/.local/bin/muse-bin-1.4.14 --yolo
+3000001 /usr/bin/python3 unrelated
+"""
+    monkeypatch_ps = ps_text
+    assert worker.find_muse_processes(monkeypatch_ps)
+    targeted = [item for item in worker.find_muse_processes(monkeypatch_ps) if int(item["pid"]) in {364422}]
+    assert [item["pid"] for item in targeted] == [364422]
+    pid_file = tmp_path / "muse.pid"
+    pid_file.write_text("364422, 2489940\n", encoding="utf-8")
+    assert worker.read_pid_file(pid_file) == {364422, 2489940}
+    args = worker.parse_args(
+        [
+            "--iso",
+            str(tmp_path / "x.iso"),
+            "--cells",
+            "desktop-uefi",
+            "--state-dir",
+            str(tmp_path / "state"),
+            "--status-file",
+            str(tmp_path / "status.json"),
+            "--lock-file",
+            str(tmp_path / "lock"),
+            "--log-file",
+            str(tmp_path / "log"),
+        ]
+    )
+    assert not hasattr(args, "vm_mib")
+
+
+def test_coordinator_waits_for_terminal_and_builds_review(tmp_path: Path) -> None:
+    status_path = tmp_path / "coordinator.json"
+    states = iter(["waiting-for-muse-exit", "running", "completed"])
+    ticks = iter([0.0, 0.0, 10.0, 20.0, 30.0, 40.0])
+    outcome = coordinator.wait_for_terminal(
+        tmp_path / "worker.json",
+        status_path,
+        poll_seconds=10,
+        max_wait_seconds=3600,
+        status_reader=lambda _path: next(states),
+        sleeper=lambda _seconds: True,
+        clock=lambda: next(ticks),
+    )
+    assert outcome == "completed"
+    args = coordinator.parse_args(
+        [
+            "--worker-status-file",
+            str(tmp_path / "worker.json"),
+            "--status-file",
+            str(status_path),
+            "--lock-file",
+            str(tmp_path / "lock"),
+            "--log-file",
+            str(tmp_path / "log"),
+            "--prompt-file",
+            str(tmp_path / "prompt.md"),
+            "--workspace",
+            str(tmp_path),
+            "--muse-bin",
+            "muse-test",
+        ]
+    )
+    assert coordinator.build_review_command(args) == [
+        "muse-test",
+        "exec",
+        "--yolo",
+        "--workspace",
+        str(tmp_path),
+        "--prompt-file",
+        str(tmp_path / "prompt.md"),
+    ]
+    unit = (SCRIPTS / "hornero-offline-coordinator.service").read_text(encoding="utf-8")
+    assert "coordinator.py" in unit and "KillMode=control-group" in unit
+
+
 def test_worker_systemd_unit_contract() -> None:
     unit = (SCRIPTS / "hornero-offline-qualification.service").read_text(encoding="utf-8")
     assert "worker.py" in unit
@@ -445,6 +523,7 @@ def test_worker_systemd_unit_contract() -> None:
     assert "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec" in unit
     assert "KillMode=control-group" in unit
     assert "Restart=no" in unit
+    assert "--wait-for-pid-file" in unit
     assert "After=default.target" not in unit
     doc = (ROOT / "docs" / "OFFLINE-QUALIFICATION.md").read_text(encoding="utf-8")
     assert "Autonomous supervised execution" in doc
