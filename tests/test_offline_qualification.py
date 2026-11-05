@@ -103,7 +103,7 @@ class _RecordingDriver:
     def __init__(self) -> None:
         self.clicks: list[tuple[float, float]] = []
         self.typed: list[str] = []
-        self.events: list[tuple] = []
+        self.events: list[tuple[object, ...]] = []
 
     def shot(self, name: str) -> None:
         pass
