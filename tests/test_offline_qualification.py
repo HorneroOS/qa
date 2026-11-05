@@ -103,18 +103,24 @@ class _RecordingDriver:
     def __init__(self) -> None:
         self.clicks: list[tuple[float, float]] = []
         self.typed: list[str] = []
+        self.events: list[tuple] = []
 
     def shot(self, name: str) -> None:
         pass
 
     def click(self, x: float, y: float, wait_s: float = 2.0) -> None:
         self.clicks.append((x, y))
+        self.events.append(("click", x, y))
 
     def type(self, text: str, wait_s: float = 0.5) -> None:
         self.typed.append(text)
+        self.events.append(("type", text))
 
     def key(self, chord: str, wait_s: float = 1.0) -> None:
         pass
+
+    def run_typed(self, command: str, wait_s: float = 3.0) -> None:
+        self.events.append(("type", command))
 
 
 def test_unencrypted_drive_clicks_encrypt_checkbox_center(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -127,6 +133,9 @@ def test_unencrypted_drive_clicks_encrypt_checkbox_center(monkeypatch: pytest.Mo
     drive.drive_install(fake, drive.CELLS["desktop-uefi"], install_timeout_s=0)
     assert (0.212, 0.715) in fake.clicks
     assert (0.215, 0.686) not in fake.clicks
+    erase = fake.clicks.index((0.298, 0.108))
+    partitions_next = fake.clicks.index((0.864, 0.941), erase)
+    assert fake.clicks.index((0.212, 0.715)) < partitions_next
     # Only the Users-page fields are typed; no passphrase pair precedes them.
     assert fake.typed == ["Hornero Test", "hornero", "hornero-test", drive.TEST_PASSWORD, drive.TEST_PASSWORD]
     # No offline flow may keep the proven-missing coordinate.
@@ -142,6 +151,39 @@ def test_encrypted_drive_types_luks_passphrase_twice(monkeypatch: pytest.MonkeyP
     # values are the passphrase + confirmation on the Partitions page.
     assert fake.typed[:2] == [drive.LUKS_PASSPHRASE, drive.LUKS_PASSPHRASE]
     assert (0.212, 0.715) not in fake.clicks
+
+
+class _FakeQMPConnection:
+    def quit(self) -> None:
+        pass
+
+    def cmd(self, *_a: object, **_k: object) -> None:
+        pass
+
+
+class _FakeQMP:
+    @staticmethod
+    def wait(_sock: object, deadline_s: int = 30) -> _FakeQMPConnection:
+        return _FakeQMPConnection()
+
+
+@pytest.mark.parametrize("flow", ["run_cancel_contract", "run_failure_cleanup"])
+def test_run_flows_uncheck_encrypt_before_users_input(
+    flow: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake = _RecordingDriver()
+    monkeypatch.setattr(run.time, "sleep", lambda *_a, **_k: None)
+    monkeypatch.setattr(run, "preflight_or_exit", lambda *_a, **_k: None)
+    monkeypatch.setattr(run, "launch_vm", lambda *_a, **_k: None)
+    monkeypatch.setattr(run, "QMP", _FakeQMP)
+    monkeypatch.setattr(run, "Driver", lambda _q, _ev: fake)
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    getattr(run, flow)(run.Manifest(tmp_path / "state"), iso, "sha")
+    checkbox = ("click", *drive.ENCRYPT_SYSTEM_CHECKBOX)
+    assert checkbox in fake.events
+    first_type = next(i for i, event in enumerate(fake.events) if event[0] == "type")
+    assert fake.events.index(checkbox) < first_type
 
 
 def test_manifest_checkpoint_roundtrip(tmp_path: Path) -> None:
