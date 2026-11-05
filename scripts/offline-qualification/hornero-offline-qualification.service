@@ -1,7 +1,6 @@
 [Unit]
 Description=HorneroOS Preview 33 offline qualification worker
 Documentation=file:%h/hornero-qa/docs/OFFLINE-QUALIFICATION.md
-After=default.target
 
 [Service]
 Type=exec

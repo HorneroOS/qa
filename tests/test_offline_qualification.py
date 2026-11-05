@@ -343,7 +343,7 @@ def test_worker_waits_for_muse_then_resources(tmp_path: Path) -> None:
         sleeps.append(seconds)
         return True
 
-    ticks = iter([0.0, 0.0, 10.0, 20.0, 30.0])
+    ticks = iter([0.0, 0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0])
     outcome = worker.wait_until_ready(
         status,
         wait_for_muse=True,
@@ -445,5 +445,84 @@ def test_worker_systemd_unit_contract() -> None:
     assert "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec" in unit
     assert "KillMode=control-group" in unit
     assert "Restart=no" in unit
+    assert "After=default.target" not in unit
     doc = (ROOT / "docs" / "OFFLINE-QUALIFICATION.md").read_text(encoding="utf-8")
     assert "Autonomous supervised execution" in doc
+
+
+def test_worker_ps_failure_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
+    class Result:
+        returncode = 1
+        stdout = ""
+        stderr = "ps unavailable"
+
+    monkeypatch.setattr(worker.subprocess, "run", lambda *_a, **_k: Result())
+    with pytest.raises(RuntimeError, match="ps exited 1"):
+        worker.list_muse_processes()
+
+
+def test_worker_qemu_cleanup_stops_only_new_runner_vms() -> None:
+    ps_text = """\
+201 /usr/bin/qemu-system-x86_64 -name hornero-install-p33off-desktop-uefi-a1 -pidfile /tmp/a1.pid
+202 /usr/bin/qemu-system-x86_64 -name other -pidfile /tmp/other.pid
+203 /usr/bin/qemu-system-x86_64 -name hornero-install-p33off-desktop-uefi-a2 -pidfile /tmp/a2.pid
+"""
+    found = worker.find_runner_qemu_processes(ps_text)
+    assert [item["pid"] for item in found] == [201, 203]
+    calls: list[tuple[int, int]] = []
+    listings = iter([found, []])
+    stopped = worker.stop_new_runner_qemu_processes(
+        {201},
+        process_provider=lambda: next(listings),
+        signaler=lambda pid, sig: calls.append((pid, sig)),
+        sleeper=lambda _seconds: None,
+    )
+    assert stopped == [203]
+    assert calls == [(203, worker.signal.SIGTERM)]
+
+
+def test_runner_rejects_expected_sha256_mismatch(tmp_path: Path) -> None:
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    state = tmp_path / "state"
+    code = run.main(
+        [
+            "--iso",
+            str(iso),
+            "--state-dir",
+            str(state),
+            "--cells",
+            "desktop-uefi",
+            "--expected-sha256",
+            "0" * 64,
+        ]
+    )
+    assert code == 2
+    data = json.loads((state / "manifest.json").read_text(encoding="utf-8"))
+    assert data["iso"] is None
+
+
+def test_worker_forwards_expected_sha256_and_resolved_installer_repo(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    args = _worker_args(tmp_path, iso)
+    args.expected_sha256 = "a" * 64  # type: ignore[attr-defined]
+    args.installer_repo = Path("relative-installer")  # type: ignore[attr-defined]
+    args.log_file = tmp_path / "new-log-dir" / "runner.log"  # type: ignore[attr-defined]
+    monkeypatch.setattr(worker, "install_signal_handlers", lambda: None)
+    monkeypatch.setattr(worker, "verify_expected_iso", lambda *_a, **_k: True)
+    monkeypatch.setattr(worker, "wait_until_ready", lambda *_a, **_k: "ready")
+    captured: dict[str, list[str]] = {}
+
+    def fake_run_runner(command: list[str], _log: Path) -> int:
+        captured["command"] = command
+        return 0
+
+    monkeypatch.setattr(worker, "run_runner", fake_run_runner)
+    assert worker.execute(args) == 0
+    assert "--expected-sha256" in captured["command"]
+    assert args.installer_repo.is_absolute()  # type: ignore[attr-defined]
+    assert (tmp_path / "new-log-dir" / "runner.log").is_file()
+    assert not hasattr(args, "vm_mib")

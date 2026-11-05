@@ -180,6 +180,7 @@ def launch_vm(name: str, firmware: str, *, with_iso: bool, iso_path: Path, fresh
     inner = (
         f"mount --bind '{BASE}/fake-resolv.conf' /etc/resolv.conf && exec qemu-system-x86_64 "
         f"-enable-kvm -cpu host -machine q35 -smp {VM_CPUS} -m {VM_MIB} -name hornero-install-{name} "
+        f"-pidfile {BASE}/{name}.pid "
         f"{fwargs} -device virtio-vga,xres=1280,yres=800 "
         f"-drive file={disk},format=qcow2,if=virtio {cdargs} -boot {boot} "
         "-netdev user,id=net0,hostfwd=tcp:127.0.0.1:2230-:22 -device virtio-net-pci,netdev=net0,id=nic0 "
@@ -475,6 +476,11 @@ def main(argv: list[str]) -> int:
         default=None,
         help="installer checkout used to verify cancel-contract ancestry (or $INSTALLER_REPO)",
     )
+    parser.add_argument(
+        "--expected-sha256",
+        default=None,
+        help="refuse to pin or resume unless the ISO hashes to this SHA-256",
+    )
     args = parser.parse_args(argv)
 
     iso_path = args.iso.resolve()
@@ -491,6 +497,9 @@ def main(argv: list[str]) -> int:
         return 2
     print(f"hashing ISO (one pass)… state={state_dir}")
     iso_sha = sha256_of(iso_path)
+    if args.expected_sha256 and iso_sha.lower() != args.expected_sha256.lower():
+        print(f"refusing ISO: expected sha256 {args.expected_sha256}, but --iso hashes to {iso_sha}")
+        return 2
     # The ISO identity and execution config are immutable within a run:
     # --resume must never mix checkpoints/evidence from different ISOs.
     existing = manifest.data.get("iso")
