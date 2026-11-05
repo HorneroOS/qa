@@ -1,5 +1,6 @@
 id: install-pairwise-negative/cancel-during-install
 purpose: >-
+  NOT RUN until an ISO built with the installer#94 mitigation exists.
   The provisional installer's cancellation contract is explicit and safe:
   cancelling during the view steps (before the Install step) quits the
   installer with no disk writes, and the Cancel button is disabled during
