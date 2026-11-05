@@ -39,6 +39,11 @@ _PLAIN = {
 TEST_PASSWORD = "hornero-test-2026"  # VM-only fixture credential, as before
 LUKS_PASSPHRASE = "hornero-test-2026"
 
+# "Encrypt system" checkbox centre at 1280x800, measured on the Preview 32
+# attempt-1 Partitions frame (~271, 572 px). The previous y (0.686) landed
+# above the checkbox row and never toggled it.
+ENCRYPT_SYSTEM_CHECKBOX = (0.212, 0.715)
+
 # Edition-chooser rows (fractions at 1280x800), pitch measured on the
 # preview32 chooser; the post-click screenshot is archived for review.
 EDITION_ROWS = {
@@ -133,7 +138,7 @@ def drive_install(d: Driver, cell: Cell, *, install_timeout_s: int = 1800) -> No
         d.click(0.621, 0.722, wait_s=0.5)
         d.type(LUKS_PASSPHRASE, wait_s=2)
     else:
-        d.click(0.215, 0.686, wait_s=3)  # uncheck Encrypt system
+        d.click(*ENCRYPT_SYSTEM_CHECKBOX, wait_s=3)  # uncheck Encrypt system
     d.shot("partition-choice")
     d.click(0.864, 0.941, wait_s=3)  # -> Users
     d.click(0.288, 0.095, wait_s=0.5)
