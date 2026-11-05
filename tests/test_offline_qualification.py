@@ -21,15 +21,17 @@ SCRIPTS = ROOT / "scripts" / "offline-qualification"
 
 def _load(name: str) -> ModuleType:
     spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
-    module = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
     sys.modules[name] = module
-    spec.loader.exec_module(module)  # type: ignore[union-attr]
+    spec.loader.exec_module(module)
     return module
 
 
 preflight = _load("preflight")
 drive = _load("drive")
 run = _load("run")
+worker = _load("worker")
 
 MEMINFO_OK = "MemTotal:       16000000 kB\nMemAvailable:   11000000 kB\n"
 MEMINFO_LOW = "MemTotal:       16000000 kB\nMemAvailable:    6000000 kB\n"
@@ -305,3 +307,222 @@ def test_runbook_recommends_single_cell_smoke() -> None:
     assert "--cells desktop-uefi" in doc
     assert "executed` is not PASS" in doc
     assert "OFFLINE_BUILD_SSH" not in doc
+
+
+# --- Autonomous supervised worker -------------------------------------------
+
+
+def test_worker_detects_only_muse_executables() -> None:
+    ps_text = """\
+101 /home/u/.local/bin/muse-bin-1.4.14 --yolo resume abc
+102 /usr/bin/python3 /tmp/muse-helper.py
+103 /bin/sh -c pgrep -f muse-bin
+104 muse --help
+"""
+    found = worker.find_muse_processes(ps_text)
+    assert [item["pid"] for item in found] == [101, 104]
+
+
+def test_worker_lock_refuses_duplicate(tmp_path: Path) -> None:
+    lock = tmp_path / "worker.lock"
+    with worker.exclusive_lock(lock) as first:
+        assert first
+        with worker.exclusive_lock(lock) as second:
+            assert not second
+
+
+def test_worker_waits_for_muse_then_resources(tmp_path: Path) -> None:
+    status = worker.StatusWriter(
+        tmp_path / "status.json", state_dir=tmp_path, iso_path=tmp_path / "x.iso", cells="desktop-uefi"
+    )
+    processes = iter([[{"pid": 1, "executable": "muse"}], [], []])
+    preflights = iter([(False, "low RAM"), (True, "ok")])
+    sleeps: list[float] = []
+
+    def record_sleep(seconds: float) -> bool:
+        sleeps.append(seconds)
+        return True
+
+    ticks = iter([0.0, 0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0])
+    outcome = worker.wait_until_ready(
+        status,
+        wait_for_muse=True,
+        vm_mib=4096,
+        state_dir=tmp_path,
+        poll_seconds=60,
+        max_wait_seconds=3600,
+        process_provider=lambda: next(processes),
+        preflight_runner=lambda _mib, _path: next(preflights),
+        sleeper=record_sleep,
+        clock=lambda: next(ticks),
+    )
+    assert outcome == "ready"
+    assert sleeps == [60, 60]
+    data = json.loads((tmp_path / "status.json").read_text(encoding="utf-8"))
+    assert data["status"] == "resources-ready"
+
+
+def test_worker_wait_deadline_is_blocked_not_infinite(tmp_path: Path) -> None:
+    status = worker.StatusWriter(
+        tmp_path / "status.json", state_dir=tmp_path, iso_path=tmp_path / "x.iso", cells="desktop-uefi"
+    )
+    ticks = iter([0.0, 0.0, 100.0])
+    outcome = worker.wait_until_ready(
+        status,
+        wait_for_muse=False,
+        vm_mib=4096,
+        state_dir=tmp_path,
+        poll_seconds=60,
+        max_wait_seconds=50,
+        preflight_runner=lambda _mib, _path: (False, "low RAM"),
+        sleeper=lambda _seconds: True,
+        clock=lambda: next(ticks),
+    )
+    assert outcome == "blocked"
+
+
+def _worker_args(tmp_path: Path, iso: Path) -> object:
+    return worker.parse_args(
+        [
+            "--iso",
+            str(iso),
+            "--cells",
+            "desktop-uefi",
+            "--state-dir",
+            str(tmp_path / "state"),
+            "--status-file",
+            str(tmp_path / "status.json"),
+            "--lock-file",
+            str(tmp_path / "worker.lock"),
+            "--log-file",
+            str(tmp_path / "runner.log"),
+        ]
+    )
+
+
+def test_worker_command_resumes_only_existing_manifest(tmp_path: Path) -> None:
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    args = _worker_args(tmp_path, iso)
+    assert "--resume" not in worker.build_runner_command(args)
+    state = tmp_path / "state"
+    state.mkdir()
+    (state / "manifest.json").write_text("{}", encoding="utf-8")
+    assert "--resume" in worker.build_runner_command(args)
+
+
+def test_worker_execute_records_completion_without_claiming_pass(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    args = _worker_args(tmp_path, iso)
+    monkeypatch.setattr(worker, "install_signal_handlers", lambda: None)
+    monkeypatch.setattr(worker, "wait_until_ready", lambda *_a, **_k: "ready")
+    monkeypatch.setattr(worker, "run_runner", lambda *_a, **_k: 0)
+    assert worker.execute(args) == 0
+    data = json.loads((tmp_path / "status.json").read_text(encoding="utf-8"))
+    assert data["status"] == "completed"
+    assert "PASS" not in json.dumps(data)
+
+
+def test_worker_execute_rejects_iso_hash_mismatch(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    args = _worker_args(tmp_path, iso)
+    args.expected_sha256 = "0" * 64  # type: ignore[attr-defined]
+    monkeypatch.setattr(worker, "install_signal_handlers", lambda: None)
+    assert worker.execute(args) == 3
+    data = json.loads((tmp_path / "status.json").read_text(encoding="utf-8"))
+    assert data["status"] == "blocked"
+    assert data["reason"] == "ISO SHA-256 mismatch"
+
+
+def test_worker_systemd_unit_contract() -> None:
+    unit = (SCRIPTS / "hornero-offline-qualification.service").read_text(encoding="utf-8")
+    assert "worker.py" in unit
+    assert "--cells desktop-uefi" in unit
+    assert "b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec" in unit
+    assert "KillMode=control-group" in unit
+    assert "Restart=no" in unit
+    assert "After=default.target" not in unit
+    doc = (ROOT / "docs" / "OFFLINE-QUALIFICATION.md").read_text(encoding="utf-8")
+    assert "Autonomous supervised execution" in doc
+
+
+def test_worker_ps_failure_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
+    class Result:
+        returncode = 1
+        stdout = ""
+        stderr = "ps unavailable"
+
+    monkeypatch.setattr(worker.subprocess, "run", lambda *_a, **_k: Result())
+    with pytest.raises(RuntimeError, match="ps exited 1"):
+        worker.list_muse_processes()
+
+
+def test_worker_qemu_cleanup_stops_only_new_runner_vms() -> None:
+    ps_text = """\
+201 /usr/bin/qemu-system-x86_64 -name hornero-install-p33off-desktop-uefi-a1 -pidfile /tmp/a1.pid
+202 /usr/bin/qemu-system-x86_64 -name other -pidfile /tmp/other.pid
+203 /usr/bin/qemu-system-x86_64 -name hornero-install-p33off-desktop-uefi-a2 -pidfile /tmp/a2.pid
+"""
+    found = worker.find_runner_qemu_processes(ps_text)
+    assert [item["pid"] for item in found] == [201, 203]
+    calls: list[tuple[int, int]] = []
+    listings = iter([found, []])
+    stopped = worker.stop_new_runner_qemu_processes(
+        {201},
+        process_provider=lambda: next(listings),
+        signaler=lambda pid, sig: calls.append((pid, sig)),
+        sleeper=lambda _seconds: None,
+    )
+    assert stopped == [203]
+    assert calls == [(203, worker.signal.SIGTERM)]
+
+
+def test_runner_rejects_expected_sha256_mismatch(tmp_path: Path) -> None:
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    state = tmp_path / "state"
+    code = run.main(
+        [
+            "--iso",
+            str(iso),
+            "--state-dir",
+            str(state),
+            "--cells",
+            "desktop-uefi",
+            "--expected-sha256",
+            "0" * 64,
+        ]
+    )
+    assert code == 2
+    data = json.loads((state / "manifest.json").read_text(encoding="utf-8"))
+    assert data["iso"] is None
+
+
+def test_worker_forwards_expected_sha256_and_resolved_installer_repo(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    iso = tmp_path / "x.iso"
+    iso.write_bytes(b"x")
+    args = _worker_args(tmp_path, iso)
+    args.expected_sha256 = "a" * 64  # type: ignore[attr-defined]
+    args.installer_repo = Path("relative-installer")  # type: ignore[attr-defined]
+    args.log_file = tmp_path / "new-log-dir" / "runner.log"  # type: ignore[attr-defined]
+    monkeypatch.setattr(worker, "install_signal_handlers", lambda: None)
+    monkeypatch.setattr(worker, "verify_expected_iso", lambda *_a, **_k: True)
+    monkeypatch.setattr(worker, "wait_until_ready", lambda *_a, **_k: "ready")
+    captured: dict[str, list[str]] = {}
+
+    def fake_run_runner(command: list[str], _log: Path) -> int:
+        captured["command"] = command
+        return 0
+
+    monkeypatch.setattr(worker, "run_runner", fake_run_runner)
+    assert worker.execute(args) == 0
+    assert "--expected-sha256" in captured["command"]
+    assert args.installer_repo.is_absolute()  # type: ignore[attr-defined]
+    assert (tmp_path / "new-log-dir" / "runner.log").is_file()
+    assert not hasattr(args, "vm_mib")

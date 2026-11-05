@@ -30,6 +30,33 @@ cd <qa clone>            # HorneroOS/qa, main, this tooling merged
 uv sync --group web      # one-time environment
 ```
 
+## Autonomous supervised execution (preferred)
+
+`worker.py` is the independent process intended for `systemd --user`.
+It holds an exclusive lock, writes atomic JSON status, waits until no
+Muse executable remains running, then waits until the existing
+`preflight.py` passes before invoking `run.py` once. It polls at a
+bounded interval, has a finite wait deadline, and records `blocked`,
+`failed`, `interrupted`, or `completed` distinctly. `completed` only
+means `run.py` exited 0 and its cells reached `executed`; it is not a
+QA PASS verdict.
+
+The checked-in unit
+`scripts/offline-qualification/hornero-offline-qualification.service`
+is preconfigured for the persistent `~/hornero-qa` checkout and the
+Preview 32 single-cell smoke. Once an agent has installed and started
+that unit, the maintainer's only required action is to close Muse
+Code completely. The worker survives that exit because systemd owns
+its process and control group.
+
+Status can be inspected later with:
+
+```bash
+~/hornero-qa/.venv/bin/python \
+  ~/hornero-qa/scripts/offline-qualification/worker.py status \
+  --status-file ~/hornero-p33-offline/smoke-preview32.worker.json
+```
+
 ## Step 2 — Build one candidate (optional; skip to test the signed Preview 32)
 
 Cells unrelated to installer#94 can run against the signed Preview 32
