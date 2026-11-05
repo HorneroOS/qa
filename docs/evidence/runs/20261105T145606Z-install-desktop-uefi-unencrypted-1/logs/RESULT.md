@@ -67,6 +67,7 @@ Executed: 2026-11-05T15:29:24Z by scripts/offline-qualification/run.py (scripted
 PASS — operator visual review 2026-11-05 (review session for run smoke-preview32-r2).
 
 Evidence inspected frame-by-frame:
+
 - 03-partition-choice.png: Erase disk selected on /dev/vda (60 GiB, EFI), "Encrypt system" unchecked — correct for the unencrypted scenario. This is the frame the qa#76 fix (checkbox-centre click) repaired; r1 attempt-1 never reached install.
 - 06-summary.png: GPT on /dev/vda; 512 MiB FAT32 EFI (/boot), 8 MiB bios-grub, 59.49 GiB Btrfs root; timezone America/Argentina/Buenos_Aires.
 - 04-users.png / 05-edition.png: user hornero / hostname hornero-test valid; edition "HorneroOS Desktop — Hyprland" selected.
