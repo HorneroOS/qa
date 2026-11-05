@@ -129,3 +129,179 @@ def test_result_draft_never_claims_pass(tmp_path: Path) -> None:
     text = (tmp_path / "RESULT.draft.md").read_text(encoding="utf-8")
     assert "PENDING OPERATOR REVIEW" in text
     assert "PASS" not in text.replace("never infer PASS", "")
+
+
+# --- Hardening regressions (post-#72 review) ---------------------------------
+
+import os  # noqa: E402
+import subprocess  # noqa: E402
+
+
+def _dry_run(env_extra: dict[str, str]) -> subprocess.CompletedProcess[str]:
+    env = {**os.environ, "OFFLINE_BUILD_DRY_RUN": "1", **env_extra}
+    env.pop("OFFLINE_BUILD_HOST", None) if "OFFLINE_BUILD_HOST" not in env_extra else None
+    return subprocess.run(
+        ["bash", str(SCRIPTS / "build-candidate.sh")],
+        capture_output=True,
+        text=True,
+        env=env,
+        timeout=30,
+    )
+
+
+def test_build_candidate_ssh_scp_use_structured_port() -> None:
+    out = _dry_run({"OFFLINE_BUILD_HOST": "builder@127.0.0.1"})
+    assert out.returncode == 0, out.stderr
+    assert "ssh -p 2224 builder@127.0.0.1" in out.stdout
+    assert "scp -P 2224 builder@127.0.0.1:" in out.stdout
+    custom = _dry_run(
+        {"OFFLINE_BUILD_HOST": "u@h", "OFFLINE_BUILD_PORT": "2200", "OFFLINE_BUILD_IDENTITY": "/tmp/k"}
+    )
+    assert "ssh -p 2200 -i /tmp/k u@h" in custom.stdout
+    assert "scp -P 2200 -i /tmp/k u@h:" in custom.stdout
+
+
+def test_build_candidate_without_host_exits_4() -> None:
+    out = _dry_run({})
+    assert out.returncode == 4
+    assert "Manual build path" in out.stderr
+
+
+def _pin_manifest(state: Path, iso: Path) -> None:
+    manifest = run.Manifest(state)
+    manifest.data["iso"] = {"path": str(iso), "name": iso.name, "sha256": run.sha256_of(iso)}
+    manifest.data["config"] = run.run_config()
+    manifest.save()
+
+
+def test_resume_rejects_different_iso(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    iso_a = tmp_path / "a.iso"
+    iso_a.write_bytes(b"A")
+    iso_b = tmp_path / "b.iso"
+    iso_b.write_bytes(b"B")
+    state = tmp_path / "state"
+    _pin_manifest(state, iso_a)
+    code = run.main(["--iso", str(iso_b), "--state-dir", str(state), "--resume", "--cells", "desktop-uefi"])
+    assert code == 2
+    assert "refusing --resume" in capsys.readouterr().out
+
+
+def test_resume_rejects_config_change(tmp_path: Path) -> None:
+    iso = tmp_path / "a.iso"
+    iso.write_bytes(b"A")
+    state = tmp_path / "state"
+    _pin_manifest(state, iso)
+    manifest = run.Manifest(state)
+    manifest.data["config"] = {"vm_mib": 8192, "vm_cpus": 4, "disk_gib": 60}
+    manifest.save()
+    assert run.main(["--iso", str(iso), "--state-dir", str(state), "--resume", "--cells", "x"]) == 2
+
+
+def test_resume_accepts_same_iso_and_skips_executed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    iso = tmp_path / "a.iso"
+    iso.write_bytes(b"A")
+    state = tmp_path / "state"
+    _pin_manifest(state, iso)
+    manifest = run.Manifest(state)
+    manifest.cell("desktop-uefi").update(status="executed")
+    manifest.save()
+    calls: list[str] = []
+    monkeypatch.setattr(run, "launch_vm", lambda *a, **k: calls.append("launch"))
+    code = run.main(["--iso", str(iso), "--state-dir", str(state), "--resume", "--cells", "desktop-uefi"])
+    assert code == 0
+    assert calls == []  # executed checkpoint respected; nothing relaunched
+
+
+def test_failed_attempt_gets_fresh_attempt_and_preserves_evidence(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    manifest = run.Manifest(tmp_path / "state")
+    cell = drive.CELLS["desktop-uefi"]
+    monkeypatch.setattr(run, "preflight_or_exit", lambda *a: (_ for _ in ()).throw(RuntimeError("boom")))
+    run.run_cell(manifest, cell, tmp_path / "x.iso", "sha")
+    run.run_cell(manifest, cell, tmp_path / "x.iso", "sha")
+    record = manifest.data["cells"]["desktop-uefi"]
+    assert record["status"] == "failed" and record["attempts"] == 2
+    assert len(record["history"]) == 2
+    assert record["history"][0]["disk"] != record["history"][1]["disk"]
+    base = tmp_path / "state" / "evidence" / "desktop-uefi"
+    assert (base / "attempt-1" / "RESULT.draft.md").is_file()
+    assert (base / "attempt-2" / "RESULT.draft.md").is_file()
+
+
+def test_final_exit_code_and_nonzero_main(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    manifest = run.Manifest(tmp_path / "s1")
+    manifest.cell("desktop-uefi").update(status="executed")
+    manifest.cell("studio-uefi").update(status="failed")
+    assert run.final_exit_code(manifest, ["desktop-uefi"]) == 0
+    assert run.final_exit_code(manifest, ["desktop-uefi", "studio-uefi"]) == 1
+    assert run.final_exit_code(manifest, ["gaming-uefi"]) == 1
+
+    iso = tmp_path / "a.iso"
+    iso.write_bytes(b"A")
+    state = tmp_path / "s2"
+
+    def fake_run_cell(m: object, cell: object, iso_path: Path, sha: str) -> None:
+        m.cell(cell.name).update(status="failed")  # type: ignore[attr-defined]
+
+    monkeypatch.setattr(run, "run_cell", fake_run_cell)
+    assert run.main(["--iso", str(iso), "--state-dir", str(state), "--cells", "desktop-uefi"]) == 1
+    assert (state / "SUMMARY.md").is_file()
+    assert (state / "manifest.json").is_file()
+
+
+def _iso_with_sidecar(tmp_path: Path, revision: str | None) -> Path:
+    iso = tmp_path / "cand.iso"
+    iso.write_bytes(b"X")
+    if revision is not None:
+        iso.with_name(iso.name + ".manifest.json").write_text(
+            json.dumps({"installerRevision": revision}), encoding="utf-8"
+        )
+    return iso
+
+
+def test_cancel_gate_requires_artifact_provenance(tmp_path: Path) -> None:
+    proven, _ = run.cancel_mitigation_proven(_iso_with_sidecar(tmp_path, None), None)
+    assert not proven  # no sidecar -> never inferred from filename
+    preview32_rev = "329e66831ad5a31e48c466771f015ef05568e571"
+    proven, reason = run.cancel_mitigation_proven(_iso_with_sidecar(tmp_path, preview32_rev), None)
+    assert not proven and "mitigation" in reason  # Preview 32 is not applicable
+    proven, _ = run.cancel_mitigation_proven(_iso_with_sidecar(tmp_path, run.MITIGATION_REVISION), None)
+    assert proven
+
+
+def test_cancel_gate_descendant_via_installer_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    repo = tmp_path / "installer"
+    repo.mkdir()
+    git = ["git", "-C", str(repo), "-c", "user.email=t@t", "-c", "user.name=t"]
+    subprocess.run([*git, "init", "-q"], check=True)
+    (repo / "f").write_text("1")
+    subprocess.run([*git, "add", "."], check=True)
+    subprocess.run([*git, "commit", "-qm", "mitigation"], check=True)
+    mitigation = subprocess.run([*git, "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    (repo / "f").write_text("2")
+    subprocess.run([*git, "commit", "-qam", "later"], check=True)
+    descendant = subprocess.run([*git, "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    monkeypatch.setattr(run, "MITIGATION_REVISION", mitigation)
+    proven, _ = run.cancel_mitigation_proven(_iso_with_sidecar(tmp_path, descendant), repo)
+    assert proven
+    proven, _ = run.cancel_mitigation_proven(_iso_with_sidecar(tmp_path, descendant), None)
+    assert not proven  # no repo -> ancestry unprovable -> refused
+
+
+def test_cancel_gate_main_records_not_applicable(tmp_path: Path) -> None:
+    iso = _iso_with_sidecar(tmp_path, "329e66831ad5a31e48c466771f015ef05568e571")
+    state = tmp_path / "state"
+    code = run.main(["--iso", str(iso), "--state-dir", str(state), "--cells", "cancel-contract"])
+    assert code == 1
+    data = json.loads((state / "manifest.json").read_text(encoding="utf-8"))
+    assert data["cells"]["cancel-contract"]["status"] == "not-applicable"
+    assert (state / "SUMMARY.md").is_file()
+
+
+def test_runbook_recommends_single_cell_smoke() -> None:
+    doc = (ROOT / "docs" / "OFFLINE-QUALIFICATION.md").read_text(encoding="utf-8")
+    assert "SINGLE-CELL SMOKE" in doc
+    assert "--cells desktop-uefi" in doc
+    assert "executed` is not PASS" in doc
+    assert "OFFLINE_BUILD_SSH" not in doc
