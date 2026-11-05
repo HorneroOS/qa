@@ -1,0 +1,107 @@
+# Offline qualification runbook (Preview 33)
+
+Runs the remaining Preview 33 installation acceptance **without
+Muse running**. Muse consumes ~5 GiB RSS; on a 15 GiB host
+that leaves too little RAM for the 4 GiB install VMs Calamares
+requires. This procedure separates preparation (already done: this
+repository) from execution (a normal terminal, Muse closed).
+
+## Safety contract (enforced, not advisory)
+
+`scripts/offline-qualification/preflight.py` runs before **every** VM
+launch and refuses (exit 3, nothing started) unless:
+
+- `MemAvailable` ≥ VM RAM + 4 GiB host floor (install VMs: ≥ 8 GiB;
+  build VM: ≥ 12 GiB),
+- no swap in/out activity in the last vmstat sample,
+- no other QEMU/build process is running (one heavy job at a time),
+- ≥ 10 GiB disk free.
+
+Guest RAM is fixed at 4096 MiB — Calamares refuses to install below
+4 GiB ("At least 4 GiB is required"), so the runner never lowers it.
+Only disposable qcow2 disks are used; host/physical disks are never
+touched. Cells run **sequentially**; each completed cell is a
+checkpoint in `manifest.json` and `--resume` skips it.
+
+## Step 1 — Prepare (Muse may still be open)
+
+```bash
+cd <qa clone>            # HorneroOS/qa, main, this tooling merged
+uv sync --group web      # one-time environment
+```
+
+## Step 2 — Build one candidate (optional; skip to test the signed Preview 32)
+
+Cells unrelated to installer#94 can run against the signed Preview 32
+ISO as-is. The **cancel-contract** cell needs a candidate containing
+installer#94 (`disable-cancel-during-exec`):
+
+```bash
+# after closing Muse (the build VM needs 8 GiB + 4 GiB floor):
+export OFFLINE_BUILD_SSH="builder@127.0.0.1 -p 2224"   # build-VM key user w/ sudo
+scripts/offline-qualification/build-candidate.sh
+# -> prints installer HEAD + artifact SHA-256; sign via the established
+#    maintainer workflow (installer/scripts/sign-release.sh)
+```
+
+Without `OFFLINE_BUILD_SSH` the script prints the exact manual
+in-VM build commands and exits 4. Record the installer HEAD and the
+sidecar `*.iso.manifest.json` next to the artifact — `run.py` embeds
+both into its manifest.
+
+## Step 3 — Close Muse, then run
+
+```bash
+# close Muse completely (this alone frees ~5 GiB), then:
+free -h                  # sanity: MemAvailable should be ≥ 8 GiB
+cd <qa clone>
+python3 scripts/offline-qualification/run.py \
+  --iso /path/to/candidate-or-preview32.iso
+```
+
+Default cells: `desktop-uefi`, `studio-uefi`, `gaming-uefi`,
+`desktop-bios-luks`, `studio-uefi-luks`, `cancel-contract`.
+Opt-in: `--cells failure-cleanup` (NIC cut mid-transaction; best
+effort, no tracked scenario yet). The Niri graphical scenario is
+**not** part of this runner — it requires a 3D-accelerated,
+observable GPU (qa#71 gate).
+
+A full default run takes roughly 3–4 hours (install waits are
+deliberately generous; the machine stays usable throughout because
+only one 4 GiB VM runs at a time under the 4 GiB floor). If you stop
+it, re-run with `--resume` and the same `--state-dir`.
+
+Output: `~/hornero-p33-offline/<run-id>/` with `manifest.json`
+(machine-readable checkpoints, ISO hash, per-cell status/timestamps),
+`SUMMARY.md`, and `evidence/<cell>/` (screenshots in drive order +
+`RESULT.draft.md`).
+
+## Step 4 — Reopen Muse and hand over the run directory
+
+Statuses in the manifest are **execution states, never verdicts**.
+An operator/agent reviews each `evidence/<cell>/` (probe screenshots
+carry `PROBE<n>:` markers from the scenario's own proof probes),
+finalizes `RESULT.md`, and records explicit verdicts:
+
+```bash
+uv run hornero-qa import install/desktop-uefi-unencrypted \
+  --source ~/hornero-p33-offline/<run>/evidence/desktop-uefi \
+  --verdict PASS --reason "<evidence-based reason>" \
+  --product iso=<iso name> --product iso_sha256=<sha256>
+git add -A && uv run hornero-qa matrix && uv run hornero-qa matrix --check
+```
+
+Then the normal PR flow updates the matrix, triage, and issues
+(installer#93 closes only with the cancel-contract behavior proof
+from this run on an installer#94 candidate).
+
+## Troubleshooting
+
+| Symptom | Meaning | Action |
+|---|---|---|
+| exit 3, `MemAvailable … < required` | host too busy | close browsers/IDEs; retry |
+| exit 3, `swap activity` | host swapping | wait for settle (`vmstat 1 5`) |
+| exit 3, `another heavy job` | a VM/build is running | let it finish or stop it |
+| cell `failed` in manifest | drive or QEMU error | inspect `evidence/<cell>/` screenshots (last frames) and `~/.local/share/hornero/install-test/*-qemu.log` |
+| cell executed but probes show errors | real product failure | keep the evidence; verdict FAIL on import with `--failure-class` |
+| install screenshots still mid-progress at the end | install slower than the wait budget | re-run that cell alone (`--cells <name> --resume` after clearing its manifest entry) |
