@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 from types import ModuleType
+from typing import cast
 
 import pytest
 
@@ -33,6 +34,7 @@ drive = _load("drive")
 run = _load("run")
 worker = _load("worker")
 coordinator = _load("coordinator")
+build_worker = _load("build_worker")
 
 MEMINFO_OK = "MemTotal:       16000000 kB\nMemAvailable:   11000000 kB\n"
 MEMINFO_LOW = "MemTotal:       16000000 kB\nMemAvailable:    6000000 kB\n"
@@ -694,3 +696,465 @@ def test_worker_forwards_expected_sha256_and_resolved_installer_repo(
     assert args.installer_repo.is_absolute()  # type: ignore[attr-defined]
     assert (tmp_path / "new-log-dir" / "runner.log").is_file()
     assert not hasattr(args, "vm_mib")
+
+
+# --- Candidate-build worker (audit defects A-E; no VMs) ---------------------
+
+
+def _status(path: Path) -> dict[str, object]:
+    loaded = json.loads(path.read_text(encoding="utf-8"))
+    assert isinstance(loaded, dict)
+    return cast(dict[str, object], loaded)
+
+
+def _muse_identity(pid: int = 50, start_time: str = "100") -> object:
+    return build_worker.TargetIdentity(
+        pid=pid,
+        start_time=start_time,
+        cmdline_tokens=("/home/u/.local/bin/muse-bin-1.4.14", "--yolo"),
+    )
+
+
+def _build_args(tmp_path: Path) -> object:
+    return build_worker.parse_args(
+        [
+            "--target-pid-file",
+            str(tmp_path / "muse.pid"),
+            "--status-file",
+            str(tmp_path / "status.json"),
+            "--lock-file",
+            str(tmp_path / "worker.lock"),
+            "--log-file",
+            str(tmp_path / "build.log"),
+            "--candidate-out",
+            str(tmp_path / "candidate"),
+            "--build-host",
+            "builder@127.0.0.1",
+            "--build-port",
+            "2224",
+            "--poll-seconds",
+            "30",
+            "--max-wait-seconds",
+            "60",
+            "--build-timeout-seconds",
+            "21600",
+            "--shutdown-wait-seconds",
+            "120",
+        ]
+    )
+
+
+def _hooks(**overrides: object) -> object:
+    hooks = build_worker.BuildHooks(
+        identity_reader=lambda _pid: None,
+        preflight_runner=lambda: (True, "ok"),
+        qemu_active=lambda: False,
+        build_runner=lambda *_a, **_k: 0,
+        shutdown_runner=lambda *_a, **_k: None,
+        vm_running=lambda: False,
+        sleeper=lambda _seconds: True,
+        clock=lambda: 0.0,
+        wall_clock=lambda: 1_000.0,
+    )
+    for name, value in overrides.items():
+        setattr(hooks, name, value)
+    return hooks
+
+
+def test_build_status_records_worker_pid_not_writer_pid(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "status.json"
+    stale_record = {
+        "status": "completed",
+        "pid": 1,
+        "reason": "stale",
+        "iso": "/old.iso",
+        "sha": "stale-sha",
+        "iso_sha256": "ff",
+    }
+    path.write_text(json.dumps(stale_record), encoding="utf-8")
+    status = build_worker.BuildStatus(path, worker_pid=4242)
+    monkeypatch.setattr(build_worker.os, "getpid", lambda: 9999)
+    status.update("blocked", reason="arming failed", iso="/still-old.iso", iso_sha256="aa")
+    written = status.update("waiting-for-preflight", target_pid=7)
+    data = _status(path)
+    assert written["pid"] == 4242
+    assert data["pid"] == 4242
+    assert data["status"] == "waiting-for-preflight"
+    assert data["target_pid"] == 7
+    assert data["started_at"] == status.started_at
+    for field in ("reason", "iso", "sha", "iso_sha256"):
+        assert field not in data
+
+
+def test_build_preflight_gate_stays_at_12_gib() -> None:
+    assert build_worker.BUILD_VM_MIB == 8192
+    assert build_worker.build_preflight_command()[-1] == "8192"
+    assert "4096" not in build_worker.build_preflight_command()
+    source = (SCRIPTS / "build_worker.py").read_text(encoding="utf-8")
+    assert "BUILD_VM_MIB = 8192" in source
+    assert "vm-mib" not in source
+    doc = (ROOT / "docs" / "OFFLINE-QUALIFICATION.md").read_text(encoding="utf-8")
+    assert "12 GiB" in doc
+    assert "build_worker.py" in doc
+
+
+def test_build_arming_fails_closed_without_probing_a_missing_or_empty_pid(tmp_path: Path) -> None:
+    def explode(_pid: int) -> object:
+        raise AssertionError("identity probe must not run")
+
+    missing = tmp_path / "missing.pid"
+    with pytest.raises(build_worker.ArmingError, match="missing"):
+        build_worker.arm_target(missing, explode)
+    empty = tmp_path / "empty.pid"
+    empty.write_text(" \n", encoding="utf-8")
+    with pytest.raises(build_worker.ArmingError, match="empty"):
+        build_worker.arm_target(empty, explode)
+    invalid = tmp_path / "bad.pid"
+    invalid.write_text("nope\n", encoding="utf-8")
+    with pytest.raises(build_worker.ArmingError, match="invalid"):
+        build_worker.arm_target(invalid, explode)
+
+
+def test_build_arming_requires_muse_cmdline_not_kill0(tmp_path: Path) -> None:
+    pid_file = tmp_path / "muse.pid"
+    pid_file.write_text("50\n", encoding="utf-8")
+    # kill -0 would succeed for this live PID; cmdline identity must still refuse it.
+    live_other = build_worker.TargetIdentity(
+        pid=50,
+        start_time="9",
+        cmdline_tokens=("/usr/bin/python3", "/tmp/muse-helper.py"),
+    )
+    with pytest.raises(build_worker.ArmingError, match="not a live Muse"):
+        build_worker.arm_target(pid_file, lambda _pid: live_other)
+    assert not build_worker.is_muse_executable(build_worker.cmdline_tokens(b"/bin/sh\0-c\0pgrep -f muse\0"))
+    assert build_worker.is_muse_executable(
+        build_worker.cmdline_tokens(b"/home/u/.local/bin/muse-bin-1.4.14\0--yolo\0")
+    )
+    fields_after = ["S", *["0"] * 18, "55555"]
+    assert build_worker.proc_start_time("50 (muse (bin) worker) " + " ".join(fields_after)) == "55555"
+    armed = build_worker.arm_target(pid_file, lambda _pid: _muse_identity())
+    reused = build_worker.TargetIdentity(pid=50, start_time="999", cmdline_tokens=("/usr/bin/bash",))
+    assert build_worker.target_still_running(armed, lambda _pid: reused) is False
+    assert build_worker.target_still_running(armed, lambda _pid: None) is False
+
+
+def test_build_phase_times_out_and_kills_the_process_group() -> None:
+    clock = {"now": 0.0}
+    signals: list[tuple[int, int]] = []
+
+    class FakeProcess:
+        pid = 77
+        returncode: int | None = None
+
+        def poll(self) -> int | None:
+            return self.returncode
+
+        def wait(self, timeout: float | None = None) -> int:
+            self.returncode = -15
+            return -15
+
+    def popen(*_a: object, **_k: object) -> FakeProcess:
+        return FakeProcess()
+
+    def sleeper(seconds: float) -> None:
+        clock["now"] += seconds
+
+    code = build_worker.run_bounded_build(
+        ["bash", "build-candidate.sh"],
+        {"OFFLINE_BUILD_HOST": "builder@127.0.0.1"},
+        Path("/dev/null"),
+        5,
+        popen=popen,
+        clock=lambda: clock["now"],
+        sleeper=sleeper,
+        killer=lambda pid, sig: signals.append((pid, sig)),
+    )
+    assert code == 124
+    assert signals == [(77, build_worker.signal.SIGTERM)]
+
+
+def test_terminal_status_waits_for_verified_shutdown_and_ignores_stale_iso(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(build_worker, "install_signal_handlers", lambda: None)
+    monkeypatch.setattr(build_worker, "STOP_REQUESTED", False)
+    args = _build_args(tmp_path)
+    out = tmp_path / "candidate"
+    out.mkdir()
+    stale = out / "old.iso"
+    stale.write_bytes(b"old-iso")
+    os.utime(stale, (1, 1))
+    (out / "old.iso.manifest.json").write_text("{}\n", encoding="utf-8")
+    (tmp_path / "muse.pid").write_text("50\n", encoding="utf-8")
+    order: list[str] = []
+    seen = {"n": 0}
+
+    def identity_reader(pid: int) -> object:
+        seen["n"] += 1
+        return _muse_identity(pid) if seen["n"] == 1 else None
+
+    def build_runner(command: list[str], env: dict[str, str], _log: Path, timeout: float) -> int:
+        order.append("build")
+        assert timeout == 21600
+        assert not stale.exists()
+        assert not (out / "old.iso.manifest.json").exists()
+        assert env["OFFLINE_BUILD_PORT"] == "2224"
+        assert command[-1].endswith("build-candidate.sh")
+        fresh = out / "fresh.iso"
+        fresh.write_bytes(b"fresh-iso")
+        (out / "fresh.iso.manifest.json").write_text(
+            json.dumps({"installerRevision": "cf72bbc"}),
+            encoding="utf-8",
+        )
+        return 0
+
+    def shutdown_runner(command: list[str], _log: Path) -> None:
+        data = _status(tmp_path / "status.json")
+        assert data["status"] == "shutting-down-build-vm"
+        assert "iso" not in data and "iso_sha256" not in data and "reason" not in data
+        assert command[:3] == ["ssh", "-p", "2224"]
+        assert command[-1] == "sudo -n poweroff"
+        order.append("shutdown")
+
+    assert (
+        build_worker.execute(
+            args,
+            _hooks(
+                identity_reader=identity_reader,
+                build_runner=build_runner,
+                shutdown_runner=shutdown_runner,
+                vm_running=lambda: False,
+            ),
+        )
+        == 0
+    )
+    assert order == ["build", "shutdown"]
+    data = _status(tmp_path / "status.json")
+    assert data["status"] == "completed"
+    assert data["pid"] == os.getpid()
+    assert str(data["iso"]).endswith("fresh.iso")
+    assert data["installer_revision"] == "cf72bbc"
+    assert "old.iso" not in str(data["iso"])
+    assert "reason" not in data
+
+
+def test_build_does_not_report_success_while_vm_is_up_or_iso_is_stale(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(build_worker, "install_signal_handlers", lambda: None)
+    args = _build_args(tmp_path)
+    out = tmp_path / "candidate"
+    out.mkdir()
+    (tmp_path / "muse.pid").write_text("50\n", encoding="utf-8")
+    clock = {"now": 0.0}
+    seen = {"n": 0}
+
+    def sleeper(seconds: float) -> bool:
+        clock["now"] += seconds
+        return True
+
+    def identity_reader(pid: int) -> object:
+        seen["n"] += 1
+        return _muse_identity(pid) if seen["n"] == 1 else None
+
+    def build_runner(*_a: object, **_k: object) -> int:
+        fresh = out / "fresh.iso"
+        fresh.write_bytes(b"fresh")
+        (out / "fresh.iso.manifest.json").write_text('{"installerRevision":"abc"}\n', encoding="utf-8")
+        return 0
+
+    code = build_worker.execute(
+        args,
+        _hooks(
+            identity_reader=identity_reader,
+            build_runner=build_runner,
+            vm_running=lambda: True,
+            sleeper=sleeper,
+            clock=lambda: clock["now"],
+        ),
+    )
+    assert code == 3
+    data = _status(tmp_path / "status.json")
+    assert data["status"] == "blocked"
+    assert "still running" in str(data["reason"])
+    assert "iso" not in data and "iso_sha256" not in data
+
+    def stale_only(*_a: object, **_k: object) -> int:
+        planted = out / "preexisting.iso"
+        planted.write_bytes(b"preexisting")
+        os.utime(planted, (1, 1))
+        sidecar = out / "preexisting.iso.manifest.json"
+        sidecar.write_text('{"installerRevision":"stale"}\n', encoding="utf-8")
+        return 0
+
+    seen["n"] = 0
+    code = build_worker.execute(
+        args,
+        _hooks(
+            identity_reader=identity_reader,
+            build_runner=stale_only,
+            vm_running=lambda: False,
+            wall_clock=lambda: 1_000_000.0,
+        ),
+    )
+    assert code == 4
+    data = _status(tmp_path / "status.json")
+    assert data["status"] == "failed"
+    assert "iso" not in data and "iso_sha256" not in data
+
+
+def test_build_execute_fails_closed_on_missing_pid_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(build_worker, "install_signal_handlers", lambda: None)
+    args = _build_args(tmp_path)
+    called = {"build": 0}
+
+    def build_runner(*_a: object, **_k: object) -> int:
+        called["build"] += 1
+        return 0
+
+    assert build_worker.execute(args, _hooks(build_runner=build_runner)) == 3
+    assert called["build"] == 0
+    data = _status(tmp_path / "status.json")
+    assert data["status"] == "blocked"
+    assert "missing" in str(data["reason"])
+    assert data["pid"] == os.getpid()
+
+
+def test_build_timeout_and_launch_error_do_not_report_an_iso(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(build_worker, "install_signal_handlers", lambda: None)
+    args = _build_args(tmp_path)
+    out = tmp_path / "candidate"
+    out.mkdir()
+    (tmp_path / "muse.pid").write_text("50\n", encoding="utf-8")
+    events: list[str] = []
+    seen = {"n": 0}
+
+    def identity_reader(pid: int) -> object:
+        seen["n"] += 1
+        return _muse_identity(pid) if seen["n"] == 1 else None
+
+    def timeout_runner(*_a: object, **_k: object) -> int:
+        fresh = out / "partial.iso"
+        fresh.write_bytes(b"partial")
+        (out / "partial.iso.manifest.json").write_text('{"installerRevision":"nope"}\n', encoding="utf-8")
+        return 124
+
+    def shutdown_runner(_command: list[str], _log: Path) -> None:
+        events.append(_status(tmp_path / "status.json")["status"])  # type: ignore[arg-type]
+        events.append("shutdown")
+
+    assert (
+        build_worker.execute(
+            args,
+            _hooks(
+                identity_reader=identity_reader,
+                build_runner=timeout_runner,
+                shutdown_runner=shutdown_runner,
+                vm_running=lambda: False,
+            ),
+        )
+        == 124
+    )
+    data = _status(tmp_path / "status.json")
+    assert events == ["shutting-down-build-vm", "shutdown"]
+    assert data["status"] == "failed"
+    assert data["reason"] == "candidate build timed out"
+    assert "iso" not in data and "sha" not in data and "iso_sha256" not in data
+
+    seen["n"] = 0
+    events.clear()
+    clock = {"now": 0.0}
+
+    def exploding_runner(*_a: object, **_k: object) -> int:
+        raise RuntimeError("build launcher failed after VM start")
+
+    def advance(seconds: float) -> bool:
+        clock["now"] += seconds
+        return True
+
+    code = build_worker.execute(
+        args,
+        _hooks(
+            identity_reader=identity_reader,
+            build_runner=exploding_runner,
+            shutdown_runner=shutdown_runner,
+            vm_running=lambda: True,
+            sleeper=advance,
+            clock=lambda: clock["now"],
+        ),
+    )
+    assert code == 3
+    assert "shutdown" in events
+    data = _status(tmp_path / "status.json")
+    assert data["status"] == "blocked"
+    assert "shutdown was not verified" in str(data["reason"])
+    assert "iso" not in data and "sha" not in data and "iso_sha256" not in data
+
+
+def test_build_vm_probe_sees_name_past_column_80(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    padding = "x" * 90
+    cmdline = f"qemu-system-x86_64 {padding} -name hornero-build-vm -m 8192"
+    name_at = cmdline.find("-name hornero-build-vm")
+    assert name_at >= 80
+    assert "hornero-build-vm" not in cmdline[:80]
+    assert build_worker.find_build_vm(cmdline)
+    assert not build_worker.find_build_vm(cmdline[:80])
+
+    proc = tmp_path / "proc" / "4242"
+    proc.mkdir(parents=True)
+    (proc / "cmdline").write_bytes(cmdline.replace(" ", "\0").encode() + b"\0")
+    (tmp_path / "proc" / "self").mkdir()
+    monkeypatch.setenv("COLUMNS", "80")
+
+    def forbid_ps(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("shutdown probe must not call ps")
+
+    monkeypatch.setattr(build_worker.subprocess, "run", forbid_ps)
+    assert build_worker.build_vm_running(proc_root=tmp_path / "proc")
+    assert build_worker.qemu_already_active(proc_root=tmp_path / "proc")
+    empty = tmp_path / "empty-proc"
+    empty.mkdir()
+    assert not build_worker.build_vm_running(proc_root=empty)
+    assert '["ps"' not in (SCRIPTS / "build_worker.py").read_text(encoding="utf-8")
+    doc = (ROOT / "docs" / "OFFLINE-QUALIFICATION.md").read_text(encoding="utf-8")
+    assert "--build-identity" in doc
+    assert "host-setup failure" in doc
+    assert "personal_rsa" not in doc
+
+
+def test_build_worker_unit_does_not_embed_local_script_or_personal_key() -> None:
+    unit = (SCRIPTS / "hornero-offline-build.service").read_text(encoding="utf-8")
+    assert "build_worker.py" in unit
+    assert "build-p33-worker.sh" not in unit
+    assert "personal_rsa" not in unit
+    assert "KillMode=control-group" in unit
+    assert "Restart=no" in unit
+    assert "TimeoutStopSec=300" in unit
+    assert "--build-timeout-seconds 21600" in unit
+    refusal = build_worker.validate_runtime_args(
+        build_worker.parse_args(
+            [
+                "--target-pid-file",
+                "p",
+                "--status-file",
+                "s",
+                "--lock-file",
+                "l",
+                "--log-file",
+                "g",
+                "--candidate-out",
+                "c",
+                "--build-host",
+                "builder@127.0.0.1",
+                "--build-timeout-seconds",
+                "1",
+            ]
+        )
+    )
+    assert refusal is not None and "60" in refusal
