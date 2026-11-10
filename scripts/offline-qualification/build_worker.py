@@ -232,8 +232,33 @@ def find_build_vm(ps_text: str) -> bool:
     return False
 
 
-def qemu_already_active(ps_text: str | None = None) -> bool:
-    text = ps_text if ps_text is not None else _ps_args()
+def collect_process_cmdlines(proc_root: Path = Path("/proc")) -> str:
+    """Read ``/proc/<pid>/cmdline``. ``ps`` without ``-ww`` truncates at COLUMNS.
+
+    The build VM's ``-name hornero-build-vm`` sits past column 80, so a
+    truncated ``ps`` line would look like the VM is gone. This collector
+    does not call ``ps`` and does not read ``COLUMNS``.
+    """
+    try:
+        entries = list(proc_root.iterdir())
+    except OSError as exc:
+        raise RuntimeError(f"cannot list process cmdlines in {proc_root}: {exc}") from exc
+    lines: list[str] = []
+    for entry in entries:
+        if not entry.name.isdigit():
+            continue
+        try:
+            raw = (entry / "cmdline").read_bytes()
+        except OSError:
+            continue
+        text = " ".join(part.decode("utf-8", errors="replace") for part in raw.split(b"\0") if part)
+        if text:
+            lines.append(text)
+    return "\n".join(lines)
+
+
+def qemu_already_active(proc_root: Path | None = None) -> bool:
+    text = collect_process_cmdlines(Path("/proc") if proc_root is None else proc_root)
     for raw_line in text.splitlines():
         line = raw_line.strip()
         if "grep" in line:
@@ -243,21 +268,9 @@ def qemu_already_active(ps_text: str | None = None) -> bool:
     return False
 
 
-def build_vm_running(ps_text: str | None = None) -> bool:
-    return find_build_vm(ps_text if ps_text is not None else _ps_args())
-
-
-def _ps_args() -> str:
-    result = subprocess.run(
-        ["ps", "-u", str(os.getuid()), "-o", "args="],
-        capture_output=True,
-        text=True,
-        timeout=15,
-        check=False,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(f"ps exited {result.returncode}: {result.stderr.strip()}")
-    return result.stdout
+def build_vm_running(proc_root: Path | None = None) -> bool:
+    text = collect_process_cmdlines(Path("/proc") if proc_root is None else proc_root)
+    return find_build_vm(text)
 
 
 def snapshot_isos(out: Path) -> dict[str, tuple[int, int]]:

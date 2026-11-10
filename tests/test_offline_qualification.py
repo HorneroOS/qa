@@ -1097,6 +1097,37 @@ def test_build_timeout_and_launch_error_do_not_report_an_iso(
     assert "iso" not in data and "sha" not in data and "iso_sha256" not in data
 
 
+def test_build_vm_probe_sees_name_past_column_80(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    padding = "x" * 90
+    cmdline = f"qemu-system-x86_64 {padding} -name hornero-build-vm -m 8192"
+    name_at = cmdline.find("-name hornero-build-vm")
+    assert name_at >= 80
+    assert "hornero-build-vm" not in cmdline[:80]
+    assert build_worker.find_build_vm(cmdline)
+    assert not build_worker.find_build_vm(cmdline[:80])
+
+    proc = tmp_path / "proc" / "4242"
+    proc.mkdir(parents=True)
+    (proc / "cmdline").write_bytes(cmdline.replace(" ", "\0").encode() + b"\0")
+    (tmp_path / "proc" / "self").mkdir()
+    monkeypatch.setenv("COLUMNS", "80")
+
+    def forbid_ps(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("shutdown probe must not call ps")
+
+    monkeypatch.setattr(build_worker.subprocess, "run", forbid_ps)
+    assert build_worker.build_vm_running(proc_root=tmp_path / "proc")
+    assert build_worker.qemu_already_active(proc_root=tmp_path / "proc")
+    empty = tmp_path / "empty-proc"
+    empty.mkdir()
+    assert not build_worker.build_vm_running(proc_root=empty)
+    assert '["ps"' not in (SCRIPTS / "build_worker.py").read_text(encoding="utf-8")
+    doc = (ROOT / "docs" / "OFFLINE-QUALIFICATION.md").read_text(encoding="utf-8")
+    assert "--build-identity" in doc
+    assert "host-setup failure" in doc
+    assert "personal_rsa" not in doc
+
+
 def test_build_worker_unit_does_not_embed_local_script_or_personal_key() -> None:
     unit = (SCRIPTS / "hornero-offline-build.service").read_text(encoding="utf-8")
     assert "build_worker.py" in unit
@@ -1104,6 +1135,7 @@ def test_build_worker_unit_does_not_embed_local_script_or_personal_key() -> None
     assert "personal_rsa" not in unit
     assert "KillMode=control-group" in unit
     assert "Restart=no" in unit
+    assert "TimeoutStopSec=300" in unit
     assert "--build-timeout-seconds 21600" in unit
     refusal = build_worker.validate_runtime_args(
         build_worker.parse_args(

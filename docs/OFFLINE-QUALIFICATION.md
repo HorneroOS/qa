@@ -93,7 +93,17 @@ verified gone. The candidate directory is cleaned of prior ISOs first,
 and a pre-existing ISO is never reported as the new candidate.
 `completed` means a fresh ISO and sidecar were produced; it is not a
 signature and not a QA PASS. The worker calls `preflight.py 8192` (the
-12 GiB gate) and has no switch to lower it.
+12 GiB gate) and has no switch to lower it. Shutdown is verified from
+`/proc/<pid>/cmdline`, not from `ps`: an 80-column `ps` line truncates
+before `-name hornero-build-vm` and must not be treated as "VM gone".
+
+The checked-in unit does not pass `--build-identity`, and
+`~/.ssh/config` does not attach a key to `builder@127.0.0.1`. SSH
+poweroff then fails unless the operator adds a drop-in with
+`--build-identity` pointing at a key that is already authorized on the
+build VM. Do not commit that path. A `blocked` status in that case is
+a host-setup failure, not a product failure, and no candidate is
+reported.
 
 Without `OFFLINE_BUILD_HOST` the script prints the exact manual
 in-VM build commands and exits 4. Keep the sidecar
