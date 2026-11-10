@@ -1,0 +1,22 @@
+[Unit]
+Description=HorneroOS Preview 33 offline candidate-build worker
+Documentation=file:%h/hornero-qa/docs/OFFLINE-QUALIFICATION.md
+
+[Service]
+Type=exec
+WorkingDirectory=%h/hornero-qa
+Environment=PYTHONUNBUFFERED=1
+# Identity is not baked in. Add a drop-in --build-identity only for a local key
+# that is already authorized on the build VM. Do not lower the 8192 MiB preflight.
+ExecStart=%h/hornero-qa/.venv/bin/python %h/hornero-qa/scripts/offline-qualification/build_worker.py --target-pid-file %h/hornero-p33-offline/build-p33.muse.pid --status-file %h/hornero-p33-offline/build-p33.worker.json --lock-file %h/hornero-p33-offline/build-p33.worker.lock --log-file %h/hornero-p33-offline/build-p33.build.log --candidate-out %h/hornero-p33-offline/candidate --build-host builder@127.0.0.1 --build-port 2224 --poll-seconds 30 --max-wait-seconds 86400 --build-timeout-seconds 21600 --shutdown-wait-seconds 120
+Restart=no
+TimeoutStopSec=180
+KillMode=control-group
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

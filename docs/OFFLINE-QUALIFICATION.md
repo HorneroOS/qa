@@ -80,6 +80,21 @@ scripts/offline-qualification/build-candidate.sh
 #    maintainer workflow (installer/scripts/sign-release.sh)
 ```
 
+The supervised candidate-build worker is
+`scripts/offline-qualification/build_worker.py` (unit:
+`hornero-offline-build.service`). It is the in-repo replacement for a
+local `build-p33-worker.sh`. Arming fails closed when the target-PID
+file is missing, empty, or not a live Muse executable (cmdline identity
+plus start-time, not `kill -0`). Status `pid` is the worker process, and
+each status write drops stale `reason` / `iso` / `iso_sha256` fields.
+The build phase is bounded (`--build-timeout-seconds`, default 6h). A
+terminal `completed` or `failed` is written only after the build VM is
+verified gone. The candidate directory is cleaned of prior ISOs first,
+and a pre-existing ISO is never reported as the new candidate.
+`completed` means a fresh ISO and sidecar were produced; it is not a
+signature and not a QA PASS. The worker calls `preflight.py 8192` (the
+12 GiB gate) and has no switch to lower it.
+
 Without `OFFLINE_BUILD_HOST` the script prints the exact manual
 in-VM build commands and exits 4. Keep the sidecar
 `*.iso.manifest.json` next to the artifact — `run.py` pins it into
@@ -173,3 +188,5 @@ from this run on an installer#94 candidate).
 | install screenshots still mid-progress at the end | install slower than the wait budget | re-run that cell alone (`--cells <name> --resume`); the retry uses a fresh disk and a new `attempt-<n>` evidence dir |
 | `refusing --resume: state dir pins ISO sha256 …` | different ISO against an existing run | use a fresh `--state-dir` (one run = one immutable ISO) |
 | `cancel-contract NOT applicable` | artifact lacks installer#94 provenance (e.g. Preview 32) | expected on Preview 32; for candidates keep the sidecar next to the ISO and pass `--installer-repo` |
+| build worker `blocked`, target PID file missing/empty | arming refused rather than building unsupervised | write the live Muse PID, then start the worker while that process still exists |
+| build worker `blocked`, build VM still running | shutdown was not verified, so no candidate is reported | stop `hornero-build-vm` before any later qualification cell |
