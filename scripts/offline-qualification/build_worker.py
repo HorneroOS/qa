@@ -481,7 +481,7 @@ def wait_until_vm_gone(
             return False
         remaining = deadline - clock()
         if remaining <= 0 or not sleeper(min(3.0, remaining)):
-            return False
+            return not vm_running()
     return True
 
 
@@ -507,7 +507,11 @@ def _finish_after_shutdown(
     preexisting: dict[str, tuple[int, int]],
     build_started_at: float,
 ) -> int:
-    """Write a terminal status only after shutdown has been verified."""
+    """Write completed/failed only after shutdown is verified.
+
+    If the build VM is still running, the only terminal status is blocked,
+    and it never carries iso/sha fields.
+    """
     if not vm_gone:
         reason = (
             "shutdown interrupted and build VM still running; refusing to report a build result"
@@ -562,6 +566,7 @@ def execute(args: argparse.Namespace, hooks: BuildHooks | None = None) -> int:
             print("candidate-build worker already running; duplicate refused", file=sys.stderr)
             return 75
         status = BuildStatus(args.status_file, worker_pid=os.getpid())
+        launched = False
         try:
             status.update("armed", target_pid_file=str(args.target_pid_file))
             try:
@@ -620,6 +625,7 @@ def execute(args: argparse.Namespace, hooks: BuildHooks | None = None) -> int:
                 args.candidate_out,
             )
             status.update("building", candidate_out=str(args.candidate_out), target_pid=identity.pid)
+            launched = True
             rc = hooks.build_runner(command, env, args.log_file, args.build_timeout_seconds)
             # Non-terminal. completed/failed are not written until shutdown is verified.
             status.update("shutting-down-build-vm", build_exit_code=rc, candidate_out=str(args.candidate_out))
@@ -642,7 +648,31 @@ def execute(args: argparse.Namespace, hooks: BuildHooks | None = None) -> int:
                 build_started_at=build_started_at,
             )
         except Exception as exc:
-            status.update("failed", error=f"{type(exc).__name__}: {exc}")
+            error = f"{type(exc).__name__}: {exc}"
+            # A launched build may have left the VM up. Do not write failed
+            # until shutdown is verified; otherwise report blocked with no ISO.
+            if launched:
+                with suppress(Exception):
+                    hooks.shutdown_runner(
+                        poweroff_command(args.build_host, args.build_port, args.build_identity),
+                        args.log_file,
+                    )
+                vm_gone = False
+                with suppress(Exception):
+                    vm_gone = wait_until_vm_gone(
+                        hooks.vm_running,
+                        timeout_seconds=args.shutdown_wait_seconds,
+                        sleeper=hooks.sleeper,
+                        clock=hooks.clock,
+                    )
+                if not vm_gone:
+                    status.update(
+                        "blocked",
+                        reason="build worker failed and build VM shutdown was not verified",
+                        error=error,
+                    )
+                    return 3
+            status.update("failed", error=error)
             raise
 
 
