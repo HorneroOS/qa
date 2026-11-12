@@ -449,6 +449,22 @@ scenarios:
     schedule: Blocked until a pinned image ships the merged horneroctl Studio
       contracts (HorneroOS/hornero#301/#303); then schedule in the next approved
       KVM QA window.
+  studio/artcraft-launcher-hyprland:
+    decision: keep
+    rationale: 'Experimental ArtCraft Launcher acceptance (HorneroOS/qa#36,
+      hornero#325): absent until explicit application opt-in, verified
+      manual install only, native Wayland launch, one Craft application,
+      update and clean uninstall. Hyprland is the blocking compositor.'
+    schedule: 'NOT RUN: execute on the current Studio Preview ISO in an
+      approved KVM window after the fixture is owner-approved and the
+      acceptance item is enabled; no PASS is claimed.'
+  studio/artcraft-launcher-niri:
+    decision: keep
+    rationale: 'Same ArtCraft Launcher contract on Niri (HorneroOS/qa#36):
+      report-only while Niri remains experimental; excluded from the
+      required gate.'
+    schedule: 'NOT RUN: report-only run alongside the Hyprland blocking
+      run; no PASS is claimed.'
   studio/selection-parity:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Post-install Studio

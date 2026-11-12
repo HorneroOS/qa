@@ -133,3 +133,14 @@ items:
     status: pending
     evidence: []
     review: {decision: pending, reference: null}
+  - id: artcraft-launcher-experimental
+    outcome: Experimental ArtCraft Launcher opt-in installs only via the verified manual channel, launches on Wayland, installs one Craft application, updates, and uninstalls cleanly (Hyprland blocking; Niri report-only).
+    required: false
+    condition: when-enabled
+    enabled: false
+    evidence_kind: bundle
+    owner_issues: [qa#36, hornero#325, installer#36, shell#333]
+    fixture: {id: null, approved: false, sha256: null, manifest: null, notes: "Owner must approve a disposable VM fixture and pin the current Studio Preview ISO before enabling; the experimental entry must not block general Studio Preview while disabled."}
+    status: pending
+    evidence: []
+    review: {decision: pending, reference: null}

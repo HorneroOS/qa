@@ -146,6 +146,49 @@ def _accepted_run(runs_dir: Path, tmp_path: Path) -> tuple[dict[str, Any], dict[
     return evidence, pins
 
 
+def _artcraft_item(enabled: bool | None) -> dict[str, Any]:
+    return {
+        "id": "artcraft-launcher-experimental",
+        "outcome": "Experimental ArtCraft Launcher opt-in evidence is accepted.",
+        "required": False,
+        "condition": "when-enabled",
+        "enabled": enabled,
+        "owner_issues": ["qa#36", "hornero#325"],
+        "evidence_kind": "bundle",
+        "fixture": {
+            "id": None,
+            "approved": False,
+            "notes": "Owner selection required.",
+            "sha256": None,
+            "manifest": None,
+        },
+        "status": "pending",
+        "evidence": [],
+        "review": {"decision": "pending", "reference": None},
+    }
+
+
+def test_artcraft_disabled_does_not_block_but_enabled_without_evidence_does(
+    tmp_path: Path,
+) -> None:
+    manifest = tmp_path / "acceptance.yaml"
+    data = _manifest()
+    data["items"].append(_artcraft_item(enabled=False))
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+    report = evaluate(manifest, tmp_path / "runs")
+    artcraft = next(i for i in report["items"] if i["id"] == "artcraft-launcher-experimental")
+    # Only the always-required audio item blocks; the disabled experimental
+    # opt-in must not block general Studio Preview.
+    assert report["summary"].startswith("Studio Preview recommendation blocked: 1 ")
+
+    data["items"][-1]["enabled"] = True
+    manifest.write_text(yaml.safe_dump(data), encoding="utf-8")
+    report = evaluate(manifest, tmp_path / "runs")
+    assert report["summary"].startswith("Studio Preview recommendation blocked: 2 ")
+    artcraft = next(i for i in report["items"] if i["id"] == "artcraft-launcher-experimental")
+    assert "no evidence is indexed" in artcraft["blocking_reasons"]
+
+
 def test_pending_or_unsupported_outcome_blocks_preview(tmp_path: Path) -> None:
     manifest = tmp_path / "acceptance.yaml"
     manifest.write_text(yaml.safe_dump(_manifest()), encoding="utf-8")

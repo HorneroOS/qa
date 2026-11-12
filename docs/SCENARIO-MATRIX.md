@@ -78,6 +78,8 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 | `regressions/shell-77-rapid-escape` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `smoke/desktop-ready` | 2026-10-24 | PASS | [run report](evidence/runs/20261024T191340Z-smoke-desktop-ready-1/report.html) | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `smoke/no-config-errors` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
+| `studio/artcraft-launcher-hyprland` | — | Never executed | — | keep | NOT RUN: execute on the current Studio Preview ISO in an approved KVM window after the fixture is owner-approved and the acceptance item is enabled; no PASS is claimed. |
+| `studio/artcraft-launcher-niri` | — | Never executed | — | keep | NOT RUN: report-only run alongside the Hyprland blocking run; no PASS is claimed. |
 | `studio/audio-mode-opt-in` | — | Never executed | — | keep | Blocked until a pinned image ships the merged horneroctl Studio contracts (HorneroOS/hornero#302); then schedule in the next approved KVM QA window. |
 | `studio/jobs-approval-privacy` | — | Never executed | — | keep | Blocked until a pinned image ships the merged horneroctl Studio contracts (HorneroOS/hornero#301/#303); then schedule in the next approved KVM QA window. |
 | `studio/selection-parity` | — | Never executed | — | keep | Blocked until a pinned image ships the merged horneroctl Studio contracts (HorneroOS/hornero#299); then schedule in the next approved KVM QA window. |
