@@ -449,6 +449,15 @@ scenarios:
     schedule: Blocked until a pinned image ships the merged horneroctl Studio
       contracts (HorneroOS/hornero#301/#303); then schedule in the next approved
       KVM QA window.
+  agentic/shell-proposal-delegate:
+    decision: keep
+    rationale: 'Agentic workstation acceptance (HorneroOS/hornero#391/#394):
+      shell proposals never execute, prefixed elevation is classified
+      protected, and external delegation is refused or truthful. Host
+      acceptance already runs in hornero scripts/agentic-acceptance.sh;
+      this scenario carries the same contract into guest QA.'
+    schedule: 'NOT RUN: execute on the next candidate ISO in an approved
+      KVM window; no PASS is claimed.'
   studio/artcraft-launcher-hyprland:
     decision: keep
     rationale: 'Experimental ArtCraft Launcher acceptance (HorneroOS/qa#36,
