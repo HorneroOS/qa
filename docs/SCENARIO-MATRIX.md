@@ -5,6 +5,7 @@ Only tracked evidence is included. Screenshot sidecars without a complete run re
 
 | Scenario | Last execution | Result | Evidence | Triage | Decision / next action |
 |---|---|---|---|---|---|
+| `agentic/shell-proposal-delegate` | — | Never executed | — | keep | NOT RUN: execute on the next candidate ISO in an approved KVM window; no PASS is claimed. |
 | `bars/dock-bottom-popout-travel` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `bars/popout-close-empty-surface` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |
 | `bars/rail-activewindow-hover-right` | — | Never executed | — | keep | Schedule in the next approved KVM QA window against the pinned ready image. |

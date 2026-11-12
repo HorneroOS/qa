@@ -1,0 +1,22 @@
+id: agentic/shell-proposal-delegate
+purpose: >-
+  Post-install agentic safety contract: shell proposals never execute,
+  privileged commands are classified honestly, and delegation to external
+  agents is a truthful handoff that installs and launches nothing.
+covers: [hornero#391, hornero#394]
+instruction: Open a terminal and review shell proposals and agent delegation.
+proof:
+  - note: Agent registry is discoverable read-only
+    probe: {run: "horneroctl --json agent list", contains: "Registered agents:"}
+  - note: A shell proposal never executes the command it proposes
+    probe: {run: "horneroctl assistant shell-proposal --command \"touch /tmp/agentic-proposal-marker\" && test ! -e /tmp/agentic-proposal-marker && echo never-executed || echo executed", equals: never-executed}
+  - note: Prefixed elevation to a destructive command is classified protected
+    probe: {run: "horneroctl --json assistant shell-proposal --command \"/usr/bin/sudo rm -rf /\"", contains: "protected"}
+  - note: Delegation to an unknown agent is refused
+    probe: {run: "horneroctl assistant delegate qa-bogus-agent --workspace /tmp \"review\" >/dev/null 2>&1 && echo allowed || echo refused", equals: refused}
+  - note: Delegation states the external security boundary truthfully
+    probe: {run: "horneroctl assistant delegate codex --workspace /tmp \"review the parser\"", contains: "does NOT inherit Hornero ABAC"}
+  - note: Agent config reports drift honestly on a fresh system
+    probe: {run: "horneroctl --json agent config status", contains: "Projection scope"}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}
