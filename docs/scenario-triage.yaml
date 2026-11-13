@@ -528,3 +528,87 @@ scenarios:
     decision: keep
     rationale: 'Hardware-free no-adapter power coverage: a power request with no adapter must fail gracefully and doctor must still report adapter/powered fail, never a false success. Real-hardware power persistence across reboot/suspend is NOT TESTED.'
     schedule: 'NOT TESTED in the QA harness yet: horneroctl hardware bluetooth doctor shipped (Preview 30) and passed on installed Desktop/Studio VMs (honest no-adapter results); schedule these probe scenarios in the next approved KVM QA window. No hardware PASS is claimed.'
+  extensions/discovery-status:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): shell discovery through horneroctl and plugins IPC agree, every enabled healthy fixture loads, diagnostics budgets are reported. Source tests in shell/plugins do not satisfy the shell#222/#366 runtime gaps.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/multi-surface-loads:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): a manifest v2 multi-surface package and a v1 package load side by side and the v2 dashboard card renders (shell#373).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/settings-persistence:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): typed settings declared in the manifest are stored by the shell in plugins.settings and survive a shell restart; the generated settings UI reads the same storage (shell#374).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/malformed-settings-resilience:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): malformed stored settings, dashboard layout and desktop slots degrade to defaults without crashing the shell or corrupting neighbours (shell#222/#374/#378).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/safe-mode-recovery:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): persisted safe mode loads no extension, reports safe-mode state, and keeps core IPC plus the horneroctl lifecycle usable for recovery (shell#380).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/load-failure-isolation:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): a load-failing extension is confined to its own Loader with bounded, redacted diagnostics while healthy neighbours keep running (shell#380). Requires the example-broken fixture, which does not exist yet.'
+    schedule: 'PENDING (qa#81): blocked until the example-broken fixture exists and the ready image carries the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; then execute in the next approved KVM window. No PASS is claimed.'
+  extensions/lifecycle-disable-enable:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): horneroctl disable unloads an extension without touching neighbours; enable revalidates and loads it again.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/uninstall-cleanup:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): horneroctl remove of the disposable desktop-note fixture cleans it out of the CLI list and shell status while the desktop keeps working.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/restart-persistence:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): dashboard layout (order/pinned/sizes) and desktop-widget slots persist verbatim through a shell restart (shell#222/#378).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/marketplace-metadata:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): marketplace previews/compatibility/changelog are reported without executing plugin code, and community discovery fails closed while no registry product key ships (shell#366/#379).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/offline-unavailable-services:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): with weather unconfigured, provider-reading extensions show empty/error state instead of failing, and local discovery needs no network (shell#377).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+  extensions/dashboard-all-enabled-stress:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): with every fixture dashboard extension enabled, the dashboard stays responsive, all cards load and no load-churn diagnostic is flagged (shell#378). Layout quality is screenshot-review evidence.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/keyboard-only:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): the dashboard Extensions tab is navigable and configurable keyboard-only (Tab, P pin persisted, Escape cascade); visible focus is screenshot-review evidence and live AT-SPI announcements stay NOT TESTED (shell#221).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/themes-reduced-motion:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): fixture extensions keep loading and render through theme tokens under Hornero Light with host animation scale 0 (reduced motion); token fidelity is screenshot-review evidence.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/bar-edge-left:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the left rail; tooltip/popover opening inward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/bar-edge-right:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the right rail; tooltip/popover opening inward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/bar-edge-top:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the top bar; tooltip/popover opening downward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/bar-edge-bottom:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the bottom dock; tooltip/popover opening upward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/narrow-display:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): bar and dashboard extensions stay loaded and compact on an 800x600 virtual output; compact rendering is screenshot-review evidence. Virtual output only.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/hidpi-wide-display:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): extensions stay loaded at 1920x1080 scale 1.5 with logical-size host caps; sharpness is screenshot-review evidence. Virtual output only; no physical HiDPI claim.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  extensions/multimonitor-virtual:
+    decision: keep
+    rationale: 'Extension Premium Acceptance (qa#81): per-screen bar/desktop extensions stay loaded on two differently scaled VIRTUAL outputs. Physical monitors, hotplug and disconnect fallback stay NOT TESTED until an approved hardware fixture exists.'
+    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'

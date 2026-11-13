@@ -1,0 +1,32 @@
+id: extensions/narrow-display
+purpose: >-
+  Narrow display (qa#81): on an 800x600 virtual output, bar and dashboard
+  extensions report the compact host context instead of clipping, and the
+  shell stays usable. Compact rendering quality is screenshot-review
+  evidence. Virtual output only; no physical-display claim. PENDING until
+  run in an approved KVM window.
+covers: [qa#81, shell#372]
+requires: {outputs: 1, compositor: hyprland}
+setup:
+  layout: islands
+  commands:
+    - 'hyprctl keyword monitor "Virtual-1,800x600@60,0x0,1"'
+instruction: Shrink the display to 800x600 and inspect the extensions in the bar and dashboard.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - screenshot: narrow-bar
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: narrow-dashboard
+  - key: escape
+proof:
+  - note: Hyprland reports the narrow 800x600 output at scale 1
+    probe: {run: "hyprctl monitors -j | jq -c '[.[] | {width,height,scale}]'", equals: '[{"width":800,"height":600,"scale":1}]', retry_s: 10}
+  - note: The top bar is still drawn on the narrow output
+    probe: {run: "qs ipc call debug bars | jq '[.[] | select(.visible)] | length > 0'", equals: "true", retry_s: 10}
+  - note: Fixture extensions stayed loaded at the narrow size, none failed
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0"}
+  - screenshot: final
+media: [narrow-bar, narrow-dashboard]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: on-failure}

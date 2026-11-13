@@ -1,0 +1,36 @@
+id: extensions/settings-persistence
+purpose: >-
+  Foundation wave (qa#81): typed extension settings are declared in the
+  manifest, stored by the shell (never by plugin code) under
+  plugins.settings in shell.json, and survive a shell restart; the
+  generated Control Center settings UI reads the same storage. The
+  generated-UI visual check is screenshot-review evidence (see
+  docs/EXTENSIONS-ACCEPTANCE.md). PENDING until run in an approved KVM window.
+covers: [qa#81, shell#374]
+setup:
+  commands:
+    - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); d.setdefault(\"plugins\",{}).setdefault(\"settings\",{})[\"example-clock\"]={\"twentyFourHour\": False}; json.dump(d, open(p,\"w\"))"'
+    - 'pkill -x qs || true; sleep 1; hyprctl dispatch exec "$HOME/.local/bin/qa-shell.sh"; sleep 3'
+instruction: Restart the shell with a stored example-clock setting and open Settings to inspect the generated extension settings.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - key: ctrl+space
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - type: ">Settings"
+  - wait: {stable: 0.5, timeout: 8}
+  - key: enter
+  - probe: {run: "hyprctl clients -j | jq -r 'any(.[]; .title | startswith(\"Hornero Settings\"))'", equals: "true", retry_s: 10}
+  - screenshot: settings-for-extensions-review
+  - key: escape
+proof:
+  - note: The fixture declares a typed boolean setting with a default in its manifest capabilities
+    probe: {run: "python3 -c \"import json,subprocess; cli=json.loads(subprocess.check_output(['horneroctl','plugin','list','--json'],text=True)); raw=cli['data']['plugins']; ps=json.loads(raw) if isinstance(raw,str) else raw; s=[p for p in ps if p['id']=='example-clock'][0]['capabilities']['settings']['twentyFourHour']; print(s['type'], s['default'])\"", equals: "boolean True"}
+  - note: The stored user value survived the shell restart verbatim
+    probe: {run: "python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.config/hornero/shell.json'))); print(d['plugins']['settings']['example-clock']['twentyFourHour'])\"", equals: "False"}
+  - note: The extension loaded again after the restart with the stored value in place
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 10}
+  - note: Quickshell remains alive after the Settings journey
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+budget: {wall_s: 180}
+artifacts: {screenshots: always, logs: on-failure}

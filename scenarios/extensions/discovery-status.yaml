@@ -1,0 +1,29 @@
+id: extensions/discovery-status
+purpose: >-
+  Foundation wave (qa#81): on a ready image whose fixture extensions are
+  installed and enabled (docs/EXTENSIONS-ACCEPTANCE.md), the shell discovers
+  them through horneroctl, loads every healthy fixture, and reports one
+  consistent status through IPC and the CLI. NOT RUN yet: this scenario is
+  PENDING until executed in an approved KVM window; no PASS is claimed.
+covers: [qa#81, shell#222, shell#380]
+instruction: Boot the desktop, then compare the extension status the shell reports with the installed-plugin list.
+proof:
+  - note: Shell finished plugin discovery without an error
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.discovered) \\(.discoveryError)\"'", equals: "true ", retry_s: 15}
+  - note: Safe mode is off on the healthy fixture image
+    probe: {run: "qs ipc call plugins status | jq -r .safeMode", equals: "false"}
+  - note: At least one fixture extension is installed, so the checks below are not vacuous
+    probe: {run: "qs ipc call plugins status | jq -r '.count >= 1'", equals: "true"}
+  - note: Every enabled installed fixture reached the loaded state and none failed
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded) \\(.failed) \\([.plugins[] | select(.enabled and .installed)] | length)\"'", matches: "^([1-9][0-9]*) 0 \\1$", retry_s: 15}
+  - note: The example-clock fixture (PluginKit-only bar extension) is loaded
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 10}
+  - note: CLI and IPC agree on the installed extension ids
+    probe: {run: "python3 -c \"import json,subprocess; cli=json.loads(subprocess.check_output(['horneroctl','plugin','list','--json'],text=True)); raw=cli['data']['plugins']; ids=sorted(p['id'] for p in (json.loads(raw) if isinstance(raw,str) else raw)); ipc=json.loads(subprocess.check_output(['qs','ipc','call','plugins','status'],text=True)); print(str(ids==sorted(p['id'] for p in ipc['plugins'])).lower())\"", equals: "true"}
+  - note: Diagnostics budgets are reported for the record
+    probe: {run: "qs ipc call plugins status | jq -r '.budgets | \"\\(.slowLoadMs) \\(.churnAttempts) \\(.churnWindowMs)\"'", equals: "2000 5 60000", save: plugins-status-budgets.txt}
+  - note: Full plugin status kept as evidence
+    probe: {run: "qs ipc call plugins status", contains: example-clock, save: plugins-status.json}
+  - screenshot: desktop-with-extensions
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: always}

@@ -1,0 +1,28 @@
+id: extensions/multi-surface-loads
+purpose: >-
+  Foundation wave (qa#81): a manifest v2 multi-surface package and a v1
+  package load side by side; the multi-surface package renders its bar
+  surface and its dashboard card from one install, and the v1 package keeps
+  working unchanged. PENDING until run in an approved KVM window.
+covers: [qa#81, shell#373]
+instruction: Open the dashboard Extensions tab and look at the multi-surface example next to the v1 example.
+steps:
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - probe: {run: "qs ipc call drawers state dashboard", equals: "true", retry_s: 5}
+  - screenshot: dashboard-extensions
+  - key: escape
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+proof:
+  - note: The v2 multi-surface fixture is a single installed package in the loaded state
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-multi-surface\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 10}
+  - note: The v1 example-clock fixture still loads unchanged beside it
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 10}
+  - note: No fixture failed while both manifest generations were hosted
+    probe: {run: "qs ipc call plugins status | jq -r .failed", equals: "0"}
+  - note: Escape closed the dashboard after viewing the cards
+    probe: {run: "qs ipc call drawers state dashboard", equals: "false", retry_s: 3}
+  - screenshot: after-escape
+media: [dashboard-extensions]
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: on-failure}

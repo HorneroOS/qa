@@ -1,0 +1,26 @@
+id: extensions/marketplace-metadata
+purpose: >-
+  Foundation wave (qa#81): marketplace metadata (static screenshot previews,
+  compatibility range, changelog) is normalized and reported without ever
+  executing plugin code to show a preview, and community discovery fails
+  closed while no registry key ships. Flip the community probe only when a
+  product key ships and that is recorded (same pattern as
+  recovery/doctor-honesty). PENDING until run in an approved KVM window.
+covers: [qa#81, shell#366, shell#379]
+instruction: Inspect the reported marketplace metadata for the example-clock fixture.
+proof:
+  - note: Status carries the normalized static screenshot preview for the fixture
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\")] | .[0].marketplace.screenshots[0].path'", equals: previews/clock.png, retry_s: 10}
+  - note: Status carries the declared compatibility floor
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\")] | .[0].marketplace.compatibility.minShellVersion'", equals: "1.0.0"}
+  - note: Status carries the version history, newest first
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\")] | .[0].marketplace.changelog[0].version'", equals: "1.0.0"}
+  - note: The fixture whose metadata was read is itself loaded (metadata checks above are not vacuous)
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 10}
+  - note: Reading metadata loaded nothing extra - the fixture state is unchanged by the probes above
+    probe: {run: "qs ipc call plugins status | jq -r .failed", equals: "0"}
+  - note: Community discovery fails closed while no registry product key ships; flip only with that recorded
+    probe: {run: "horneroctl plugin community list >/dev/null 2>&1 && echo listed || echo refused", equals: refused}
+  - screenshot: desktop
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: on-failure}

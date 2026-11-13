@@ -1,0 +1,24 @@
+id: extensions/uninstall-cleanup
+purpose: >-
+  Foundation wave (qa#81): removing a receipt-owned extension through
+  horneroctl takes it out of the CLI list and the shell status, and the
+  desktop keeps working with the remaining extensions. Removes the
+  disposable example-desktop-note fixture only; each guest is throwaway, so
+  no other scenario depends on this guest afterwards. PENDING until run in
+  an approved KVM window.
+covers: [qa#81]
+instruction: Remove the disposable desktop-note extension and confirm the desktop without it.
+proof:
+  - note: Precondition - the disposable fixture starts installed and loaded
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-desktop-note\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 15}
+  - note: Removing through the CLI succeeds
+    probe: {run: "horneroctl plugin remove example-desktop-note --yes >/dev/null 2>&1 && echo removed || echo refused", equals: removed}
+  - note: The CLI list no longer contains the removed extension
+    probe: {run: "python3 -c \"import json,subprocess; cli=json.loads(subprocess.check_output(['horneroctl','plugin','list','--json'],text=True)); raw=cli['data']['plugins']; ps=json.loads(raw) if isinstance(raw,str) else raw; print(str(all(p['id']!='example-desktop-note' for p in ps)).lower())\"", equals: "true"}
+  - note: After rediscovery the shell status no longer contains it either
+    probe: {run: "qs ipc call plugins reload >/dev/null 2>&1; qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-desktop-note\")] | length'", equals: "0", retry_s: 10}
+  - note: Remaining healthy extensions still load and none failed
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0", retry_s: 10}
+  - screenshot: after-uninstall
+budget: {wall_s: 180}
+artifacts: {screenshots: always, logs: always}

@@ -1,0 +1,28 @@
+id: extensions/bar-edge-top
+purpose: >-
+  Bar edges (qa#81), top bar: a bar extension renders on the horizontal top
+  bar, and its host-owned tooltip and popover open downward without
+  clipping. Tooltip/popover placement is manual screenshot-review evidence
+  from the note-step journey; the deterministic run alone must not be
+  recorded as visual PASS. PENDING until run.
+covers: [qa#81, shell#370, shell#371, shell#372]
+requires: {resolution: 1280x800}
+setup:
+  layout: islands
+instruction: Look at the bar extension on the top bar, then hover or focus it for its tooltip and open its popover if it has one.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - screenshot: top-bar-extension
+  - note: "MANUAL (reviewer, KVM window): hover the fixture bar widget, wait for the tooltip, confirm it opens below the bar fully on-screen; activate the widget and confirm any popover is clamped inside the display; capture both frames into the bundle."
+  - screenshot: top-bar-for-review
+proof:
+  - note: The active preset is the top-bar layout
+    probe: {run: "horneroctl shell preset current", contains: islands}
+  - note: Exactly the top bar edge is visible
+    probe: {run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'", equals: '["top"]', retry_s: 10}
+  - note: A bar-placement fixture extension is loaded on this edge
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.placement == \"bar\" and .state == \"loaded\")] | length >= 1'", equals: "true", retry_s: 10}
+  - screenshot: final
+media: [top-bar-extension]
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: on-failure}

@@ -1,0 +1,32 @@
+id: extensions/themes-reduced-motion
+purpose: >-
+  Themes and reduced motion (qa#81): under the Hornero Light theme with host
+  animation scale 0 (the shell's reduced-motion signal, which PluginKit
+  Theme exposes to extensions), fixture extensions keep loading and render
+  through theme tokens. Colour/token fidelity is screenshot-review evidence.
+  PENDING until run in an approved KVM window.
+covers: [qa#81, shell#369, shell#376]
+setup:
+  theme: hornero-light
+  commands:
+    - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); d.setdefault(\"appearance\",{}).setdefault(\"anim\",{}).setdefault(\"durations\",{})[\"scale\"]=0; json.dump(d, open(p,\"w\"))"'
+    - 'pkill -x qs || true; sleep 1; hyprctl dispatch exec "$HOME/.local/bin/qa-shell.sh"; sleep 3'
+instruction: Look at the extensions under the light theme with reduced motion, in the bar and in the dashboard.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - screenshot: light-reduced-motion-bar
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: light-reduced-motion-dashboard
+  - key: escape
+proof:
+  - note: The active official theme is Hornero Light
+    probe: {run: "horneroctl appearance theme get", contains: hornero-light, retry_s: 10}
+  - note: Host animation scale is 0, the reduced-motion signal extensions inherit
+    probe: {run: "python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.config/hornero/shell.json'))); print(d['appearance']['anim']['durations']['scale'])\"", equals: "0"}
+  - note: Fixture extensions loaded under the theme and motion change, none failed
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0", retry_s: 10}
+  - screenshot: final
+media: [light-reduced-motion-bar, light-reduced-motion-dashboard]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: on-failure}

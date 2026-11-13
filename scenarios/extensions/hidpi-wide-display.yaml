@@ -1,0 +1,32 @@
+id: extensions/hidpi-wide-display
+purpose: >-
+  Wide HiDPI display (qa#81): on a 1920x1080 virtual output at scale 1.5,
+  extensions render at logical size (host caps are scale-corrected) in the
+  bar and dashboard. Rendering sharpness is screenshot-review evidence.
+  Virtual output only; no physical HiDPI claim. PENDING until run in an
+  approved KVM window.
+covers: [qa#81, shell#372]
+requires: {outputs: 1, compositor: hyprland}
+setup:
+  layout: horizon
+  commands:
+    - 'hyprctl keyword monitor "Virtual-1,1920x1080@60,0x0,1.5"'
+instruction: Set the display to 1920x1080 at 1.5 scale and inspect the extensions in the bar and dashboard.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - screenshot: hidpi-bar
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: hidpi-dashboard
+  - key: escape
+proof:
+  - note: Hyprland reports 1920x1080 at scale 1.5
+    probe: {run: "hyprctl monitors -j | jq -c '[.[] | {width,height,scale}]'", equals: '[{"width":1920,"height":1080,"scale":1.5}]', retry_s: 10}
+  - note: Horizon draws its top and bottom bars at this scale
+    probe: {run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'", equals: '["bottom","top"]', retry_s: 10}
+  - note: Fixture extensions stayed loaded at this scale, none failed
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0"}
+  - screenshot: final
+media: [hidpi-bar, hidpi-dashboard]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: on-failure}
