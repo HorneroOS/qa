@@ -4,8 +4,12 @@ purpose: >-
   confined to its own Loader: it reports failed with a bounded, redacted
   diagnostic, healthy neighbours keep running, and the shell stays usable.
   Requires the deliberately broken fixture extension (example-broken) from
-  docs/EXTENSIONS-ACCEPTANCE.md; without it the first proof fails honestly
-  instead of passing vacuously. PENDING until run in an approved KVM window.
+  docs/EXTENSIONS-ACCEPTANCE.md; it now exists on HorneroOS/shell main
+  @07d8d1d (PR #395, examples/plugins/example-broken, validator-clean,
+  deterministic load failure), so the fixture blocker is removed. Without
+  it in the guest the first proof fails honestly instead of passing
+  vacuously. Execution still PENDING a ready image carrying the fixture
+  and an approved KVM window; never executed yet.
 covers: [qa#81, shell#380]
 instruction: Boot the desktop with one broken and one healthy extension enabled and inspect the reported states.
 proof:

@@ -550,8 +550,8 @@ scenarios:
     schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
   extensions/load-failure-isolation:
     decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): a load-failing extension is confined to its own Loader with bounded, redacted diagnostics while healthy neighbours keep running (shell#380). Requires the example-broken fixture, which does not exist yet.'
-    schedule: 'PENDING (qa#81): blocked until the example-broken fixture exists and the ready image carries the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; then execute in the next approved KVM window. No PASS is claimed.'
+    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): a load-failing extension is confined to its own Loader with bounded, redacted diagnostics while healthy neighbours keep running (shell#380). Requires the example-broken fixture, which now exists on HorneroOS/shell main @07d8d1d (PR #395, examples/plugins/example-broken: validator-clean, deterministic load failure, tests/test_plugin_broken_fixture.py); the fixture blocker is removed.'
+    schedule: 'PENDING (qa#81): fixture blocker removed (example-broken on shell main @07d8d1d); execution still PENDING a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md and an approved KVM window. No PASS is claimed; never executed yet.'
   extensions/lifecycle-disable-enable:
     decision: keep
     rationale: 'Extension Premium Acceptance (qa#81, foundation wave): horneroctl disable unloads an extension without touching neighbours; enable revalidates and loads it again.'
