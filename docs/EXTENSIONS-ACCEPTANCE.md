@@ -22,9 +22,10 @@ uv run pytest tests/test_extensions_scenarios.py
 The scenarios assume a ready image (shell + config at pinned SHAs, a
 `horneroctl` build that accepts manifest `schemaVersion` 2) whose guest
 user has these fixture extensions **installed, trusted and enabled** through
-the normal `horneroctl plugin` lifecycle before the run. The first four are
+the normal `horneroctl plugin` lifecycle before the run. All five are
 the shell repo's reference packages (`examples/plugins/` in
-`HorneroOS/shell`); the fifth still has to be created and owner-approved:
+`HorneroOS/shell`); the fifth, `example-broken`, landed on shell `main`
+in shell PR #395 (merge `07d8d1d`):
 
 | Fixture id | Shape | Used for |
 |---|---|---|
@@ -32,9 +33,9 @@ the shell repo's reference packages (`examples/plugins/` in
 | `example-multi-surface` | v2, `bar` primary + `dashboard` surface, string setting | multi-surface, restart persistence |
 | `example-dashboard-note` | `dashboard` card | dashboard stress, restart persistence |
 | `example-desktop-note` | `desktop` widget (disposable) | desktop slots, uninstall cleanup |
-| `example-broken` | **TO CREATE**: entrypoint that fails to load | load-failure isolation |
+| `example-broken` | exists on shell `main` @ `07d8d1d` (shell PR #395, `examples/plugins/example-broken`): validator-clean manifest, entrypoint deterministically fails to load (`tests/test_plugin_broken_fixture.py`) | load-failure isolation |
 
-Until the image carries the fixture, `extensions/load-failure-isolation`
+Until a ready image carries the fixture, `extensions/load-failure-isolation`
 cannot run at all, and every other scenario's fixture precondition probe
 fails honestly rather than passing vacuously (e.g. "no failed extensions"
 is always paired with "at least one loaded"). Fixture installation is image
@@ -54,7 +55,7 @@ claim anything. They are listed here in run order:
 3. `extensions/settings-persistence`
 4. `extensions/malformed-settings-resilience`
 5. `extensions/safe-mode-recovery`
-6. `extensions/load-failure-isolation` (needs the `example-broken` fixture)
+6. `extensions/load-failure-isolation` (needs the `example-broken` fixture, now on shell `main` @ `07d8d1d`; still needs a ready image carrying it)
 7. `extensions/lifecycle-disable-enable`
 8. `extensions/uninstall-cleanup`
 9. `extensions/restart-persistence`
