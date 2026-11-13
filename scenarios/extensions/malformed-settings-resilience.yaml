@@ -1,0 +1,31 @@
+id: extensions/malformed-settings-resilience
+purpose: >-
+  Foundation wave (qa#81): malformed stored extension state (a setting of
+  the wrong type, a malformed dashboard layout, an unknown desktop slot)
+  degrades to declared defaults and manifest order; it never crashes the
+  shell and never corrupts neighbouring extensions. PENDING until run in an
+  approved KVM window.
+covers: [qa#81, shell#222, shell#374, shell#378]
+setup:
+  commands:
+    - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); pl=d.setdefault(\"plugins\",{}); pl[\"settings\"]={\"example-clock\":{\"twentyFourHour\":\"not-a-boolean\"}}; pl[\"dashboardLayout\"]={\"order\":\"bogus\",\"pinned\":[\"no-such-plugin\"],\"sizes\":{\"example-clock\":\"huge\"}}; pl[\"desktopWidgetSlots\"]={\"default\":{\"example-desktop-note\":\"off-screen\"}}; json.dump(d, open(p,\"w\"))"'
+    - 'pkill -x qs || true; sleep 1; hyprctl dispatch exec "$HOME/.local/bin/qa-shell.sh"; sleep 3'
+instruction: Start the shell over malformed stored extension state and open the dashboard.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: dashboard-over-malformed-state
+  - key: escape
+proof:
+  - note: The shell process survived the malformed stored state
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - note: The extension with the malformed setting still loaded (default applies on read)
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 10}
+  - note: No healthy fixture was taken down by its neighbour's malformed state
+    probe: {run: "qs ipc call plugins status | jq -r .failed", equals: "0"}
+  - note: The guest has no nonempty Hyprland configuration errors
+    probe: {run: "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'", equals: "0"}
+  - screenshot: final
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: always}

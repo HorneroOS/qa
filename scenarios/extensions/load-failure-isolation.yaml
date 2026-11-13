@@ -1,0 +1,26 @@
+id: extensions/load-failure-isolation
+purpose: >-
+  Foundation wave (qa#81): an extension whose entrypoint fails to load is
+  confined to its own Loader: it reports failed with a bounded, redacted
+  diagnostic, healthy neighbours keep running, and the shell stays usable.
+  Requires the deliberately broken fixture extension (example-broken) from
+  docs/EXTENSIONS-ACCEPTANCE.md; without it the first proof fails honestly
+  instead of passing vacuously. PENDING until run in an approved KVM window.
+covers: [qa#81, shell#380]
+instruction: Boot the desktop with one broken and one healthy extension enabled and inspect the reported states.
+proof:
+  - note: The broken fixture is present and reported failed (precondition, never vacuous)
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-broken\" and .state == \"failed\")] | length'", equals: "1", retry_s: 15}
+  - note: The healthy neighbour still loaded
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 10}
+  - note: The diagnostics log recorded the failure and stays within its 50-event bound
+    probe: {run: "qs ipc call plugins status | jq -r '(.diagnosticsLog | length <= 50) and ([.diagnosticsLog[] | select(.id == \"example-broken\")] | length >= 1)'", equals: "true"}
+  - note: No diagnostics detail leaks a credential-looking value unredacted
+    probe: {run: "python3 -c \"import json,re,subprocess; s=json.loads(subprocess.check_output(['qs','ipc','call','plugins','status'],text=True)); bad=[e for e in s['diagnosticsLog'] if re.search(r'(token|password|secret|api[_-]?key)\\s*[=:]\\s*(?!<redacted>)\\S+', e.get('detail',''), re.I) or re.search(r'Bearer\\s+(?!<redacted>)\\S+', e.get('detail',''), re.I)]; print(str(not bad).lower())\"", equals: "true"}
+  - note: The shell process and IPC stayed alive despite the load failure
+    probe: {run: "qs ipc call drawers list", contains: launcher}
+  - note: Full plugin status kept as evidence
+    probe: {run: "qs ipc call plugins status", contains: example-broken, save: plugins-status-with-failure.json}
+  - screenshot: desktop-despite-broken-extension
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: always}
