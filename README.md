@@ -1,7 +1,8 @@
 # Hornero QA
 
 System-level graphical, end-to-end, visual and agentic acceptance for
-[Hornero OS](https://github.com/HorneroOS).
+[HorneroOS](https://github.com/HorneroOS), the Arch-based workstation
+operating-system family (Desktop · Studio · Gaming).
 
 Hornero QA boots a real Hornero composition (shell + config + horneroctl at
 exact SHAs) in QEMU/KVM, drives it through the keyboard and pointer like a
@@ -33,6 +34,17 @@ fails closed until every required Studio outcome has owner-approved fixtures,
 complete pinned evidence bundles, and human review. It can recommend owner
 review; it never changes Hornero's edition maturity. See
 [docs/STUDIO-ACCEPTANCE.md](docs/STUDIO-ACCEPTANCE.md).
+
+## Evidence and the Hornero Signal redesign
+
+[Hornero Signal](https://github.com/HorneroOS/docs/blob/main/development/rfc-0001-hornero-signal.md)
+replaced the previous Material-derived appearance in November 2026. Evidence
+recorded before that change documents the previous appearance and is not
+evidence for Signal surfaces; keep it as history, do not relabel it. Signal
+acceptance follows RFC 0001 §7.1: every claim states where it ran (real
+host, VM or CI), virtual outputs are labelled as such, and concept renders
+are never presented as captures. See [docs/MEDIA.md](docs/MEDIA.md) for the
+capture provenance rules.
 
 ## Quick start
 
