@@ -139,12 +139,22 @@ def hex_rgb(h: str) -> tuple[int, int, int]:
     return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
 
 
-def load_tokens(colours_qml: str | Path, table: str = "_horneroDark") -> dict[str, str]:
-    """Resolve design tokens from the shell's services/Colours.qml token table."""
-    src = Path(colours_qml).read_text(encoding="utf-8")
-    m = re.search(rf"{table}\s*:\s*\(\{{(.*?)\}}\)", src, re.S)
+HEX_RE = re.compile(r"#[0-9A-Fa-f]{6}")
+
+
+def scheme_tokens(scheme_json: str) -> dict[str, str]:
+    """Signal role tokens from a live scheme (schema v2, RFC 0001 §9)."""
+    doc = json.loads(scheme_json)
+    if doc.get("schemaVersion") != 2 or not isinstance(doc.get("palette"), dict):
+        raise ValueError("not a Hornero Signal schema-v2 scheme")
+    return {k: v for k, v in doc["palette"].items() if isinstance(v, str) and HEX_RE.fullmatch(v)}
+
+
+def builtin_tokens(signal_qml: str, theme_id: str) -> dict[str, str]:
+    """Signal role tokens of a built-in theme from the shell's services/Signal.qml."""
+    m = re.search(rf'"{re.escape(theme_id)}"\s*:\s*\{{.*?"palette"\s*:\s*\{{(.*?)\}}', signal_qml, re.S)
     if not m:
-        raise ValueError(f"token table {table} not found in {colours_qml}")
+        raise ValueError(f"built-in theme {theme_id} not found in Signal.qml")
     return dict(re.findall(r'"(\w+)"\s*:\s*"(#[0-9A-Fa-f]{6})"', m.group(1)))
 
 

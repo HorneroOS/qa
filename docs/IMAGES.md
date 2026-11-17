@@ -35,8 +35,8 @@ Image and key files are rejected by repository governance
     "horneroctl": "horneroctl horneroctl-v0.2.0-preview13-dirty (8557401)",
     "horneroctl_sha256": "<64-hex>"
   },
-  "runtime_packages": ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq", "hyprlock", "gtk3"],
-  "aur_runtime_packages": ["python-materialyoucolor", "python-pywal16"]
+  "runtime_packages": ["papirus-icon-theme", "qt6ct", "dunst", "libnotify", "jq", "hyprlock", "gtk3", "ttf-ibm-plex"],
+  "aur_runtime_packages": []
 }
 ```
 
@@ -84,17 +84,28 @@ job at a time.
 
 What the mint adds on top of the composition:
 
-- Hyprland images use `guest/hyprland.conf`, which sources the product's `environment`, `input`,
-  `layout`, `window-rules` and `keybindings` fragments, so product binds are
-  exercised as shipped; fixed `Virtual-1`/`Virtual-2` outputs; animations off.
+- Hyprland images use `guest/hyprland.lua` (Hyprland 0.57+ prefers the Lua
+  entrypoint and HorneroOS/config ships only Lua), which `dofile`s the
+  product's `environment`, `input`, `layout`, `helpers`, `keybindings`,
+  `window-rules`, `smart-colors` and `static` fragments from
+  `~/.config/hypr/hyprland.lua.d/`, so product binds, rules and Signal border
+  colours are exercised as shipped. The mint verifies every fragment exists,
+  removes any stale `hyprland.conf`, fixes `Virtual-1`/`Virtual-2` outputs and
+  disables animations. Runtime changes inside the guest go through
+  `hyprctl eval '<lua>'`; `hyprctl keyword` answers "unknown request" with
+  exit status 0 on a Lua config.
 - tty1 autologin into the selected compositor and a serial readiness marker
   (`HORNERO-SHELL-READY`). The marker is diagnostic only; readiness is
   proven by the shell's IPC answering.
 - `shell.json` idle timeouts disabled (a locking guest would poison runs).
-- AUR runtime dependencies the Hornero packages declare:
-  `python-materialyoucolor` for M3 generation and `python-pywal16` for the
-  recipe pipeline's `wal` command. They are installed with the base image's
-  `yay`.
+- No AUR runtime packages. Hornero Signal themes are schema-v2 role tables
+  rendered by hornero-config's stdlib Python, so the retired M3 generator
+  (`python-materialyoucolor`) and recipe pipeline (`python-pywal16`) are gone.
+  `ttf-ibm-plex` (the Signal type families, RFC 0001 §3.3) is named explicitly
+  so the image stays honest if a package drops the dependency.
+- The selected-wallpaper pointer is set to the factory theme's packaged
+  artwork (`hornero-signal-night`, RFC 0001 §9) so the desktop never renders
+  a black fallback after the deploy copies are removed.
 - Runtime packages a Hornero desktop needs (Papirus icons, `qt6ct`). `dunst`
   is installed **on purpose**: notification acceptance must prove the shell
   owns `org.freedesktop.Notifications` with a competitor present.
@@ -127,6 +138,92 @@ A base image is the shell harness's provisioned cloud image (Arch +
 Hyprland + Quickshell + build dependencies). Building one from scratch uses
 the shell harness (`tests/vm/lib/boot.sh` with cloud-init); this repository
 consumes it and does not duplicate that provisioning.
+
+## Validating Hornero Signal in the QA VM
+
+This is the runbook other workstreams (shell surfaces, layouts, experience
+modes, plugins) use to validate Signal visually. The guest is disposable;
+the host session is never touched.
+
+Rules of the road:
+
+- **One graphical VM at a time, machine-wide.** Wrap every run in `flock` on
+  the shared mission lock so parallel agents serialise instead of colliding:
+
+  ```sh
+  flock ~/.local/share/hornero-signal-mission/vm.lock \
+    uv run hornero-qa run smoke/desktop-ready
+  ```
+
+- **Budgets:** guest ≤ 3 GiB RAM and ≤ 3 vCPUs. `run` defaults to 2048 MiB
+  (`--mem-mb`); for `image refresh` pass `--mem-mb 3072 --cpus 3` (the builder
+  defaults are 4 GiB/4 vCPUs). QEMU always runs inside a memory-capped
+  `systemd-run --user --scope`.
+- **Never** drive the host's compositor, shell or display manager, and never
+  screenshot host outputs. Anything that could write config/state outside the
+  VM runs with `XDG_CONFIG_HOME`/`XDG_STATE_HOME`/`XDG_DATA_HOME`/
+  `XDG_CACHE_HOME` pointed at a scratch dir; compare
+  `sha256sum ~/.config/hornero/shell.json` before/after and stop if it moved.
+- State (images, runs, overlays) lives under `~/.local/share/hornero/qa/`
+  (`$HORNERO_QA_STATE` overrides). Nothing large goes to `/tmp`.
+
+Current ready images in `~/.local/share/hornero/qa/images/` (2026-11-16;
+`current.qcow2`/`current.json` symlink to the default):
+
+| Image | Composition |
+|---|---|
+| `signal-s6e880f2-c64b0c46-hdaa03b0.qcow2` (current) | shell `6e880f2`, config `64b0c46`, horneroctl `daa03b0` — Signal mains |
+| `signal-s5651dd2-cc5f96a7-h421a593.qcow2` | earlier Signal composition (bisect) |
+| `arch-provisioned-yay-20261116.qcow2` | provisioned base for `image refresh` |
+
+Image names encode the first 7 hex of shell/config/horneroctl SHAs; the
+`.json` sidecar is the provenance of record. A shell change is only in the VM
+once a new image is minted from its merged SHA:
+
+```sh
+git -C ../shell worktree add --detach ~/.local/share/hornero/qa/work/shell-<sha> <sha>
+flock ~/.local/share/hornero-signal-mission/vm.lock uv run hornero-qa image refresh \
+  --base ~/.local/share/hornero/qa/images/arch-provisioned-yay-20261116.qcow2 \
+  --shell ~/.local/share/hornero/qa/work/shell-<sha> \
+  --config-sha <40-hex config SHA> \
+  --horneroctl <horneroctl binary> \
+  --name signal-s<shell7>-c<config7>-h<ctl7> --mem-mb 3072 --cpus 3
+```
+
+Run loop:
+
+```sh
+uv run hornero-qa doctor                 # KVM, QEMU, current image, memory
+uv run hornero-qa list                   # scenario ids
+uv run hornero-qa validate               # schema + anchors (no VM)
+flock ~/.local/share/hornero-signal-mission/vm.lock \
+  uv run hornero-qa run smoke/desktop-ready [more scenarios...] [--repeat 3] [--json]
+uv run hornero-qa inspect ~/.local/share/hornero/qa/runs/<run-id>
+```
+
+Reading results: every run writes an evidence bundle under `runs/<run-id>/`
+(screenshots, `actions.jsonl`, logs incl. `signal-scheme.json` when a live
+scheme was applied, and the image provenance). Exit codes: 0 pass, 1 any
+fail, 2 inconclusive only, 64 usage. **Open every screenshot** — a PASS with
+an ugly frame is a finding, not a success. Compare against
+`signal-visual-language.md` (Signal Bezel) and the concept specimens; Signal
+(immersive) mode must look visibly richer than everyday, and Cockpit Clear
+means a zero-opacity bar background with adaptive per-region ink.
+
+Signal-specific gotchas inside the guest:
+
+- Themes are schema-v2 role tables. Built-ins: `hornero-signal-night`
+  (factory), `hornero-signal-day`, `hornero-signal-contrast`. Retired M3 ids
+  (`hornero-dark`, `hornero-light`, …) no longer exist; scenarios still naming
+  them need a human-reviewed update, not a runtime workaround.
+- Apply with `horneroctl appearance theme apply <id> --yes` (or the scenario
+  `setup.theme`, which uses `theme set`); verify with
+  `qs ipc call signal theme` and `horneroctl appearance theme get`.
+- The live scheme is `~/.local/state/hornero/signal/scheme.json`
+  (`{"schemaVersion": 2, "id", "mode", "palette", "terminal"}`). Wallpaper
+  changes never recolour the UI.
+- Hyprland is Lua-only in the guest: use `hyprctl eval '<lua>'` for runtime
+  changes; `hyprctl keyword` silently no-ops ("unknown request", exit 0).
 
 ## Known product gaps the image works around
 

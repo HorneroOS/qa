@@ -4,17 +4,19 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from hornero_qa.vision import (
     Anchor,
     Rect,
     blank_frame,
+    builtin_tokens,
     changed,
     cut_anchor,
     delta_e_ok,
     load_frame,
-    load_tokens,
     match_anchor,
+    scheme_tokens,
     still,
 )
 from tests.conftest import SavePng, desktop, paint_widget
@@ -79,11 +81,44 @@ def test_cut_anchor_provenance(tmp_path: Path, save_png: SavePng) -> None:
     assert data["provenance"]["run_id"] == "r1" and len(data["provenance"]["capture_sha256"]) == 64
 
 
-def test_load_tokens(tmp_path: Path) -> None:
-    qml = tmp_path / "Colours.qml"
-    body = '  "primary": "#C8643C",\n  "surface": "#1B1613"\n'
-    qml.write_text("readonly property var _horneroDark: ({\n" + body + "})\n")
-    assert load_tokens(qml) == {"primary": "#C8643C", "surface": "#1B1613"}
+def test_scheme_tokens() -> None:
+    scheme = {
+        "schemaVersion": 2,
+        "id": "hornero-signal-night",
+        "mode": "dark",
+        "palette": {"ground": "#0C0F13", "signal": "#F2A33A", "bogus": "amber"},
+        "terminal": ["#000000"] * 16,
+    }
+    assert scheme_tokens(json.dumps(scheme)) == {"ground": "#0C0F13", "signal": "#F2A33A"}
+
+
+def test_scheme_tokens_rejects_m3() -> None:
+    with pytest.raises(ValueError):
+        scheme_tokens(json.dumps({"primary": "#C8643C"}))
+
+
+def test_builtin_tokens() -> None:
+    qml = """
+    readonly property var builtInThemes: ({
+            "hornero-signal-night": {
+                "id": "hornero-signal-night",
+                "palette": {
+                    "ground": "#0C0F13",
+                    "signal": "#F2A33A"
+                },
+                "terminal": ["#0C0F13"]
+            },
+            "hornero-signal-day": {
+                "palette": {
+                    "ground": "#F4F1EA"
+                }
+            }
+        })
+    """
+    assert builtin_tokens(qml, "hornero-signal-night") == {"ground": "#0C0F13", "signal": "#F2A33A"}
+    assert builtin_tokens(qml, "hornero-signal-day") == {"ground": "#F4F1EA"}
+    with pytest.raises(ValueError):
+        builtin_tokens(qml, "hornero-dark")
 
 
 def test_cut_anchor_namespaced_id(tmp_path: Path, save_png: SavePng) -> None:
