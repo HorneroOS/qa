@@ -1,0 +1,34 @@
+id: studio/audio-foreign-file-live
+purpose: >-
+  A personal PipeWire file with the same name is never overwritten or
+  removed: apply refuses, revert refuses, the file and the runtime clock
+  stay exactly as they were.
+covers: [hornero#431, shell#572]
+requires:
+  compositor: hyprland
+setup:
+  commands:
+    - "horneroctl version > \"$HOME/hctl-version.txt\" 2>&1; sha256sum $(command -v horneroctl) >> \"$HOME/hctl-version.txt\""
+    - systemctl --user start pipewire wireplumber || true
+    - sleep 3
+    - "pw-metadata -n settings > \"$HOME/pw-before.txt\""
+    - mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
+    - "printf 'context.properties = { default.clock.quantum = 32 }\\n' > \"$HOME/.config/pipewire/pipewire.conf.d/50-hornero-studio-low-latency.conf\""
+    - "horneroctl studio audio apply --yes --json > \"$HOME/apply.json\" 2>&1 || true"
+    - "horneroctl studio audio revert --json > \"$HOME/revert.json\" 2>&1 || true"
+instruction: Inspect the PipeWire audio profile state with horneroctl and pw-metadata.
+proof:
+  - note: The horneroctl under test is recorded (version and sha256)
+    probe: {run: "cat $HOME/hctl-version.txt", contains: "horneroctl", save: horneroctl-under-test.txt}
+  - note: PipeWire runtime before any change is recorded
+    probe: {run: "cat $HOME/pw-before.txt", contains: "clock.quantum", save: pw-before.txt}
+  - note: apply refused
+    probe: {run: "cat $HOME/apply.json", json: ok, equals: "false", save: apply.json}
+  - note: revert refused
+    probe: {run: "cat $HOME/revert.json", json: ok, equals: "false", save: revert.json}
+  - note: The personal file is byte-for-byte untouched
+    probe: {run: "cat $HOME/.config/pipewire/pipewire.conf.d/50-hornero-studio-low-latency.conf", equals: "context.properties = { default.clock.quantum = 32 }"}
+  - note: The runtime quantum did not change
+    probe: {run: "diff <(pw-metadata -n settings | grep \"key:'clock.quantum'\") <(grep \"key:'clock.quantum'\" $HOME/pw-before.txt) && echo identical", equals: identical}
+budget: {wall_s: 120}
+artifacts: {screenshots: on-failure, logs: always}

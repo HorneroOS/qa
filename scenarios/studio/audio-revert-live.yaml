@@ -1,0 +1,39 @@
+id: studio/audio-revert-live
+purpose: >-
+  `horneroctl studio audio revert` against a LIVE PipeWire: after an
+  apply, revert removes the drop-in and restores the exact previous
+  runtime clock values; reverting again is a harmless no-op.
+covers: [hornero#431, shell#572]
+requires:
+  compositor: hyprland
+setup:
+  commands:
+    - "horneroctl version > \"$HOME/hctl-version.txt\" 2>&1; sha256sum $(command -v horneroctl) >> \"$HOME/hctl-version.txt\""
+    - systemctl --user start pipewire wireplumber || true
+    - sleep 3
+    - "pw-metadata -n settings > \"$HOME/pw-before.txt\""
+    - "horneroctl studio audio apply --yes >/dev/null 2>&1"
+    - sleep 1
+    - "horneroctl studio audio revert --yes --json > \"$HOME/revert.json\" 2>&1"
+    - sleep 2
+instruction: Inspect the PipeWire audio profile state with horneroctl and pw-metadata.
+proof:
+  - note: The horneroctl under test is recorded (version and sha256)
+    probe: {run: "cat $HOME/hctl-version.txt", contains: "horneroctl", save: horneroctl-under-test.txt}
+  - note: PipeWire runtime before any change is recorded
+    probe: {run: "cat $HOME/pw-before.txt", contains: "clock.quantum", save: pw-before.txt}
+  - note: revert reported ok
+    probe: {run: "cat $HOME/revert.json", json: ok, equals: "true", save: revert.json}
+  - note: The drop-in is gone
+    probe: {run: "test ! -e $HOME/.config/pipewire/pipewire.conf.d/50-hornero-studio-low-latency.conf && echo absent", equals: absent}
+  - note: The runtime quantum, min and max equal the values before the apply
+    probe:
+      run: "diff <(pw-metadata -n settings | grep -E \"key:'clock.(quantum|min-quantum|max-quantum)'\" | sort) <(grep -E \"key:'clock.(quantum|min-quantum|max-quantum)'\" $HOME/pw-before.txt | sort) && echo identical"
+      equals: identical
+      retry_s: 5
+  - note: status reports the profile absent
+    probe: {run: "horneroctl studio audio status --json", json: data.dropin, equals: absent}
+  - note: A second revert is a successful no-op
+    probe: {run: "horneroctl studio audio revert --json", json: ok, equals: "true"}
+budget: {wall_s: 120}
+artifacts: {screenshots: on-failure, logs: always}
