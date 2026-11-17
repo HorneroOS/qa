@@ -1,0 +1,13 @@
+{"t": 17.484, "kind": "ready", "serial": []}
+{"t": 38.216, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 38.216, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 38.319, "kind": "wait", "step": 1, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 46.488, "kind": "wait_result", "step": 1, "ok": false}
+{"t": 46.488, "kind": "probe", "step": 2, "value": {"run": "qs ipc call drawers state launcher", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 46.745, "kind": "type", "step": 3, "value": ">theme Hornero Signal Day", "note": null}
+{"t": 47.836, "kind": "wait", "step": 4, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 55.995, "kind": "wait_result", "step": 4, "ok": false}
+{"t": 55.995, "kind": "screenshot", "step": 5, "value": "hornero-signal-day-result", "note": null}
+{"t": 56.04, "kind": "key", "step": 6, "value": "enter", "note": null}
+{"t": 56.141, "kind": "probe", "step": 7, "value": {"run": "horneroctl appearance theme get", "contains": "hornero-signal-day", "retry_s": 20}, "note": null}
+{"t": 56.384, "kind": "screenshot", "step": 8, "value": "hornero-signal-day-applied", "note": null}

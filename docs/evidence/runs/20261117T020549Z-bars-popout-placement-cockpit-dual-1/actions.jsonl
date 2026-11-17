@@ -1,0 +1,11 @@
+{"t": 17.789, "kind": "ready", "serial": []}
+{"t": 39.531, "kind": "setup", "run": "horneroctl shell preset apply cockpit --yes", "rc": 0, "stdout": "applied preset Cockpit (cockpit)", "stderr": ""}
+{"t": 39.994, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 70.976, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 70.976, "kind": "wait", "step": 0, "value": {"stable": 1.0, "timeout": 8}, "note": null}
+{"t": 79.022, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 79.022, "kind": "pointer", "step": 1, "value": {"x": 0.5, "y": 0.5}, "note": null}
+{"t": 79.062, "kind": "wait", "step": 2, "value": {"stable": 0.6, "timeout": 4}, "note": null}
+{"t": 83.26, "kind": "wait_result", "step": 2, "ok": false}
+{"t": 83.26, "kind": "pointer", "step": 3, "value": {"x": 0.8883, "y": 0.045, "glide": 8}, "note": null}
+{"t": 83.467, "kind": "probe", "step": 4, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "network", "retry_s": 6}, "note": null}

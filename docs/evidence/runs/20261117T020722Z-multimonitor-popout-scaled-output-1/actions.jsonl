@@ -1,0 +1,15 @@
+{"t": 15.815, "kind": "ready", "serial": []}
+{"t": 36.033, "kind": "setup", "run": "horneroctl shell preset apply hornero-left --yes", "rc": 0, "stdout": "applied preset Hornero Left (hornero-left)", "stderr": ""}
+{"t": 36.316, "kind": "setup", "run": "hyprctl eval 'hl.monitor({ output = \"Virtual-2\", mode = \"1920x1080@60\", position = \"1280x0\", scale = 1.5 })'", "rc": 0, "stdout": "ok", "stderr": ""}
+{"t": 39.588, "kind": "setup", "run": "sleep 3", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 70.635, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 70.635, "kind": "probe", "step": 0, "value": {"run": "hyprctl monitors -j | jq -c '[.[] | {name,scale}] | sort_by(.name)'", "equals": "[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1.5}]", "retry_s": 10}, "note": null}
+{"t": 70.883, "kind": "wait", "step": 1, "value": {"stable": 1.5, "timeout": 8}, "note": null}
+{"t": 78.953, "kind": "wait_result", "step": 1, "ok": false}
+{"t": 78.954, "kind": "pointer", "step": 2, "value": {"x": 0.5, "y": 0.3}, "note": null}
+{"t": 79.004, "kind": "wait", "step": 3, "value": {"stable": 0.6, "timeout": 4}, "note": null}
+{"t": 80.245, "kind": "wait_result", "step": 3, "ok": true}
+{"t": 80.245, "kind": "pointer", "step": 4, "value": {"x": 0.511, "y": 0.741, "glide": 8}, "note": null}
+{"t": 80.462, "kind": "wait", "step": 5, "value": {"stable": 1.0, "timeout": 6}, "note": null}
+{"t": 81.704, "kind": "wait_result", "step": 5, "ok": true}
+{"t": 81.704, "kind": "screenshot", "step": 6, "value": "scaled-output-popout", "note": null}

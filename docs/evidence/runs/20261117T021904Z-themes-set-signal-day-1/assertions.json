@@ -1,0 +1,22 @@
+[
+  {
+    "t": 69.631,
+    "kind": "probe",
+    "run": "horneroctl appearance theme get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "current theme: hornero-signal-day (scheme; mode=light, gtk=Hornero-Signal-Day)",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 69.674,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-hornero-signal-day.png"
+    ],
+    "where": "proof 1"
+  }
+]

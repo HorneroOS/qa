@@ -1,0 +1,44 @@
+[
+  {
+    "t": 93.72,
+    "kind": "probe",
+    "run": "horneroctl wallpaper current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "/usr/share/hornero/wallpapers/iguazu/iguazu-falls-01.jpg",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 94.021,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {edge,style,geom}]'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[{\"edge\":\"top\",\"style\":\"attached\",\"geom\":[0,0,1280,52]},{\"edge\":\"bottom\",\"style\":\"attached\",\"geom\":[0,754,1280,46]}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 94.319,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 94.604,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-final.png"
+    ],
+    "where": "proof 3"
+  }
+]

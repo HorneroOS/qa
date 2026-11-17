@@ -1,0 +1,32 @@
+id: wallpapers/ink-cockpit-clear-vivid
+purpose: >-
+  cockpit-clear over a vivid wallpaper (quebrada-mineral-01.jpg): judge the adaptive per-region ink and any halo/shadow honestly; Cockpit Clear must stay legible with a zero-opacity bar background.
+covers: [shell#490]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: cockpit-clear
+  theme: hornero-signal-night
+  commands:
+    - qs ipc call experience set everyday
+    - horneroctl wallpaper set /usr/share/hornero/wallpapers/quebrada/quebrada-mineral-01.jpg --yes
+    - sleep 6
+instruction: Look at the desktop and judge it against the Signal Bezel visual language and its concept specimens.
+steps:
+  - wait: {stable: 1.5, timeout: 10}
+  - pointer: {x: 0.5, y: 0.5}
+  - wait: {stable: 1.0, timeout: 6}
+  - screenshot: cockpit-clear-vivid
+proof:
+  - note: The wallpaper pointer is the requested image
+    probe: {run: "horneroctl wallpaper current", contains: "quebrada-mineral-01.jpg", retry_s: 8}
+  - note: At least one bar is visible and the geometry is recorded for review
+    probe: {run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {edge,style,geom}]'", matches: "edge", save: bars.json, retry_s: 12}
+  - note: No QML errors
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - screenshot: final
+
+media: [cockpit-clear-vivid]
+budget: {wall_s: 100}
+artifacts: {screenshots: always, logs: always}

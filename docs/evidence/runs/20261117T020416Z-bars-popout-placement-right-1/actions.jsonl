@@ -1,0 +1,15 @@
+{"t": 17.621, "kind": "ready", "serial": []}
+{"t": 38.021, "kind": "setup", "run": "horneroctl shell preset apply hornero-right --yes", "rc": 0, "stdout": "applied preset Hornero Right (hornero-right)", "stderr": ""}
+{"t": 38.396, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 69.635, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 69.635, "kind": "wait", "step": 0, "value": {"stable": 1.0, "timeout": 8}, "note": null}
+{"t": 77.668, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 77.668, "kind": "pointer", "step": 1, "value": {"x": 0.5, "y": 0.5}, "note": null}
+{"t": 77.775, "kind": "wait", "step": 2, "value": {"stable": 0.6, "timeout": 4}, "note": null}
+{"t": 81.977, "kind": "wait_result", "step": 2, "ok": false}
+{"t": 81.977, "kind": "pointer", "step": 3, "value": {"x": 0.9781, "y": 0.8413, "glide": 8}, "note": null}
+{"t": 82.247, "kind": "probe", "step": 4, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "bluetooth", "retry_s": 6}, "note": null}
+{"t": 82.505, "kind": "probe", "step": 5, "value": {"run": "qs ipc call debug dump | jq -r .popout.phase", "equals": "open", "retry_s": 4}, "note": null}
+{"t": 82.82, "kind": "wait", "step": 6, "value": {"stable": 0.5, "timeout": 4}, "note": null}
+{"t": 87.021, "kind": "wait_result", "step": 6, "ok": false}
+{"t": 87.021, "kind": "screenshot", "step": 7, "value": "popout-right", "note": null}

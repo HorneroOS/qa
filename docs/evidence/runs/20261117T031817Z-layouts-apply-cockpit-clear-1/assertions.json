@@ -1,0 +1,33 @@
+[
+  {
+    "t": 68.971,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "cockpit-clear",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 69.242,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[\"bottom\",\"top\"]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 69.359,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-layout-cockpit-clear.png"
+    ],
+    "where": "proof 2"
+  }
+]

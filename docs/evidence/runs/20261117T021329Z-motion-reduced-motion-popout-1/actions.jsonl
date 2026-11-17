@@ -1,0 +1,8 @@
+{"t": 16.915, "kind": "ready", "serial": []}
+{"t": 37.265, "kind": "setup", "run": "horneroctl shell preset apply hornero-left --yes", "rc": 0, "stdout": "applied preset Hornero Left (hornero-left)", "stderr": ""}
+{"t": 37.56, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 46.4, "kind": "setup", "run": "measure() { out=\"$1\"; hyprctl eval 'hl.dispatch(hl.dsp.cursor.move({x=600,y=400}))' >/dev/null; sleep 1.5; : > \"$out\"; hyprctl eval 'hl.dispatch(hl.dsp.cursor.move({x=28,y=673}))' >/dev/null; end=$(( $(date +%s%3N) + 900 )); while [ \"$(date +%s%3N)\" -lt \"$end\" ]; do qs ipc call debug dump | jq -r '.popout | select(.phase != \"closed\") | (if .frame == .target then \"still\" else \"moving\" end)' >> \"$out\"; done; }; gsettings set org.gnome.desktop.interface enable-animations true; sleep 1; measure \"$HOME/qa-motion-standard.txt\"; hyprctl eval 'hl.dispatch(hl.dsp.cursor.move({x=600,y=400}))' >/dev/null; sleep 1.5; gsettings set org.gnome.desktop.interface enable-animations false; sleep 1; measure \"$HOME/qa-motion-reduced.txt\"", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 77.487, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 77.487, "kind": "wait", "step": 0, "value": {"stable": 1.0, "timeout": 6}, "note": null}
+{"t": 83.758, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 83.758, "kind": "screenshot", "step": 1, "value": "reduced-motion-popout-open", "note": null}

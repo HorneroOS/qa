@@ -1,0 +1,4 @@
+{"t": 18.066, "kind": "ready", "serial": []}
+{"t": 38.404, "kind": "setup", "run": "horneroctl shell preset apply cockpit-clear --yes", "rc": 0, "stdout": "applied preset Cockpit Clear (cockpit-clear)", "stderr": ""}
+{"t": 38.764, "kind": "setup", "run": "hyprctl monitors all -j | jq -e '([.[] | select(.name == \"Virtual-1\")] | length == 1) and ([.[] | select(.name == \"Virtual-2\")] | length == 1) and ([.[] | select(.name == \"Virtual-3\")] | length == 1)'", "rc": 0, "stdout": "true", "stderr": ""}
+{"t": 70.159, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}

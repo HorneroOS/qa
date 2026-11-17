@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T020549Z-bars-popout-placement-cockpit-dual-1",
+  "finished": "2026-11-17T02:07:21Z",
+  "wall_s": 91.78,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "step 4 probe failed: stdout 'bluetooth' != 'network'",
+  "actions": 2,
+  "driver_end": null,
+  "review": null
+}

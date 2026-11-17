@@ -1,0 +1,13 @@
+[
+  {
+    "t": 88.776,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": false,
+    "rc": 0,
+    "stdout": "battery",
+    "stderr": "",
+    "detail": "stdout 'battery' != 'bluetooth'",
+    "where": "step 4"
+  }
+]

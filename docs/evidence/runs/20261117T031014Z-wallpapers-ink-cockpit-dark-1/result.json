@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T031014Z-wallpapers-ink-cockpit-dark-1",
+  "finished": "2026-11-17T03:15:01Z",
+  "wall_s": 286.444,
+  "verdict": "inconclusive",
+  "class": "provisioning",
+  "regression": false,
+  "reason": "guest not reachable over SSH after 240s",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

@@ -1,0 +1,12 @@
+{"t": 15.897, "kind": "ready", "serial": []}
+{"t": 36.566, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-night --yes", "rc": 0, "stdout": "theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)", "stderr": ""}
+{"t": 36.81, "kind": "setup", "run": "horneroctl shell preset apply hornero-left --yes", "rc": 0, "stdout": "applied preset Hornero Left (hornero-left)", "stderr": ""}
+{"t": 37.162, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 42.376, "kind": "setup", "run": "sleep 5", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 73.523, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 73.523, "kind": "wait", "step": 0, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 83.713, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 83.713, "kind": "pointer", "step": 1, "value": {"x": 0.5, "y": 0.5}, "note": null}
+{"t": 83.768, "kind": "wait", "step": 2, "value": {"stable": 1.0, "timeout": 6}, "note": null}
+{"t": 89.806, "kind": "wait_result", "step": 2, "ok": false}
+{"t": 89.807, "kind": "screenshot", "step": 3, "value": "gallery-hornero-left", "note": null}

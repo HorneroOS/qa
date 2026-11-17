@@ -1,0 +1,37 @@
+{"t": 17.064, "kind": "ready", "serial": []}
+{"t": 37.833, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-night --yes", "rc": 0, "stdout": "theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)", "stderr": ""}
+{"t": 38.208, "kind": "setup", "run": "horneroctl shell preset apply cockpit --yes", "rc": 0, "stdout": "applied preset Cockpit (cockpit)", "stderr": ""}
+{"t": 69.452, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 69.452, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 69.561, "kind": "wait", "step": 1, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 77.717, "kind": "wait_result", "step": 1, "ok": false}
+{"t": 77.717, "kind": "type", "step": 2, "value": ">theme Hornero Signal Day", "note": null}
+{"t": 78.864, "kind": "wait", "step": 3, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 86.907, "kind": "wait_result", "step": 3, "ok": false}
+{"t": 86.907, "kind": "key", "step": 4, "value": "enter", "note": null}
+{"t": 87.058, "kind": "probe", "step": 5, "value": {"run": "qs ipc call signal theme", "equals": "hornero-signal-day", "retry_s": 20}, "note": null}
+{"t": 87.368, "kind": "wait", "step": 6, "value": {"stable": 1.0, "timeout": 8}, "note": null}
+{"t": 95.533, "kind": "wait_result", "step": 6, "ok": false}
+{"t": 95.533, "kind": "screenshot", "step": 7, "value": "signal-day", "note": null}
+{"t": 95.635, "kind": "key", "step": 8, "value": "ctrl+space", "note": null}
+{"t": 95.74, "kind": "wait", "step": 9, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 103.854, "kind": "wait_result", "step": 9, "ok": false}
+{"t": 103.854, "kind": "type", "step": 10, "value": ">theme Hornero Signal Contrast", "note": null}
+{"t": 105.153, "kind": "wait", "step": 11, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 113.43, "kind": "wait_result", "step": 11, "ok": false}
+{"t": 113.43, "kind": "key", "step": 12, "value": "enter", "note": null}
+{"t": 113.588, "kind": "probe", "step": 13, "value": {"run": "qs ipc call signal theme", "equals": "hornero-signal-contrast", "retry_s": 20}, "note": null}
+{"t": 113.896, "kind": "wait", "step": 14, "value": {"stable": 1.0, "timeout": 8}, "note": null}
+{"t": 122.137, "kind": "wait_result", "step": 14, "ok": false}
+{"t": 122.137, "kind": "screenshot", "step": 15, "value": "signal-contrast", "note": null}
+{"t": 122.242, "kind": "key", "step": 16, "value": "ctrl+space", "note": null}
+{"t": 122.342, "kind": "wait", "step": 17, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 130.509, "kind": "wait_result", "step": 17, "ok": false}
+{"t": 130.509, "kind": "type", "step": 18, "value": ">theme Hornero Signal Night", "note": null}
+{"t": 131.744, "kind": "wait", "step": 19, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 140.009, "kind": "wait_result", "step": 19, "ok": false}
+{"t": 140.009, "kind": "key", "step": 20, "value": "enter", "note": null}
+{"t": 140.177, "kind": "probe", "step": 21, "value": {"run": "qs ipc call signal theme", "equals": "hornero-signal-night", "retry_s": 20}, "note": null}
+{"t": 140.417, "kind": "wait", "step": 22, "value": {"stable": 1.0, "timeout": 8}, "note": null}
+{"t": 148.515, "kind": "wait_result", "step": 22, "ok": false}
+{"t": 148.515, "kind": "screenshot", "step": 23, "value": "signal-night", "note": null}

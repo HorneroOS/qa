@@ -1,0 +1,3 @@
+{"t": 17.183, "kind": "ready", "serial": []}
+{"t": 38.105, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-day --yes", "rc": 0, "stdout": "theme set to hornero-signal-day (mode=light, gtk=Hornero-Signal-Day)", "stderr": ""}
+{"t": 69.344, "kind": "tokens", "theme": "hornero-signal-day", "roles": 34}

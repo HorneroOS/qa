@@ -1,0 +1,22 @@
+[
+  {
+    "t": 41.092,
+    "kind": "probe",
+    "run": "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 41.146,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-desktop.png"
+    ],
+    "where": "proof 1"
+  }
+]

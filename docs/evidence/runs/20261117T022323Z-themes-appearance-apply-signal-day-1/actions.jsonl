@@ -1,0 +1,25 @@
+{"t": 16.932, "kind": "ready", "serial": []}
+{"t": 37.7, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 37.7, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 37.806, "kind": "wait", "step": 1, "value": {"stable": 0.5, "timeout": 8}, "note": null}
+{"t": 45.987, "kind": "wait_result", "step": 1, "ok": false}
+{"t": 45.987, "kind": "type", "step": 2, "value": ">Settings", "note": null}
+{"t": 46.445, "kind": "wait", "step": 3, "value": {"stable": 0.5, "timeout": 8}, "note": null}
+{"t": 54.593, "kind": "wait_result", "step": 3, "ok": false}
+{"t": 54.593, "kind": "key", "step": 4, "value": "enter", "note": null}
+{"t": 54.736, "kind": "probe", "step": 5, "value": {"run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", "equals": "Hornero Settings - Network", "retry_s": 10}, "note": null}
+{"t": 55.801, "kind": "wait", "step": 6, "value": {"stable": 2.0, "timeout": 10}, "note": null}
+{"t": 61.211, "kind": "wait_result", "step": 6, "ok": true}
+{"t": 61.211, "kind": "pointer", "step": 7, "value": {"x": 0.144, "y": 0.4475, "click": "left"}, "note": null}
+{"t": 61.393, "kind": "probe", "step": 8, "value": {"run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", "equals": "Hornero Settings - Appearance", "retry_s": 8}, "note": null}
+{"t": 61.697, "kind": "wait", "step": 9, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 67.132, "kind": "wait_result", "step": 9, "ok": true}
+{"t": 67.132, "kind": "screenshot", "step": 10, "value": "appearance-before-apply", "note": null}
+{"t": 67.226, "kind": "pointer", "step": 11, "value": {"x": 0.4375, "y": 0.6463, "click": "left"}, "note": null}
+{"t": 67.377, "kind": "probe", "step": 12, "value": {"run": "horneroctl appearance theme get", "contains": "hornero-signal-day", "retry_s": 30}, "note": null}
+{"t": 67.65, "kind": "probe", "step": 13, "value": {"run": "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'", "equals": "hornero-signal-day|light|Hornero-Signal-Day|Papirus|prefer-light", "retry_s": 10}, "note": null}
+{"t": 68.699, "kind": "wait", "step": 14, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 77.114, "kind": "wait_result", "step": 14, "ok": true}
+{"t": 77.114, "kind": "screenshot", "step": 15, "value": "appearance-hornero-signal-day-current", "note": null}
+{"t": 77.213, "kind": "probe", "step": 16, "value": {"run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", "equals": "0"}, "note": null}
+{"t": 77.469, "kind": "key", "step": 17, "value": "escape", "note": null}

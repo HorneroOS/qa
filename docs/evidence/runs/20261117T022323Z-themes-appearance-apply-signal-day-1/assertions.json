@@ -1,0 +1,77 @@
+[
+  {
+    "t": 55.801,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Network",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 61.697,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Appearance",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 8"
+  },
+  {
+    "t": 67.65,
+    "kind": "probe",
+    "run": "horneroctl appearance theme get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "current theme: hornero-signal-day (scheme; mode=light, gtk=Hornero-Signal)",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 12"
+  },
+  {
+    "t": 68.698,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-day|light|Hornero-Signal-Day|Papirus|prefer-light",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 13"
+  },
+  {
+    "t": 77.469,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 16"
+  },
+  {
+    "t": 77.849,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": true,
+    "rc": 0,
+    "stdout": "503",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 0"
+  },
+  {
+    "t": 77.898,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-final.png"
+    ],
+    "where": "proof 1"
+  }
+]

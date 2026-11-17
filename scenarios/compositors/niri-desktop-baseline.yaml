@@ -8,7 +8,7 @@ requires:
   resolution: 1280x800
 setup:
   layout: hornero-left
-  theme: hornero-light
+  theme: hornero-signal-day
   commands:
     - mkdir -p ~/Pictures/Screenshots
 instruction: >-
@@ -30,8 +30,8 @@ steps:
       contains: "org.freedesktop.portal.ScreenCast"
       retry_s: 15
   - probe:
-      run: "qs ipc call wallpaper list | grep -F '/usr/share/hornero/wallpapers/hornero-light/hornero-light-01.png'"
-      contains: "hornero-light-01.png"
+      run: "qs ipc call wallpaper list | grep -F '/usr/share/hornero/wallpapers/hornero-signal-day/hornero-signal-day-01.png'"
+      contains: "hornero-signal-day-01.png"
       retry_s: 15
   - probe:
       run: "qs ipc call drawers state launcher"
@@ -116,10 +116,10 @@ proof:
       equals: "1"
   - note: The Hornero Shell stays responsive through Niri workspace changes and launcher use.
     probe: {run: "qs ipc call drawers state launcher", equals: "false"}
-  - note: Hornero Light remains active in the shared Shell appearance system.
-    probe: {run: "horneroctl appearance theme get", contains: "hornero-light"}
+  - note: Hornero Signal Day remains active in the shared Shell appearance system.
+    probe: {run: "horneroctl appearance theme get", contains: "hornero-signal-day"}
   - note: Factory wallpaper files installed by hornero-config remain browseable without copies in the user home.
-    probe: {run: "qs ipc call wallpaper list | grep -F '/usr/share/hornero/wallpapers/hornero-light/hornero-light-01.png'", contains: "hornero-light-01.png"}
+    probe: {run: "qs ipc call wallpaper list | grep -F '/usr/share/hornero/wallpapers/hornero-signal-day/hornero-signal-day-01.png'", contains: "hornero-signal-day-01.png"}
   - note: Niri exposes Kitty as the active native Wayland window.
     probe: {run: "niri msg --json focused-window | jq -er '.app_id'", equals: "kitty"}
   - note: Niri's desktop portal advertises its screencasting interface.

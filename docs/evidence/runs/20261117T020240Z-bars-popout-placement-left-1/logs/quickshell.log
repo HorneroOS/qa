@@ -1,0 +1,124 @@
+[32m  INFO[0m: Launching config: "/home/hornero/.config/quickshell/shell.qml"
+[32m  INFO[0m: Shell ID: "c2c965cc868169c13ac9ef4fd8778557" Path ID "c2c965cc868169c13ac9ef4fd8778557"
+[33m  WARN[0m: QFont::fromString: Invalid description '(empty)'
+[33m  WARN[0m: QFont::fromString: Invalid description '(empty)'
+[32m  INFO[0m: Saving logs to "/run/user/1000/quickshell/by-id/ydu0jmot/log.qslog"
+MESA-EGL: warning: egl: failed to create dri2 screen
+MESA-EGL: warning: egl: failed to create dri2 screen
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[97m quickshell.dbus.objectmanager[0m: Failed to create DBusObjectManagerInterface for "org.bluez" "/" : QDBusError("", "")
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: CachingImageManager::sha256sum: failed to open "/home/hornero/.face"
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[32m  INFO[0m: Configuration Loaded
+[33m  WARN[97m quickshell.dbus[0m: Could not launch service org.freedesktop.UPower: QDBusError(org.freedesktop.DBus.Error.ServiceUnknown, The name is not activatable)
+[33m  WARN[97m quickshell.service.upower[0m: Could not start UPower. The UPower service will not work.
+[33m  WARN[97m scene[0m: QML FileView at @services/Signal.qml[368:5]: Read of /home/hornero/.local/state/hornero/signal/scheme.json failed: File does not exist.
+[33m  WARN[97m scene[0m: QML FileView at @modules/companion/CompanionPersist.qml[92:5]: Read of /home/hornero/.local/state/hornero/companion/state.json failed: File does not exist.
+[33m  WARN[97m scene[0m: QML FileView at @services/Experience.qml[340:5]: Read of /home/hornero/.local/state/hornero/experience.json failed: File does not exist.
+[33m  WARN[97m scene[0m: QML FileView at @services/Notifs.qml[175:5]: Read of /home/hornero/.local/state/hornero/notifs.json failed: File does not exist.
+[33m  WARN[97m quickshell.dbus[0m: Could not launch service org.freedesktop.UPower.PowerProfiles: QDBusError(org.freedesktop.DBus.Error.ServiceUnknown, The name is not activatable)
+[33m  WARN[97m quickshell.service.powerprofiles[0m: Could not start PowerProfilesDaemon. The PowerProfiles service will not work.
+[33m  WARN[0m: CachingImageManager::createCache: failed to read "/home/hornero/.face"
+[33m  WARN[97m scene[0m: QML FileView at @modules/welcome/Session.qml[67:5]: Read of /run/user/1000/hornero/welcome/seen-4 failed: File does not exist.
+[33m  WARN[97m scene[0m: QML FileView at @modules/companion/AssistantBridge.qml[355:5]: Read of /home/hornero/.local/state/hornero/companion/chat-history.json failed: File does not exist.
+[33m  WARN[97m quickshell.io.fileview[0m: got operation finished from dropped operation qs::io::FileViewOperation(0x7f4ee3f14220)
+[33m  WARN[97m scene[0m: QML CachingImage at @modules/dashboard/dash/User.qml[35:9]: Cannot open: file:///home/hornero/.face
+[33m  WARN[97m qt.qpa.services[0m: Failed to register with host portal QDBusError("org.freedesktop.portal.Error.Failed", "Could not register app ID: Connection already associated with an application ID")
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported
+[33m  WARN[0m: Attempting to set another interceptor on QQuickShaderEffect_QML_197 property backgroundColor - unsupported

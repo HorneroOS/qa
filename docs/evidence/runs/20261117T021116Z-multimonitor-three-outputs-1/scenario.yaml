@@ -1,0 +1,25 @@
+id: multimonitor/three-outputs
+covers: [qa#25]
+purpose: >-
+  With three virtual monitors the desktop reaches all outputs and the shell
+  renders a nonblank desktop on each one.
+requires: {outputs: 3, compositor: hyprland}
+setup:
+  layout: cockpit-clear
+  commands:
+    - >-
+      hyprctl monitors all -j | jq -e '([.[] | select(.name == "Virtual-1")] | length == 1) and
+      ([.[] | select(.name == "Virtual-2")] | length == 1) and
+      ([.[] | select(.name == "Virtual-3")] | length == 1)'
+instruction: Start the desktop with three monitors connected and inspect each screen.
+proof:
+  - note: The compositor reports all three configured outputs
+    probe: {run: "hyprctl monitors -j | jq length", equals: "3", retry_s: 10}
+  - note: Cockpit Clear has two visible bars on each output
+    probe:
+      run: "qs ipc call debug bars | jq -c '[.[] | select(.visible)] | group_by(.screen) | map(length) | sort'"
+      equals: '[2,2,2]'
+      retry_s: 10
+  - screenshot: all-three-screens
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: on-failure}
