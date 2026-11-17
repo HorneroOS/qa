@@ -1,8 +1,9 @@
 id: extensions/deck-draws-installed-widgets
 purpose: >-
+  PENDING (qa#81): not yet executed through hornero-qa run; no PASS is claimed.
   Needs the HorneroOS/plugins catalog (catalog.json + plugins/) staged at ~/catalog in the guest.
   Signal mode must actually draw the first-party instrument deck from packages that `horneroctl plugin catalog install` left installed but NOT enabled (the contract in shell docs/EXPERIENCE.md). Regression for the empty deck on a real host where status said `disabled` and nothing was drawn.
-covers: [shell#478, plugins#62]
+covers: [qa#81, shell#478, plugins#62]
 requires:
   resolution: 1280x800
   compositor: hyprland
