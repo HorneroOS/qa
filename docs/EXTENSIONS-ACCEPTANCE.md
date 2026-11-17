@@ -17,15 +17,24 @@ uv run hornero-qa matrix --check
 uv run pytest tests/test_extensions_scenarios.py
 ```
 
-## Fixture requirement (ready image)
+## Fixture requirement
 
-The scenarios assume a ready image (shell + config at pinned SHAs, a
-`horneroctl` build that accepts manifest `schemaVersion` 2) whose guest
-user has these fixture extensions **installed, trusted and enabled** through
-the normal `horneroctl plugin` lifecycle before the run. All five are
-the shell repo's reference packages (`examples/plugins/` in
-`HorneroOS/shell`); the fifth, `example-broken`, landed on shell `main`
-in shell PR #395 (merge `07d8d1d`):
+The ready image does not carry any fixture extension, so a bare boot reports
+`count: 0` and every lane that needs one would fail on its precondition probe
+(that is what the 21 failures of the 2026-11-17 full run on image
+`signal-s74619fa-c7605886-h420c73c` were, together with the harness defects
+listed under "Lane defects fixed" below; it was not a regression of the
+PluginKit 3 host). Each lane therefore installs the fixtures itself in its
+`setup.commands`, through the normal `horneroctl plugin` lifecycle
+(`install-local`, `trust`, `enable`, then `qs ipc call plugins reload`), from
+the shell's reference packages (`examples/plugins/` in `HorneroOS/shell`),
+which the image already carries inside the deployed shell tree at
+`~/.config/quickshell/examples/plugins/`. Every package is `schemaVersion` 3
+(PluginKit 3, Hornero Signal). `example-broken` is installed only by
+`extensions/load-failure-isolation`. The first-party catalogue lane
+(`extensions/deck-draws-installed-widgets`) needs the HorneroOS/plugins
+checkout staged in the guest and `HORNERO_PLUGINS_CATALOG_URL` pointing at an
+HTTPS Git URL (the CLI refuses a local path).
 
 | Fixture id | Shape | Used for |
 |---|---|---|
@@ -35,12 +44,24 @@ in shell PR #395 (merge `07d8d1d`):
 | `example-desktop-note` | `desktop` widget (disposable) | desktop slots, uninstall cleanup |
 | `example-broken` | exists on shell `main` @ `07d8d1d` (shell PR #395, `examples/plugins/example-broken`): validator-clean manifest, entrypoint deterministically fails to load (`tests/test_plugin_broken_fixture.py`) | load-failure isolation |
 
-Until a ready image carries the fixture, `extensions/load-failure-isolation`
-cannot run at all, and every other scenario's fixture precondition probe
-fails honestly rather than passing vacuously (e.g. "no failed extensions"
-is always paired with "at least one loaded"). Fixture installation is image
-composition work (shell `tests/vm/lib` at a pinned SHA, per `AGENTS.md`);
-this repo does not fork that harness.
+A scenario's fixture precondition probe still fails honestly rather than
+passing vacuously (for example "no failed extensions" is always paired with "at
+least one loaded"), so a missing fixture can never read as a pass.
+
+### Lane defects fixed (2026-11-17)
+
+- **Fixtures missing** (13 lanes): nothing installed the fixtures, see above.
+- **Shell restart** (5 extension lanes and `wallpapers/unconfigured-empty-state`,
+  all classed `product_crash`): the scenarios restarted the shell with
+  `hyprctl dispatch exec`, which the Lua-configured Hyprland of the image
+  rejects (`dispatch in lua ... unexpected symbol`), so the shell never came
+  back. They now use `setsid -f nohup "$HOME/.local/bin/qa-shell.sh"` and wait
+  for the shell IPC, the pattern of `persistence/signal-state-survives-restart`.
+- **Display geometry** (`hidpi-wide-display`, `narrow-display`,
+  `multimonitor-virtual`): `hyprctl keyword monitor` is gone on the Lua config;
+  monitors are set with `hyprctl eval 'hl.monitor({ ... })'`.
+- **Trailing-space probes** (`discovery-status`, `offline-unavailable-services`):
+  the harness strips probe output, so an expected `"true "` could never match.
 
 ## Waves
 
