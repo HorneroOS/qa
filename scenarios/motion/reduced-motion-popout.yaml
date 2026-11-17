@@ -38,7 +38,7 @@ proof:
   - note: Reduced run never morphed - zero samples where frame differed from target
     probe: {run: "grep -c moving \"$HOME/qa-motion-reduced.txt\" || true", equals: "0"}
   - note: Both timelines kept for review
-    probe: {run: "paste -d' ' \"$HOME/qa-motion-standard.txt\" /dev/null | sort | uniq -c; echo --; sort \"$HOME/qa-motion-reduced.txt\" | uniq -c", save: motion-timelines.txt}
+    probe: {run: "echo standard; sort \"$HOME/qa-motion-standard.txt\" | uniq -c; echo reduced; sort \"$HOME/qa-motion-reduced.txt\" | uniq -c", save: motion-timelines.txt}
   - screenshot: final
 media: [reduced-motion-popout-open]
 budget: {wall_s: 150}
