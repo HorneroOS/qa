@@ -82,6 +82,7 @@ recorded as the visual PASS.
 | `extensions/malformed-settings-resilience` | foundation | load errors from stored state (shell#222/#374/#378) | Bundle: shell alive, fixture `loaded`, 0 config errors over malformed `shell.json` | PENDING |
 | `extensions/safe-mode-recovery` | foundation | safe mode / diagnostics (shell#380) | Bundle: `safeMode=true`, `loaded=0`, core IPC alive, reload refused, lifecycle untouched | PENDING |
 | `extensions/load-failure-isolation` | foundation | extension load errors (shell#380) | Bundle with the broken fixture: `failed` isolated, bounded redacted diagnostics, neighbour `loaded` | PENDING |
+| `extensions/deck-draws-installed-widgets` | foundation | Signal deck draws first-party widgets that are installed but not enabled (shell docs/EXPERIENCE.md) | Bundle: at least four numbered deck modules drawn, none enabled, no QML errors | PENDING |
 | `extensions/lifecycle-disable-enable` | foundation | disable cleanup | Bundle: disable → `disabled` → enable → `loaded` probe sequence | PENDING |
 | `extensions/uninstall-cleanup` | foundation | uninstall cleanup | Bundle: removed id absent from CLI list and IPC status, neighbours healthy | PENDING |
 | `extensions/restart-persistence` | foundation | restart persistence, dashboard layout (shell#378), desktop slots (shell#222) | Bundle: `dashboardLayout` + `desktopWidgetSlots` verbatim after restart, dashboard screenshot | PENDING |
