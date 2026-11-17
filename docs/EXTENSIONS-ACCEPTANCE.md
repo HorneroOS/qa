@@ -88,7 +88,7 @@ recorded as the visual PASS.
 | `extensions/marketplace-metadata` | foundation | marketplace metadata (shell#366/#379), offline registry | Bundle: normalized preview/compatibility/changelog in status; community list refused while no product key ships | PENDING |
 | `extensions/dashboard-all-enabled-stress` | visual | all-dashboard-extensions-enabled stress (shell#378) | Bundle: every enabled fixture `loaded`, no churn flags; screenshot-review of grouping/scroll with all cards | PENDING |
 | `extensions/keyboard-only` | visual | keyboard-only use (shell#370/#376/#378) | Bundle: keyboard pin persisted (exactly 1 pinned), Escape closed drawer; screenshot-review of visible focus ring | PENDING |
-| `extensions/themes-reduced-motion` | visual | themes, reduced motion (shell#369/#376) | Bundle: `hornero-light` active, anim scale 0; screenshot-review of bar + dashboard token colours under light | PENDING |
+| `extensions/themes-reduced-motion` | visual | themes, reduced motion (shell#369/#376) | Bundle: `hornero-signal-day` active, anim scale 0; screenshot-review of bar + dashboard token colours under Signal Day | PENDING |
 | `extensions/bar-edge-left` | visual | four bar edges + tooltip placement (shell#370/#371/#372) | Bundle + MANUAL reviewer frames: tooltip/popover open inward from the left rail, unclipped | PENDING |
 | `extensions/bar-edge-right` | visual | four bar edges + tooltip placement | Bundle + MANUAL reviewer frames: tooltip/popover open inward from the right rail, unclipped | PENDING |
 | `extensions/bar-edge-top` | visual | four bar edges + tooltip placement | Bundle + MANUAL reviewer frames: tooltip/popover open below the top bar, unclipped | PENDING |
