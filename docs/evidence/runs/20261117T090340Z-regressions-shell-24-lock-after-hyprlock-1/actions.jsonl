@@ -1,0 +1,10 @@
+{"t": 16.161, "kind": "ready", "serial": []}
+{"t": 36.519, "kind": "setup", "run": "setsid -f hyprlock > /tmp/hyprlock.log 2>&1", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 39.275, "kind": "setup", "run": "for i in $(seq 1 20); do grep -q onLockLocked /tmp/hyprlock.log 2>/dev/null && break; sleep 0.5; done; grep -q onLockLocked /tmp/hyprlock.log; pgrep -x hyprlock", "rc": 0, "stdout": "823", "stderr": ""}
+{"t": 39.529, "kind": "setup", "run": "pkill -x hyprlock; for i in $(seq 1 20); do pgrep -x hyprlock > /dev/null || break; sleep 0.5; done; ! pgrep -x hyprlock", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 42.317, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 42.317, "kind": "screenshot", "step": 0, "value": "crashed-fallback-before-lock", "note": null}
+{"t": 42.363, "kind": "key", "step": 1, "value": "super+l", "note": null}
+{"t": 42.475, "kind": "wait", "step": 2, "value": {"changed": true, "stable": 1.0, "timeout": 8}, "note": null}
+{"t": 50.625, "kind": "wait_result", "step": 2, "ok": false}
+{"t": 50.625, "kind": "probe", "step": 3, "value": {"run": "qs ipc call lock lock && echo ipc-ok", "contains": "ipc-ok"}, "note": "The issue's exact reproduction uses direct IPC, not the keybinding"}

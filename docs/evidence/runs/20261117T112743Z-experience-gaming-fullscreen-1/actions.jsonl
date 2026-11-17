@@ -1,0 +1,13 @@
+{"t": 15.504, "kind": "ready", "serial": []}
+{"t": 36.217, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-night --yes", "rc": 0, "stdout": "theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)", "stderr": ""}
+{"t": 36.483, "kind": "setup", "run": "horneroctl shell preset apply cockpit --yes", "rc": 0, "stdout": "applied preset Cockpit (cockpit)", "stderr": ""}
+{"t": 36.749, "kind": "setup", "run": "qs ipc call experience set gaming", "rc": 0, "stdout": "ok: gaming", "stderr": ""}
+{"t": 39.994, "kind": "setup", "run": "sleep 3", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 40.216, "kind": "setup", "run": "setsid -f kitty --class hqa-fullscreen --start-as=fullscreen -o background_opacity=1 -o background=#101010 -o cursor=none sh -c 'for i in $(seq 1 18); do echo; done; echo \"FULLSCREEN TEST WINDOW\"; sleep 600' >/dev/null 2>&1\n", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 44.442, "kind": "setup", "run": "sleep 4", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 44.649, "kind": "setup", "run": "notify-send -a hornero-qa 'Held notification' 'This must be queued, not shown over the game'", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 46.918, "kind": "setup", "run": "sleep 2", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 49.68, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 49.68, "kind": "wait", "step": 0, "value": {"stable": 1.0, "timeout": 8}, "note": null}
+{"t": 50.876, "kind": "wait_result", "step": 0, "ok": true}
+{"t": 50.876, "kind": "screenshot", "step": 1, "value": "gaming-fullscreen", "note": null}

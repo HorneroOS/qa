@@ -1,0 +1,22 @@
+{"t": 15.244, "kind": "ready", "serial": []}
+{"t": 35.776, "kind": "setup", "run": "horneroctl shell preset apply horizon --yes", "rc": 0, "stdout": "applied preset Horizon (horizon)", "stderr": ""}
+{"t": 66.769, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 66.769, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 66.87, "kind": "wait", "step": 1, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 74.908, "kind": "wait_result", "step": 1, "ok": false}
+{"t": 74.908, "kind": "type", "step": 2, "value": "kitty", "note": null}
+{"t": 75.161, "kind": "key", "step": 3, "value": "enter", "note": null}
+{"t": 75.265, "kind": "probe", "step": 4, "value": {"run": "hyprctl activewindow -j | jq -r .class", "equals": "kitty", "retry_s": 10}, "note": null}
+{"t": 76.337, "kind": "pointer", "step": 5, "value": {"x": 0.93, "y": 0.035, "glide": 8}, "note": null}
+{"t": 76.547, "kind": "wait", "step": 6, "value": {"stable": 0.5, "timeout": 5}, "note": null}
+{"t": 80.453, "kind": "wait_result", "step": 6, "ok": true}
+{"t": 80.453, "kind": "pointer", "step": 7, "value": {"x": 0.93, "y": 0.2, "glide": 8}, "note": null}
+{"t": 80.667, "kind": "wait", "step": 8, "value": {"stable": 0.3, "timeout": 4}, "note": null}
+{"t": 81.323, "kind": "wait_result", "step": 8, "ok": true}
+{"t": 81.323, "kind": "probe", "step": 9, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "bluetooth", "retry_s": 3}, "note": null}
+{"t": 81.563, "kind": "probe", "step": 10, "value": {"run": "qs ipc call debug dump | jq -r '.panels[] | select(.name == \"popouts\") | (.visible == true and .width > 0 and .height > 0)'", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 81.801, "kind": "probe", "step": 11, "value": {"run": "hyprctl activewindow -j | jq -r .class", "equals": "kitty", "retry_s": 3}, "note": null}
+{"t": 82.016, "kind": "screenshot", "step": 12, "value": "bluetooth-popout-open", "note": null}
+{"t": 82.066, "kind": "pointer", "step": 13, "value": {"x": 0.5, "y": 0.5, "glide": 8}, "note": null}
+{"t": 82.279, "kind": "wait", "step": 14, "value": {"stable": 0.5, "timeout": 5}, "note": null}
+{"t": 83.512, "kind": "wait_result", "step": 14, "ok": true}

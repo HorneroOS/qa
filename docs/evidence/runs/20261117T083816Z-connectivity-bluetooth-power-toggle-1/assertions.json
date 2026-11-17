@@ -1,0 +1,24 @@
+[
+  {
+    "t": 37.487,
+    "kind": "probe",
+    "run": "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['adapter'])\"",
+    "ok": false,
+    "rc": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import json,sys;print(json.load(sys.stdin)['data']['adapter'])\n                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^\nKeyError: 'adapter'",
+    "detail": "stdout '' != 'fail'",
+    "where": "proof 0"
+  },
+  {
+    "t": 37.788,
+    "kind": "probe",
+    "run": "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['powered'])\"",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "stdout 'false' != 'fail'",
+    "where": "proof 1"
+  }
+]

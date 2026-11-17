@@ -1,0 +1,23 @@
+id: notifications/shell-owns-bus
+purpose: >-
+  The Hornero shell owns org.freedesktop.Notifications even with dunst
+  installed, and a notification is shown by the shell (dunst is never
+  D-Bus activated).
+covers: [config#44]
+setup:
+  commands:
+    - "notify-send -a hornero-qa 'Hornero QA' 'Notification ownership check'"
+instruction: Send a desktop notification and see it appear in the Hornero style.
+steps:
+  - wait: {stable: 0.5, timeout: 5}
+  - screenshot: notification
+proof:
+  - note: The bus name belongs to the shell process
+    probe:
+      run: "busctl --user status org.freedesktop.Notifications | sed -n 's/^Comm=//p'"
+      matches: "^(qs|quickshell)$"
+  - note: dunst was not activated by the notification
+    probe: {run: "pgrep -x dunst || echo none", equals: none}
+  - screenshot: notification-final
+media: [notification]
+budget: {wall_s: 60}

@@ -1,0 +1,33 @@
+[
+  {
+    "t": 73.91,
+    "kind": "probe",
+    "run": "busctl --user status org.freedesktop.Notifications | sed -n 's/^Comm=//p'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "qs",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 74.204,
+    "kind": "probe",
+    "run": "pgrep -x dunst || echo none",
+    "ok": true,
+    "rc": 0,
+    "stdout": "none",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 74.25,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-notification-final.png"
+    ],
+    "where": "proof 2"
+  }
+]

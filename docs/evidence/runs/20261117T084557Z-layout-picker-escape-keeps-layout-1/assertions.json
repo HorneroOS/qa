@@ -1,0 +1,44 @@
+[
+  {
+    "t": 70.034,
+    "kind": "probe",
+    "run": "qs ipc call drawers state layoutPicker",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 2"
+  },
+  {
+    "t": 76.729,
+    "kind": "probe",
+    "run": "qs ipc call drawers state layoutPicker",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 76.958,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-left",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 77.002,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-after-escape.png"
+    ],
+    "where": "proof 2"
+  }
+]

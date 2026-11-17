@@ -1,0 +1,26 @@
+id: extensions/lifecycle-disable-enable
+purpose: >-
+  Foundation wave (qa#81): horneroctl owns the extension lifecycle. Disabling
+  an extension unloads it without touching its neighbours or its stored
+  settings; re-enabling revalidates and loads it again. This scenario tests
+  the CLI interface itself, so the lifecycle verbs run in ordered proof
+  probes (same pattern as agentic/shell-proposal-delegate). PENDING until
+  run in an approved KVM window.
+covers: [qa#81, shell#380]
+instruction: Disable the example-clock extension, confirm the desktop without it, then enable it again.
+proof:
+  - note: Precondition - the fixture starts loaded
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 15}
+  - note: Disabling through the CLI succeeds
+    probe: {run: "horneroctl plugin disable example-clock --yes >/dev/null 2>&1 && echo disabled || echo refused", equals: disabled}
+  - note: After rediscovery the shell reports it disabled, not loaded
+    probe: {run: "qs ipc call plugins reload >/dev/null 2>&1; qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\")] | .[0].state'", equals: disabled, retry_s: 10}
+  - note: Neighbouring extensions are unaffected by the disable
+    probe: {run: "qs ipc call plugins status | jq -r .failed", equals: "0"}
+  - note: Re-enabling through the CLI succeeds (payload is revalidated)
+    probe: {run: "horneroctl plugin enable example-clock --yes >/dev/null 2>&1 && echo enabled || echo refused", equals: enabled}
+  - note: After rediscovery the extension is loaded again
+    probe: {run: "qs ipc call plugins reload >/dev/null 2>&1; qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'", equals: "1", retry_s: 15}
+  - screenshot: after-reenable
+budget: {wall_s: 180}
+artifacts: {screenshots: always, logs: always}

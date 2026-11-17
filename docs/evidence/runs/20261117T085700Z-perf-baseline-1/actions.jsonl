@@ -1,0 +1,4 @@
+{"t": 16.973, "kind": "ready", "serial": []}
+{"t": 37.628, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 37.628, "kind": "wait", "step": 0, "value": {"stable": 3, "timeout": 30}, "note": null}
+{"t": 67.836, "kind": "wait_result", "step": 0, "ok": false}

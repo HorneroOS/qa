@@ -1,0 +1,47 @@
+id: bars/rail-activewindow-hover
+purpose: >-
+  A vertical rail keeps the active-window marker compact while its hover card
+  still exposes the real window title and live preview.
+covers: [shell#125]
+setup:
+  layout: hornero-left
+instruction: Open Kitty, hover its marker, move into the title card and detach its details.
+steps:
+  - key: ctrl+space
+  - probe:
+      run: "qs ipc call drawers state launcher"
+      equals: "true"
+      retry_s: 5
+  - type: kitty
+  - key: enter
+  - probe:
+      run: "hyprctl activewindow -j | jq -r .class"
+      equals: kitty
+      retry_s: 10
+  - pointer: {x: 0.024, y: 0.49, glide: 8}
+  - probe:
+      run: "qs ipc call debug dump | jq -r .popout.name"
+      equals: activewindow
+      retry_s: 3
+  - pointer: {x: 0.10, y: 0.325, glide: 8}
+  - probe:
+      run: "qs ipc call debug dump | jq -r .popout.name"
+      equals: activewindow
+      retry_s: 3
+  - screenshot: hornero-left-active-window-hover
+  - pointer: {x: 0.356, y: 0.325, click: left, glide: 8}
+  - probe:
+      run: "qs ipc call debug dump | jq -r .popout.detached"
+      equals: winfo
+      retry_s: 3
+  - screenshot: hornero-left-window-details
+proof:
+  - note: The active-window popout remains open after the pointer travels from its rail trigger
+    probe: {run: "qs ipc call debug dump | jq -r .popout.hasCurrent", equals: "true", retry_s: 3}
+  - note: The rail shows the app icon without a rotated title
+    anchor: {id: bars/rail-activewindow-app-icon, expect: present}
+  - note: The pre-change rotated title is absent
+    anchor: {id: bars/rail-activewindow-title-rotated, expect: absent}
+  - screenshot: active-window-details
+media: [hornero-left-active-window-hover, hornero-left-window-details]
+budget: {wall_s: 90}

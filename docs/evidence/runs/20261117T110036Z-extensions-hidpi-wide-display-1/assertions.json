@@ -1,0 +1,55 @@
+[
+  {
+    "t": 69.145,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .discovered",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 82.04,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -c '[.[] | {width,height,scale}]'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "[{\"width\":1280,\"height\":800,\"scale\":1}]",
+    "stderr": "",
+    "detail": "stdout '[{\"width\":1280,\"height\":800,\"scale\":1}]' != '[{\"width\":1920,\"height\":1080,\"scale\":1.5}]'",
+    "where": "proof 0"
+  },
+  {
+    "t": 82.325,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[\"bottom\",\"top\"]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 82.625,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false 0",
+    "stderr": "",
+    "detail": "stdout 'false 0' != 'true 0'",
+    "where": "proof 2"
+  },
+  {
+    "t": 82.668,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-final.png"
+    ],
+    "where": "proof 3"
+  }
+]

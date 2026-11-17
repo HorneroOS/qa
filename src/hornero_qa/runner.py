@@ -260,12 +260,78 @@ class _Attempt:
                 self.bundle.action("wait_result", step=i, ok=ok)
             elif kind == "pause":
                 time.sleep(float(val))
+            elif kind == "hover":
+                self.count_action()
+                self.hover(i, val)
             elif kind == "screenshot":
                 self.keep(val, {"step": i})
             elif kind in ("probe", "anchor"):
                 rec = self.check(kind, val, f"step {i}")
                 if not rec["ok"]:
                     raise QAError(FailureClass.PRODUCT, f"step {i} {kind} failed: {rec['detail']}")
+
+    def _layout_box(self) -> tuple[float, float]:
+        """Logical bounding box (width, height) of all outputs: the QMP tablet spans it."""
+        r = self.probe("hyprctl monitors -j", timeout=15)
+        mons = json.loads(r.stdout)
+        width = max(m["x"] + m["width"] / m["scale"] for m in mons)
+        height = max(m["y"] + m["height"] / m["scale"] for m in mons)
+        return float(width), float(height)
+
+    def _point(self, x: float, y: float, glide: int = 6) -> None:
+        w, h = self._layout_box()
+        self.engine.pointer(min(max(x / w, 0.0), 1.0), min(max(y / h, 0.0), 1.0), None, glide)
+
+    def hover(self, step: int, spec: dict[str, Any]) -> None:
+        """Open a popout (or park the pointer) with real pointer input.
+
+        Bar and trigger geometry come from `debug bars`, so presets, scales and
+        icon sets can change without moving hard-coded coordinates."""
+        if spec.get("away"):
+            self._point(40, 300)
+            time.sleep(1.4)
+            self.bundle.action("hover_away", step=step)
+            return
+        name, edge = spec["popout"], spec["edge"]
+        bars = json.loads(self.probe("qs ipc call debug bars", timeout=15).stdout or "[]")
+        bar = next((b for b in bars if b.get("edge") == edge and b.get("visible")), None)
+        seen: list[str] = []
+        found: tuple[float, float] | None = None
+        if bar is not None:
+            pts: list[tuple[float, float]] = []
+            for isl in bar.get("islands", []):
+                for g in isl.get("groups", []):
+                    _name, vis, gw, gh, gx, gy = g[:6]
+                    if not vis or gw <= 0 or gh <= 0:
+                        continue
+                    if edge in ("top", "bottom"):
+                        pts += [(gx + d, gy + gh / 2) for d in range(2, int(gw), 12)]
+                        pts.sort(key=lambda p: -p[0])
+                    else:
+                        pts += [(gx + gw / 2, gy + d) for d in range(2, int(gh), 12)]
+                        pts.sort(key=lambda p: -p[1])
+            for x, y in pts:
+                self._point(x, y, glide=4)
+                time.sleep(0.45)
+                cur = self.probe("qs ipc call debug dump | jq -r .popout.name", timeout=15).stdout.strip()
+                if cur == name:
+                    time.sleep(0.9)
+                    found = (x, y)
+                    break
+                if cur and cur not in seen:
+                    seen.append(cur)
+                if cur:  # a different popout is open: leave so it closes before the next trigger
+                    self._point(40, 300)
+                    time.sleep(1.0)
+        msg = f"found {name} at {found}" if found else f"not found; popouts seen: {' '.join(seen)}"
+        self.bundle.action("hover", step=step, popout=name, edge=edge, found=bool(found), detail=msg)
+        logs = self.bundle.root / "logs"
+        logs.mkdir(parents=True, exist_ok=True)
+        (logs / f"hover-{edge}-{name}.txt").write_text(msg + "\n", encoding="utf-8")
+        if not found:
+            raise QAError(
+                FailureClass.PRODUCT, f"step {step}: popout {name!r} never opened from the {edge} bar: {msg}"
+            )
 
     def wait(self, spec: dict[str, Any]) -> bool:
         """Screen synchronisation. Timeouts are recorded, never asserted: proof decides."""

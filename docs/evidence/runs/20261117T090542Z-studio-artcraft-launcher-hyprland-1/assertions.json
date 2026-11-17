@@ -1,0 +1,97 @@
+[
+  {
+    "t": 37.871,
+    "kind": "probe",
+    "run": "python3 -c \"import json;print(str('artcraft-launcher' in json.load(open('/home/qa/.config/hornero/studio-selection.json'))['applications']).lower())\"",
+    "ok": false,
+    "rc": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import json;print(str('artcraft-launcher' in json.load(open('/home/qa/.config/hornero/studio-selection.json'))['applications']).lower())\n                                                           ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/qa/.config/hornero/studio-selection.json'",
+    "detail": "stdout '' != 'true'",
+    "where": "proof 0"
+  },
+  {
+    "t": 38.174,
+    "kind": "probe",
+    "run": "horneroctl --json studio app show artcraft-launcher | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['state'])\"",
+    "ok": false,
+    "rc": 0,
+    "stdout": "not-installed",
+    "stderr": "",
+    "detail": "stdout 'not-installed' != 'installed'",
+    "where": "proof 1"
+  },
+  {
+    "t": 38.446,
+    "kind": "probe",
+    "run": "test -f /usr/share/applications/ai.storyteller.artcraft-launcher.desktop && desktop-file-validate /usr/share/applications/ai.storyteller.artcraft-launcher.desktop && echo valid",
+    "ok": false,
+    "rc": 1,
+    "stdout": "",
+    "stderr": "",
+    "detail": "stdout '' != 'valid'",
+    "where": "proof 2"
+  },
+  {
+    "t": 38.803,
+    "kind": "probe",
+    "run": "pacman -Qq ai.storyteller.artcraft-launcher >/dev/null 2>&1 && echo present || echo absent",
+    "ok": false,
+    "rc": 0,
+    "stdout": "absent",
+    "stderr": "",
+    "detail": "stdout 'absent' != 'present'",
+    "where": "proof 3"
+  },
+  {
+    "t": 39.1,
+    "kind": "probe",
+    "run": "pgrep -f artcraft-launcher >/dev/null && echo up",
+    "ok": true,
+    "rc": 0,
+    "stdout": "up",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  },
+  {
+    "t": 39.397,
+    "kind": "probe",
+    "run": "python3 -c \"import glob,os; print(str(any('ai.storyteller.' in os.path.basename(p) and 'artcraft-launcher' not in p for p in glob.glob('/home/qa/.local/share/applications/*.desktop')+glob.glob('/home/qa/.local/share/flatpak/app/*/current/active/files/share/applications/*.desktop'))).lower())\"",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "stdout 'false' != 'true'",
+    "where": "proof 5"
+  },
+  {
+    "t": 40.703,
+    "kind": "probe",
+    "run": "horneroctl studio doctor --json | python3 -c \"import json,sys;print(str(json.load(sys.stdin)['ok']).lower())\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 6"
+  },
+  {
+    "t": 40.747,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-artcraft-launcher.png"
+    ],
+    "where": "proof 7"
+  },
+  {
+    "t": 40.788,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-artcraft-craft-app.png"
+    ],
+    "where": "proof 8"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T110036Z-extensions-hidpi-wide-display-1",
+  "finished": "2026-11-17T11:02:01Z",
+  "wall_s": 85.499,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '[{\"width\":1280,\"height\":800,\"scale\":1}]' != '[{\"width\":1920,\"height\":1080,\"scale\":1.5}]'; proof 2: stdout 'false 0' != 'true 0'",
+  "actions": 2,
+  "driver_end": null,
+  "review": null
+}

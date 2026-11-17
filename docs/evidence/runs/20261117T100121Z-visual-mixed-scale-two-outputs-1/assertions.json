@@ -1,0 +1,56 @@
+[
+  {
+    "t": 98.372,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 98.696,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq '[.[] | select(.mapped)] | length >= 2'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 98.984,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq '[.[] | select(.mapped and .at[0] < 0)] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 99.298,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {screen,edge,style,geom}]'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[{\"screen\":\"Virtual-1\",\"edge\":\"top\",\"style\":\"inset\",\"geom\":[0,0,1920,40]},{\"screen\":\"Virtual-1\",\"edge\":\"bottom\",\"style\":\"inset\",\"geom\":[0,1048,1920,32]},{\"screen\":\"Virtual-2\",\"edge\":\"top\",\"style\":\"inset\",\"geom\":[0,0,1280,40]},{\"screen\":\"Virtual-2\",\"edge\":\"bottom\",\"style\":\"inset\",\"geom\":[0,688,1280,32]}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 99.491,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-final-h0.png",
+      "004-final-h1.png"
+    ],
+    "where": "proof 4"
+  }
+]

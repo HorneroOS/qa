@@ -1,0 +1,6 @@
+{"t": 16.839, "kind": "ready", "serial": []}
+{"t": 37.563, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-day --yes", "rc": 0, "stdout": "theme set to hornero-signal-day (mode=light, gtk=Hornero-Signal-Day)", "stderr": ""}
+{"t": 38.022, "kind": "setup", "run": "python3 -c \"import json,os; p=os.path.expanduser(\\\"~/.config/hornero/shell.json\\\"); d=json.load(open(p)); d.setdefault(\\\"appearance\\\",{}).setdefault(\\\"anim\\\",{}).setdefault(\\\"durations\\\",{})[\\\"scale\\\"]=0; json.dump(d, open(p,\\\"w\\\"))\"", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 42.349, "kind": "setup", "run": "pkill -x qs || true; sleep 1; hyprctl dispatch exec \"$HOME/.local/bin/qa-shell.sh\"; sleep 3", "rc": 0, "stdout": "error: 3 [string \"return hl.dispatch(exec /home/hornero/.local/...\"]:1: unexpected symbol near '.'\n\n \u2192 Note: dispatch in lua is a shorthand for hl.dispatch(...), your syntax might need to be updated.", "stderr": ""}
+{"t": 73.796, "kind": "tokens", "theme": "", "roles": 0}
+{"t": 73.796, "kind": "probe", "step": 0, "value": {"run": "qs ipc call plugins status | jq -r .discovered", "equals": "true", "retry_s": 15}, "note": null}

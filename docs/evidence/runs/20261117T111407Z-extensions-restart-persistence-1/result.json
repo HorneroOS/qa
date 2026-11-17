@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T111407Z-extensions-restart-persistence-1",
+  "finished": "2026-11-17T11:15:39Z",
+  "wall_s": 91.792,
+  "verdict": "fail",
+  "class": "product_crash",
+  "regression": true,
+  "reason": "shell process died during the run; step 0 probe failed: stdout '' != 'true'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

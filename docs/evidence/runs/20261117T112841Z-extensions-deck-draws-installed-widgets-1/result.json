@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T112841Z-extensions-deck-draws-installed-widgets-1",
+  "finished": "2026-11-17T11:29:21Z",
+  "wall_s": 40.193,
+  "verdict": "inconclusive",
+  "class": "harness",
+  "regression": false,
+  "reason": "setup failed (rc=1): export HORNERO_PLUGINS_CATALOG_URL=$HOME/catalog; for id in agenda audio-deck calendar moon-phase network-scope system-insight; do horneroctl plugin catalog install hornero-$id --yes; done: catalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

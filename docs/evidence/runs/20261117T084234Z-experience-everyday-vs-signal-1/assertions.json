@@ -1,0 +1,24 @@
+[
+  {
+    "t": 43.799,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Experience",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 56.574,
+    "kind": "probe",
+    "run": "qs ipc call experience get",
+    "ok": false,
+    "rc": 0,
+    "stdout": "everyday",
+    "stderr": "",
+    "detail": "stdout 'everyday' != 'signal'",
+    "where": "step 4"
+  }
+]

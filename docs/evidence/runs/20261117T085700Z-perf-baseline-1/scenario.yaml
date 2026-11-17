@@ -1,0 +1,18 @@
+id: perf/baseline
+purpose: >-
+  Reference performance numbers for the composition under test, measured by
+  the shell's own scripts/perf-baseline.sh inside the fixed QA machine
+  (2 vCPU, 2 GiB, one 1280x800 output), so numbers are comparable between
+  runs and releases (HorneroOS/shell#47).
+covers: [shell#47]
+instruction: Leave the freshly booted desktop idle and measure the shell.
+steps:
+  - wait: {stable: 3, timeout: 30}
+proof:
+  - note: The shell's baseline harness runs and reports steady-state samples
+    probe:
+      run: "~/.config/quickshell/scripts/perf-baseline.sh --samples 5 --interval 1"
+      json: samples.0.rss_kb
+      matches: "^[0-9]+$"
+      save: perf-baseline.json
+budget: {wall_s: 120}

@@ -1,0 +1,26 @@
+id: layout-picker/escape-keeps-layout
+purpose: >-
+  SUPER+SHIFT+B opens the Layout Picker, the picker takes the keyboard, and
+  Escape closes it without changing the active layout.
+covers: [shell#93]
+setup:
+  layout: hornero-left
+instruction: Open the Layout Picker with Super+Shift+B, move the selection, then press Escape.
+steps:
+  - key: super+shift+b
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+  - probe: {run: "qs ipc call drawers state layoutPicker", equals: "true", retry_s: 3}
+  - screenshot: picker
+  - key: right
+  - wait: {changed: true, stable: 0.3, timeout: 3}
+  - screenshot: picker-moved
+  - key: escape
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+proof:
+  - note: The picker closed
+    probe: {run: "qs ipc call drawers state layoutPicker", equals: "false", retry_s: 3}
+  - note: The active layout did not change
+    probe: {run: "horneroctl shell preset current", contains: hornero-left}
+  - screenshot: after-escape
+media: [picker]
+budget: {wall_s: 90}

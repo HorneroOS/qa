@@ -1,0 +1,22 @@
+{"t": 15.991, "kind": "ready", "serial": []}
+{"t": 36.52, "kind": "setup", "run": "python3 -c \"import json,os; p=os.path.expanduser(\\\"~/.config/hornero/shell.json\\\"); d=json.load(open(p)); d.setdefault(\\\"plugins\\\",{})[\\\"dashboardLayout\\\"]={}; json.dump(d, open(p,\\\"w\\\"))\"", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 67.746, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 67.746, "kind": "key", "step": 0, "value": "super+d", "note": null}
+{"t": 67.852, "kind": "wait", "step": 1, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 70.033, "kind": "wait_result", "step": 1, "ok": true}
+{"t": 70.033, "kind": "probe", "step": 2, "value": {"run": "qs ipc call drawers state dashboard", "equals": "true", "retry_s": 5}, "note": null}
+{"t": 70.344, "kind": "key", "step": 3, "value": "tab", "note": null}
+{"t": 70.446, "kind": "key", "step": 4, "value": "tab", "note": null}
+{"t": 70.562, "kind": "key", "step": 5, "value": "tab", "note": null}
+{"t": 70.663, "kind": "key", "step": 6, "value": "tab", "note": null}
+{"t": 70.78, "kind": "key", "step": 7, "value": "tab", "note": null}
+{"t": 70.881, "kind": "key", "step": 8, "value": "tab", "note": null}
+{"t": 70.997, "kind": "screenshot", "step": 9, "value": "dashboard-keyboard-focus", "note": null}
+{"t": 71.042, "kind": "note", "step": 10, "value": "Pin the focused card with P (dashboard card keyboard contract, shell#378)", "note": "Pin the focused card with P (dashboard card keyboard contract, shell#378)"}
+{"t": 71.042, "kind": "key", "step": 11, "value": "p", "note": null}
+{"t": 71.203, "kind": "wait", "step": 12, "value": {"stable": 0.5, "timeout": 5}, "note": null}
+{"t": 72.134, "kind": "wait_result", "step": 12, "ok": true}
+{"t": 72.134, "kind": "screenshot", "step": 13, "value": "dashboard-after-pin", "note": null}
+{"t": 72.251, "kind": "key", "step": 14, "value": "escape", "note": null}
+{"t": 72.352, "kind": "wait", "step": 15, "value": {"changed": true, "stable": 0.5, "timeout": 5}, "note": null}
+{"t": 77.619, "kind": "wait_result", "step": 15, "ok": false}

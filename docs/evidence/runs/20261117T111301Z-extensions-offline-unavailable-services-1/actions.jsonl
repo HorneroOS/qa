@@ -1,0 +1,8 @@
+{"t": 16.708, "kind": "ready", "serial": []}
+{"t": 37.441, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 37.441, "kind": "probe", "step": 0, "value": {"run": "qs ipc call plugins status | jq -r .discovered", "equals": "true", "retry_s": 15}, "note": null}
+{"t": 37.75, "kind": "key", "step": 1, "value": "super+d", "note": null}
+{"t": 37.854, "kind": "wait", "step": 2, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 40.025, "kind": "wait_result", "step": 2, "ok": true}
+{"t": 40.025, "kind": "screenshot", "step": 3, "value": "dashboard-services-unavailable", "note": null}
+{"t": 40.117, "kind": "key", "step": 4, "value": "escape", "note": null}

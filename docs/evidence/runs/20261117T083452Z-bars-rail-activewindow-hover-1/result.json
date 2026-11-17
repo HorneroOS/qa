@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T083452Z-bars-rail-activewindow-hover-1",
+  "finished": "2026-11-17T08:36:12Z",
+  "wall_s": 77.315,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "step 11 probe failed: stdout '' != 'winfo'",
+  "actions": 6,
+  "driver_end": null,
+  "review": null
+}

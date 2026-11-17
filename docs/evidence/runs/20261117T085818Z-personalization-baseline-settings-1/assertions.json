@@ -1,0 +1,55 @@
+[
+  {
+    "t": 54.594,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq -r 'any(.[]; .title | startswith(\"Hornero Settings\"))'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 6"
+  },
+  {
+    "t": 55.103,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero Settings - Appearance",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 9"
+  },
+  {
+    "t": 65.746,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": true,
+    "rc": 0,
+    "stdout": "502",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 0"
+  },
+  {
+    "t": 65.986,
+    "kind": "probe",
+    "run": "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 66.032,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "004-final.png"
+    ],
+    "where": "proof 2"
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "t": 48.598,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\")] | .[0].marketplace.screenshots[0].path'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "null",
+    "stderr": "",
+    "detail": "stdout 'null' != 'previews/clock.png'",
+    "where": "proof 0"
+  },
+  {
+    "t": 48.885,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\")] | .[0].marketplace.compatibility.minShellVersion'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "null",
+    "stderr": "",
+    "detail": "stdout 'null' != '1.0.0'",
+    "where": "proof 1"
+  },
+  {
+    "t": 49.183,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\")] | .[0].marketplace.changelog[0].version'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "null",
+    "stderr": "",
+    "detail": "stdout 'null' != '1.0.0'",
+    "where": "proof 2"
+  },
+  {
+    "t": 59.912,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 3"
+  },
+  {
+    "t": 60.211,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .failed",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  },
+  {
+    "t": 60.484,
+    "kind": "probe",
+    "run": "horneroctl plugin community list >/dev/null 2>&1 && echo listed || echo refused",
+    "ok": true,
+    "rc": 0,
+    "stdout": "refused",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 5"
+  },
+  {
+    "t": 60.533,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-desktop.png"
+    ],
+    "where": "proof 6"
+  }
+]

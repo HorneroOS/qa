@@ -1,0 +1,26 @@
+id: recovery/doctor-honesty
+purpose: >-
+  OS recovery readiness is reported, never invented: recovery doctor
+  probes the shipped snapshot backend, root filesystem, the
+  top-level /.snapshots store, snapper/config presence and retention
+  timers read-only. While no backend is VM-proven it must keep
+  reporting snapshot_backend=none, fail its backend check, and state
+  that config snapshots are not OS rollback. A non-Btrfs root is
+  plainly unsupported. No restore or create verb exists.
+covers: [hornero#179, qa#19]
+instruction: >-
+  On an installed HorneroOS system, open a terminal and inspect the
+  recovery doctor reporting without changing anything.
+proof:
+  - note: Doctor JSON exposes the machine-readable backend contract
+    probe: {run: "horneroctl recovery doctor --json | python3 -c \"import json,sys;d=json.load(sys.stdin)['data'];print('snapshot_backend' in d and 'root_fstype' in d and 'snapshots_store' in d)\"", equals: "True"}
+  - note: Backend is still none (and failing) until the VM restore proof passes; flip this probe only with that proof recorded
+    probe: {run: "horneroctl recovery doctor --json | python3 -c \"import json,sys;d=json.load(sys.stdin)['data'];print((d['snapshot_backend']=='none') and (d['snapshot-backend']=='fail'))\"", equals: "True"}
+  - note: Human output keeps config snapshots separate from OS rollback
+    probe: {run: "horneroctl recovery doctor | grep -ci 'not OS rollback'; true", equals: "1"}
+  - note: Advertised command surface is doctor-only (read-only help; verb rejection itself is unit-tested in HorneroOS/hornero)
+    probe: {run: "horneroctl recovery --help | grep -c 'horneroctl recovery <doctor>'; true", equals: "1"}
+  - note: Root filesystem probe matches the installed system
+    probe: {run: "horneroctl recovery doctor --json | python3 -c \"import json,sys;d=json.load(sys.stdin)['data'];fs=[l.split()[2] for l in open('/proc/mounts') if l.split()[1]=='/'][0];print(d['root_fstype']==fs)\"", equals: "True"}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}

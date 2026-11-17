@@ -1,0 +1,33 @@
+[
+  {
+    "t": 42.892,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 2"
+  },
+  {
+    "t": 53.659,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 53.704,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-after-escape.png"
+    ],
+    "where": "proof 1"
+  }
+]

@@ -1,0 +1,3 @@
+{"t": 16.474, "kind": "ready", "serial": []}
+{"t": 37.198, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 37.198, "kind": "probe", "step": 0, "value": {"run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.enabled and .installed)] | length >= 3'", "equals": "true", "retry_s": 15}, "note": null}

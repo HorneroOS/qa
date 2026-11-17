@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T112019Z-extensions-uninstall-cleanup-1",
+  "finished": "2026-11-17T11:21:28Z",
+  "wall_s": 69.406,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '0' != '1'; proof 1: stdout 'refused' != 'removed'; proof 4: stdout 'false 0' != 'true 0'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

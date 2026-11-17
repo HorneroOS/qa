@@ -1,0 +1,389 @@
+Nov 17 09:22:20 hornero-vm systemd[409]: Queued start job for default target Main User Target.
+Nov 17 09:22:20 hornero-vm systemd[409]: Created slice User Application Slice.
+Nov 17 09:22:20 hornero-vm systemd[409]: Reached target Paths.
+Nov 17 09:22:20 hornero-vm systemd[409]: Reached target Timers.
+Nov 17 09:22:20 hornero-vm systemd[409]: Starting D-Bus User Message Bus Socket...
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on GnuPG network certificate management daemon.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on GnuPG cryptographic agent and passphrase cache.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on GnuPG public key management service.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on p11-kit server.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on PipeWire PulseAudio.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on PipeWire Multimedia System Sockets.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on Query the User Interactively for a Password.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on Disk Image Download Service Socket.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on Journal Log Access Socket.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on Virtual Machine and Container Registration Service Socket.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on Simple File System Backed Storage Provider.
+Nov 17 09:22:20 hornero-vm systemd[409]: Listening on D-Bus User Message Bus Socket.
+Nov 17 09:22:20 hornero-vm systemd[409]: Reached target Sockets.
+Nov 17 09:22:20 hornero-vm systemd[409]: Reached target Basic System.
+Nov 17 09:22:20 hornero-vm systemd[409]: Reached target Main User Target.
+Nov 17 09:22:20 hornero-vm systemd[409]: Startup finished in 70ms.
+Nov 17 09:22:20 hornero-vm sshd-session[417]: Received disconnect from 10.0.2.2 port 52924:11: disconnected by user
+Nov 17 09:22:20 hornero-vm sshd-session[417]: Disconnected from user hornero 10.0.2.2 port 52924
+Nov 17 09:22:20 hornero-vm sshd-session[454]: Received disconnect from 10.0.2.2 port 52930:11: disconnected by user
+Nov 17 09:22:20 hornero-vm sshd-session[454]: Disconnected from user hornero 10.0.2.2 port 52930
+Nov 17 09:22:21 hornero-vm sshd-session[472]: Received disconnect from 10.0.2.2 port 52936:11: disconnected by user
+Nov 17 09:22:21 hornero-vm sshd-session[472]: Disconnected from user hornero 10.0.2.2 port 52936
+Nov 17 09:22:21 hornero-vm systemd[409]: Created slice User Core Session Slice.
+Nov 17 09:22:21 hornero-vm systemd[409]: Starting D-Bus User Message Bus...
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Service file '/home/hornero/.local/share/dbus-1/services/fr.emersion.mako.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Service file '/home/hornero/.local/share/dbus-1/services/org.erikreider.swaync.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Ignoring duplicate name 'org.freedesktop.Notifications' in service file '/home/hornero/.local/share/dbus-1/services/org.erikreider.swaync.service'
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Service file '/home/hornero/.local/share/dbus-1/services/org.knopwob.dunst.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Ignoring duplicate name 'org.freedesktop.Notifications' in service file '/home/hornero/.local/share/dbus-1/services/org.knopwob.dunst.service'
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Service file '/usr/share/dbus-1/services/org.knopwob.dunst.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Ignoring duplicate name 'org.freedesktop.Notifications' in service file '/usr/share/dbus-1/services/org.knopwob.dunst.service'
+Nov 17 09:22:21 hornero-vm systemd[409]: Started D-Bus User Message Bus.
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Policy to allow eavesdropping in /usr/share/dbus-1/session.conf +31: Eavesdropping is deprecated and ignored
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Policy to allow eavesdropping in /usr/share/dbus-1/session.conf +33: Eavesdropping is deprecated and ignored
+Nov 17 09:22:21 hornero-vm dbus-broker-launch[494]: Ready
+Nov 17 09:22:21 hornero-vm systemd[409]: Starting User preferences database...
+Nov 17 09:22:21 hornero-vm systemd[409]: Started User preferences database.
+Nov 17 09:22:21 hornero-vm systemd[409]: Starting Portal service...
+Nov 17 09:22:21 hornero-vm systemd[409]: Starting sandboxed app permission store...
+Nov 17 09:22:21 hornero-vm systemd[409]: Started sandboxed app permission store.
+Nov 17 09:22:21 hornero-vm systemd[409]: Starting flatpak document portal service...
+Nov 17 09:22:21 hornero-vm systemd[409]: Started flatpak document portal service.
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: The location portal requires an access impl
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: The camera portal requires an access impl
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: The screenshot portal requires an access impl
+Nov 17 09:22:21 hornero-vm systemd[409]: Starting Portal service (Hyprland implementation)...
+Nov 17 09:22:21 hornero-vm systemd[409]: Started Portal service (Hyprland implementation).
+Nov 17 09:22:21 hornero-vm systemd[409]: Reached target Session services which should run early before the graphical session is brought up.
+Nov 17 09:22:21 hornero-vm systemd[409]: Reached target Current graphical user session.
+Nov 17 09:22:21 hornero-vm systemd[409]: Reached target Hyprland session.
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] Initializing xdph...
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] XDG_CURRENT_DESKTOP set to Hyprland
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] Gathering exported interfaces
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wl_seat (ver 9)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wl_data_device_manager (ver 3)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wl_compositor (ver 6)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wl_subcompositor (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wl_shm (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_viewporter (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_tearing_control_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_fractional_scale_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zxdg_output_manager_v1 (ver 3)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_cursor_shape_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_idle_inhibit_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_relative_pointer_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zxdg_decoration_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_alpha_modifier_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_gamma_control_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: ext_foreign_toplevel_list_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_pointer_gestures_v1 (ver 3)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_foreign_toplevel_manager_v1 (ver 3)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] [toplevel] (activate) locks: 1
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_keyboard_shortcuts_inhibit_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_text_input_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_text_input_manager_v3 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_pointer_constraints_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_output_power_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: xdg_activation_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: ext_idle_notifier_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_lock_notifier_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: ext_session_lock_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_input_method_manager_v2 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_virtual_keyboard_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_virtual_pointer_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_output_manager_v1 (ver 4)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: org_kde_kwin_server_decoration_manager (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_focus_grab_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_tablet_manager_v2 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_layer_shell_v1 (ver 5)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_presentation (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: xdg_wm_base (ver 7)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_data_control_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwp_primary_selection_device_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: xwayland_shell_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_toplevel_mapping_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] [toplevel mapping] registered manager
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_global_shortcuts_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] [globalshortcuts] registered
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: xdg_wm_dialog_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_single_pixel_buffer_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_security_context_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_ctm_control_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_input_capture_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] [input-capture] initializing input capture portal
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] [input-capture] init successful
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_surface_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_content_type_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: xdg_toplevel_tag_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: xdg_system_bell_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: vicinae_hotkey_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: xx_hotkey_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: ext_workspace_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: ext_data_control_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_pointer_warp_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_fifo_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zxdg_exporter_v2 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zxdg_importer_v2 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: ext_background_effect_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: wp_commit_timing_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: zwlr_screencopy_manager_v1 (ver 3)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] [pipewire] connected
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG] [screencopy] init successful
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: hyprland_toplevel_export_manager_v1 (ver 2)
+Nov 17 09:22:21 hornero-vm xdg-desktop-portal-hyprland[531]: [LOG]  | Got interface: ext_output_image_capture_source_manager_v1 (ver 1)
+Nov 17 09:22:21 hornero-vm systemd[409]: Started PipeWire Multimedia Service.
+Nov 17 09:22:21 hornero-vm systemd[409]: Started Multimedia Service Session Manager.
+Nov 17 09:22:21 hornero-vm wireplumber[538]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 09:22:21 hornero-vm wireplumber[538]: mod.rt: RTKit does not give us MaxRealtimePriority, using 1
+Nov 17 09:22:21 hornero-vm wireplumber[538]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 09:22:21 hornero-vm wireplumber[538]: mod.rt: RTKit does not give us MinNiceLevel, using 0
+Nov 17 09:22:21 hornero-vm wireplumber[538]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 09:22:21 hornero-vm wireplumber[538]: mod.rt: RTKit does not give us RTTimeUSecMax, using -1
+Nov 17 09:22:21 hornero-vm pipewire[537]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 09:22:21 hornero-vm pipewire[537]: mod.rt: RTKit does not give us MaxRealtimePriority, using 1
+Nov 17 09:22:21 hornero-vm pipewire[537]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 09:22:21 hornero-vm pipewire[537]: mod.rt: RTKit does not give us MinNiceLevel, using 0
+Nov 17 09:22:21 hornero-vm pipewire[537]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 09:22:21 hornero-vm pipewire[537]: mod.rt: RTKit does not give us RTTimeUSecMax, using -1
+Nov 17 09:22:21 hornero-vm systemd[409]: Started Portal service.
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: ../glib/gobject/gtype.c:4158: type id '2' is invalid
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: can't peek value table for type '<unknown>' which is not currently referenced
+Nov 17 09:22:21 hornero-vm /usr/lib/xdg-desktop-portal[509]: g_value_unset: assertion 'value_table' failed
+Nov 17 09:22:21 hornero-vm wireplumber[538]: default: Failed to get percentage from UPower: org.freedesktop.DBus.Error.NameHasNoOwner
+Nov 17 09:22:21 hornero-vm wireplumber[538]: spa.bluez5: BlueZ system service is not available
+Nov 17 09:22:21 hornero-vm wireplumber[538]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded: No such file or directory
+Nov 17 09:22:21 hornero-vm wireplumber[538]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not be supported.
+Nov 17 09:22:24 hornero-vm sshd-session[570]: Received disconnect from 10.0.2.2 port 54770:11: disconnected by user
+Nov 17 09:22:24 hornero-vm sshd-session[570]: Disconnected from user hornero 10.0.2.2 port 54770
+Nov 17 09:22:45 hornero-vm sshd-session[815]: Received disconnect from 10.0.2.2 port 36768:11: disconnected by user
+Nov 17 09:22:45 hornero-vm sshd-session[815]: Disconnected from user hornero 10.0.2.2 port 36768
+Nov 17 09:22:45 hornero-vm sshd-session[870]: Received disconnect from 10.0.2.2 port 36784:11: disconnected by user
+Nov 17 09:22:45 hornero-vm sshd-session[870]: Disconnected from user hornero 10.0.2.2 port 36784
+Nov 17 09:22:45 hornero-vm sshd-session[884]: Received disconnect from 10.0.2.2 port 36800:11: disconnected by user
+Nov 17 09:22:45 hornero-vm sshd-session[884]: Disconnected from user hornero 10.0.2.2 port 36800
+Nov 17 09:22:49 hornero-vm sshd-session[897]: Received disconnect from 10.0.2.2 port 36808:11: disconnected by user
+Nov 17 09:22:49 hornero-vm sshd-session[897]: Disconnected from user hornero 10.0.2.2 port 36808
+Nov 17 09:22:49 hornero-vm sshd-session[911]: Received disconnect from 10.0.2.2 port 36824:11: disconnected by user
+Nov 17 09:22:49 hornero-vm sshd-session[911]: Disconnected from user hornero 10.0.2.2 port 36824
+Nov 17 09:22:53 hornero-vm sshd-session[927]: Received disconnect from 10.0.2.2 port 36828:11: disconnected by user
+Nov 17 09:22:53 hornero-vm sshd-session[927]: Disconnected from user hornero 10.0.2.2 port 36828
+Nov 17 09:22:54 hornero-vm systemd[409]: Started kitty child process: 966 launched by: 954.
+Nov 17 09:22:55 hornero-vm systemd[409]: Started kitty child process: 992 launched by: 983.
+Nov 17 09:23:01 hornero-vm sshd-session[943]: Received disconnect from 10.0.2.2 port 55550:11: disconnected by user
+Nov 17 09:23:01 hornero-vm sshd-session[943]: Disconnected from user hornero 10.0.2.2 port 55550
+Nov 17 09:23:04 hornero-vm sshd-session[1016]: Received disconnect from 10.0.2.2 port 56150:11: disconnected by user
+Nov 17 09:23:04 hornero-vm sshd-session[1016]: Disconnected from user hornero 10.0.2.2 port 56150
+Nov 17 09:23:04 hornero-vm sshd-session[1029]: Received disconnect from 10.0.2.2 port 56152:11: disconnected by user
+Nov 17 09:23:04 hornero-vm sshd-session[1029]: Disconnected from user hornero 10.0.2.2 port 56152
+Nov 17 09:23:08 hornero-vm sshd-session[1042]: Received disconnect from 10.0.2.2 port 56156:11: disconnected by user
+Nov 17 09:23:08 hornero-vm sshd-session[1042]: Disconnected from user hornero 10.0.2.2 port 56156
+Nov 17 09:23:08 hornero-vm sshd-session[1055]: Received disconnect from 10.0.2.2 port 56172:11: disconnected by user
+Nov 17 09:23:08 hornero-vm sshd-session[1055]: Disconnected from user hornero 10.0.2.2 port 56172
+Nov 17 09:23:09 hornero-vm sshd-session[1069]: Received disconnect from 10.0.2.2 port 56178:11: disconnected by user
+Nov 17 09:23:09 hornero-vm sshd-session[1069]: Disconnected from user hornero 10.0.2.2 port 56178
+Nov 17 09:23:09 hornero-vm sshd-session[1084]: Received disconnect from 10.0.2.2 port 56190:11: disconnected by user
+Nov 17 09:23:09 hornero-vm sshd-session[1084]: Disconnected from user hornero 10.0.2.2 port 56190
+Nov 17 09:23:10 hornero-vm sshd-session[1098]: Received disconnect from 10.0.2.2 port 56202:11: disconnected by user
+Nov 17 09:23:10 hornero-vm sshd-session[1098]: Disconnected from user hornero 10.0.2.2 port 56202
+Nov 17 09:23:10 hornero-vm sshd-session[1113]: Received disconnect from 10.0.2.2 port 56216:11: disconnected by user
+Nov 17 09:23:10 hornero-vm sshd-session[1113]: Disconnected from user hornero 10.0.2.2 port 56216
+Nov 17 09:23:11 hornero-vm sshd-session[1126]: Received disconnect from 10.0.2.2 port 56218:11: disconnected by user
+Nov 17 09:23:11 hornero-vm sshd-session[1126]: Disconnected from user hornero 10.0.2.2 port 56218
+Nov 17 09:23:11 hornero-vm sshd-session[1141]: Received disconnect from 10.0.2.2 port 43674:11: disconnected by user
+Nov 17 09:23:11 hornero-vm sshd-session[1141]: Disconnected from user hornero 10.0.2.2 port 43674
+Nov 17 09:23:12 hornero-vm sshd-session[1154]: Received disconnect from 10.0.2.2 port 43684:11: disconnected by user
+Nov 17 09:23:12 hornero-vm sshd-session[1154]: Disconnected from user hornero 10.0.2.2 port 43684
+Nov 17 09:23:12 hornero-vm sshd-session[1169]: Received disconnect from 10.0.2.2 port 43690:11: disconnected by user
+Nov 17 09:23:12 hornero-vm sshd-session[1169]: Disconnected from user hornero 10.0.2.2 port 43690
+Nov 17 09:23:13 hornero-vm sshd-session[1183]: Received disconnect from 10.0.2.2 port 43706:11: disconnected by user
+Nov 17 09:23:13 hornero-vm sshd-session[1183]: Disconnected from user hornero 10.0.2.2 port 43706
+Nov 17 09:23:14 hornero-vm sshd-session[1198]: Received disconnect from 10.0.2.2 port 43716:11: disconnected by user
+Nov 17 09:23:14 hornero-vm sshd-session[1198]: Disconnected from user hornero 10.0.2.2 port 43716
+Nov 17 09:23:14 hornero-vm sshd-session[1211]: Received disconnect from 10.0.2.2 port 43726:11: disconnected by user
+Nov 17 09:23:14 hornero-vm sshd-session[1211]: Disconnected from user hornero 10.0.2.2 port 43726
+Nov 17 09:23:15 hornero-vm sshd-session[1226]: Received disconnect from 10.0.2.2 port 43732:11: disconnected by user
+Nov 17 09:23:15 hornero-vm sshd-session[1226]: Disconnected from user hornero 10.0.2.2 port 43732
+Nov 17 09:23:16 hornero-vm sshd-session[1239]: Received disconnect from 10.0.2.2 port 43734:11: disconnected by user
+Nov 17 09:23:16 hornero-vm sshd-session[1239]: Disconnected from user hornero 10.0.2.2 port 43734
+Nov 17 09:23:16 hornero-vm sshd-session[1254]: Received disconnect from 10.0.2.2 port 43746:11: disconnected by user
+Nov 17 09:23:16 hornero-vm sshd-session[1254]: Disconnected from user hornero 10.0.2.2 port 43746
+Nov 17 09:23:17 hornero-vm sshd-session[1268]: Received disconnect from 10.0.2.2 port 43756:11: disconnected by user
+Nov 17 09:23:17 hornero-vm sshd-session[1268]: Disconnected from user hornero 10.0.2.2 port 43756
+Nov 17 09:23:17 hornero-vm sshd-session[1283]: Received disconnect from 10.0.2.2 port 43766:11: disconnected by user
+Nov 17 09:23:17 hornero-vm sshd-session[1283]: Disconnected from user hornero 10.0.2.2 port 43766
+Nov 17 09:23:18 hornero-vm sshd-session[1296]: Received disconnect from 10.0.2.2 port 43780:11: disconnected by user
+Nov 17 09:23:18 hornero-vm sshd-session[1296]: Disconnected from user hornero 10.0.2.2 port 43780
+Nov 17 09:23:19 hornero-vm sshd-session[1309]: Received disconnect from 10.0.2.2 port 43786:11: disconnected by user
+Nov 17 09:23:19 hornero-vm sshd-session[1309]: Disconnected from user hornero 10.0.2.2 port 43786
+Nov 17 09:23:19 hornero-vm sshd-session[1324]: Received disconnect from 10.0.2.2 port 43800:11: disconnected by user
+Nov 17 09:23:19 hornero-vm sshd-session[1324]: Disconnected from user hornero 10.0.2.2 port 43800
+Nov 17 09:23:20 hornero-vm sshd-session[1337]: Received disconnect from 10.0.2.2 port 43808:11: disconnected by user
+Nov 17 09:23:20 hornero-vm sshd-session[1337]: Disconnected from user hornero 10.0.2.2 port 43808
+Nov 17 09:23:20 hornero-vm sshd-session[1352]: Received disconnect from 10.0.2.2 port 43812:11: disconnected by user
+Nov 17 09:23:20 hornero-vm sshd-session[1352]: Disconnected from user hornero 10.0.2.2 port 43812
+Nov 17 09:23:22 hornero-vm sshd-session[1365]: Received disconnect from 10.0.2.2 port 45624:11: disconnected by user
+Nov 17 09:23:22 hornero-vm sshd-session[1365]: Disconnected from user hornero 10.0.2.2 port 45624
+Nov 17 09:23:23 hornero-vm sshd-session[1378]: Received disconnect from 10.0.2.2 port 45632:11: disconnected by user
+Nov 17 09:23:23 hornero-vm sshd-session[1378]: Disconnected from user hornero 10.0.2.2 port 45632
+Nov 17 09:23:23 hornero-vm sshd-session[1393]: Received disconnect from 10.0.2.2 port 45634:11: disconnected by user
+Nov 17 09:23:23 hornero-vm sshd-session[1393]: Disconnected from user hornero 10.0.2.2 port 45634
+Nov 17 09:23:24 hornero-vm sshd-session[1406]: Received disconnect from 10.0.2.2 port 45650:11: disconnected by user
+Nov 17 09:23:24 hornero-vm sshd-session[1406]: Disconnected from user hornero 10.0.2.2 port 45650
+Nov 17 09:23:25 hornero-vm sshd-session[1419]: Received disconnect from 10.0.2.2 port 45662:11: disconnected by user
+Nov 17 09:23:25 hornero-vm sshd-session[1419]: Disconnected from user hornero 10.0.2.2 port 45662
+Nov 17 09:23:25 hornero-vm sshd-session[1434]: Received disconnect from 10.0.2.2 port 45664:11: disconnected by user
+Nov 17 09:23:25 hornero-vm sshd-session[1434]: Disconnected from user hornero 10.0.2.2 port 45664
+Nov 17 09:23:27 hornero-vm sshd-session[1447]: Received disconnect from 10.0.2.2 port 45678:11: disconnected by user
+Nov 17 09:23:27 hornero-vm sshd-session[1447]: Disconnected from user hornero 10.0.2.2 port 45678
+Nov 17 09:23:28 hornero-vm sshd-session[1460]: Received disconnect from 10.0.2.2 port 45680:11: disconnected by user
+Nov 17 09:23:28 hornero-vm sshd-session[1460]: Disconnected from user hornero 10.0.2.2 port 45680
+Nov 17 09:23:30 hornero-vm sshd-session[1475]: Received disconnect from 10.0.2.2 port 45686:11: disconnected by user
+Nov 17 09:23:30 hornero-vm sshd-session[1475]: Disconnected from user hornero 10.0.2.2 port 45686
+Nov 17 09:23:30 hornero-vm sshd-session[1489]: Received disconnect from 10.0.2.2 port 45702:11: disconnected by user
+Nov 17 09:23:30 hornero-vm sshd-session[1489]: Disconnected from user hornero 10.0.2.2 port 45702
+Nov 17 09:23:31 hornero-vm sshd-session[1502]: Received disconnect from 10.0.2.2 port 45708:11: disconnected by user
+Nov 17 09:23:31 hornero-vm sshd-session[1502]: Disconnected from user hornero 10.0.2.2 port 45708
+Nov 17 09:23:31 hornero-vm sshd-session[1517]: Received disconnect from 10.0.2.2 port 45340:11: disconnected by user
+Nov 17 09:23:31 hornero-vm sshd-session[1517]: Disconnected from user hornero 10.0.2.2 port 45340
+Nov 17 09:23:32 hornero-vm sshd-session[1534]: Received disconnect from 10.0.2.2 port 45352:11: disconnected by user
+Nov 17 09:23:32 hornero-vm sshd-session[1534]: Disconnected from user hornero 10.0.2.2 port 45352
+Nov 17 09:23:33 hornero-vm sshd-session[1550]: Received disconnect from 10.0.2.2 port 45366:11: disconnected by user
+Nov 17 09:23:33 hornero-vm sshd-session[1550]: Disconnected from user hornero 10.0.2.2 port 45366
+Nov 17 09:23:33 hornero-vm sshd-session[1564]: Received disconnect from 10.0.2.2 port 45378:11: disconnected by user
+Nov 17 09:23:33 hornero-vm sshd-session[1564]: Disconnected from user hornero 10.0.2.2 port 45378
+Nov 17 09:23:34 hornero-vm sshd-session[1579]: Received disconnect from 10.0.2.2 port 45392:11: disconnected by user
+Nov 17 09:23:34 hornero-vm sshd-session[1579]: Disconnected from user hornero 10.0.2.2 port 45392
+Nov 17 09:23:35 hornero-vm sshd-session[1592]: Received disconnect from 10.0.2.2 port 45400:11: disconnected by user
+Nov 17 09:23:35 hornero-vm sshd-session[1592]: Disconnected from user hornero 10.0.2.2 port 45400
+Nov 17 09:23:35 hornero-vm sshd-session[1607]: Received disconnect from 10.0.2.2 port 45408:11: disconnected by user
+Nov 17 09:23:35 hornero-vm sshd-session[1607]: Disconnected from user hornero 10.0.2.2 port 45408
+Nov 17 09:23:36 hornero-vm sshd-session[1621]: Received disconnect from 10.0.2.2 port 45420:11: disconnected by user
+Nov 17 09:23:36 hornero-vm sshd-session[1621]: Disconnected from user hornero 10.0.2.2 port 45420
+Nov 17 09:23:36 hornero-vm sshd-session[1636]: Received disconnect from 10.0.2.2 port 45436:11: disconnected by user
+Nov 17 09:23:36 hornero-vm sshd-session[1636]: Disconnected from user hornero 10.0.2.2 port 45436
+Nov 17 09:23:37 hornero-vm sshd-session[1649]: Received disconnect from 10.0.2.2 port 45440:11: disconnected by user
+Nov 17 09:23:37 hornero-vm sshd-session[1649]: Disconnected from user hornero 10.0.2.2 port 45440
+Nov 17 09:23:37 hornero-vm sshd-session[1664]: Received disconnect from 10.0.2.2 port 45446:11: disconnected by user
+Nov 17 09:23:37 hornero-vm sshd-session[1664]: Disconnected from user hornero 10.0.2.2 port 45446
+Nov 17 09:23:38 hornero-vm sshd-session[1677]: Received disconnect from 10.0.2.2 port 45450:11: disconnected by user
+Nov 17 09:23:38 hornero-vm sshd-session[1677]: Disconnected from user hornero 10.0.2.2 port 45450
+Nov 17 09:23:38 hornero-vm sshd-session[1692]: Received disconnect from 10.0.2.2 port 45466:11: disconnected by user
+Nov 17 09:23:38 hornero-vm sshd-session[1692]: Disconnected from user hornero 10.0.2.2 port 45466
+Nov 17 09:23:39 hornero-vm sshd-session[1705]: Received disconnect from 10.0.2.2 port 45480:11: disconnected by user
+Nov 17 09:23:39 hornero-vm sshd-session[1705]: Disconnected from user hornero 10.0.2.2 port 45480
+Nov 17 09:23:39 hornero-vm sshd-session[1721]: Received disconnect from 10.0.2.2 port 45490:11: disconnected by user
+Nov 17 09:23:39 hornero-vm sshd-session[1721]: Disconnected from user hornero 10.0.2.2 port 45490
+Nov 17 09:23:41 hornero-vm sshd-session[1734]: Received disconnect from 10.0.2.2 port 45502:11: disconnected by user
+Nov 17 09:23:41 hornero-vm sshd-session[1734]: Disconnected from user hornero 10.0.2.2 port 45502
+Nov 17 09:23:42 hornero-vm sshd-session[1747]: Received disconnect from 10.0.2.2 port 50472:11: disconnected by user
+Nov 17 09:23:42 hornero-vm sshd-session[1747]: Disconnected from user hornero 10.0.2.2 port 50472
+Nov 17 09:23:42 hornero-vm sshd-session[1762]: Received disconnect from 10.0.2.2 port 50476:11: disconnected by user
+Nov 17 09:23:42 hornero-vm sshd-session[1762]: Disconnected from user hornero 10.0.2.2 port 50476
+Nov 17 09:23:43 hornero-vm sshd-session[1775]: Received disconnect from 10.0.2.2 port 50490:11: disconnected by user
+Nov 17 09:23:43 hornero-vm sshd-session[1775]: Disconnected from user hornero 10.0.2.2 port 50490
+Nov 17 09:23:43 hornero-vm sshd-session[1790]: Received disconnect from 10.0.2.2 port 50494:11: disconnected by user
+Nov 17 09:23:43 hornero-vm sshd-session[1790]: Disconnected from user hornero 10.0.2.2 port 50494
+Nov 17 09:23:44 hornero-vm sshd-session[1803]: Received disconnect from 10.0.2.2 port 50506:11: disconnected by user
+Nov 17 09:23:44 hornero-vm sshd-session[1803]: Disconnected from user hornero 10.0.2.2 port 50506
+Nov 17 09:23:45 hornero-vm sshd-session[1816]: Received disconnect from 10.0.2.2 port 50514:11: disconnected by user
+Nov 17 09:23:45 hornero-vm sshd-session[1816]: Disconnected from user hornero 10.0.2.2 port 50514
+Nov 17 09:23:48 hornero-vm sshd-session[1831]: Received disconnect from 10.0.2.2 port 50520:11: disconnected by user
+Nov 17 09:23:48 hornero-vm sshd-session[1831]: Disconnected from user hornero 10.0.2.2 port 50520
+Nov 17 09:23:48 hornero-vm sshd-session[1844]: Received disconnect from 10.0.2.2 port 50530:11: disconnected by user
+Nov 17 09:23:48 hornero-vm sshd-session[1844]: Disconnected from user hornero 10.0.2.2 port 50530
+Nov 17 09:23:49 hornero-vm sshd-session[1857]: Received disconnect from 10.0.2.2 port 50532:11: disconnected by user
+Nov 17 09:23:49 hornero-vm sshd-session[1857]: Disconnected from user hornero 10.0.2.2 port 50532
+Nov 17 09:23:49 hornero-vm sshd-session[1872]: Received disconnect from 10.0.2.2 port 50536:11: disconnected by user
+Nov 17 09:23:49 hornero-vm sshd-session[1872]: Disconnected from user hornero 10.0.2.2 port 50536
+Nov 17 09:23:50 hornero-vm sshd-session[1885]: Received disconnect from 10.0.2.2 port 50540:11: disconnected by user
+Nov 17 09:23:50 hornero-vm sshd-session[1885]: Disconnected from user hornero 10.0.2.2 port 50540
+Nov 17 09:23:50 hornero-vm sshd-session[1900]: Received disconnect from 10.0.2.2 port 50550:11: disconnected by user
+Nov 17 09:23:50 hornero-vm sshd-session[1900]: Disconnected from user hornero 10.0.2.2 port 50550
+Nov 17 09:23:51 hornero-vm sshd-session[1913]: Received disconnect from 10.0.2.2 port 50560:11: disconnected by user
+Nov 17 09:23:51 hornero-vm sshd-session[1913]: Disconnected from user hornero 10.0.2.2 port 50560
+Nov 17 09:23:51 hornero-vm sshd-session[1928]: Received disconnect from 10.0.2.2 port 36554:11: disconnected by user
+Nov 17 09:23:51 hornero-vm sshd-session[1928]: Disconnected from user hornero 10.0.2.2 port 36554
+Nov 17 09:23:52 hornero-vm sshd-session[1941]: Received disconnect from 10.0.2.2 port 36564:11: disconnected by user
+Nov 17 09:23:52 hornero-vm sshd-session[1941]: Disconnected from user hornero 10.0.2.2 port 36564
+Nov 17 09:23:52 hornero-vm sshd-session[1956]: Received disconnect from 10.0.2.2 port 36568:11: disconnected by user
+Nov 17 09:23:52 hornero-vm sshd-session[1956]: Disconnected from user hornero 10.0.2.2 port 36568
+Nov 17 09:23:53 hornero-vm sshd-session[1969]: Received disconnect from 10.0.2.2 port 36570:11: disconnected by user
+Nov 17 09:23:53 hornero-vm sshd-session[1969]: Disconnected from user hornero 10.0.2.2 port 36570
+Nov 17 09:23:54 hornero-vm sshd-session[1984]: Received disconnect from 10.0.2.2 port 36576:11: disconnected by user
+Nov 17 09:23:54 hornero-vm sshd-session[1984]: Disconnected from user hornero 10.0.2.2 port 36576
+Nov 17 09:23:55 hornero-vm sshd-session[1998]: Received disconnect from 10.0.2.2 port 36586:11: disconnected by user
+Nov 17 09:23:55 hornero-vm sshd-session[1998]: Disconnected from user hornero 10.0.2.2 port 36586
+Nov 17 09:23:55 hornero-vm sshd-session[2013]: Received disconnect from 10.0.2.2 port 36594:11: disconnected by user
+Nov 17 09:23:55 hornero-vm sshd-session[2013]: Disconnected from user hornero 10.0.2.2 port 36594
+Nov 17 09:23:56 hornero-vm sshd-session[2027]: Received disconnect from 10.0.2.2 port 36610:11: disconnected by user
+Nov 17 09:23:56 hornero-vm sshd-session[2027]: Disconnected from user hornero 10.0.2.2 port 36610
+Nov 17 09:23:56 hornero-vm sshd-session[2042]: Received disconnect from 10.0.2.2 port 36612:11: disconnected by user
+Nov 17 09:23:56 hornero-vm sshd-session[2042]: Disconnected from user hornero 10.0.2.2 port 36612
+Nov 17 09:23:57 hornero-vm sshd-session[2055]: Received disconnect from 10.0.2.2 port 36626:11: disconnected by user
+Nov 17 09:23:57 hornero-vm sshd-session[2055]: Disconnected from user hornero 10.0.2.2 port 36626
+Nov 17 09:23:57 hornero-vm sshd-session[2070]: Received disconnect from 10.0.2.2 port 36632:11: disconnected by user
+Nov 17 09:23:57 hornero-vm sshd-session[2070]: Disconnected from user hornero 10.0.2.2 port 36632
+Nov 17 09:23:58 hornero-vm sshd-session[2084]: Received disconnect from 10.0.2.2 port 36644:11: disconnected by user
+Nov 17 09:23:58 hornero-vm sshd-session[2084]: Disconnected from user hornero 10.0.2.2 port 36644
+Nov 17 09:23:59 hornero-vm sshd-session[2097]: Received disconnect from 10.0.2.2 port 36646:11: disconnected by user
+Nov 17 09:23:59 hornero-vm sshd-session[2097]: Disconnected from user hornero 10.0.2.2 port 36646
+Nov 17 09:24:00 hornero-vm sshd-session[2112]: Received disconnect from 10.0.2.2 port 36654:11: disconnected by user
+Nov 17 09:24:00 hornero-vm sshd-session[2112]: Disconnected from user hornero 10.0.2.2 port 36654
+Nov 17 09:24:00 hornero-vm sshd-session[2125]: Received disconnect from 10.0.2.2 port 36658:11: disconnected by user
+Nov 17 09:24:00 hornero-vm sshd-session[2125]: Disconnected from user hornero 10.0.2.2 port 36658
+Nov 17 09:24:05 hornero-vm sshd-session[2140]: Received disconnect from 10.0.2.2 port 37038:11: disconnected by user
+Nov 17 09:24:05 hornero-vm sshd-session[2140]: Disconnected from user hornero 10.0.2.2 port 37038
+Nov 17 09:24:05 hornero-vm sshd-session[2153]: Received disconnect from 10.0.2.2 port 37048:11: disconnected by user
+Nov 17 09:24:05 hornero-vm sshd-session[2153]: Disconnected from user hornero 10.0.2.2 port 37048
+Nov 17 09:24:06 hornero-vm sshd-session[2166]: Received disconnect from 10.0.2.2 port 37054:11: disconnected by user
+Nov 17 09:24:06 hornero-vm sshd-session[2166]: Disconnected from user hornero 10.0.2.2 port 37054
+Nov 17 09:24:06 hornero-vm sshd-session[2181]: Received disconnect from 10.0.2.2 port 37068:11: disconnected by user
+Nov 17 09:24:06 hornero-vm sshd-session[2181]: Disconnected from user hornero 10.0.2.2 port 37068
+Nov 17 09:24:07 hornero-vm sshd-session[2194]: Received disconnect from 10.0.2.2 port 37082:11: disconnected by user
+Nov 17 09:24:07 hornero-vm sshd-session[2194]: Disconnected from user hornero 10.0.2.2 port 37082
+Nov 17 09:24:07 hornero-vm sshd-session[2209]: Received disconnect from 10.0.2.2 port 37086:11: disconnected by user
+Nov 17 09:24:07 hornero-vm sshd-session[2209]: Disconnected from user hornero 10.0.2.2 port 37086
+Nov 17 09:24:08 hornero-vm sshd-session[2222]: Received disconnect from 10.0.2.2 port 37096:11: disconnected by user
+Nov 17 09:24:08 hornero-vm sshd-session[2222]: Disconnected from user hornero 10.0.2.2 port 37096
+Nov 17 09:24:08 hornero-vm sshd-session[2237]: Received disconnect from 10.0.2.2 port 37104:11: disconnected by user
+Nov 17 09:24:08 hornero-vm sshd-session[2237]: Disconnected from user hornero 10.0.2.2 port 37104
+Nov 17 09:24:09 hornero-vm sshd-session[2250]: Received disconnect from 10.0.2.2 port 37114:11: disconnected by user
+Nov 17 09:24:09 hornero-vm sshd-session[2250]: Disconnected from user hornero 10.0.2.2 port 37114
+Nov 17 09:24:09 hornero-vm sshd-session[2265]: Received disconnect from 10.0.2.2 port 37126:11: disconnected by user
+Nov 17 09:24:09 hornero-vm sshd-session[2265]: Disconnected from user hornero 10.0.2.2 port 37126
+Nov 17 09:24:10 hornero-vm sshd-session[2278]: Received disconnect from 10.0.2.2 port 37136:11: disconnected by user
+Nov 17 09:24:10 hornero-vm sshd-session[2278]: Disconnected from user hornero 10.0.2.2 port 37136
+Nov 17 09:24:11 hornero-vm sshd-session[2293]: Received disconnect from 10.0.2.2 port 37150:11: disconnected by user
+Nov 17 09:24:11 hornero-vm sshd-session[2293]: Disconnected from user hornero 10.0.2.2 port 37150
+Nov 17 09:24:11 hornero-vm sshd-session[2306]: Received disconnect from 10.0.2.2 port 39866:11: disconnected by user
+Nov 17 09:24:11 hornero-vm sshd-session[2306]: Disconnected from user hornero 10.0.2.2 port 39866
+Nov 17 09:24:12 hornero-vm sshd-session[2321]: Received disconnect from 10.0.2.2 port 39880:11: disconnected by user
+Nov 17 09:24:12 hornero-vm sshd-session[2321]: Disconnected from user hornero 10.0.2.2 port 39880
+Nov 17 09:24:13 hornero-vm sshd-session[2334]: Received disconnect from 10.0.2.2 port 39890:11: disconnected by user
+Nov 17 09:24:13 hornero-vm sshd-session[2334]: Disconnected from user hornero 10.0.2.2 port 39890
+Nov 17 09:24:13 hornero-vm sshd-session[2349]: Received disconnect from 10.0.2.2 port 39904:11: disconnected by user
+Nov 17 09:24:13 hornero-vm sshd-session[2349]: Disconnected from user hornero 10.0.2.2 port 39904
+Nov 17 09:24:14 hornero-vm sshd-session[2362]: Received disconnect from 10.0.2.2 port 39916:11: disconnected by user
+Nov 17 09:24:14 hornero-vm sshd-session[2362]: Disconnected from user hornero 10.0.2.2 port 39916
+Nov 17 09:24:16 hornero-vm sshd-session[2377]: Received disconnect from 10.0.2.2 port 39924:11: disconnected by user
+Nov 17 09:24:16 hornero-vm sshd-session[2377]: Disconnected from user hornero 10.0.2.2 port 39924
+Nov 17 09:24:16 hornero-vm sshd-session[2392]: Received disconnect from 10.0.2.2 port 39930:11: disconnected by user
+Nov 17 09:24:16 hornero-vm sshd-session[2392]: Disconnected from user hornero 10.0.2.2 port 39930
+Nov 17 09:24:17 hornero-vm sshd-session[2406]: Received disconnect from 10.0.2.2 port 39946:11: disconnected by user
+Nov 17 09:24:17 hornero-vm sshd-session[2406]: Disconnected from user hornero 10.0.2.2 port 39946
+Nov 17 09:24:17 hornero-vm sshd-session[2420]: Received disconnect from 10.0.2.2 port 39948:11: disconnected by user
+Nov 17 09:24:17 hornero-vm sshd-session[2420]: Disconnected from user hornero 10.0.2.2 port 39948
+Nov 17 09:24:17 hornero-vm sshd-session[2433]: Received disconnect from 10.0.2.2 port 39964:11: disconnected by user
+Nov 17 09:24:17 hornero-vm sshd-session[2433]: Disconnected from user hornero 10.0.2.2 port 39964
+Nov 17 09:24:18 hornero-vm sshd-session[2448]: Received disconnect from 10.0.2.2 port 39980:11: disconnected by user
+Nov 17 09:24:18 hornero-vm sshd-session[2448]: Disconnected from user hornero 10.0.2.2 port 39980
+Nov 17 09:24:18 hornero-vm sshd-session[2462]: Received disconnect from 10.0.2.2 port 39990:11: disconnected by user
+Nov 17 09:24:18 hornero-vm sshd-session[2462]: Disconnected from user hornero 10.0.2.2 port 39990
+Nov 17 09:24:18 hornero-vm sshd-session[2475]: Received disconnect from 10.0.2.2 port 40002:11: disconnected by user
+Nov 17 09:24:18 hornero-vm sshd-session[2475]: Disconnected from user hornero 10.0.2.2 port 40002
+Nov 17 09:24:18 hornero-vm sshd-session[2489]: Received disconnect from 10.0.2.2 port 40018:11: disconnected by user
+Nov 17 09:24:18 hornero-vm sshd-session[2489]: Disconnected from user hornero 10.0.2.2 port 40018
+Nov 17 09:24:19 hornero-vm sshd-session[2502]: Received disconnect from 10.0.2.2 port 40028:11: disconnected by user
+Nov 17 09:24:19 hornero-vm sshd-session[2502]: Disconnected from user hornero 10.0.2.2 port 40028

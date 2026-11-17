@@ -1,0 +1,10 @@
+{"t": 16.424, "kind": "ready", "serial": []}
+{"t": 37.031, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 37.031, "kind": "key", "step": 0, "value": "super+x", "note": null}
+{"t": 37.134, "kind": "wait", "step": 1, "value": {"changed": true, "stable": 0.5, "timeout": 5}, "note": null}
+{"t": 38.59, "kind": "wait_result", "step": 1, "ok": true}
+{"t": 38.59, "kind": "probe", "step": 2, "value": {"run": "qs ipc call drawers state session", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 38.828, "kind": "screenshot", "step": 3, "value": "session", "note": null}
+{"t": 38.872, "kind": "key", "step": 4, "value": "escape", "note": null}
+{"t": 38.973, "kind": "wait", "step": 5, "value": {"changed": true, "stable": 0.5, "timeout": 5}, "note": null}
+{"t": 44.258, "kind": "wait_result", "step": 5, "ok": false}

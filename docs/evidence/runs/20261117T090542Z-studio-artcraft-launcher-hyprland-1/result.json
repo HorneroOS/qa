@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T090542Z-studio-artcraft-launcher-hyprland-1",
+  "finished": "2026-11-17T09:06:26Z",
+  "wall_s": 43.649,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '' != 'true'; proof 1: stdout 'not-installed' != 'installed'; proof 2: stdout '' != 'valid'; proof 3: stdout 'absent' != 'present'; proof 5: stdout 'false' != 'true'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

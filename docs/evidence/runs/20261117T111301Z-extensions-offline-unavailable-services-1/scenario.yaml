@@ -1,0 +1,29 @@
+id: extensions/offline-unavailable-services
+purpose: >-
+  Offline and unavailable services (qa#81): with weather unconfigured (the
+  factory first-boot state, no location chosen and no fetch possible),
+  extensions that read shared PluginKit providers show their empty/error
+  state instead of failing to load, and local extension discovery keeps
+  working with no network involvement. PENDING until run in an approved
+  KVM window.
+covers: [qa#81, shell#377]
+instruction: Open the dashboard on a fresh desktop whose weather was never configured and inspect the extension cards.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: dashboard-services-unavailable
+  - key: escape
+proof:
+  - note: Factory defaults leave the weather location empty (unavailable-service precondition)
+    probe: {run: "jq -er '.services.weatherLocation == \"\"' /etc/xdg/hornero/shell.json", equals: "true"}
+  - note: Local receipt-based discovery needs no network and reports no discovery error
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.discovered) \\(.discoveryError)\"'", equals: "true "}
+  - note: Provider-reading fixture extensions loaded despite the unavailable service, none failed
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0"}
+  - note: The shell remains alive with the service unavailable
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+media: [dashboard-services-unavailable]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: on-failure}

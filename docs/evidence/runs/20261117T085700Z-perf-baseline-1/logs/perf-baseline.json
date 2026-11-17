@@ -1,0 +1,9 @@
+Hornero Shell performance sample (2026-11-17T08:58:14.412000+00:00)
+Compositor: hyprland | Quickshell: Quickshell 0.3.2 (revision , distributed by Arch Linux) | monitors: 1 | QML files available: 527 | shell age: 54s
+CPU cores: 2 effective / 2 online | RAM: 2.8 GiB
+Sample  RSS MiB  PSS MiB  Anon MiB  File MiB  Shared MiB  Swap MiB  CPU %  IPC ms  Layers
+     1    700.4    632.7     527.6      97.3       7.9       0.0   5.52      22       9
+     2    700.3    632.7     527.6      97.3       7.9       0.0   2.77      21       9
+     3    700.3    632.7     527.6      97.3       7.9       0.0   3.65      24       9
+     4    700.3    632.7     527.6      97.3       7.9       0.0   2.78      22       9
+     5    700.4    632.7     527.6      97.3       7.9       0.0   3.71      21       9

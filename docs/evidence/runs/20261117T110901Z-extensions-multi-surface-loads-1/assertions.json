@@ -1,0 +1,66 @@
+[
+  {
+    "t": 40.103,
+    "kind": "probe",
+    "run": "qs ipc call drawers state dashboard",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 2"
+  },
+  {
+    "t": 55.811,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-multi-surface\" and .state == \"loaded\")] | length'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 0"
+  },
+  {
+    "t": 66.233,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 1"
+  },
+  {
+    "t": 66.472,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .failed",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 66.707,
+    "kind": "probe",
+    "run": "qs ipc call drawers state dashboard",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 66.748,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-after-escape.png"
+    ],
+    "where": "proof 4"
+  }
+]

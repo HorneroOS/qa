@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T090257Z-recovery-polkit-agent-1",
+  "finished": "2026-11-17T09:03:39Z",
+  "wall_s": 41.57,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 2: stdout '' != 'running'; proof 3: stdout '4' != '0'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

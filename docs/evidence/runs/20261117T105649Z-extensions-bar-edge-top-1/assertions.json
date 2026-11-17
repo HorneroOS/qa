@@ -1,0 +1,55 @@
+[
+  {
+    "t": 71.582,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .discovered",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 71.887,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "islands",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 72.116,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[\"top\"]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 82.566,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.placement == \"bar\" and .state == \"loaded\")] | length >= 1'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "stdout 'false' != 'true'",
+    "where": "proof 2"
+  },
+  {
+    "t": 82.621,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-final.png"
+    ],
+    "where": "proof 3"
+  }
+]

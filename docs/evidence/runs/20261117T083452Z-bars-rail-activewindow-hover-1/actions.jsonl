@@ -1,0 +1,15 @@
+{"t": 15.655, "kind": "ready", "serial": []}
+{"t": 36.149, "kind": "setup", "run": "horneroctl shell preset apply hornero-left --yes", "rc": 0, "stdout": "applied preset Hornero Left (hornero-left)", "stderr": ""}
+{"t": 67.254, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 67.254, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 67.354, "kind": "probe", "step": 1, "value": {"run": "qs ipc call drawers state launcher", "equals": "true", "retry_s": 5}, "note": null}
+{"t": 67.696, "kind": "type", "step": 2, "value": "kitty", "note": null}
+{"t": 67.949, "kind": "key", "step": 3, "value": "enter", "note": null}
+{"t": 68.054, "kind": "probe", "step": 4, "value": {"run": "hyprctl activewindow -j | jq -r .class", "equals": "kitty", "retry_s": 10}, "note": null}
+{"t": 69.233, "kind": "pointer", "step": 5, "value": {"x": 0.024, "y": 0.49, "glide": 8}, "note": null}
+{"t": 69.44, "kind": "probe", "step": 6, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "activewindow", "retry_s": 3}, "note": null}
+{"t": 69.802, "kind": "pointer", "step": 7, "value": {"x": 0.1, "y": 0.325, "glide": 8}, "note": null}
+{"t": 70.015, "kind": "probe", "step": 8, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "activewindow", "retry_s": 3}, "note": null}
+{"t": 70.343, "kind": "screenshot", "step": 9, "value": "hornero-left-active-window-hover", "note": null}
+{"t": 70.392, "kind": "pointer", "step": 10, "value": {"x": 0.356, "y": 0.325, "click": "left", "glide": 8}, "note": null}
+{"t": 70.745, "kind": "probe", "step": 11, "value": {"run": "qs ipc call debug dump | jq -r .popout.detached", "equals": "winfo", "retry_s": 3}, "note": null}

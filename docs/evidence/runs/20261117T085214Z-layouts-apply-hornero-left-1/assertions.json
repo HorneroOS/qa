@@ -1,0 +1,33 @@
+[
+  {
+    "t": 68.074,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-left",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 68.313,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[\"left\"]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 68.358,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-layout-hornero-left.png"
+    ],
+    "where": "proof 2"
+  }
+]

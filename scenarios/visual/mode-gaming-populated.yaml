@@ -1,0 +1,54 @@
+id: visual/mode-gaming-populated
+purpose: >-
+  Experience mode gaming on Cockpit at 1920x1080 with content behind the bars.
+covers: [qa#88]
+requires:
+  resolution: 1920x1080
+  compositor: hyprland
+setup:
+  layout: cockpit
+  theme: hornero-signal-night
+  commands:
+    - >-
+      hyprctl eval 'hl.monitor({ output = "Virtual-1", mode = "1920x1080@60", position = "0x0", scale = 1 })'
+    - sleep 3
+    - qs ipc call experience set gaming
+    - sleep 4
+    - |
+      cat > "$HOME/qa-populate.sh" <<'EOS'
+      #!/bin/sh
+      # Real content behind the bars: terminals with output, a file manager and a browser-like window when installed.
+      # QA captures need windows visible side by side: the product default is the scrolling layout (columns scroll off-screen).
+      hyprctl eval 'hl.config({ general = { layout = "dwindle" } })' >/dev/null
+      run() { hyprctl eval "hl.exec_cmd(\"$1\")" >/dev/null; }
+      run "kitty --title QA-Terminal sh -c 'ls --color=always -la /usr/share/hornero | head -30; echo; df -h | head -8; exec sh'"
+      sleep 1
+      run "kitty --title QA-Monitor sh -c 'top -b -d 2 | head -40; exec sh'"
+      sleep 1
+      for fm in thunar nautilus pcmanfm dolphin; do command -v $fm >/dev/null && { run "$fm /usr/share/hornero"; break; }; done
+      for br in firefox chromium epiphany falkon; do command -v $br >/dev/null && { run "$br --new-window file:///usr/share/doc"; break; }; done
+      sleep 6
+      hyprctl clients -j | jq -r '.[].class' | sort | uniq -c > "$HOME/qa-clients.txt"
+      EOS
+      sh "$HOME/qa-populate.sh"
+instruction: Look at the populated desktop and judge it against the Signal Bezel visual language.
+steps:
+  - wait: {stable: 1.5, timeout: 10}
+  - hover: {away: true}
+  - wait: {stable: 1.0, timeout: 6}
+  - screenshot: mode-gaming-pop
+proof:
+  - note: Mode active
+    probe: {run: "qs ipc call experience get", equals: gaming, retry_s: 8}
+  - note: No QML errors
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - note: Real windows are mapped behind the bars
+    probe: {run: "hyprctl clients -j | jq '[.[] | select(.mapped)] | length >= 2'", equals: "true", retry_s: 10}
+  - note: Every mapped window lies fully inside its output (no window pushed off the left/top edge)
+    probe: {run: "hyprctl clients -j | jq '[.[] | select(.mapped and .at[0] < 0)] | length'", equals: "0", save: window-geometry.json}
+  - note: Bar geometry recorded
+    probe: {run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {screen,edge,style,geom}]'", matches: edge, save: bars.json}
+  - screenshot: final
+media: [mode-gaming-pop]
+budget: {wall_s: 140}
+artifacts: {screenshots: always, logs: always}

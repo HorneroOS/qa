@@ -1,0 +1,22 @@
+[
+  {
+    "t": 39.663,
+    "kind": "probe",
+    "run": "qs ipc call lock isLocked",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 39.704,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-lock.png"
+    ],
+    "where": "proof 1"
+  }
+]

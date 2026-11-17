@@ -1,0 +1,33 @@
+[
+  {
+    "t": 68.631,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "dock-bottom",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 68.939,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[\"bottom\"]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 68.985,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-layout-dock-bottom.png"
+    ],
+    "where": "proof 2"
+  }
+]

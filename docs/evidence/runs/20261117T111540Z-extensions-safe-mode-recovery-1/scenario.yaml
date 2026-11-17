@@ -1,0 +1,33 @@
+id: extensions/safe-mode-recovery
+purpose: >-
+  Foundation wave (qa#81): with persisted safe mode on, the shell loads no
+  extension at all (not even its manifest), reports every enabled extension
+  as safe-mode, and the core desktop plus the horneroctl lifecycle stay
+  usable so the broken extension can be disabled. Safe mode itself never
+  enables, disables or removes anything. PENDING until run in an approved
+  KVM window.
+covers: [qa#81, shell#380]
+setup:
+  commands:
+    - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); d.setdefault(\"plugins\",{})[\"safeMode\"]=True; json.dump(d, open(p,\"w\"))"'
+    - 'pkill -x qs || true; sleep 1; hyprctl dispatch exec "$HOME/.local/bin/qa-shell.sh"; sleep 3'
+instruction: Start the shell in safe mode and confirm the desktop and extension lifecycle tools still work.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - screenshot: safe-mode-desktop
+proof:
+  - note: Status reports safe mode on (persisted, not the launch env override)
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.safeMode) \\(.safeModeEnv)\"'", equals: "true false"}
+  - note: No extension QML was loaded in safe mode
+    probe: {run: "qs ipc call plugins status | jq -r .loaded", equals: "0"}
+  - note: Every enabled installed extension is reported safe-mode, not failed or loaded
+    probe: {run: "qs ipc call plugins status | jq -r '[.plugins[] | select(.installed and .state != \"disabled\" and .state != \"safe-mode\" and .state != \"blocked\")] | length'", equals: "0"}
+  - note: Safe mode changed no lifecycle state (fixture is still installed and enabled in the CLI list)
+    probe: {run: "python3 -c \"import json,subprocess; cli=json.loads(subprocess.check_output(['horneroctl','plugin','list','--json'],text=True)); raw=cli['data']['plugins']; ps=json.loads(raw) if isinstance(raw,str) else raw; e=[p for p in ps if p['id']=='example-clock'][0]; print(str(e['installed'] and e['enabled']).lower())\"", equals: "true"}
+  - note: The core shell still answers IPC (drawers list includes the launcher)
+    probe: {run: "qs ipc call drawers list", contains: launcher}
+  - note: A per-plugin reload is honestly refused in safe mode
+    probe: {run: "qs ipc call plugins reloadPlugin example-clock", contains: "not reloadable"}
+  - screenshot: final
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: always}

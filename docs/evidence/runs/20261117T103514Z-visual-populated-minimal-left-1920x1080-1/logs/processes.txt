@@ -1,0 +1,172 @@
+PID COMMAND         COMMAND
+      1 systemd         /usr/lib/systemd/systemd --switched-root --system --deserialize=54
+      2 kthreadd        [kthreadd]
+      3 pool_workqueue_ [pool_workqueue_release]
+      4 kworker/R-rcu_g [kworker/R-rcu_gp]
+      5 kworker/R-sync_ [kworker/R-sync_wq]
+      6 kworker/R-kvfre [kworker/R-kvfree_rcu_reclaim]
+      7 kworker/R-slub_ [kworker/R-slub_flushwq]
+      8 kworker/R-netns [kworker/R-netns]
+      9 kworker/0:0-eve [kworker/0:0-events]
+     10 kworker/0:0H-kb [kworker/0:0H-kblockd]
+     11 kworker/0:1-eve [kworker/0:1-events]
+     12 kworker/u8:0-bt [kworker/u8:0-btrfs-endio]
+     13 kworker/R-mm_pe [kworker/R-mm_percpu_wq]
+     14 kworker/u8:1-ev [kworker/u8:1-events_power_efficient]
+     15 ksoftirqd/0     [ksoftirqd/0]
+     16 rcu_preempt     [rcu_preempt]
+     17 rcub/0          [rcub/0]
+     18 rcu_exp_par_gp_ [rcu_exp_par_gp_kthread_worker/0]
+     19 rcu_exp_gp_kthr [rcu_exp_gp_kthread_worker]
+     20 migration/0     [migration/0]
+     21 kprobe-optimize [kprobe-optimizer]
+     22 idle_inject/0   [idle_inject/0]
+     23 cpuhp/0         [cpuhp/0]
+     24 cpuhp/1         [cpuhp/1]
+     25 idle_inject/1   [idle_inject/1]
+     26 migration/1     [migration/1]
+     27 ksoftirqd/1     [ksoftirqd/1]
+     28 kworker/1:0-eve [kworker/1:0-events]
+     29 kworker/1:0H-kb [kworker/1:0H-kblockd]
+     30 kdevtmpfs       [kdevtmpfs]
+     31 kworker/R-inet_ [kworker/R-inet_frag_wq]
+     32 rcu_tasks_kthre [rcu_tasks_kthread]
+     33 rcu_tasks_rude_ [rcu_tasks_rude_kthread]
+     34 kworker/1:1-eve [kworker/1:1-events]
+     35 kauditd         [kauditd]
+     36 pr/ttyS0        [pr/ttyS0]
+     37 khungtaskd      [khungtaskd]
+     38 kworker/u8:2-bt [kworker/u8:2-btrfs-endio]
+     39 oom_reaper      [oom_reaper]
+     40 kworker/R-write [kworker/R-writeback]
+     41 kcompactd0      [kcompactd0]
+     42 ksmd            [ksmd]
+     43 khugepaged      [khugepaged]
+     44 kworker/R-bio_c [kworker/R-bio_complete]
+     45 kworker/R-kbloc [kworker/R-kblockd]
+     46 kworker/R-blkcg [kworker/R-blkcg_punt_bio]
+     47 kworker/R-kinte [kworker/R-kintegrityd]
+     48 irq/9-acpi      [irq/9-acpi]
+     49 kworker/R-tpm_d [kworker/R-tpm_dev_wq]
+     50 kworker/R-ata_s [kworker/R-ata_sff]
+     51 kworker/R-edac- [kworker/R-edac-poller]
+     52 kworker/R-devfr [kworker/R-devfreq_wq]
+     53 watchdogd       [watchdogd]
+     54 kworker/R-quota [kworker/R-quota_events_unbound]
+     55 kswapd0         [kswapd0]
+     56 kworker/R-kthro [kworker/R-kthrotld]
+     57 kworker/R-acpi_ [kworker/R-acpi_thermal_pm]
+     58 scsi_eh_0       [scsi_eh_0]
+     59 kworker/R-scsi_ [kworker/R-scsi_tmf_0]
+     60 scsi_eh_1       [scsi_eh_1]
+     61 kworker/R-scsi_ [kworker/R-scsi_tmf_1]
+     62 scsi_eh_2       [scsi_eh_2]
+     63 kworker/R-scsi_ [kworker/R-scsi_tmf_2]
+     64 scsi_eh_3       [scsi_eh_3]
+     65 kworker/R-scsi_ [kworker/R-scsi_tmf_3]
+     66 scsi_eh_4       [scsi_eh_4]
+     67 kworker/R-scsi_ [kworker/R-scsi_tmf_4]
+     68 scsi_eh_5       [scsi_eh_5]
+     69 kworker/R-scsi_ [kworker/R-scsi_tmf_5]
+     70 kworker/u8:3-bt [kworker/u8:3-btrfs-endio-meta]
+     71 kworker/u8:4-bt [kworker/u8:4-btrfs-endio-meta]
+     72 kworker/u8:5-bt [kworker/u8:5-btrfs-endio]
+     73 kworker/u8:6-bt [kworker/u8:6-btrfs-endio]
+     74 kworker/u8:7-sc [kworker/u8:7-scsi_tmf_4]
+     75 kworker/u8:8-ev [kworker/u8:8-events_unbound]
+     76 kworker/u8:9-pm [kworker/u8:9-pm]
+     77 kworker/u8:10   [kworker/u8:10]
+     78 kworker/0:2-eve [kworker/0:2-events]
+     79 kworker/R-mld   [kworker/R-mld]
+     80 kworker/R-ipv6_ [kworker/R-ipv6_addrconf]
+     81 kworker/R-kstrp [kworker/R-kstrp]
+     85 kworker/R-zswap [kworker/R-zswap-shrink]
+     86 kworker/u9:0    [kworker/u9:0]
+     87 kworker/1:2-cgr [kworker/1:2-cgroup_release]
+     88 kworker/1:1H-kb [kworker/1:1H-kblockd]
+     89 kworker/0:1H-kb [kworker/0:1H-kblockd]
+    136 kworker/0:3-cgr [kworker/0:3-cgroup_release]
+    140 card0-crtc0     [card0-crtc0]
+    150 kworker/R-btrfs [kworker/R-btrfs-worker]
+    151 kworker/R-btrfs [kworker/R-btrfs-delalloc]
+    152 kworker/R-btrfs [kworker/R-btrfs-flush_delalloc]
+    153 kworker/R-btrfs [kworker/R-btrfs-cache]
+    154 kworker/R-btrfs [kworker/R-btrfs-fixup]
+    155 kworker/R-btrfs [kworker/R-btrfs-endio]
+    156 kworker/R-btrfs [kworker/R-btrfs-endio-meta]
+    157 kworker/R-btrfs [kworker/R-btrfs-rmw]
+    158 kworker/R-btrfs [kworker/R-btrfs-endio-write]
+    159 kworker/R-btrfs [kworker/R-btrfs-freespace-write]
+    160 kworker/R-btrfs [kworker/R-btrfs-delayed-meta]
+    161 kworker/R-btrfs [kworker/R-btrfs-qgroup-rescan]
+    162 btrfs-cleaner   [btrfs-cleaner]
+    163 btrfs-transacti [btrfs-transaction]
+    216 systemd-journal /usr/lib/systemd/systemd-journald
+    242 systemd-userdbd /usr/lib/systemd/systemd-userdbd
+    251 psimon          [psimon]
+    256 systemd-nsresou /usr/lib/systemd/systemd-nsresourced
+    257 kworker/0:4-cgr [kworker/0:4-cgroup_release]
+    258 systemd-nsresou systemd-nsresourcework: waiting...
+    259 systemd-nsresou systemd-nsresourcework: waiting...
+    260 systemd-nsresou systemd-nsresourcework: waiting...
+    261 systemd-nsresou systemd-nsresourcework: waiting...
+    262 systemd-nsresou systemd-nsresourcework: waiting...
+    263 psimon          [psimon]
+    268 kworker/1:3-cgr [kworker/1:3-cgroup_free]
+    270 systemd-resolve /usr/lib/systemd/systemd-resolved
+    272 kworker/1:4-rcu [kworker/1:4-rcu_gp]
+    275 systemd-udevd   /usr/lib/systemd/systemd-udevd
+    276 systemd-timesyn /usr/lib/systemd/systemd-timesyncd
+    279 psimon          [psimon]
+    290 systemd-network /usr/lib/systemd/systemd-networkd
+    312 kworker/R-cfg80 [kworker/R-cfg80211]
+    340 systemd-coredum /usr/lib/systemd/systemd-coredump --manager
+    359 dbus-broker-lau /usr/bin/dbus-broker-launch --scope system --audit
+    367 dbus-broker     dbus-broker --log 10 --controller 9 --machine-id 91e6400afa174898a8dc6538809e595a --max-bytes 536870912 --max-fds 4096 --max-matches 131072 --audit
+    368 NetworkManager  /usr/bin/NetworkManager --no-daemon
+    369 seatd           seatd -g seat
+    370 systemd-homed   /usr/lib/systemd/systemd-homed
+    373 systemd-logind  /usr/lib/systemd/systemd-logind
+    376 psimon          [psimon]
+    387 sshd            sshd: /usr/bin/sshd -D [listener] 0 of 10-100 startups
+    394 login           login -- hornero
+    395 agetty          /usr/bin/agetty --noreset --noclear --keep-baud 115200,57600,38400,9600 - vt220
+    402 psimon          [psimon]
+    404 systemd         /usr/lib/systemd/systemd --user
+    406 (sd-pam)        (sd-pam)
+    436 kworker/1:2H-kb [kworker/1:2H-kblockd]
+    437 start-hyprland  start-hyprland
+    462 Hyprland        Hyprland --watchdog-fd 4
+    489 dbus-broker-lau /usr/bin/dbus-broker-launch --scope user
+    490 dbus-broker     dbus-broker --log 11 --controller 10 --machine-id 91e6400afa174898a8dc6538809e595a --max-bytes 100000000000000 --max-fds 25000000000000 --max-matches 5000000000
+    492 dconf-service   /usr/lib/dconf-service
+    498 bash            bash /home/hornero/.local/bin/qa-shell.sh
+    499 qs              qs
+    504 xdg-desktop-por /usr/lib/xdg-desktop-portal
+    509 xdg-permission- /usr/lib/xdg-permission-store
+    514 xdg-document-po /usr/lib/xdg-document-portal
+    521 fusermount3     fusermount3 -o rw,nosuid,nodev,fsname=portal,auto_unmount,subtype=portal -- /run/user/1000/doc
+    527 xdg-desktop-por /usr/lib/xdg-desktop-portal-hyprland
+    531 Xwayland        Xwayland :0 -rootless -core -listenfd 55 -listenfd 56 -displayfd 87 -wm 84
+    533 pipewire        /usr/bin/pipewire
+    538 wireplumber     /usr/bin/wireplumber
+    588 gsettings       /usr/bin/gsettings monitor org.gnome.desktop.interface enable-animations
+    603 nmcli           /usr/bin/nmcli monitor
+    612 nmcli           /usr/bin/nmcli m
+    696 polkitd         /usr/lib/polkit-1/polkitd --no-debug --log-level=notice
+    951 kitty           kitty --title QA-Terminal sh -c ls --color=always -la /usr/share/hornero | head -30; echo; df -h | head -8; exec sh
+    961 kitten          /usr/bin/kitten __atexit__
+    963 sh              sh
+    964 kitten          /usr/bin/kitten __watch_conf__ 951 100 /etc/xdg/kitty/kitty.conf /home/hornero/.config/kitty/kitty.conf
+    981 kitty           kitty --title QA-Monitor sh -c top -b -d 2 | head -40; exec sh
+    988 kitten          /usr/bin/kitten __atexit__
+    993 sh              sh
+    995 kitten          /usr/bin/kitten __watch_conf__ 981 100 /etc/xdg/kitty/kitty.conf /home/hornero/.config/kitty/kitty.conf
+   1038 systemd-userwor systemd-userwork: waiting...
+   1112 systemd-userwor systemd-userwork: waiting...
+   1194 systemd-userwor systemd-userwork: waiting...
+   1231 sshd-session    sshd-session: hornero [postauth]
+   1234 sshd-session    sshd-session: hornero@notty
+   1235 bash            bash -c export LANG=C.UTF-8 LC_ALL=C.UTF-8 XDG_RUNTIME_DIR=/run/user/$(id -u) WAYLAND_DISPLAY=wayland-1 HYPRLAND_INSTANCE_SIGNATURE="$(ls -t /run/user/$(id -u)/hypr 2>/dev/null | head -1)"; niri_pid="$(pgrep -xo niri || true)"; if [ -n "$niri_pid" ]; then niri_socket="$(find "$XDG_RUNTIME_DIR" -maxdepth 1 -type s -name "niri.*.${niri_pid}.sock" -print -quit)"; NIRI_SOCKET="${NIRI_SOCKET:-$niri_socket}"; export NIRI_SOCKET; fi; ps -eo pid,comm,args --sort=pid | head -200
+   1243 ps              ps -eo pid,comm,args --sort=pid
+   1244 head            head -200

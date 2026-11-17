@@ -1,0 +1,55 @@
+[
+  {
+    "t": 68.557,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 1"
+  },
+  {
+    "t": 70.029,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r .class",
+    "ok": true,
+    "rc": 0,
+    "stdout": "kitty",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 4"
+  },
+  {
+    "t": 70.494,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "activewindow",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 6"
+  },
+  {
+    "t": 70.816,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.hasCurrent",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 70.86,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-active-window-popout.png"
+    ],
+    "where": "proof 1"
+  }
+]

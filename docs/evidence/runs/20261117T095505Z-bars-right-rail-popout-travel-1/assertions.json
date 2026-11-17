@@ -1,0 +1,88 @@
+[
+  {
+    "t": 68.622,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r .class",
+    "ok": true,
+    "rc": 0,
+    "stdout": "kitty",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 3"
+  },
+  {
+    "t": 80.963,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bluetooth",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 81.239,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r '.panels[] | select(.name == \"popouts\") | (.visible == true and .width > 0 and .height > 0)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 6"
+  },
+  {
+    "t": 81.887,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bluetooth",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 9"
+  },
+  {
+    "t": 82.151,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r .class",
+    "ok": true,
+    "rc": 0,
+    "stdout": "kitty",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 10"
+  },
+  {
+    "t": 82.44,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bluetooth",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 82.715,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r .class",
+    "ok": true,
+    "rc": 0,
+    "stdout": "kitty",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 82.763,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-pointer-inside-right-rail-popout.png"
+    ],
+    "where": "proof 2"
+  }
+]

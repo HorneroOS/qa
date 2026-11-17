@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T105912Z-extensions-discovery-status-1",
+  "finished": "2026-11-17T11:00:34Z",
+  "wall_s": 82.67,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout 'true' != 'true '; proof 2: stdout 'false' != 'true'; proof 3: stdout '0 0 0' does not match /^([1-9][0-9]*) 0 \\1$/; proof 4: stdout '0' != '1'; proof 7: stdout lacks 'example-clock'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

@@ -1,0 +1,7 @@
+{"t": 15.567, "kind": "ready", "serial": []}
+{"t": 36.168, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 36.168, "kind": "key", "step": 0, "value": "super+d", "note": null}
+{"t": 36.272, "kind": "pause", "step": 1, "value": 0.7, "note": null}
+{"t": 36.973, "kind": "key", "step": 2, "value": "escape", "note": null}
+{"t": 37.079, "kind": "wait", "step": 3, "value": {"stable": 0.5, "timeout": 5}, "note": null}
+{"t": 42.14, "kind": "wait_result", "step": 3, "ok": false}

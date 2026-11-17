@@ -1,0 +1,15 @@
+{"t": 16.487, "kind": "ready", "serial": []}
+{"t": 36.913, "kind": "setup", "run": "horneroctl shell preset apply hornero-left --yes", "rc": 0, "stdout": "applied preset Hornero Left (hornero-left)", "stderr": ""}
+{"t": 68.092, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 68.092, "kind": "key", "step": 0, "value": "super+shift+b", "note": null}
+{"t": 68.2, "kind": "wait", "step": 1, "value": {"changed": true, "stable": 0.5, "timeout": 5}, "note": null}
+{"t": 69.78, "kind": "wait_result", "step": 1, "ok": true}
+{"t": 69.78, "kind": "probe", "step": 2, "value": {"run": "qs ipc call drawers state layoutPicker", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 70.034, "kind": "screenshot", "step": 3, "value": "picker", "note": null}
+{"t": 70.081, "kind": "key", "step": 4, "value": "right", "note": null}
+{"t": 70.184, "kind": "wait", "step": 5, "value": {"changed": true, "stable": 0.3, "timeout": 3}, "note": null}
+{"t": 71.043, "kind": "wait_result", "step": 5, "ok": true}
+{"t": 71.043, "kind": "screenshot", "step": 6, "value": "picker-moved", "note": null}
+{"t": 71.085, "kind": "key", "step": 7, "value": "escape", "note": null}
+{"t": 71.184, "kind": "wait", "step": 8, "value": {"changed": true, "stable": 0.5, "timeout": 5}, "note": null}
+{"t": 76.476, "kind": "wait_result", "step": 8, "ok": false}

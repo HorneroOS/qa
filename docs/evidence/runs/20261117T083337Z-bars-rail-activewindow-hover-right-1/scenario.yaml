@@ -1,0 +1,20 @@
+id: bars/rail-activewindow-hover-right
+purpose: Verify an active-window hover card attaches inward from the right-edge rail.
+setup:
+  layout: hornero-right
+instruction: Open Kitty from Launcher and hover its active-window marker on the right rail.
+steps:
+  - key: ctrl+space
+  - probe: {run: "qs ipc call drawers state launcher", equals: "true", retry_s: 5}
+  - type: kitty
+  - key: enter
+  - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty, retry_s: 10}
+  - pointer: {x: 0.976, y: 0.49, glide: 8}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: activewindow, retry_s: 3}
+  - screenshot: hornero-right-active-window-hover
+proof:
+  - note: The right-rail active-window popout remains open
+    probe: {run: "qs ipc call debug dump | jq -r .popout.hasCurrent", equals: "true", retry_s: 3}
+  - screenshot: active-window-popout
+media: [hornero-right-active-window-hover]
+budget: {wall_s: 90}

@@ -1,0 +1,66 @@
+[
+  {
+    "t": 37.75,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .discovered",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 40.512,
+    "kind": "probe",
+    "run": "jq -er '.services.weatherLocation == \"\"' /etc/xdg/hornero/shell.json",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 40.818,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.discovered) \\(.discoveryError)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "stdout 'true' != 'true '",
+    "where": "proof 1"
+  },
+  {
+    "t": 41.099,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false 0",
+    "stderr": "",
+    "detail": "stdout 'false 0' != 'true 0'",
+    "where": "proof 2"
+  },
+  {
+    "t": 41.361,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": true,
+    "rc": 0,
+    "stdout": "501",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 3"
+  },
+  {
+    "t": 41.405,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-final.png"
+    ],
+    "where": "proof 4"
+  }
+]

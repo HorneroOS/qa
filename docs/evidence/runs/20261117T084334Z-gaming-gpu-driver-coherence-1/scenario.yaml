@@ -1,0 +1,27 @@
+id: gaming/gpu-driver-coherence
+purpose: >-
+  On any GPU topology, gaming doctor reports GPU driver coherence
+  (HorneroOS/hornero#342) as capability only: the running kernel,
+  its installed module tree and any installed vendor driver must
+  agree, an incoherent or not-yet-rebooted state is reported fail
+  rather than ok, and nothing is installed or changed to fix it.
+  This VM scenario never qualifies physical hardware and never
+  promises a vendor driver from PCI IDs.
+covers: [qa#37, hornero#328, hornero#342]
+instruction: >-
+  On an installed Gaming system, open a terminal and inspect the
+  gaming doctor GPU driver coherence reporting without changing
+  anything.
+proof:
+  - note: Doctor JSON exposes the gpu-driver-coherence capability check
+    probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys;print('gpu-driver-coherence' in json.load(sys.stdin)['data'])\"", equals: "True"}
+  - note: Coherence value is ok or fail only, never a qualification claim
+    probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['gpu-driver-coherence'] in ('ok','fail'))\"", equals: "True"}
+  - note: Coherence is never ok when the running kernel has no module tree
+    probe: {run: "horneroctl gaming doctor --json | python3 -c \"import json,sys,os;d=json.load(sys.stdin)['data'];mods=os.path.isdir('/usr/lib/modules/'+os.uname().release);print(d['gpu-driver-coherence']=='fail' if not mods else True)\"", equals: "True"}
+  - note: Repeated doctor runs agree, so the report installs and changes nothing
+    probe: {run: "a=$(horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['gpu-driver-coherence'])\"); b=$(horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['gpu-driver-coherence'])\"); [ \"$a\" = \"$b\" ] && echo stable || echo changed", equals: stable}
+  - note: Doctor never claims hardware qualification in its human output
+    probe: {run: "horneroctl gaming doctor | grep -ci qualified; true", equals: "0"}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}

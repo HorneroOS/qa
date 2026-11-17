@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T083006Z-agentic-shell-proposal-delegate-1",
+  "finished": "2026-11-17T08:30:48Z",
+  "wall_s": 42.33,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 1: stdout ' horneroctl assistant tool <name> [arg]. Requires: explicit manual run or existing typed broker approval.\\nnever-executed' != 'never-executed'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "t": 68.679,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .discovered",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 79.352,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -c '[.[] | {name,scale}] | sort_by(.name)'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1}]",
+    "stderr": "",
+    "detail": "stdout '[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1}]' != '[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1.5}]'",
+    "where": "proof 0"
+  },
+  {
+    "t": 79.589,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible)] | group_by(.screen) | map(length) | sort'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[2,2]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 79.833,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false 0",
+    "stderr": "",
+    "detail": "stdout 'false 0' != 'true 0'",
+    "where": "proof 2"
+  },
+  {
+    "t": 79.918,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-final-h0.png",
+      "004-final-h1.png"
+    ],
+    "where": "proof 3"
+  }
+]

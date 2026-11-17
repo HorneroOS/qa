@@ -1,0 +1,33 @@
+[
+  {
+    "t": 128.688,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -c .popout",
+    "ok": true,
+    "rc": 0,
+    "stdout": "{\"name\":\"battery\",\"hasCurrent\":true,\"detached\":\"\",\"phase\":\"open\",\"intent\":\"hover\",\"keyboard\":false,\"frame\":[48,918,282,125],\"target\":[48,918,282,125],\"trigger\":[16,972,16,16],\"side\":\"right\",\"attached\":true,\"flipped\":false,\"scroll\":false,\"opacity\":1}",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 128.974,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 129.074,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "005-final.png"
+    ],
+    "where": "proof 2"
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "t": 37.321,
+    "kind": "probe",
+    "run": "horneroctl studio jobs list",
+    "ok": true,
+    "rc": 0,
+    "stdout": "No Studio jobs recorded yet.",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 37.558,
+    "kind": "probe",
+    "run": "printf qa > /tmp/qa-studio-in.mov && horneroctl studio jobs submit --adapter vlc --input /tmp/qa-studio-in.mov --output /tmp/qa-studio-out.mp4 >/dev/null 2>&1 && echo allowed || echo refused",
+    "ok": true,
+    "rc": 0,
+    "stdout": "refused",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 37.881,
+    "kind": "probe",
+    "run": "horneroctl studio jobs submit --adapter ffmpeg-export --input /tmp/qa-missing-in.mov --output /tmp/qa-studio-out.mp4 >/dev/null 2>&1 && echo allowed || echo refused",
+    "ok": true,
+    "rc": 0,
+    "stdout": "refused",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 38.062,
+    "kind": "probe",
+    "run": "horneroctl studio jobs list",
+    "ok": true,
+    "rc": 0,
+    "stdout": "No Studio jobs recorded yet.",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 38.294,
+    "kind": "probe",
+    "run": "horneroctl studio jobs status ../selection >/dev/null 2>&1 && echo allowed || echo refused",
+    "ok": true,
+    "rc": 0,
+    "stdout": "refused",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  }
+]

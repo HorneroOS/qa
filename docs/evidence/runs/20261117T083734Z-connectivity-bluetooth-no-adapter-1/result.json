@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T083734Z-connectivity-bluetooth-no-adapter-1",
+  "finished": "2026-11-17T08:38:14Z",
+  "wall_s": 40.254,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout 'False' != 'True'; proof 1: stdout '' != 'fail'; proof 2: stdout 'fail' != 'ok'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

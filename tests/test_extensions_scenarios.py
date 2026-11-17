@@ -148,14 +148,22 @@ def test_foundation_wave_is_named_in_the_acceptance_doc() -> None:
     assert "example-broken" in doc
 
 
-def test_triage_records_every_scenario_pending_without_a_pass_claim() -> None:
+def test_triage_records_every_scenario_without_an_unproven_pass_claim() -> None:
+    """Extensions lanes are PENDING, or carry an executed non-PASS result and a `fix` decision.
+
+    2026-11-17: the first VM run found no extensions loaded in the image (PluginKit v3 port pending), so
+    those lanes are recorded as executed FAIL/INCONCLUSIVE with decision `fix`; a PASS claim needs a bundle.
+    """
     triage = _triage()
     for stem in _scenario_ids():
         entry = triage[f"extensions/{stem}"]
-        assert entry["decision"] == "keep"
-        assert "PENDING" in entry["schedule"], stem
-        assert "EXECUTED" not in entry["schedule"], stem
-        assert "no PASS is claimed" in entry["schedule"] or "No PASS is claimed" in entry["schedule"], stem
+        schedule = entry["schedule"]
+        assert entry["decision"] in {"keep", "fix"}, stem
+        pending = "PENDING" in schedule and "EXECUTED" not in schedule
+        pending = pending and ("no PASS is claimed" in schedule or "No PASS is claimed" in schedule)
+        executed_non_pass = schedule.startswith(("FAIL ", "INCONCLUSIVE ")) and entry["decision"] == "fix"
+        executed_pass = schedule.startswith("PASS on image") and "bundle " in schedule
+        assert pending or executed_non_pass or executed_pass, stem
 
 
 def test_probe_and_setup_commands_parse() -> None:

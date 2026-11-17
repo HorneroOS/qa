@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T083917Z-connectivity-bluetooth-service-down-1",
+  "finished": "2026-11-17T08:39:57Z",
+  "wall_s": 39.734,
+  "verdict": "inconclusive",
+  "class": "harness",
+  "regression": false,
+  "reason": "setup failed (rc=1): systemctl stop bluetooth.service: Failed to stop bluetooth.service: Access denied as the requested operation requires interactive authentication. However, interactive authentication has not been enabled by the calling program.\nSee system logs and 'systemctl status bluetooth.service' for details.",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

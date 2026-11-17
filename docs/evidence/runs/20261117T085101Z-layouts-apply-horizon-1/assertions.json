@@ -1,0 +1,33 @@
+[
+  {
+    "t": 68.53,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "horizon",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 68.858,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[\"bottom\",\"top\"]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 68.904,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-layout-horizon.png"
+    ],
+    "where": "proof 2"
+  }
+]

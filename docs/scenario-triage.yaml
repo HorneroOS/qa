@@ -1,195 +1,164 @@
 scenarios:
   install-pairwise-negative/cancel-during-install:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'EXECUTED 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261104T224831Z-install-pairwise-negative-cancel-during-install-1): FAIL — cancelling at 56% during the packages job does not cancel; the pacman transaction completes after Calamares quits and the target boots to the greeter with user and profile. Live-session cleanup was clean. Contract revised 2026-11-04: HorneroOS/installer#94 sets disable-cancel-during-exec and this scenario now asserts that contract (view-step cancel + disabled Cancel during exec). Re-execute on the first ISO built with the mitigation; the preview32 FAIL bundle remains the record for the old contract.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. EXECUTED 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261104T224831Z-install-pairwise-negative-cancel-during-install-1): FAIL"
   install-pairwise-negative/systemd-boot-bios-not-offered:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise-negative/wrong-luks-passphrase:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-dual-primary-linux-systemd-boot-uefi-luks-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-dual-primary-lts-grub-bios-luks-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-dual-primary-lts-grub-uefi-luks-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-linux-grub-bios-luks-bt-off:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-linux-grub-bios-luks-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-linux-grub-uefi-luks-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-linux-grub-uefi-none-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-linux-lts-systemd-boot-uefi-none-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/desktop-linux-systemd-boot-uefi-luks-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/gaming-dual-primary-linux-grub-bios-none-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/gaming-dual-primary-lts-systemd-boot-uefi-luks-bt-off:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/gaming-linux-grub-bios-none-bt-off:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/gaming-linux-grub-uefi-luks-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/gaming-linux-lts-systemd-boot-uefi-none-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/gaming-linux-systemd-boot-uefi-none-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/studio-dual-primary-linux-systemd-boot-uefi-none-bt-off:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/studio-dual-primary-lts-grub-uefi-none-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/studio-linux-grub-uefi-luks-bt-on-studio-complete:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/studio-linux-lts-grub-bios-luks-bt-off:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install-pairwise/studio-linux-systemd-boot-uefi-none-bt-on:
-    decision: keep
-    rationale: 'Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed.'
-    schedule: 'NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window.'
+    decision: fix
+    rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
   install/desktop-uefi-encrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (desktop, UEFI, encrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-uefi-encrypted/RESULT.md'
-    schedule: 'Delta smoke re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097: PASS. Other Desktop cells carried over per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed). Re-executed 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261104T185202Z-install-desktop-uefi-encrypted-1): PASS — LUKS install, reboot without ISO, initramfs unlock, greeter authentication; all six probes pass as written after the jq-free probe rewrite (qa#65, #63 closed). The bundle preserves the earlier INCONCLUSIVE phase verbatim.'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (desktop, UEFI, encrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-uefi-encrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Delta smoke re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097: PASS. Other Desktop cells carried over per evidence-delta/DELTA-JUSTIFICATION.md (onl"
   install/desktop-uefi-unencrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (desktop, UEFI, unencrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-uefi-unencrypted/RESULT.md'
-    schedule: 'Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta. Re-executed 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261104T141118Z-install-desktop-uefi-unencrypted-1): INCONCLUSIVE — install/login/versions documented, but not every scenario proof probe recorded. Next: re-run capturing all proof probes (shell IPC, config errors, edition profile, pacman.conf cleanup, persisted selections). Re-executed 2026-11-05 via the offline qualification runner (smoke-preview32-r2, qa#76 fixed Encrypt-checkbox drive) on the same published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261105T145606Z-install-desktop-uefi-unencrypted-1): PASS — Erase-disk unencrypted install, Calamares All done, reboot without ISO to Hyprland greeter and Hornero desktop; all six proof probes recorded (Hyprland up, shell IPC drawers, 0 config errors, edition desktop via profile + horneroctl, hornero-installer absent from pacman.conf) and parity horneroctl preview40/a449641 matches sidecar productRevision. r1 attempt-1 was an infrastructure failure (drive clicked above the Encrypt checkbox) and was not imported.'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (desktop, UEFI, unencrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-uefi-unencrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta. Re-executed 2026-11-04 on published preview32 ISO sh"
   install/desktop-niri-uefi-unencrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the experimental Niri compositor choice (desktop, UEFI, unencrypted): guards HorneroOS/installer#11, HorneroOS/qa#19 and HorneroOS/config#121. First declared 2026-11-04 (Preview 33 Stage D); no install scenario covered the Niri edition choice before.'
-    schedule: 'EXECUTED 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec: FAIL — install, greeter authentication, niri/quickshell processes and Shell IPC all work, but niri reports zero outputs (Error::DeviceMissing on virtio-gpu early import) and the desktop frame is black. Root cause attributed 2026-11-04 to the test environment (plain virtio-vga has no 3D acceleration, which Niri requires; config#121 closed). Re-execute only on an accelerated virtual GPU (virtio-vga-gl/VirGL with a proven observability stack) or physical hardware; accelerated retest on the current workstation was not observable (egl-headless scanout/input limitations) and is recorded as an external QA requirement. Physical-hardware behavior remains NOT TESTED.'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the experimental Niri compositor choice (desktop, UEFI, unencrypted): guards HorneroOS/installer#11, HorneroOS/qa#19 and HorneroOS/config#121. First declared 2026-11-04 (Preview 33 Stage D); no install scenario covered the Niri edition choice before."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. EXECUTED 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec: FAIL \u2014 install, greeter authentication, niri/quickshell processes and Shell IPC "
   install/desktop-recovery-uefi-encrypted:
-    decision: keep
-    rationale: 'Recovery-profile install-to-first-boot acceptance (desktop Recovery candidate, UEFI, LUKS): guards HorneroOS/hornero#179, HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-11-04 in a disposable QEMU VM against recovery-candidate ISO sha256 aee853c419efe9074c4dc415e7baa80292e048a2d5e089759bd41b7b9d3f7355 via the manual install harness (hornero-qa runner has no install engine yet): PASS (LUKS unlock, greeter login, snapper registered, snapshot create/list, manual @-replacement restore, restored boot). Evidence: ~/.local/share/hornero/install-test/evidence/scenario-e-luks/RESULT.md'
-    schedule: 'Re-execute on the next signed Preview ISO that ships the recovery profile; candidate-media evidence does not satisfy the release gate.'
+    decision: fix
+    rationale: "Recovery-profile install-to-first-boot acceptance (desktop Recovery candidate, UEFI, LUKS): guards HorneroOS/hornero#179, HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-11-04 in a disposable QEMU VM against recovery-candidate ISO sha256 aee853c419efe9074c4dc415e7baa80292e048a2d5e089759bd41b7b9d3f7355 via the manual install harness (hornero-qa runner has no install engine yet): PASS (LUKS unlock, greeter login, snapper registered, snapshot create/list, manual @-replacement restore, restored boot). Evidence: ~/.local/share/hornero/install-test/evidence/scenario-e-luks/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Re-execute on the next signed Preview ISO that ships the recovery profile; candidate-media evidence does not satisfy the release gate."
   install/desktop-recovery-uefi-unencrypted:
-    decision: keep
-    rationale: 'Recovery-profile install-to-first-boot acceptance (desktop Recovery candidate, UEFI, unencrypted): guards HorneroOS/hornero#179, HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED on recovery-candidate v3 ISO sha256 604cb0bc2b4d4ed3e2a3d65b698c53dc8aea71f56e19250b2f101dfe69be09df and v4 sha256 aee853c419efe9074c4dc415e7baa80292e048a2d5e089759bd41b7b9d3f7355 in disposable QEMU VMs via the manual install harness: PASS (clean install/first boot, snapper registration, timers, grub-btrfsd; scenario D @-replacement restore PASS on v3). Evidence: ~/.local/share/hornero/install-test/evidence/recovery-candidate-v3/RESULT.md and recovery-candidate-v4/RESULT.md'
-    schedule: 'Re-execute on the next signed Preview ISO that ships the recovery profile; candidate-media evidence does not satisfy the release gate.'
+    decision: fix
+    rationale: "Recovery-profile install-to-first-boot acceptance (desktop Recovery candidate, UEFI, unencrypted): guards HorneroOS/hornero#179, HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED on recovery-candidate v3 ISO sha256 604cb0bc2b4d4ed3e2a3d65b698c53dc8aea71f56e19250b2f101dfe69be09df and v4 sha256 aee853c419efe9074c4dc415e7baa80292e048a2d5e089759bd41b7b9d3f7355 in disposable QEMU VMs via the manual install harness: PASS (clean install/first boot, snapper registration, timers, grub-btrfsd; scenario D @-replacement restore PASS on v3). Evidence: ~/.local/share/hornero/install-test/evidence/recovery-candidate-v3/RESULT.md and recovery-candidate-v4/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Re-execute on the next signed Preview ISO that ships the recovery profile; candidate-media evidence does not satisfy the release gate."
   install/desktop-bios-encrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (desktop, BIOS, encrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-bios-encrypted/RESULT.md'
-    schedule: 'Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta.'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (desktop, BIOS, encrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-bios-encrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta."
   install/desktop-bios-unencrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (desktop, BIOS, unencrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-bios-unencrypted/RESULT.md'
-    schedule: 'Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta. Re-executed 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261104T191207Z-install-desktop-bios-unencrypted-1): PASS — legacy BIOS/MBR install, reboot without ISO, greeter authentication; all six probes pass as written after the jq-free probe rewrite (qa#65, #63 closed).'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (desktop, BIOS, unencrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-bios-unencrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta. Re-executed 2026-11-04 on published preview32 ISO sh"
   install/studio-uefi-encrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (studio, UEFI, encrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-uefi-encrypted/RESULT.md'
-    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-uefi-encrypted/RESULT.md'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (studio, UEFI, encrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-uefi-encrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5"
   install/gaming-uefi-unencrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Gaming ISO
-      (gaming, UEFI, unencrypted): guards HorneroOS/installer#38
-      and HorneroOS/qa#39. EXECUTED 2026-10-29 in a disposable QEMU VM against candidate ISO sha256 665fefdbc3291dadf4bbf2d0f984fefaeb17d832ebc539dea7c3deb67979693a via the manual install harness (hornero-qa runner has no install engine yet): FAIL (installer candidate bugs: missing multilib and gaming profile package; fixed in HorneroOS/installer#41). Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/RESULT.md'
-    schedule: 'Re-executed 2026-10-29 on rebuilt candidate ISO sha256 f61420aea2d58ccc3a0e06f00f8e57e1d9dc03c22bae4d3ed22eba52a971f656 (installer b677419): install completes, all proofs pass except horneroctl gaming doctor (installed horneroctl-bin preview33 predates the Gaming CLI; HorneroOS/hornero#330). Re-executed 2026-10-29 on candidate v3 ISO sha256 9eb9041d85278b0d95ed98bccaaeedbe3a373fd125db34c4b47ac534aae2968f (installer 066bca3, horneroctl-bin preview35): PASS, all 10 proofs pass on the installed system including horneroctl gaming doctor. Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/RESULT-v3.md Re-executed 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261104T145453Z-install-gaming-uefi-unencrypted-1): INCONCLUSIVE — install/login/polkit documented and gaming doctor 12/14 (no Vulkan ICD, no LTS/snapshot in a GPU-less VM), but not every scenario proof probe recorded; the 2026-10-29 PASS above remains the latest full-proof PASS on a different ISO. Next: re-run on the current ISO capturing all proof probes.'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Gaming ISO (gaming, UEFI, unencrypted): guards HorneroOS/installer#38 and HorneroOS/qa#39. EXECUTED 2026-10-29 in a disposable QEMU VM against candidate ISO sha256 665fefdbc3291dadf4bbf2d0f984fefaeb17d832ebc539dea7c3deb67979693a via the manual install harness (hornero-qa runner has no install engine yet): FAIL (installer candidate bugs: missing multilib and gaming profile package; fixed in HorneroOS/installer#41). Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Re-executed 2026-10-29 on rebuilt candidate ISO sha256 f61420aea2d58ccc3a0e06f00f8e57e1d9dc03c22bae4d3ed22eba52a971f656 (installer b677419): install completes, all proofs pass except horneroctl gaming"
   install/studio-uefi-unencrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (studio, UEFI, unencrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-uefi-unencrypted/RESULT.md'
-    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-uefi-unencrypted/RESULT.md Re-executed 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec (bundle 20261104T143736Z-install-studio-uefi-unencrypted-1): INCONCLUSIVE — install/login/studio doctor 5/5 documented, but not every scenario proof probe recorded. Next: re-run capturing all proof probes.'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (studio, UEFI, unencrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-uefi-unencrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5"
   install/studio-bios-encrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (studio, BIOS, encrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-bios-encrypted/RESULT.md'
-    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-bios-encrypted/RESULT.md'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (studio, BIOS, encrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-bios-encrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5"
   install/studio-bios-unencrypted:
-    decision: keep
-    rationale: 'Install-to-first-boot acceptance for the candidate Preview ISO
-      (studio, BIOS, unencrypted): guards HorneroOS/installer#11
-      and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-bios-unencrypted/RESULT.md'
-    schedule: 'Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5 checks passed). Evidence: ~/.local/share/hornero/install-test/evidence-delta/install/studio-bios-unencrypted/RESULT.md'
+    decision: fix
+    rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (studio, BIOS, unencrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-bios-unencrypted/RESULT.md"
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5"
   bars/dock-bottom-popout-travel:
-    decision: keep
-    rationale: 'Retain coverage for this product behavior: Moving the pointer from
-      a bottom-dock status trigger into its popout must keep the card open across
-      the gap and preserve focus in the active app.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    decision: fix
+    rationale: "Retain coverage for this product behavior: Moving the pointer from a bottom-dock status trigger into its popout must keep the card open across the gap and preserve focus in the active app."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T095339Z-bars-dock-bottom-popout-travel-1. Needs triage."
   bars/popout-close-empty-surface:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Closing a status popout
-      removes its visual surface and input region from the bar window.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Closing a status popout removes its visual surface and input region from the bar window."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083209Z-bars-popout-close-empty-surface-1."
   bars/rail-activewindow-hover:
-    decision: keep
-    rationale: 'Retain coverage for this product behavior: A vertical rail keeps the
-      active-window marker compact while its hover card still exposes the real window
-      title and live preview.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    decision: fix
+    rationale: "Retain coverage for this product behavior: A vertical rail keeps the active-window marker compact while its hover card still exposes the real window title and live preview."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083452Z-bars-rail-activewindow-hover-1. drift: hover coordinates; the winfo popout is not reached after the thin-bar change - port to the geometry-derived hover step."
   bars/rail-activewindow-hover-right:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Verify an active-window
-      hover card attaches inward from the right-edge rail.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Verify an active-window hover card attaches inward from the right-edge rail."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083337Z-bars-rail-activewindow-hover-right-1."
   bars/right-rail-popout-travel:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Moving from a right-rail
-      status trigger into its popout must keep the card open across the horizontal
-      gap and preserve focus in the active app.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Moving from a right-rail status trigger into its popout must keep the card open across the horizontal gap and preserve focus in the active app."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T095505Z-bars-right-rail-popout-travel-1."
   compositors/niri-desktop-baseline:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Hornero Desktop starts
@@ -199,80 +168,48 @@ scenarios:
       image.
   drawers/dashboard-keyboard:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: SUPER+D (the product keybinding)
-      opens the dashboard drawer and Escape closes it again without leaving the drawer
-      stuck open.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: SUPER+D (the product keybinding) opens the dashboard drawer and Escape closes it again without leaving the drawer stuck open."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083958Z-drawers-dashboard-keyboard-1."
   drawers/launcher-keyboard:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: CTRL+Space opens the app
-      launcher through `horneroctl apps launch`, typed text reaches its search field,
-      and Escape closes it.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: CTRL+Space opens the app launcher through `horneroctl apps launch`, typed text reaches its search field, and Escape closes it."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084047Z-drawers-launcher-keyboard-1."
   drawers/session-keyboard:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: SUPER+X opens the session
-      drawer (lock, logout, reboot, shutdown) and Escape dismisses it without triggering
-      any session action.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: SUPER+X opens the session drawer (lock, logout, reboot, shutdown) and Escape dismisses it without triggering any session action."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084145Z-drawers-session-keyboard-1."
   layout-picker/escape-keeps-layout:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: SUPER+SHIFT+B opens the
-      Layout Picker, the picker takes the keyboard, and Escape closes it without changing
-      the active layout.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: SUPER+SHIFT+B opens the Layout Picker, the picker takes the keyboard, and Escape closes it without changing the active layout."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084557Z-layout-picker-escape-keeps-layout-1."
   layout-picker/keyboard-apply:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: The Layout Picker starts
-      keyboard focus at the active layout even when the stationary pointer is over
-      another card; arrows move in catalogue order and Enter applies the focused preset.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: The Layout Picker starts keyboard focus at the active layout even when the stationary pointer is over another card; arrows move in catalogue order and Enter applies the focused preset."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084718Z-layout-picker-keyboard-apply-1."
   layouts/apply-cockpit-clear:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Cockpit Clear: transparent
-      top and bottom bars. Applying the preset must switch the active preset and leave
-      exactly the declared bar edges visible.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Cockpit Clear: transparent top and bottom bars. Applying the preset must switch the active preset and leave exactly the declared bar edges visible."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084835Z-layouts-apply-cockpit-clear-1."
   layouts/apply-dock-bottom:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Dock Bottom: a single dock-style
-      bottom bar. Applying the preset must switch the active preset and leave exactly
-      the declared bar edges visible.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Dock Bottom: a single dock-style bottom bar. Applying the preset must switch the active preset and leave exactly the declared bar edges visible."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084948Z-layouts-apply-dock-bottom-1."
   layouts/apply-horizon:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Horizon: inset top bar
-      plus a clear bottom workspace strip. Applying the preset must switch the active
-      preset and leave exactly the declared bar edges visible.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Horizon: inset top bar plus a clear bottom workspace strip. Applying the preset must switch the active preset and leave exactly the declared bar edges visible."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085101Z-layouts-apply-horizon-1."
   layouts/apply-hornero-left:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: The Hornero original: one
-      attached bar on the left edge. Applying the preset must switch the active preset
-      and leave exactly the declared bar edges visible.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: The Hornero original: one attached bar on the left edge. Applying the preset must switch the active preset and leave exactly the declared bar edges visible."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085214Z-layouts-apply-hornero-left-1."
   layouts/apply-islands:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Islands: floating top bar
-      split into islands. Applying the preset must switch the active preset and leave
-      exactly the declared bar edges visible.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Islands: floating top bar split into islands. Applying the preset must switch the active preset and leave exactly the declared bar edges visible."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085326Z-layouts-apply-islands-1."
   lock/lock-keyboard:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: SUPER+L locks the session
-      with the shell''s own lock screen (the shell owns idle and manual lock).'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: SUPER+L locks the session with the shell's own lock screen (the shell owns idle and manual lock)."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085438Z-lock-lock-keyboard-1."
   multimonitor/two-outputs:
     decision: keep
     rationale: 'Retain two-output Studio coverage. Run 20261025T035600Z against
@@ -311,57 +248,32 @@ scenarios:
       hotplug evidence only after a suitable fixture is approved.
   notifications/shell-owns-bus:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: The Hornero shell owns
-      org.freedesktop.Notifications even with dunst installed, and a notification
-      is shown by the shell (dunst is never D-Bus activated).'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: The Hornero shell owns org.freedesktop.Notifications even with dunst installed, and a notification is shown by the shell (dunst is never D-Bus activated)."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085542Z-notifications-shell-owns-bus-1."
   perf/baseline:
-    decision: keep
-    rationale: 'Retain coverage for this product behavior: Reference performance numbers
-      for the composition under test, measured by the shell''s own scripts/perf-baseline.sh
-      inside the fixed QA machine (2 vCPU, 2 GiB, one 1280x800 output), so numbers
-      are comparable between runs and releases (HorneroOS/shell#47).'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    decision: fix
+    rationale: "Retain coverage for this product behavior: Reference performance numbers for the composition under test, measured by the shell's own scripts/perf-baseline.sh inside the fixed QA machine (2 vCPU, 2 GiB, one 1280x800 output), so numbers are comparable between runs and releases (HorneroOS/shell#47)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085700Z-perf-baseline-1. harness: perf probe output is not JSON on this image; needs the perf harness update (shell#47/#228)."
   personalization/baseline-settings:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Capture the current Settings
-      navigation and Appearance presentation.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Capture the current Settings navigation and Appearance presentation."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085818Z-personalization-baseline-settings-1."
   personalization/controlcenter-panel-matrix:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Capture every Control Center
-      destination at the same desktop size for visual review.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Capture every Control Center destination at the same desktop size for visual review."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085925Z-personalization-controlcenter-panel-matrix-1."
   privacy/weather-first-boot:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: A fresh desktop presents
-      weather as an intentional offline state until the user chooses a place.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: A fresh desktop presents weather as an intentional offline state until the user chooses a place."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090134Z-privacy-weather-first-boot-1."
   regressions/shell-24-lock-after-hyprlock:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: The shell must survive
-      a lock request after another locker (hyprlock) died mid-lock in the same session
-      (HorneroOS/shell#24, currently OPEN: the direct IPC call kills the shell with
-      the issue''s wl_display fatal). SIGTERM while holding the ext-session-lock strands
-      the session in Hyprland''s crashed-lockscreen fallback by design (recovery is
-      lua-only: hl.clear_crashed_lockscreen); the crash fallback also swallows the
-      Super+L keybind, so the issue''s direct `qs ipc call lock lock` is the real
-      probe. The contract is survival plus a truthful lock state.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: The shell must survive a lock request after another locker (hyprlock) died mid-lock in the same session (HorneroOS/shell#24, currently OPEN: the direct IPC call kills the shell with the issue's wl_display fatal). SIGTERM while holding the ext-session-lock strands the session in Hyprland's crashed-lockscreen fallback by design (recovery is lua-only: hl.clear_crashed_lockscreen); the crash fallback also swallows the Super+L keybind, so the issue's direct `qs ipc call lock lock` is the real probe. The contract is survival plus a truthful lock state."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090340Z-regressions-shell-24-lock-after-hyprlock-1. PRODUCT: shell dies with Wayland 'invalid object' on lock; evidence on HorneroOS/shell#24."
   regressions/shell-77-rapid-escape:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Escape pressed 0.7 s after
-      Super+D still closes the dashboard: the first Escape must not be lost while
-      the drawer''s focus grab activates (HorneroOS/shell#77). Run with --repeat to
-      measure the miss rate.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: Escape pressed 0.7 s after Super+D still closes the dashboard: the first Escape must not be lost while the drawer's focus grab activates (HorneroOS/shell#77). Run with --repeat to measure the miss rate."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090456Z-regressions-shell-77-rapid-escape-1."
   smoke/desktop-ready:
     decision: keep
     rationale: 'Retain coverage for this product behavior: The ready image boots to
@@ -378,111 +290,49 @@ scenarios:
     schedule: Schedule in the next approved KVM QA window against the pinned ready
       image.
   gaming/graphics-capability:
-    decision: keep
-    rationale: 'Hardware-neutral Vulkan capability coverage for the Gaming
-      gate item graphics-topology-fixtures at VM level: 64/32-bit loader
-      and ICD registration are capability probes only; physical topology
-      qualification stays BLOCKED on owner-approved hardware fixtures.'
-    schedule: 'EXECUTED 2026-10-29 on installed candidate v3 (ISO 9eb9041d) in a disposable VM: PASS with corrected honesty probes (ICD report consistent with on-disk registry, ICDCONS=True; no ICD registered under virtio, reported fail as designed). Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/scenarios-run*.png'
+    decision: fix
+    rationale: "Hardware-neutral Vulkan capability coverage for the Gaming gate item graphics-topology-fixtures at VM level: 64/32-bit loader and ICD registration are capability probes only; physical topology qualification stays BLOCKED on owner-approved hardware fixtures."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084414Z-gaming-graphics-capability-1. environment: GPU-less VM has no Vulkan ICD (proof 3 absent)."
   gaming/gpu-driver-coherence:
     decision: keep
-    rationale: 'VM-safe coverage for HorneroOS/hornero#342 gpu-driver-coherence:
-      gaming doctor must report running-kernel/module-tree/vendor-driver
-      coherence as ok/fail only, never ok when the running kernel has no
-      module tree, and must install or change nothing. Physical GPU
-      qualification stays BLOCKED on owner-approved hardware fixtures.'
-    schedule: 'NOT TESTED: blocked until a horneroctl tag ships the
-      gpu-driver-coherence doctor check (absent from the pinned preview35
-      contract in tests/fixtures/gaming-doctor-contract.json); then schedule
-      in the next approved KVM QA window. No VM or hardware PASS is claimed.'
+    rationale: "VM-safe coverage for HorneroOS/hornero#342 gpu-driver-coherence: gaming doctor must report running-kernel/module-tree/vendor-driver coherence as ok/fail only, never ok when the running kernel has no module tree, and must install or change nothing. Physical GPU qualification stays BLOCKED on owner-approved hardware fixtures."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084334Z-gaming-gpu-driver-coherence-1."
   gaming/recovery-readiness:
     decision: keep
-    rationale: 'Coverage for the Gaming gate item graphics-update-recovery:
-      gaming doctor probes LTS/snapshot recovery readiness on the existing
-      update path and never asserts an absent recovery path; no
-      Gaming-only snapshot framework.'
-    schedule: 'EXECUTED 2026-10-29 on installed candidate v3 (ISO 9eb9041d) in a disposable VM: PASS with corrected honesty probes (no LTS kernel or snapshot tool present; doctor reports recovery-readiness fail with actionable linux-lts/snapshot guidance, RECACT=1, never asserts an absent path). Presence of a recovery path itself remains a gate item for qualified systems. Evidence: ~/.local/share/hornero/install-test/evidence/gaming-uefi-unencrypted/scenarios-run*.png'
+    rationale: "Coverage for the Gaming gate item graphics-update-recovery: gaming doctor probes LTS/snapshot recovery readiness on the existing update path and never asserts an absent recovery path; no Gaming-only snapshot framework."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084457Z-gaming-recovery-readiness-1."
   recovery/doctor-honesty:
     decision: keep
-    rationale: 'Coverage for hornero#179 recovery honesty: recovery doctor
-      probes backend/layout/snapper readiness read-only and must keep
-      reporting snapshot_backend=none with a failing backend check until
-      the disposable-VM restore proof in SNAPSHOT_BACKEND_CONTRACT.md
-      passes; config snapshots are never presented as OS rollback and no
-      restore/create verb exists before that proof.'
-    schedule: 'NOT TESTED: blocked until a horneroctl tag ships the recovery
-      doctor command (absent from Preview31); then schedule in the next
-      approved KVM QA window on an installed image. No VM or hardware PASS
-      is claimed.'
+    rationale: "Coverage for hornero#179 recovery honesty: recovery doctor probes backend/layout/snapper readiness read-only and must keep reporting snapshot_backend=none with a failing backend check until the disposable-VM restore proof in SNAPSHOT_BACKEND_CONTRACT.md passes; config snapshots are never presented as OS rollback and no restore/create verb exists before that proof."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090216Z-recovery-doctor-honesty-1."
   recovery/polkit-agent:
-    decision: keep
-    rationale: 'Regression coverage for hornero#366: fresh installs shipped
-      no registered polkit authentication agent (the Hyprland autostart
-      referenced the polkit-gnome binary while the package was missing
-      from the edition catalogue), so every pkexec flow failed with
-      "No session for cookie". Root cause and the session-agent fix were
-      proven in disposable VMs (scen366c: baseline pkexec FAIL 127,
-      session agent PASS incl. horneroctl package upgrade reaching
-      pacman and stopping correctly on a fake db.lck). The scenario
-      probes the automatable contract (package, binary, live agent
-      process, no passwordless rules); the interactive pkexec password
-      round-trip stays a manual confirmation in the run evidence.'
-    schedule: 'NOT TESTED on an image containing hornero#367 + config#119:
-      schedule with the next candidate fresh-install re-verification
-      tracked on hornero#366. Manual differential evidence exists
-      (scen366c) but is not a runner PASS for this cell.'
+    decision: fix
+    rationale: "Regression coverage for hornero#366: fresh installs shipped no registered polkit authentication agent (the Hyprland autostart referenced the polkit-gnome binary while the package was missing from the edition catalogue), so every pkexec flow failed with \"No session for cookie\". Root cause and the session-agent fix were proven in disposable VMs (scen366c: baseline pkexec FAIL 127, session agent PASS incl. horneroctl package upgrade reaching pacman and stopping correctly on a fake db.lck). The scenario probes the automatable contract (package, binary, live agent process, no passwordless rules); the interactive pkexec password round-trip stays a manual confirmation in the run evidence."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090257Z-recovery-polkit-agent-1. unverified: polkit agent not running in the QA image; check whether the image lacks the agent (hornero#366) or the shell regressed."
   studio/audio-mode-opt-in:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Studio audio modes stay
-      safe by default: Balanced is the recorded default, Low Latency refuses
-      without explicit opt-in, and restore with nothing recorded is a harmless
-      no-op (HorneroOS/hornero#287 contract).'
-    schedule: Blocked until a pinned image ships the merged horneroctl Studio
-      contracts (HorneroOS/hornero#302); then schedule in the next approved KVM
-      QA window.
+    rationale: "Retain coverage for this product behavior: Studio audio modes stay safe by default: Balanced is the recorded default, Low Latency refuses without explicit opt-in, and restore with nothing recorded is a harmless no-op (HorneroOS/hornero#287 contract)."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090713Z-studio-audio-mode-opt-in-1."
   studio/jobs-approval-privacy:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Studio render jobs
-      require explicit submission through allow-listed adapters only: unknown
-      adapters and missing inputs are refused, job ids cannot traverse out of
-      the user job store, and no background execution happens.'
-    schedule: Blocked until a pinned image ships the merged horneroctl Studio
-      contracts (HorneroOS/hornero#301/#303); then schedule in the next approved
-      KVM QA window.
+    rationale: "Retain coverage for this product behavior: Studio render jobs require explicit submission through allow-listed adapters only: unknown adapters and missing inputs are refused, job ids cannot traverse out of the user job store, and no background execution happens."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090752Z-studio-jobs-approval-privacy-1."
   agentic/shell-proposal-delegate:
-    decision: keep
-    rationale: 'Agentic workstation acceptance (HorneroOS/hornero#391/#394):
-      shell proposals never execute, prefixed elevation is classified
-      protected, and external delegation is refused or truthful. Host
-      acceptance already runs in hornero scripts/agentic-acceptance.sh;
-      this scenario carries the same contract into guest QA.'
-    schedule: 'NOT RUN: execute on the next candidate ISO in an approved
-      KVM window; no PASS is claimed.'
+    decision: fix
+    rationale: "Agentic workstation acceptance (HorneroOS/hornero#391/#394): shell proposals never execute, prefixed elevation is classified protected, and external delegation is refused or truthful. Host acceptance already runs in hornero scripts/agentic-acceptance.sh; this scenario carries the same contract into guest QA."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083006Z-agentic-shell-proposal-delegate-1. drift: horneroctl now prints a usage line before the result, the probe expects the bare 'never-executed'."
   studio/artcraft-launcher-hyprland:
-    decision: keep
-    rationale: 'Experimental ArtCraft Launcher acceptance (HorneroOS/qa#36,
-      hornero#325): absent until explicit application opt-in, verified
-      manual install only, native Wayland launch, one Craft application,
-      update and clean uninstall. Hyprland is the blocking compositor.'
-    schedule: 'NOT RUN: execute on the current Studio Preview ISO in an
-      approved KVM window after the fixture is owner-approved and the
-      acceptance item is enabled; no PASS is claimed.'
+    decision: fix
+    rationale: "Experimental ArtCraft Launcher acceptance (HorneroOS/qa#36, hornero#325): absent until explicit application opt-in, verified manual install only, native Wayland launch, one Craft application, update and clean uninstall. Hyprland is the blocking compositor."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090542Z-studio-artcraft-launcher-hyprland-1. fixture: ArtCraft launcher is not installed in the ready image."
   studio/artcraft-launcher-niri:
-    decision: keep
-    rationale: 'Same ArtCraft Launcher contract on Niri (HorneroOS/qa#36):
-      report-only while Niri remains experimental; excluded from the
-      required gate.'
-    schedule: 'NOT RUN: report-only run alongside the Hyprland blocking
-      run; no PASS is claimed.'
+    decision: fix
+    rationale: "Same ArtCraft Launcher contract on Niri (HorneroOS/qa#36): report-only while Niri remains experimental; excluded from the required gate."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090627Z-studio-artcraft-launcher-niri-1. fixture: ArtCraft launcher is not installed in the ready image."
   studio/selection-parity:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: Post-install Studio
-      selection behaves as recorded intent only: a fresh system reports no
-      selection, unknown catalogue IDs are rejected, and doctor reports health
-      without installing or changing anything.'
-    schedule: Blocked until a pinned image ships the merged horneroctl Studio
-      contracts (HorneroOS/hornero#299); then schedule in the next approved KVM
-      QA window.
+    rationale: "Retain coverage for this product behavior: Post-install Studio selection behaves as recorded intent only: a fresh system reports no selection, unknown catalogue IDs are rejected, and doctor reports health without installing or changing anything."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090832Z-studio-selection-parity-1."
   themes/package-only-flagships:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Installed Hornero theme
@@ -492,111 +342,108 @@ scenarios:
       image.
   wallpapers/unconfigured-empty-state:
     decision: keep
-    rationale: 'Retain coverage for this product behavior: A fresh profile with no
-      wallpaper uses the intentional choose-wallpaper empty state instead of trying
-      to render a CLI diagnostic as an image.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
+    rationale: "Retain coverage for this product behavior: A fresh profile with no wallpaper uses the intentional choose-wallpaper empty state instead of trying to render a CLI diagnostic as an image."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090914Z-wallpapers-unconfigured-empty-state-1. shell connection dropped during the probe (product_crash class); not yet root-caused."
   connectivity/bluetooth-no-adapter:
-    decision: keep
-    rationale: 'Hardware-free no-adapter coverage: in the default QEMU topology bluetooth doctor must report adapter/powered fail while bluetooth-service and bluez-tools stay ok, never conflating missing hardware with a down service. Physical pairing, A2DP/HFP audio, codec negotiation, autosuspend quirks, hotplug and suspend/resume power persistence are NOT TESTED (no vhci or hardware lab exists).'
-    schedule: 'NOT TESTED in the QA harness yet: horneroctl hardware bluetooth doctor shipped (Preview 30) and passed on installed Desktop/Studio VMs (honest no-adapter results); schedule these probe scenarios in the next approved KVM QA window. No hardware PASS is claimed.'
+    decision: fix
+    rationale: "Hardware-free no-adapter coverage: in the default QEMU topology bluetooth doctor must report adapter/powered fail while bluetooth-service and bluez-tools stay ok, never conflating missing hardware with a down service. Physical pairing, A2DP/HFP audio, codec negotiation, autosuspend quirks, hotplug and suspend/resume power persistence are NOT TESTED (no vhci or hardware lab exists)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083734Z-connectivity-bluetooth-no-adapter-1. scenario contract no longer matches horneroctl hardware bluetooth output; QA VM has no adapter."
   connectivity/bluetooth-service-down:
-    decision: keep
-    rationale: 'Hardware-free service-down coverage: with bluetooth.service stopped, doctor must report bluetooth-service fail while adapter presence comes from sysfs, distinguishing a down service from missing hardware. Physical pairing/audio/suspend checks are NOT TESTED.'
-    schedule: 'NOT TESTED in the QA harness yet: horneroctl hardware bluetooth doctor shipped (Preview 30) and passed on installed Desktop/Studio VMs (honest no-adapter results); schedule these probe scenarios in the next approved KVM QA window. No hardware PASS is claimed.'
+    decision: fix
+    rationale: "Hardware-free service-down coverage: with bluetooth.service stopped, doctor must report bluetooth-service fail while adapter presence comes from sysfs, distinguishing a down service from missing hardware. Physical pairing/audio/suspend checks are NOT TESTED."
+    schedule: "INCONCLUSIVE on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083917Z-connectivity-bluetooth-service-down-1. harness: guest user cannot stop bluetooth.service without polkit; needs a privileged setup path."
   connectivity/bluetooth-power-toggle:
-    decision: keep
-    rationale: 'Hardware-free no-adapter power coverage: a power request with no adapter must fail gracefully and doctor must still report adapter/powered fail, never a false success. Real-hardware power persistence across reboot/suspend is NOT TESTED.'
-    schedule: 'NOT TESTED in the QA harness yet: horneroctl hardware bluetooth doctor shipped (Preview 30) and passed on installed Desktop/Studio VMs (honest no-adapter results); schedule these probe scenarios in the next approved KVM QA window. No hardware PASS is claimed.'
+    decision: fix
+    rationale: "Hardware-free no-adapter power coverage: a power request with no adapter must fail gracefully and doctor must still report adapter/powered fail, never a false success. Real-hardware power persistence across reboot/suspend is NOT TESTED."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T083816Z-connectivity-bluetooth-power-toggle-1. needs a Bluetooth adapter fixture the QA VM does not have."
   extensions/discovery-status:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): shell discovery through horneroctl and plugins IPC agree, every enabled healthy fixture loads, diagnostics budgets are reported. Source tests in shell/plugins do not satisfy the shell#222/#366 runtime gaps.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): shell discovery through horneroctl and plugins IPC agree, every enabled healthy fixture loads, diagnostics budgets are reported. Source tests in shell/plugins do not satisfy the shell#222/#366 runtime gaps."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105912Z-extensions-discovery-status-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/multi-surface-loads:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): a manifest v2 multi-surface package and a v1 package load side by side and the v2 dashboard card renders (shell#373).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): a manifest v2 multi-surface package and a v1 package load side by side and the v2 dashboard card renders (shell#373)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T110901Z-extensions-multi-surface-loads-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/settings-persistence:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): typed settings declared in the manifest are stored by the shell in plugins.settings and survive a shell restart; the generated settings UI reads the same storage (shell#374).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): typed settings declared in the manifest are stored by the shell in plugins.settings and survive a shell restart; the generated settings UI reads the same storage (shell#374)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T111712Z-extensions-settings-persistence-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/malformed-settings-resilience:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): malformed stored settings, dashboard layout and desktop slots degrade to defaults without crashing the shell or corrupting neighbours (shell#222/#374/#378).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): malformed stored settings, dashboard layout and desktop slots degrade to defaults without crashing the shell or corrupting neighbours (shell#222/#374/#378)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T110621Z-extensions-malformed-settings-resilience-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/safe-mode-recovery:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): persisted safe mode loads no extension, reports safe-mode state, and keeps core IPC plus the horneroctl lifecycle usable for recovery (shell#380).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): persisted safe mode loads no extension, reports safe-mode state, and keeps core IPC plus the horneroctl lifecycle usable for recovery (shell#380)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T111540Z-extensions-safe-mode-recovery-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/load-failure-isolation:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): a load-failing extension is confined to its own Loader with bounded, redacted diagnostics while healthy neighbours keep running (shell#380). Requires the example-broken fixture, which now exists on HorneroOS/shell main @07d8d1d (PR #395, examples/plugins/example-broken: validator-clean, deterministic load failure, tests/test_plugin_broken_fixture.py); the fixture blocker is removed.'
-    schedule: 'PENDING (qa#81): fixture blocker removed (example-broken on shell main @07d8d1d); execution still PENDING a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md and an approved KVM window. No PASS is claimed; never executed yet.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): a load-failing extension is confined to its own Loader with bounded, redacted diagnostics while healthy neighbours keep running (shell#380). Requires the example-broken fixture, which now exists on HorneroOS/shell main @07d8d1d (PR #395, examples/plugins/example-broken: validator-clean, deterministic load failure, tests/test_plugin_broken_fixture.py); the fixture blocker is removed."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T110513Z-extensions-load-failure-isolation-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/deck-draws-installed-widgets:
-    decision: keep
+    decision: fix
     rationale: 'Regression for the empty Signal deck: packages left installed but not enabled by `horneroctl plugin catalog install` must still be drawn by the deck (shell docs/EXPERIENCE.md contract). Needs the plugins catalog staged at ~/catalog in the guest.'
-    schedule: 'PENDING (qa#81): manually exercised in the QA VM on 2026-11-17 (4 of 6 widgets drawn at 1280x800, calendar and moon dropped for room); the scenario file itself has not been run through hornero-qa run yet. No PASS is claimed.'
+    schedule: "INCONCLUSIVE (harness) on image signal-s74619fa-c7605886-h420c73c, bundle 20261117T112841Z-extensions-deck-draws-installed-widgets-1: horneroctl plugin catalog install refuses a file catalogue ('must be an HTTPS Git URL'); the scenario needs a local HTTPS git fixture."
   extensions/lifecycle-disable-enable:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): horneroctl disable unloads an extension without touching neighbours; enable revalidates and loads it again.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): horneroctl disable unloads an extension without touching neighbours; enable revalidates and loads it again."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T110351Z-extensions-lifecycle-disable-enable-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/uninstall-cleanup:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): horneroctl remove of the disposable desktop-note fixture cleans it out of the CLI list and shell status while the desktop keeps working.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): horneroctl remove of the disposable desktop-note fixture cleans it out of the CLI list and shell status while the desktop keeps working."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T112019Z-extensions-uninstall-cleanup-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/restart-persistence:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): dashboard layout (order/pinned/sizes) and desktop-widget slots persist verbatim through a shell restart (shell#222/#378).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): dashboard layout (order/pinned/sizes) and desktop-widget slots persist verbatim through a shell restart (shell#222/#378)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T111407Z-extensions-restart-persistence-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/marketplace-metadata:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): marketplace previews/compatibility/changelog are reported without executing plugin code, and community discovery fails closed while no registry product key ships (shell#366/#379).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): marketplace previews/compatibility/changelog are reported without executing plugin code, and community discovery fails closed while no registry product key ships (shell#366/#379)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T110754Z-extensions-marketplace-metadata-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/offline-unavailable-services:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81, foundation wave): with weather unconfigured, provider-reading extensions show empty/error state instead of failing, and local discovery needs no network (shell#377).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window against a ready image carrying the fixture extensions in docs/EXTENSIONS-ACCEPTANCE.md; no PASS is claimed until a complete run bundle is recorded.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81, foundation wave): with weather unconfigured, provider-reading extensions show empty/error state instead of failing, and local discovery needs no network (shell#377)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T111301Z-extensions-offline-unavailable-services-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/dashboard-all-enabled-stress:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): with every fixture dashboard extension enabled, the dashboard stays responsive, all cards load and no load-churn diagnostic is flagged (shell#378). Layout quality is screenshot-review evidence.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): with every fixture dashboard extension enabled, the dashboard stays responsive, all cards load and no load-churn diagnostic is flagged (shell#378). Layout quality is screenshot-review evidence."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105815Z-extensions-dashboard-all-enabled-stress-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/keyboard-only:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): the dashboard Extensions tab is navigable and configurable keyboard-only (Tab, P pin persisted, Escape cascade); visible focus is screenshot-review evidence and live AT-SPI announcements stay NOT TESTED (shell#221).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): the dashboard Extensions tab is navigable and configurable keyboard-only (Tab, P pin persisted, Escape cascade); visible focus is screenshot-review evidence and live AT-SPI announcements stay NOT TESTED (shell#221)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T110203Z-extensions-keyboard-only-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/themes-reduced-motion:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): fixture extensions keep loading and render through theme tokens under Hornero Light with host animation scale 0 (reduced motion); token fidelity is screenshot-review evidence.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): fixture extensions keep loading and render through theme tokens under Hornero Light with host animation scale 0 (reduced motion); token fidelity is screenshot-review evidence."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T111845Z-extensions-themes-reduced-motion-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/bar-edge-left:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the left rail; tooltip/popover opening inward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): a bar extension renders on the left rail; tooltip/popover opening inward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105400Z-extensions-bar-edge-left-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/bar-edge-right:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the right rail; tooltip/popover opening inward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): a bar extension renders on the right rail; tooltip/popover opening inward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105525Z-extensions-bar-edge-right-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/bar-edge-top:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the top bar; tooltip/popover opening downward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): a bar extension renders on the top bar; tooltip/popover opening downward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105649Z-extensions-bar-edge-top-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/bar-edge-bottom:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): a bar extension renders on the bottom dock; tooltip/popover opening upward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372).'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): a bar extension renders on the bottom dock; tooltip/popover opening upward unclipped is MANUAL reviewer evidence until a geometry probe or certified anchor exists (shell#370/#371/#372)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105236Z-extensions-bar-edge-bottom-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/narrow-display:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): bar and dashboard extensions stay loaded and compact on an 800x600 virtual output; compact rendering is screenshot-review evidence. Virtual output only.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): bar and dashboard extensions stay loaded and compact on an 800x600 virtual output; compact rendering is screenshot-review evidence. Virtual output only."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T111135Z-extensions-narrow-display-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/hidpi-wide-display:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): extensions stay loaded at 1920x1080 scale 1.5 with logical-size host caps; sharpness is screenshot-review evidence. Virtual output only; no physical HiDPI claim.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): extensions stay loaded at 1920x1080 scale 1.5 with logical-size host caps; sharpness is screenshot-review evidence. Virtual output only; no physical HiDPI claim."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T110036Z-extensions-hidpi-wide-display-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   extensions/multimonitor-virtual:
-    decision: keep
-    rationale: 'Extension Premium Acceptance (qa#81): per-screen bar/desktop extensions stay loaded on two differently scaled VIRTUAL outputs. Physical monitors, hotplug and disconnect fallback stay NOT TESTED until an approved hardware fixture exists.'
-    schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+    decision: fix
+    rationale: "Extension Premium Acceptance (qa#81): per-screen bar/desktop extensions stay loaded on two differently scaled VIRTUAL outputs. Physical monitors, hotplug and disconnect fallback stay NOT TESTED until an approved hardware fixture exists."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T111011Z-extensions-multimonitor-virtual-1. No extensions load in the image (PluginKit v3 fixtures pending, HorneroOS/plugins#62); re-run when the plugins port lands."
   bars/popout-placement-bottom:
     decision: keep
     rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
@@ -618,9 +465,9 @@ scenarios:
     rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
     schedule: "FAIL (harness drift, not a product verdict): hover coordinates were derived on shell 02cc16b and no longer hit Bluetooth after the segment/anatomy changes (the popout opened was 'battery'). Re-derive from `qs ipc call debug bars` and re-run; the same scenario PASSED on image 02cc16b (bundle 20261117T011637Z-bars-popout-placement-top-1, not tracked)."
   experience/everyday-vs-signal:
-    decision: keep
+    decision: fix
     rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
-    schedule: "FAIL (harness drift): the Settings > Experience pane layout moved after #488-#491 so the Switch click missed (mode stayed everyday); PASSED on 02cc16b. Re-derive click coordinates. Mode-by-mode captures are covered by experience/mode-*."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T084234Z-experience-everyday-vs-signal-1. drift: Settings > Experience pane layout moved, the Switch click misses; mode-by-mode coverage is experience/mode-* and visual/mode-*."
   experience/mode-everyday:
     decision: keep
     rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
@@ -776,20 +623,168 @@ scenarios:
   experience/gaming-fullscreen:
     decision: keep
     rationale: "Editions audit: guards the Gaming policy under a real fullscreen window (compositor state, held notifications, paused telemetry, no shell pixels over it, focus kept)."
-    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, which predates shell#551/#557), bundle 20261117T060803Z-experience-gaming-fullscreen-1. PASS means the probes held: compositor fullscreen state, focus kept, policy engaged, no shell pixels in the top/bottom 48 px of an opaque fullscreen window."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c, bundle 20261117T112743Z-experience-gaming-fullscreen-1."
   gaming/hyprland-tuning-lua:
-    decision: keep
+    decision: fix
     rationale: "Editions audit: guards that the Gaming Hyprland tuning reaches a Lua-only Hyprland through eval (keyword is a silent no-op there)."
-    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0, bundle 20261117T060645Z-gaming-hyprland-tuning-lua-1. The exact eval request text the shell sends is accepted by Hyprland 0.57 (reply ok) and changes rounding, gaps and tearing; reload restores them. The shell code path itself (shell#557) is not in that image."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. PASS on image signal-s433acea-cf1e98b1-hdaa03b0, bundle 20261117T060645Z-gaming-hyprland-tuning-lua-1. The exact eval request text the shell sends is accepted by Hyprland 0.57 (reply ok) and changes r"
   studio/audio-apply-live:
-    decision: keep
+    decision: fix
     rationale: "Editions audit: guards that studio audio apply changes a live PipeWire (drop-in plus clock quantum 128/64/256) and status reports it."
-    schedule: "PASS on image studio-hctl431 (shell f32a005, config 7605886, horneroctl built from hornero 650fae7, sha256 0e9d31d4...), bundle 20261117T064207Z-studio-audio-apply-live-1. Guest has no audio hardware (Dummy driver): xruns and DSP load read 0/0, not a latency or hardware claim."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. PASS on image studio-hctl431 (shell f32a005, config 7605886, horneroctl built from hornero 650fae7, sha256 0e9d31d4...), bundle 20261117T064207Z-studio-audio-apply-live-1. Guest has no audio hardware "
   studio/audio-revert-live:
-    decision: keep
+    decision: fix
     rationale: "Editions audit: guards exact restore of the previous live PipeWire clock values and removal of the drop-in."
-    schedule: "PASS on image studio-hctl431, bundle 20261117T064336Z-studio-audio-revert-live-1."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. PASS on image studio-hctl431, bundle 20261117T064336Z-studio-audio-revert-live-1."
   studio/audio-foreign-file-live:
-    decision: keep
+    decision: fix
     rationale: "Editions audit: guards that a personal PipeWire file of the same name is never overwritten or removed."
-    schedule: "PASS on image studio-hctl431, bundle 20261117T064513Z-studio-audio-foreign-file-live-1."
+    schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. PASS on image studio-hctl431, bundle 20261117T064513Z-studio-audio-foreign-file-live-1."
+  visual/mixed-scale-two-outputs:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T100121Z-visual-mixed-scale-two-outputs-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/mode-everyday-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T100305Z-visual-mode-everyday-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/mode-focus-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T100422Z-visual-mode-focus-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/mode-gaming-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T100531Z-visual-mode-gaming-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/mode-signal-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T100644Z-visual-mode-signal-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/mode-studio-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T100833Z-visual-mode-studio-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/popouts-classic-bottom:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T091504Z-visual-popouts-classic-bottom-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/popouts-cockpit-top:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T100950Z-visual-popouts-cockpit-top-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/popouts-hornero-left:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T092208Z-visual-popouts-hornero-left-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/popouts-hornero-right:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T092421Z-visual-popouts-hornero-right-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/popouts-islands-floating:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T101218Z-visual-popouts-islands-floating-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-classic-bottom-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T101430Z-visual-populated-classic-bottom-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-classic-top-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T101600Z-visual-populated-classic-top-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-cockpit-1366x768:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T101709Z-visual-populated-cockpit-1366x768-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-cockpit-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T101858Z-visual-populated-cockpit-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-cockpit-clear-1366x768:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T102015Z-visual-populated-cockpit-clear-1366x768-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-cockpit-clear-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T102202Z-visual-populated-cockpit-clear-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-cozy-minimal-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T102314Z-visual-populated-cozy-minimal-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-dock-bottom-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T102426Z-visual-populated-dock-bottom-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-gaming-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T102532Z-visual-populated-gaming-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-horizon-1366x768:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T102642Z-visual-populated-horizon-1366x768-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-horizon-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T102849Z-visual-populated-horizon-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-hornero-left-1366x768:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103002Z-visual-populated-hornero-left-1366x768-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-hornero-left-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103150Z-visual-populated-hornero-left-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-hornero-right-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103256Z-visual-populated-hornero-right-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-islands-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103404Z-visual-populated-islands-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-minimal-left-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103514Z-visual-populated-minimal-left-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-minimal-top-1366x768:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103621Z-visual-populated-minimal-top-1366x768-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-minimal-top-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103805Z-visual-populated-minimal-top-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/populated-studio-1920x1080:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T103915Z-visual-populated-studio-1920x1080-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/scale-1440p-1-25x:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T104246Z-visual-scale-1440p-1-25x-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/scale-1440p-1-5x:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T104056Z-visual-scale-1440p-1-5x-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/scale-2160p-2x:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T104432Z-visual-scale-2160p-2x-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/scale-ultrawide-3440x1440:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T104609Z-visual-scale-ultrawide-3440x1440-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/theme-contrast-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T104718Z-visual-theme-contrast-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/theme-day-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T104837Z-visual-theme-day-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  visual/theme-night-populated:
+    decision: keep
+    rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
+    schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105032Z-visual-theme-night-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."

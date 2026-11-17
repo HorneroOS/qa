@@ -1,0 +1,15 @@
+{"t": 15.672, "kind": "ready", "serial": []}
+{"t": 36.13, "kind": "setup", "run": "horneroctl shell preset apply classic-bottom --yes", "rc": 0, "stdout": "applied preset Classic Bottom (classic-bottom)", "stderr": ""}
+{"t": 67.375, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 67.375, "kind": "probe", "step": 0, "value": {"run": "horneroctl shell preset current", "contains": "classic-bottom", "retry_s": 0}, "note": null}
+{"t": 67.568, "kind": "key", "step": 1, "value": "super+shift+b", "note": null}
+{"t": 67.67, "kind": "wait", "step": 2, "value": {"changed": true, "stable": 0.5, "timeout": 5}, "note": null}
+{"t": 69.267, "kind": "wait_result", "step": 2, "ok": true}
+{"t": 69.267, "kind": "probe", "step": 3, "value": {"run": "qs ipc call drawers state layoutPicker", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 69.535, "kind": "probe", "step": 4, "value": {"run": "horneroctl shell preset list", "contains": "hornero-left:"}, "note": "The starting preset is in the catalogue the picker lists"}
+{"t": 69.786, "kind": "key", "step": 5, "value": "right", "note": null}
+{"t": 69.887, "kind": "wait", "step": 6, "value": {"changed": true, "stable": 0.3, "timeout": 3}, "note": null}
+{"t": 70.761, "kind": "wait_result", "step": 6, "ok": true}
+{"t": 70.762, "kind": "key", "step": 7, "value": "enter", "note": null}
+{"t": 70.885, "kind": "wait", "step": 8, "value": {"changed": true, "stable": 1.0, "timeout": 10}, "note": null}
+{"t": 72.767, "kind": "wait_result", "step": 8, "ok": true}

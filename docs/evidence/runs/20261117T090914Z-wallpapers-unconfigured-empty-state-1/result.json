@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T090914Z-wallpapers-unconfigured-empty-state-1",
+  "finished": "2026-11-17T09:10:31Z",
+  "wall_s": 76.929,
+  "verdict": "fail",
+  "class": "product_crash",
+  "regression": true,
+  "reason": "probe qs ipc call wallpaper get broke its connection and the shell died",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

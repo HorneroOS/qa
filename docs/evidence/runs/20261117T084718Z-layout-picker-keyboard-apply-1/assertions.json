@@ -1,0 +1,55 @@
+[
+  {
+    "t": 67.568,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "classic-bottom",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 69.535,
+    "kind": "probe",
+    "run": "qs ipc call drawers state layoutPicker",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 3"
+  },
+  {
+    "t": 69.786,
+    "kind": "probe",
+    "run": "horneroctl shell preset list",
+    "ok": true,
+    "rc": 0,
+    "stdout": "classic-bottom: Classic Bottom [bottom] (active)\nclassic-top: Classic Top [top]\ncockpit: Cockpit [top + bottom]\ncockpit-clear: Cockpit Clear [top + bottom]\ncozy-minimal: Minimal Float [top]\ndock-bottom: Dock Bottom [bottom]\nfloating-island: Floating Island [top]\ngaming: Gaming [bottom]\nhorizon: Horizon [top + bottom]\nhornero-left: Hornero Left [left]\nhornero-right: Hornero Right [right]\nislands: Islands [top]\nminimal-left: Minimal Left [left]\nminimal-top: Minimal Top [top]\nproductivity: Productivity [top]\nstudio: Studio [top]\n16 preset(s), active: classic-bottom",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 4"
+  },
+  {
+    "t": 73.019,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "classic-top",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 73.062,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-applied.png"
+    ],
+    "where": "proof 1"
+  }
+]

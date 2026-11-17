@@ -1,0 +1,14 @@
+{"t": 15.298, "kind": "ready", "serial": []}
+{"t": 35.669, "kind": "setup", "run": "horneroctl shell preset apply dock-bottom --yes", "rc": 0, "stdout": "applied preset Dock Bottom (dock-bottom)", "stderr": ""}
+{"t": 66.757, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 66.757, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 66.857, "kind": "type", "step": 1, "value": "kitty", "note": null}
+{"t": 67.104, "kind": "key", "step": 2, "value": "enter", "note": null}
+{"t": 67.208, "kind": "probe", "step": 3, "value": {"run": "hyprctl activewindow -j | jq -r .class", "equals": "kitty", "retry_s": 10}, "note": null}
+{"t": 68.284, "kind": "hover", "step": 4, "value": {"popout": "bluetooth", "edge": "bottom"}, "note": null}
+{"t": 77.629, "kind": "hover", "step": 4, "popout": "bluetooth", "edge": "bottom", "found": true, "detail": "found bluetooth at (863, 770.0)"}
+{"t": 77.629, "kind": "probe", "step": 5, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "bluetooth", "retry_s": 6}, "note": null}
+{"t": 77.867, "kind": "probe", "step": 6, "value": {"run": "qs ipc call debug dump | jq -r '.panels[] | select(.name == \"popouts\") | (.visible == true and .width > 0 and .height > 0)'", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 78.111, "kind": "screenshot", "step": 7, "value": "dock-popout-open", "note": null}
+{"t": 78.155, "kind": "pointer", "step": 8, "value": {"x": 0.713, "y": 0.7, "glide": 12}, "note": null}
+{"t": 78.462, "kind": "probe", "step": 9, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "bluetooth", "retry_s": 3}, "note": null}

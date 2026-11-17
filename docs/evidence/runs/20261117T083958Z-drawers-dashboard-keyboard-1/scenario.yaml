@@ -1,0 +1,19 @@
+id: drawers/dashboard-keyboard
+purpose: >-
+  SUPER+D (the product keybinding) opens the dashboard drawer and Escape
+  closes it again without leaving the drawer stuck open.
+instruction: Press Super+D to open the dashboard, look at it, then press Escape.
+steps:
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+  - note: The dashboard drawer reports open
+    probe: {run: "qs ipc call drawers state dashboard", equals: "true", retry_s: 3}
+  - screenshot: dashboard
+  - key: escape
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+proof:
+  - note: Escape closed the dashboard
+    probe: {run: "qs ipc call drawers state dashboard", equals: "false", retry_s: 3}
+  - screenshot: after-escape
+media: [dashboard]
+budget: {wall_s: 60}
