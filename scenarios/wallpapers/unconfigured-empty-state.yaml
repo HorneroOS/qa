@@ -11,7 +11,9 @@ setup:
     - 'rm -f "$HOME/.local/state/hornero/wallpaper/path"'
     - 'rm -f "$HOME/.local/state/dots/wallpaper/path"'
     - 'rm -f "$HOME/.cache/wal/wal"'
-    - 'pkill -x qs || true; sleep 1; hyprctl dispatch exec "$HOME/.local/bin/qa-shell.sh"; sleep 3'
+    - 'pkill -x qs || true; sleep 2'
+    - 'setsid -f nohup "$HOME/.local/bin/qa-shell.sh" >/dev/null 2>&1 < /dev/null'
+    - 'for _ in $(seq 1 60); do qs ipc call drawers list >/dev/null 2>&1 && exit 0; sleep 1; done; exit 1'
 instruction: Open the desktop with no wallpaper selected and inspect the background prompt.
 steps:
   - probe: {run: "qs ipc call wallpaper get", equals: "", retry_s: 3}

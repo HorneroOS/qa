@@ -7,6 +7,10 @@ purpose: >-
   product key ships and that is recorded (same pattern as
   recovery/doctor-honesty). PENDING until run in an approved KVM window.
 covers: [qa#81, shell#366, shell#379]
+setup:
+  commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
 instruction: Inspect the reported marketplace metadata for the example-clock fixture.
 proof:
   - note: Status carries the normalized static screenshot preview for the fixture

@@ -7,6 +7,10 @@ purpose: >-
   no other scenario depends on this guest afterwards. PENDING until run in
   an approved KVM window.
 covers: [qa#81]
+setup:
+  commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
 instruction: Remove the disposable desktop-note extension and confirm the desktop without it.
 proof:
   - note: Precondition - the disposable fixture starts installed and loaded

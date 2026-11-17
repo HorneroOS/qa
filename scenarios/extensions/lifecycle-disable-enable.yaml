@@ -7,6 +7,10 @@ purpose: >-
   probes (same pattern as agentic/shell-proposal-delegate). PENDING until
   run in an approved KVM window.
 covers: [qa#81, shell#380]
+setup:
+  commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
 instruction: Disable the example-clock extension, confirm the desktop without it, then enable it again.
 proof:
   - note: Precondition - the fixture starts loaded

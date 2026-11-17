@@ -7,6 +7,10 @@ purpose: >-
   working with no network involvement. PENDING until run in an approved
   KVM window.
 covers: [qa#81, shell#377]
+setup:
+  commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
 instruction: Open the dashboard on a fresh desktop whose weather was never configured and inspect the extension cards.
 steps:
   - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
@@ -18,7 +22,7 @@ proof:
   - note: Factory defaults leave the weather location empty (unavailable-service precondition)
     probe: {run: "jq -er '.services.weatherLocation == \"\"' /etc/xdg/hornero/shell.json", equals: "true"}
   - note: Local receipt-based discovery needs no network and reports no discovery error
-    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.discovered) \\(.discoveryError)\"'", equals: "true "}
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.discovered) \\(.discoveryError)\"'", equals: "true"}
   - note: Provider-reading fixture extensions loaded despite the unavailable service, none failed
     probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0"}
   - note: The shell remains alive with the service unavailable

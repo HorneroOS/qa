@@ -9,6 +9,9 @@ covers: [qa#81, shell#370, shell#371, shell#372]
 requires: {resolution: 1280x800}
 setup:
   layout: islands
+  commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
 instruction: Look at the bar extension on the top bar, then hover or focus it for its tooltip and open its popover if it has one.
 steps:
   - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}

@@ -5,6 +5,10 @@ purpose: >-
   surface and its dashboard card from one install, and the v1 package keeps
   working unchanged. PENDING until run in an approved KVM window.
 covers: [qa#81, shell#373]
+setup:
+  commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
 instruction: Open the dashboard Extensions tab and look at the multi-surface example next to the v1 example.
 steps:
   - key: super+d

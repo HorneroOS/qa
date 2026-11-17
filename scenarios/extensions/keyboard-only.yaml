@@ -10,6 +10,8 @@ purpose: >-
 covers: [qa#81, shell#370, shell#376, shell#378]
 setup:
   commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
     - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); d.setdefault(\"plugins\",{})[\"dashboardLayout\"]={}; json.dump(d, open(p,\"w\"))"'
 instruction: Using only the keyboard, open the dashboard, move focus into the extension cards, pin one, and leave.
 steps:
