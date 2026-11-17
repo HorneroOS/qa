@@ -1,0 +1,46 @@
+[
+  {
+    "t": 68.284,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r .class",
+    "ok": true,
+    "rc": 0,
+    "stdout": "kitty",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 3"
+  },
+  {
+    "t": 77.867,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bluetooth",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 78.111,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r '.panels[] | select(.name == \"popouts\") | (.visible == true and .width > 0 and .height > 0)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 6"
+  },
+  {
+    "t": 81.716,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": false,
+    "rc": 0,
+    "stdout": "",
+    "stderr": "",
+    "detail": "stdout '' != 'bluetooth'",
+    "where": "step 9"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "t": 37.96,
+    "kind": "probe",
+    "run": "pacman -Q polkit-gnome >/dev/null 2>&1 && echo installed",
+    "ok": true,
+    "rc": 0,
+    "stdout": "installed",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 38.286,
+    "kind": "probe",
+    "run": "test -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 && echo present",
+    "ok": true,
+    "rc": 0,
+    "stdout": "present",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 38.587,
+    "kind": "probe",
+    "run": "pgrep -u \"$(id -u)\" -f '[p]olkit-gnome-authentication-agent-1' >/dev/null && echo running",
+    "ok": false,
+    "rc": 1,
+    "stdout": "",
+    "stderr": "",
+    "detail": "stdout '' != 'running'",
+    "where": "proof 2"
+  },
+  {
+    "t": 38.892,
+    "kind": "probe",
+    "run": "grep -rl 'return polkit.Result.YES' /etc/polkit-1/rules.d /usr/share/polkit-1/rules.d 2>/dev/null | wc -l",
+    "ok": false,
+    "rc": 0,
+    "stdout": "4",
+    "stderr": "",
+    "detail": "stdout '4' != '0'",
+    "where": "proof 3"
+  }
+]

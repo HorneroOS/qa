@@ -1,0 +1,99 @@
+[
+  {
+    "t": 52.94,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.discovered) \\(.discoveryError)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "stdout 'true' != 'true '",
+    "where": "proof 0"
+  },
+  {
+    "t": 53.205,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .safeMode",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 53.481,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '.count >= 1'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "stdout 'false' != 'true'",
+    "where": "proof 2"
+  },
+  {
+    "t": 68.5,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.loaded) \\(.failed) \\([.plugins[] | select(.enabled and .installed)] | length)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0 0 0",
+    "stderr": "",
+    "detail": "stdout '0 0 0' does not match /^([1-9][0-9]*) 0 \\1$/",
+    "where": "proof 3"
+  },
+  {
+    "t": 78.96,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 4"
+  },
+  {
+    "t": 79.296,
+    "kind": "probe",
+    "run": "python3 -c \"import json,subprocess; cli=json.loads(subprocess.check_output(['horneroctl','plugin','list','--json'],text=True)); raw=cli['data']['plugins']; ids=sorted(p['id'] for p in (json.loads(raw) if isinstance(raw,str) else raw)); ipc=json.loads(subprocess.check_output(['qs','ipc','call','plugins','status'],text=True)); print(str(ids==sorted(p['id'] for p in ipc['plugins'])).lower())\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 5"
+  },
+  {
+    "t": 79.546,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '.budgets | \"\\(.slowLoadMs) \\(.churnAttempts) \\(.churnWindowMs)\"'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "2000 5 60000",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 6"
+  },
+  {
+    "t": 79.836,
+    "kind": "probe",
+    "run": "qs ipc call plugins status",
+    "ok": false,
+    "rc": 0,
+    "stdout": "{\"discovered\":true,\"loading\":false,\"discoveryError\":\"\",\"pluginsDir\":\"/home/hornero/.local/share/hornero/plugins\",\"safeMode\":false,\"safeModeEnv\":false,\"kit\":{\"level\":3,\"required\":3,\"compatible\":true,\"message\":\"\"},\"budgets\":{\"slowLoadMs\":2000,\"churnAttempts\":5,\"churnWindowMs\":60000},\"diagnosticsLog\":[],\"desktopNoRoom\":[],\"count\":0,\"loaded\":0,\"failed\":0,\"plugins\":[]}",
+    "stderr": "",
+    "detail": "stdout lacks 'example-clock'",
+    "where": "proof 7"
+  },
+  {
+    "t": 79.885,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-desktop-with-extensions.png"
+    ],
+    "where": "proof 8"
+  }
+]

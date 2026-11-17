@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T084334Z-gaming-gpu-driver-coherence-1",
+  "finished": "2026-11-17T08:44:13Z",
+  "wall_s": 39.034,
+  "verdict": "pass",
+  "class": null,
+  "regression": false,
+  "reason": "all proof checks passed",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "t": 88.619,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r .discovered",
+    "ok": false,
+    "rc": 5,
+    "stdout": "",
+    "stderr": "jq: parse error: Invalid numeric literal at line 1, column 3",
+    "detail": "stdout '' != 'true'",
+    "where": "step 0"
+  }
+]

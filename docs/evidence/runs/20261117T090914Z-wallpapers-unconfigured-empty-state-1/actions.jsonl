@@ -1,0 +1,8 @@
+{"t": 15.975, "kind": "ready", "serial": []}
+{"t": 36.487, "kind": "setup", "run": "horneroctl shell preset apply hornero-left --yes", "rc": 0, "stdout": "applied preset Hornero Left (hornero-left)", "stderr": ""}
+{"t": 36.78, "kind": "setup", "run": "rm -f \"$HOME/.local/state/hornero/wallpaper/path\"", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 37.067, "kind": "setup", "run": "rm -f \"$HOME/.local/state/dots/wallpaper/path\"", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 37.332, "kind": "setup", "run": "rm -f \"$HOME/.cache/wal/wal\"", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 41.602, "kind": "setup", "run": "pkill -x qs || true; sleep 1; hyprctl dispatch exec \"$HOME/.local/bin/qa-shell.sh\"; sleep 3", "rc": 0, "stdout": "error: 3 [string \"return hl.dispatch(exec /home/hornero/.local/...\"]:1: unexpected symbol near '.'\n\n \u2192 Note: dispatch in lua is a shorthand for hl.dispatch(...), your syntax might need to be updated.", "stderr": ""}
+{"t": 73.68, "kind": "tokens", "theme": "", "roles": 0}
+{"t": 73.68, "kind": "probe", "step": 0, "value": {"run": "qs ipc call wallpaper get", "equals": "", "retry_s": 3}, "note": null}

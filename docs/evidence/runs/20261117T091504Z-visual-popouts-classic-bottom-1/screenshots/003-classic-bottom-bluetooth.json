@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "003-classic-bottom-bluetooth.png",
+  "sha256": "72b543022e41984ab1756219a1b7e45be6436a4fedd88ddf9cbb5b39f90efa5d",
+  "run_id": "20261117T091504Z-visual-popouts-classic-bottom-1",
+  "scenario": "visual/popouts-classic-bottom",
+  "captured": "2026-11-17T09:16:46Z",
+  "t": 101.26,
+  "product": {
+    "shell_sha": "74619fab04951777b2bdba37c1b80e1d19cb66bc",
+    "config_sha": "76058860dc3631250a6cd913ddbf1271c0eebf88",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview45-9-g420c73c (420c73c)",
+    "horneroctl_sha256": "bea50d20f272e14fb1712b880c484c7dc65eb97381759b65f895e4808a700967"
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.3.4-arch1-2",
+    "qemu": "QEMU emulator version 11.1.3",
+    "image": "signal-s74619fa-c7605886-h420c73c.qcow2",
+    "outputs": 1,
+    "resolution": "1920x1080",
+    "captured_resolution": "1920x1080"
+  },
+  "step": 9
+}

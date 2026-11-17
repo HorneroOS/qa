@@ -1,0 +1,65 @@
+Welcome to Hyprland!
+
+
+                     YY    UJ
+                    YYY    UUJ
+                   XXXY    UUUU
+                  zXXXX    UUUUU
+                zzzzX        UUUUJ
+               cczzz          UUUUJ
+             vccccz            UUUUUJ
+            vvcccc              UUUUUJ
+           vvvvv                  UUUUJ
+          uuuvv                    UUUUJ
+         uuuuu                      UUUUU
+        nnnuu                        UUUUU
+       nnnnn                          YUUUU
+       xxnn                            YUUU
+       xxxn                            YYUU
+      xxxx                              YYUU
+      rxxx                              YYYY
+      rrrx                              YYYY
+       rrrx                            XXXY
+       rrrr                            XXXX
+        rrrr                          zzXX
+         rrrr                        zzzz
+          rrrrr                    ccczz
+           rrrrrx                vccccc
+             rrrrxxxx        uuvvvvvc
+                rrxxxxxxnnnnuuuuuv
+                    xxxxxnnnnu
+
+
+
+DEBUG ]: [CCompositor::bumpNofile] Old rlimit: soft -> 1024, hard -> 524288
+DEBUG ]: [CCompositor::bumpNofile] New rlimit: soft -> 524288, hard -> 524288
+DEBUG ]: [CCompositor::initManagers] Creating the EventLoopManager!
+DEBUG ]: [CCompositor::initManagers] Creating the KeybindManager!
+DEBUG ]: [CCompositor::initManagers] Creating the AnimationManager!
+DEBUG ]: [CCompositor::initManagers] Creating the DynamicPermissionManager!
+DEBUG ]: [CCompositor::initManagers] Creating the MonitorState!
+DEBUG ]: [CCompositor::initManagers] Creating the WorkspaceState!
+DEBUG ]: [CCompositor::initManagers] Creating the ConfigManager!
+DEBUG ]: [Config::initConfigManager] [cfg] Regular config at /home/hornero/.config/hypr/hyprland.lua
+DEBUG ]: [CCompositor::initManagers] Creating the Error Overlay!
+DEBUG ]: [CCompositor::initManagers] Creating the LayoutManager!
+DEBUG ]: [CCompositor::initManagers] Creating the TokenManager!
+DEBUG ]: [Config::Lua::CConfigManager::postConfigReload] Disabling stdout logs (debug.enable_stdout_logs = 0). Further logs will be written to /run/user/1000/hypr/11cbc6c577b84ffb1edf4df3fc5b6128c3ae6947_1794913335_1136225385/hyprland.log
+DEBUG ]: [CCompositor::initManagers] Creating the PointerManager!
+DEBUG ]: [CCompositor::initManagers] Creating the AsyncResourceGatherer!
+MESA-EGL: warning: egl: failed to create dri2 screen
+MESA-EGL: warning: egl: failed to create dri2 screen
+MESA-EGL: warning: NEEDS EXTENSION: falling back to kms_swrast
+[1;32mDEBUG [0mfrom start-hyprland ]: got an event from hyprland
+Refusing to try glamor on llvmpipe
+XWAYLAND: Disabling GLAMOR support
+EGL setup failed, disabling glamor
+Failed to initialize glamor, falling back to sw
+The XKEYBOARD keymap compiler (xkbcomp) reports:
+> Warning:          Unsupported maximum keycode 709, clipping.
+>                   X11 cannot support keycodes above 255.
+> Warning:          Virtual modifier Hyper multiply defined
+>                   Using 0, ignoring 0
+> Warning:          Virtual modifier ScrollLock multiply defined
+>                   Using 0, ignoring 0
+Errors from xkbcomp are not fatal to the X server

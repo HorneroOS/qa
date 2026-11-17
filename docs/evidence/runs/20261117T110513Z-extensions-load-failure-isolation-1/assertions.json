@@ -1,0 +1,77 @@
+[
+  {
+    "t": 51.824,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-broken\" and .state == \"failed\")] | length'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 0"
+  },
+  {
+    "t": 62.57,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-clock\" and .state == \"loaded\")] | length'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 1"
+  },
+  {
+    "t": 62.816,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '(.diagnosticsLog | length <= 50) and ([.diagnosticsLog[] | select(.id == \"example-broken\")] | length >= 1)'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "stdout 'false' != 'true'",
+    "where": "proof 2"
+  },
+  {
+    "t": 63.135,
+    "kind": "probe",
+    "run": "python3 -c \"import json,re,subprocess; s=json.loads(subprocess.check_output(['qs','ipc','call','plugins','status'],text=True)); bad=[e for e in s['diagnosticsLog'] if re.search(r'(token|password|secret|api[_-]?key)\\s*[=:]\\s*(?!<redacted>)\\S+', e.get('detail',''), re.I) or re.search(r'Bearer\\s+(?!<redacted>)\\S+', e.get('detail',''), re.I)]; print(str(not bad).lower())\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 63.384,
+    "kind": "probe",
+    "run": "qs ipc call drawers list",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bar\nosd\nsession\nlauncher\ndashboard\nutilities\nsidebar\nlayoutPicker",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  },
+  {
+    "t": 63.636,
+    "kind": "probe",
+    "run": "qs ipc call plugins status",
+    "ok": false,
+    "rc": 0,
+    "stdout": "{\"discovered\":true,\"loading\":false,\"discoveryError\":\"\",\"pluginsDir\":\"/home/hornero/.local/share/hornero/plugins\",\"safeMode\":false,\"safeModeEnv\":false,\"kit\":{\"level\":3,\"required\":3,\"compatible\":true,\"message\":\"\"},\"budgets\":{\"slowLoadMs\":2000,\"churnAttempts\":5,\"churnWindowMs\":60000},\"diagnosticsLog\":[],\"desktopNoRoom\":[],\"count\":0,\"loaded\":0,\"failed\":0,\"plugins\":[]}",
+    "stderr": "",
+    "detail": "stdout lacks 'example-broken'",
+    "where": "proof 5"
+  },
+  {
+    "t": 63.689,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-desktop-despite-broken-extension.png"
+    ],
+    "where": "proof 6"
+  }
+]

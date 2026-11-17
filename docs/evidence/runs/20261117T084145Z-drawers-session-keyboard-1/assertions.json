@@ -1,0 +1,44 @@
+[
+  {
+    "t": 38.828,
+    "kind": "probe",
+    "run": "qs ipc call drawers state session",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 2"
+  },
+  {
+    "t": 44.489,
+    "kind": "probe",
+    "run": "qs ipc call drawers state session",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 44.723,
+    "kind": "probe",
+    "run": "qs ipc call lock isLocked",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 44.768,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-after-escape.png"
+    ],
+    "where": "proof 2"
+  }
+]

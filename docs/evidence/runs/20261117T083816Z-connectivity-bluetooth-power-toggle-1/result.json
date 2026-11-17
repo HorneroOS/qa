@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T083816Z-connectivity-bluetooth-power-toggle-1",
+  "finished": "2026-11-17T08:38:56Z",
+  "wall_s": 40.164,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '' != 'fail'; proof 1: stdout 'false' != 'fail'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

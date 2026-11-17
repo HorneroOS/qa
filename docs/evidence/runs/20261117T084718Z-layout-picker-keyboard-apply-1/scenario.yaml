@@ -1,0 +1,27 @@
+id: layout-picker/keyboard-apply
+purpose: >-
+  The Layout Picker starts keyboard focus at the active layout even when the
+  stationary pointer is over another card; arrows move in catalogue order and
+  Enter applies the focused preset.
+covers: [shell#93, shell#133]
+setup:
+  layout: classic-bottom
+instruction: >-
+  Open the Layout Picker with Super+Shift+B, press Right once, and press Enter
+  to apply Classic Top, the next catalogue entry after Classic Bottom.
+steps:
+  - probe: {run: "horneroctl shell preset current", contains: "classic-bottom", retry_s: 0}
+  - key: super+shift+b
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+  - probe: {run: "qs ipc call drawers state layoutPicker", equals: "true", retry_s: 3}
+  - note: The starting preset is in the catalogue the picker lists
+    probe: {run: "horneroctl shell preset list", contains: "hornero-left:"}
+  - key: right
+  - wait: {changed: true, stable: 0.3, timeout: 3}
+  - key: enter
+  - wait: {changed: true, stable: 1.0, timeout: 10}
+proof:
+  - note: One Right from Classic Bottom applies Classic Top
+    probe: {run: "horneroctl shell preset current", contains: classic-top, retry_s: 5}
+  - screenshot: applied
+budget: {wall_s: 90}

@@ -1,0 +1,4 @@
+{"t": 16.433, "kind": "ready", "serial": []}
+{"t": 37.242, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-night --yes", "rc": 0, "stdout": "theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)", "stderr": ""}
+{"t": 37.545, "kind": "setup", "run": "horneroctl shell preset apply cockpit --yes", "rc": 0, "stdout": "applied preset Cockpit (cockpit)", "stderr": ""}
+{"t": 37.946, "kind": "setup", "run": "export HORNERO_PLUGINS_CATALOG_URL=$HOME/catalog; for id in agenda audio-deck calendar moon-phase network-scope system-insight; do horneroctl plugin catalog install hornero-$id --yes; done", "rc": 1, "stdout": "catalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL\ncatalogue source must be an HTTPS Git URL", "stderr": ""}

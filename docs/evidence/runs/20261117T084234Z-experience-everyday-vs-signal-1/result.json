@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T084234Z-experience-everyday-vs-signal-1",
+  "finished": "2026-11-17T08:43:33Z",
+  "wall_s": 59.014,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "step 4 probe failed: stdout 'everyday' != 'signal'",
+  "actions": 1,
+  "driver_end": null,
+  "review": null
+}

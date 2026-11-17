@@ -1,0 +1,13 @@
+[
+  {
+    "t": 52.48,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.enabled and .installed)] | length >= 3'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "stdout 'false' != 'true'",
+    "where": "step 0"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "t": 42.423,
+    "kind": "probe",
+    "run": "qs ipc call drawers state dashboard",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 42.475,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-after-quick-escape.png"
+    ],
+    "where": "proof 1"
+  }
+]

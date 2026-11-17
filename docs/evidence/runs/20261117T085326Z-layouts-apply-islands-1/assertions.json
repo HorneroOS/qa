@@ -1,0 +1,33 @@
+[
+  {
+    "t": 68.072,
+    "kind": "probe",
+    "run": "horneroctl shell preset current",
+    "ok": true,
+    "rc": 0,
+    "stdout": "islands",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 68.332,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | .edge] | unique'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[\"top\"]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 68.378,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-layout-islands.png"
+    ],
+    "where": "proof 2"
+  }
+]

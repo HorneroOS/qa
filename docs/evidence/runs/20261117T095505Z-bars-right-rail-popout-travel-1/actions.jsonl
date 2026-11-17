@@ -1,0 +1,15 @@
+{"t": 15.456, "kind": "ready", "serial": []}
+{"t": 35.928, "kind": "setup", "run": "horneroctl shell preset apply hornero-right --yes", "rc": 0, "stdout": "applied preset Hornero Right (hornero-right)", "stderr": ""}
+{"t": 66.988, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 66.988, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 67.09, "kind": "type", "step": 1, "value": "kitty", "note": null}
+{"t": 67.336, "kind": "key", "step": 2, "value": "enter", "note": null}
+{"t": 67.441, "kind": "probe", "step": 3, "value": {"run": "hyprctl activewindow -j | jq -r .class", "equals": "kitty", "retry_s": 10}, "note": null}
+{"t": 68.622, "kind": "hover", "step": 4, "value": {"popout": "bluetooth", "edge": "right"}, "note": null}
+{"t": 80.696, "kind": "hover", "step": 4, "popout": "bluetooth", "edge": "right", "found": true, "detail": "found bluetooth at (1257.0, 688)"}
+{"t": 80.696, "kind": "probe", "step": 5, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "bluetooth", "retry_s": 6}, "note": null}
+{"t": 80.963, "kind": "probe", "step": 6, "value": {"run": "qs ipc call debug dump | jq -r '.panels[] | select(.name == \"popouts\") | (.visible == true and .width > 0 and .height > 0)'", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 81.239, "kind": "screenshot", "step": 7, "value": "right-rail-popout-open", "note": null}
+{"t": 81.286, "kind": "pointer", "step": 8, "value": {"x": 0.85, "y": 0.875, "glide": 12}, "note": null}
+{"t": 81.613, "kind": "probe", "step": 9, "value": {"run": "qs ipc call debug dump | jq -r .popout.name", "equals": "bluetooth", "retry_s": 3}, "note": null}
+{"t": 81.887, "kind": "probe", "step": 10, "value": {"run": "hyprctl activewindow -j | jq -r .class", "equals": "kitty"}, "note": null}

@@ -12,7 +12,7 @@ steps:
   - type: kitty
   - key: enter
   - probe: {run: "hyprctl activewindow -j | jq -r .class", equals: kitty, retry_s: 10}
-  - pointer: {x: 0.976, y: 0.875, glide: 8}
+  - hover: {popout: bluetooth, edge: right}
   - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: bluetooth, retry_s: 6}
   - probe:
       run: >-

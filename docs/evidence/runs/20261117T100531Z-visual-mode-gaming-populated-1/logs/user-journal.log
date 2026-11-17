@@ -1,0 +1,204 @@
+Nov 17 10:05:43 hornero-vm systemd[403]: Queued start job for default target Main User Target.
+Nov 17 10:05:43 hornero-vm systemd[403]: Created slice User Application Slice.
+Nov 17 10:05:43 hornero-vm systemd[403]: Reached target Paths.
+Nov 17 10:05:43 hornero-vm systemd[403]: Reached target Timers.
+Nov 17 10:05:43 hornero-vm systemd[403]: Starting D-Bus User Message Bus Socket...
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on GnuPG network certificate management daemon.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on GnuPG cryptographic agent and passphrase cache (access for web browsers).
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on GnuPG cryptographic agent and passphrase cache (restricted).
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on GnuPG cryptographic agent (ssh-agent emulation).
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on GnuPG cryptographic agent and passphrase cache.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on GnuPG public key management service.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on p11-kit server.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on PipeWire PulseAudio.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on PipeWire Multimedia System Sockets.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on Query the User Interactively for a Password.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on Disk Image Download Service Socket.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on Journal Log Access Socket.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on Virtual Machine and Container Registration Service Socket.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on Simple File System Backed Storage Provider.
+Nov 17 10:05:43 hornero-vm systemd[403]: Listening on D-Bus User Message Bus Socket.
+Nov 17 10:05:43 hornero-vm systemd[403]: Reached target Sockets.
+Nov 17 10:05:43 hornero-vm systemd[403]: Reached target Basic System.
+Nov 17 10:05:43 hornero-vm systemd[403]: Reached target Main User Target.
+Nov 17 10:05:43 hornero-vm systemd[403]: Startup finished in 60ms.
+Nov 17 10:05:43 hornero-vm sshd-session[413]: Received disconnect from 10.0.2.2 port 46008:11: disconnected by user
+Nov 17 10:05:43 hornero-vm sshd-session[413]: Disconnected from user hornero 10.0.2.2 port 46008
+Nov 17 10:05:43 hornero-vm sshd-session[447]: Received disconnect from 10.0.2.2 port 46016:11: disconnected by user
+Nov 17 10:05:43 hornero-vm sshd-session[447]: Disconnected from user hornero 10.0.2.2 port 46016
+Nov 17 10:05:44 hornero-vm sshd-session[465]: Received disconnect from 10.0.2.2 port 46018:11: disconnected by user
+Nov 17 10:05:44 hornero-vm sshd-session[465]: Disconnected from user hornero 10.0.2.2 port 46018
+Nov 17 10:05:44 hornero-vm systemd[403]: Created slice User Core Session Slice.
+Nov 17 10:05:44 hornero-vm systemd[403]: Starting D-Bus User Message Bus...
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Service file '/home/hornero/.local/share/dbus-1/services/fr.emersion.mako.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Service file '/home/hornero/.local/share/dbus-1/services/org.erikreider.swaync.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Ignoring duplicate name 'org.freedesktop.Notifications' in service file '/home/hornero/.local/share/dbus-1/services/org.erikreider.swaync.service'
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Service file '/home/hornero/.local/share/dbus-1/services/org.knopwob.dunst.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Ignoring duplicate name 'org.freedesktop.Notifications' in service file '/home/hornero/.local/share/dbus-1/services/org.knopwob.dunst.service'
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Service file '/usr/share/dbus-1/services/org.knopwob.dunst.service' is not named after the D-Bus name 'org.freedesktop.Notifications'.
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Ignoring duplicate name 'org.freedesktop.Notifications' in service file '/usr/share/dbus-1/services/org.knopwob.dunst.service'
+Nov 17 10:05:44 hornero-vm systemd[403]: Started D-Bus User Message Bus.
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Policy to allow eavesdropping in /usr/share/dbus-1/session.conf +31: Eavesdropping is deprecated and ignored
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Policy to allow eavesdropping in /usr/share/dbus-1/session.conf +33: Eavesdropping is deprecated and ignored
+Nov 17 10:05:44 hornero-vm dbus-broker-launch[486]: Ready
+Nov 17 10:05:44 hornero-vm systemd[403]: Starting User preferences database...
+Nov 17 10:05:44 hornero-vm systemd[403]: Started User preferences database.
+Nov 17 10:05:44 hornero-vm systemd[403]: Starting Portal service...
+Nov 17 10:05:44 hornero-vm systemd[403]: Starting sandboxed app permission store...
+Nov 17 10:05:44 hornero-vm systemd[403]: Started sandboxed app permission store.
+Nov 17 10:05:44 hornero-vm systemd[403]: Starting flatpak document portal service...
+Nov 17 10:05:44 hornero-vm systemd[403]: Started flatpak document portal service.
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: Failed to load RealtimeKit property: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name is not activatable
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: The location portal requires an access impl
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: The camera portal requires an access impl
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: The screenshot portal requires an access impl
+Nov 17 10:05:44 hornero-vm systemd[403]: Starting Portal service (Hyprland implementation)...
+Nov 17 10:05:44 hornero-vm systemd[403]: Started Portal service (Hyprland implementation).
+Nov 17 10:05:44 hornero-vm systemd[403]: Reached target Session services which should run early before the graphical session is brought up.
+Nov 17 10:05:44 hornero-vm systemd[403]: Reached target Current graphical user session.
+Nov 17 10:05:44 hornero-vm systemd[403]: Reached target Hyprland session.
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] Initializing xdph...
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] XDG_CURRENT_DESKTOP set to Hyprland
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] Gathering exported interfaces
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wl_seat (ver 9)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wl_data_device_manager (ver 3)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wl_compositor (ver 6)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wl_subcompositor (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wl_shm (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_viewporter (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_tearing_control_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_fractional_scale_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zxdg_output_manager_v1 (ver 3)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_cursor_shape_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_idle_inhibit_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_relative_pointer_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zxdg_decoration_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_alpha_modifier_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_gamma_control_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: ext_foreign_toplevel_list_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_pointer_gestures_v1 (ver 3)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_foreign_toplevel_manager_v1 (ver 3)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] [toplevel] (activate) locks: 1
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_keyboard_shortcuts_inhibit_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_text_input_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_text_input_manager_v3 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_pointer_constraints_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_output_power_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: xdg_activation_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: ext_idle_notifier_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_lock_notifier_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: ext_session_lock_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_input_method_manager_v2 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_virtual_keyboard_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_virtual_pointer_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_output_manager_v1 (ver 4)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: org_kde_kwin_server_decoration_manager (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_focus_grab_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_tablet_manager_v2 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_layer_shell_v1 (ver 5)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_presentation (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: xdg_wm_base (ver 7)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_data_control_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwp_primary_selection_device_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: xwayland_shell_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_toplevel_mapping_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] [toplevel mapping] registered manager
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_global_shortcuts_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] [globalshortcuts] registered
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: xdg_wm_dialog_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_single_pixel_buffer_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_security_context_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_ctm_control_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_input_capture_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] [input-capture] initializing input capture portal
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] [input-capture] init successful
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_surface_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_content_type_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: xdg_toplevel_tag_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: xdg_system_bell_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: vicinae_hotkey_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: xx_hotkey_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: ext_workspace_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: ext_data_control_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_pointer_warp_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_fifo_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zxdg_exporter_v2 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zxdg_importer_v2 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: ext_background_effect_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: wp_commit_timing_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: zwlr_screencopy_manager_v1 (ver 3)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] [pipewire] connected
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG] [screencopy] init successful
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: hyprland_toplevel_export_manager_v1 (ver 2)
+Nov 17 10:05:44 hornero-vm xdg-desktop-portal-hyprland[523]: [LOG]  | Got interface: ext_output_image_capture_source_manager_v1 (ver 1)
+Nov 17 10:05:44 hornero-vm systemd[403]: Started PipeWire Multimedia Service.
+Nov 17 10:05:44 hornero-vm systemd[403]: Started Multimedia Service Session Manager.
+Nov 17 10:05:44 hornero-vm pipewire[534]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 10:05:44 hornero-vm pipewire[534]: mod.rt: RTKit does not give us MaxRealtimePriority, using 1
+Nov 17 10:05:44 hornero-vm pipewire[534]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 10:05:44 hornero-vm pipewire[534]: mod.rt: RTKit does not give us MinNiceLevel, using 0
+Nov 17 10:05:44 hornero-vm pipewire[534]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 10:05:44 hornero-vm pipewire[534]: mod.rt: RTKit does not give us RTTimeUSecMax, using -1
+Nov 17 10:05:44 hornero-vm wireplumber[535]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 10:05:44 hornero-vm wireplumber[535]: mod.rt: RTKit does not give us MaxRealtimePriority, using 1
+Nov 17 10:05:44 hornero-vm wireplumber[535]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 10:05:44 hornero-vm wireplumber[535]: mod.rt: RTKit does not give us MinNiceLevel, using 0
+Nov 17 10:05:44 hornero-vm wireplumber[535]: mod.rt: RTKit error: org.freedesktop.DBus.Error.ServiceUnknown
+Nov 17 10:05:44 hornero-vm wireplumber[535]: mod.rt: RTKit does not give us RTTimeUSecMax, using -1
+Nov 17 10:05:44 hornero-vm systemd[403]: Started Portal service.
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: ../glib/gobject/gtype.c:4158: type id '2' is invalid
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: can't peek value table for type '<unknown>' which is not currently referenced
+Nov 17 10:05:44 hornero-vm /usr/lib/xdg-desktop-portal[501]: g_value_unset: assertion 'value_table' failed
+Nov 17 10:05:44 hornero-vm wireplumber[535]: default: Failed to get percentage from UPower: org.freedesktop.DBus.Error.NameHasNoOwner
+Nov 17 10:05:44 hornero-vm wireplumber[535]: spa.bluez5: BlueZ system service is not available
+Nov 17 10:05:44 hornero-vm wireplumber[535]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded: No such file or directory
+Nov 17 10:05:44 hornero-vm wireplumber[535]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not be supported.
+Nov 17 10:05:47 hornero-vm /usr/lib/xdg-desktop-portal[501]: Realtime error: Could not map tid 688 of pid 496: Process ids could not be found: 688
+Nov 17 10:05:47 hornero-vm sshd-session[563]: Received disconnect from 10.0.2.2 port 46026:11: disconnected by user
+Nov 17 10:05:47 hornero-vm sshd-session[563]: Disconnected from user hornero 10.0.2.2 port 46026
+Nov 17 10:06:08 hornero-vm sshd-session[810]: Received disconnect from 10.0.2.2 port 49300:11: disconnected by user
+Nov 17 10:06:08 hornero-vm sshd-session[810]: Disconnected from user hornero 10.0.2.2 port 49300
+Nov 17 10:06:08 hornero-vm sshd-session[860]: Received disconnect from 10.0.2.2 port 49312:11: disconnected by user
+Nov 17 10:06:08 hornero-vm sshd-session[860]: Disconnected from user hornero 10.0.2.2 port 49312
+Nov 17 10:06:08 hornero-vm sshd-session[877]: Received disconnect from 10.0.2.2 port 49324:11: disconnected by user
+Nov 17 10:06:08 hornero-vm sshd-session[877]: Disconnected from user hornero 10.0.2.2 port 49324
+Nov 17 10:06:12 hornero-vm sshd-session[890]: Received disconnect from 10.0.2.2 port 49332:11: disconnected by user
+Nov 17 10:06:12 hornero-vm sshd-session[890]: Disconnected from user hornero 10.0.2.2 port 49332
+Nov 17 10:06:12 hornero-vm sshd-session[913]: Received disconnect from 10.0.2.2 port 36312:11: disconnected by user
+Nov 17 10:06:12 hornero-vm sshd-session[913]: Disconnected from user hornero 10.0.2.2 port 36312
+Nov 17 10:06:16 hornero-vm sshd-session[929]: Received disconnect from 10.0.2.2 port 36318:11: disconnected by user
+Nov 17 10:06:16 hornero-vm sshd-session[929]: Disconnected from user hornero 10.0.2.2 port 36318
+Nov 17 10:06:17 hornero-vm systemd[403]: Started kitty child process: 984 launched by: 972.
+Nov 17 10:06:18 hornero-vm systemd[403]: Started kitty child process: 1016 launched by: 1003.
+Nov 17 10:06:24 hornero-vm sshd-session[960]: Received disconnect from 10.0.2.2 port 36332:11: disconnected by user
+Nov 17 10:06:24 hornero-vm sshd-session[960]: Disconnected from user hornero 10.0.2.2 port 36332
+Nov 17 10:06:30 hornero-vm sshd-session[1075]: Received disconnect from 10.0.2.2 port 44710:11: disconnected by user
+Nov 17 10:06:30 hornero-vm sshd-session[1075]: Disconnected from user hornero 10.0.2.2 port 44710
+Nov 17 10:06:31 hornero-vm sshd-session[1088]: Received disconnect from 10.0.2.2 port 44726:11: disconnected by user
+Nov 17 10:06:31 hornero-vm sshd-session[1088]: Disconnected from user hornero 10.0.2.2 port 44726
+Nov 17 10:06:34 hornero-vm sshd-session[1113]: Received disconnect from 10.0.2.2 port 43216:11: disconnected by user
+Nov 17 10:06:34 hornero-vm sshd-session[1113]: Disconnected from user hornero 10.0.2.2 port 43216
+Nov 17 10:06:37 hornero-vm sshd-session[1135]: Received disconnect from 10.0.2.2 port 43226:11: disconnected by user
+Nov 17 10:06:37 hornero-vm sshd-session[1135]: Disconnected from user hornero 10.0.2.2 port 43226
+Nov 17 10:06:38 hornero-vm sshd-session[1152]: Received disconnect from 10.0.2.2 port 43236:11: disconnected by user
+Nov 17 10:06:38 hornero-vm sshd-session[1152]: Disconnected from user hornero 10.0.2.2 port 43236
+Nov 17 10:06:38 hornero-vm sshd-session[1166]: Received disconnect from 10.0.2.2 port 43244:11: disconnected by user
+Nov 17 10:06:38 hornero-vm sshd-session[1166]: Disconnected from user hornero 10.0.2.2 port 43244
+Nov 17 10:06:38 hornero-vm sshd-session[1181]: Received disconnect from 10.0.2.2 port 43246:11: disconnected by user
+Nov 17 10:06:38 hornero-vm sshd-session[1181]: Disconnected from user hornero 10.0.2.2 port 43246
+Nov 17 10:06:39 hornero-vm sshd-session[1199]: Received disconnect from 10.0.2.2 port 43254:11: disconnected by user
+Nov 17 10:06:39 hornero-vm sshd-session[1199]: Disconnected from user hornero 10.0.2.2 port 43254
+Nov 17 10:06:39 hornero-vm sshd-session[1215]: Received disconnect from 10.0.2.2 port 43264:11: disconnected by user
+Nov 17 10:06:39 hornero-vm sshd-session[1215]: Disconnected from user hornero 10.0.2.2 port 43264
+Nov 17 10:06:39 hornero-vm sshd-session[1229]: Received disconnect from 10.0.2.2 port 43278:11: disconnected by user
+Nov 17 10:06:39 hornero-vm sshd-session[1229]: Disconnected from user hornero 10.0.2.2 port 43278
+Nov 17 10:06:40 hornero-vm sshd-session[1245]: Received disconnect from 10.0.2.2 port 43280:11: disconnected by user
+Nov 17 10:06:40 hornero-vm sshd-session[1245]: Disconnected from user hornero 10.0.2.2 port 43280
+Nov 17 10:06:40 hornero-vm sshd-session[1260]: Received disconnect from 10.0.2.2 port 43294:11: disconnected by user
+Nov 17 10:06:40 hornero-vm sshd-session[1260]: Disconnected from user hornero 10.0.2.2 port 43294
+Nov 17 10:06:40 hornero-vm sshd-session[1274]: Received disconnect from 10.0.2.2 port 43296:11: disconnected by user
+Nov 17 10:06:40 hornero-vm sshd-session[1274]: Disconnected from user hornero 10.0.2.2 port 43296
+Nov 17 10:06:40 hornero-vm sshd-session[1287]: Received disconnect from 10.0.2.2 port 43300:11: disconnected by user
+Nov 17 10:06:40 hornero-vm sshd-session[1287]: Disconnected from user hornero 10.0.2.2 port 43300

@@ -1,0 +1,63 @@
+{
+  "schema": "hornero.qa.run/1",
+  "run_id": "20261117T105400Z-extensions-bar-edge-left-1",
+  "started": "2026-11-17T10:54:00Z",
+  "scenario": "extensions/bar-edge-left",
+  "covers": [
+    "qa#81",
+    "shell#370",
+    "shell#371",
+    "shell#372"
+  ],
+  "instruction": "Look at the bar extension on the left rail, then hover or focus it for its tooltip and open its popover if it has one.",
+  "attempt": 1,
+  "image_sha256": "411aa49ab4454a581d76148313b7905c455798defb5bc392267e0f63b71daa94",
+  "product": {
+    "shell_sha": "74619fab04951777b2bdba37c1b80e1d19cb66bc",
+    "config_sha": "76058860dc3631250a6cd913ddbf1271c0eebf88",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview45-9-g420c73c (420c73c)",
+    "horneroctl_sha256": "bea50d20f272e14fb1712b880c484c7dc65eb97381759b65f895e4808a700967"
+  },
+  "image": {
+    "schema": "hornero.qa.image/1",
+    "name": "signal-s74619fa-c7605886-h420c73c",
+    "built": "2026-11-17T07:51:04Z",
+    "base": "arch-provisioned-yay-20261116.qcow2",
+    "product": {
+      "shell_sha": "74619fab04951777b2bdba37c1b80e1d19cb66bc",
+      "config_sha": "76058860dc3631250a6cd913ddbf1271c0eebf88",
+      "horneroctl": "horneroctl horneroctl-v0.2.0-preview45-9-g420c73c (420c73c)",
+      "horneroctl_sha256": "bea50d20f272e14fb1712b880c484c7dc65eb97381759b65f895e4808a700967"
+    },
+    "compositor": "hyprland",
+    "builder_mem_mb": 3072,
+    "builder_cpus": 3,
+    "runtime_packages": [
+      "papirus-icon-theme",
+      "qt6ct",
+      "dunst",
+      "libnotify",
+      "jq",
+      "hyprlock",
+      "gtk3",
+      "ttf-ibm-plex"
+    ],
+    "compositor_packages": [],
+    "aur_runtime_packages": [],
+    "catalogues": {
+      "shell_presets": "user catalogue seeded from shell presets/",
+      "themes": "hornero-config system package; user copies removed",
+      "wallpapers": "hornero-config system package; user copies removed"
+    }
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.3.4-arch1-2",
+    "qemu": "QEMU emulator version 11.1.3",
+    "image": "signal-s74619fa-c7605886-h420c73c.qcow2",
+    "outputs": 1,
+    "resolution": "1280x800"
+  }
+}

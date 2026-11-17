@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T110203Z-extensions-keyboard-only-1",
+  "finished": "2026-11-17T11:03:29Z",
+  "wall_s": 86.779,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '0' != '1'; proof 2: stdout 'false 0' != 'true 0'",
+  "actions": 9,
+  "driver_end": null,
+  "review": null
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "t": 37.691,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys;print('vulkan-icd' in json.load(sys.stdin)['data'])\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 37.979,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys;print('vulkan-32bit-loader' in json.load(sys.stdin)['data'])\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 38.242,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys,os;d=json.load(sys.stdin)['data'];reg=os.path.isdir('/usr/share/vulkan/icd.d') and len(os.listdir('/usr/share/vulkan/icd.d'))>0;print(d['vulkan-icd']=='ok' if reg else d['vulkan-icd']=='fail')\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 38.495,
+    "kind": "probe",
+    "run": "command -v vulkaninfo >/dev/null && echo present || echo absent",
+    "ok": false,
+    "rc": 0,
+    "stdout": "absent",
+    "stderr": "",
+    "detail": "stdout 'absent' != 'present'",
+    "where": "proof 3"
+  }
+]

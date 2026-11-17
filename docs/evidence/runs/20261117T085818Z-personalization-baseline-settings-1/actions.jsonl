@@ -1,0 +1,20 @@
+{"t": 16.43, "kind": "ready", "serial": []}
+{"t": 37.108, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 37.108, "kind": "key", "step": 0, "value": "ctrl+space", "note": null}
+{"t": 37.213, "kind": "wait", "step": 1, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 45.41, "kind": "wait_result", "step": 1, "ok": false}
+{"t": 45.41, "kind": "type", "step": 2, "value": ">Settings", "note": null}
+{"t": 45.838, "kind": "wait", "step": 3, "value": {"stable": 0.5, "timeout": 8}, "note": null}
+{"t": 53.934, "kind": "wait_result", "step": 3, "ok": false}
+{"t": 53.934, "kind": "screenshot", "step": 4, "value": "launcher-settings-search", "note": null}
+{"t": 53.991, "kind": "key", "step": 5, "value": "enter", "note": null}
+{"t": 54.092, "kind": "probe", "step": 6, "value": {"run": "hyprctl clients -j | jq -r 'any(.[]; .title | startswith(\"Hornero Settings\"))'", "equals": "true", "retry_s": 10}, "note": null}
+{"t": 54.594, "kind": "screenshot", "step": 7, "value": "settings-overview", "note": null}
+{"t": 54.651, "kind": "pointer", "step": 8, "value": {"x": 0.116, "y": 0.46, "click": "left"}, "note": null}
+{"t": 54.797, "kind": "probe", "step": 9, "value": {"run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", "equals": "Hornero Settings - Appearance", "retry_s": 5}, "note": null}
+{"t": 55.103, "kind": "wait", "step": 10, "value": {"stable": 1.5, "timeout": 8}, "note": null}
+{"t": 60.308, "kind": "wait_result", "step": 10, "ok": true}
+{"t": 60.308, "kind": "screenshot", "step": 11, "value": "appearance-overview", "note": null}
+{"t": 60.367, "kind": "key", "step": 12, "value": "escape", "note": null}
+{"t": 60.475, "kind": "wait", "step": 13, "value": {"changed": true, "stable": 0.4, "timeout": 5}, "note": null}
+{"t": 65.502, "kind": "wait_result", "step": 13, "ok": false}

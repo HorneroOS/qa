@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T090340Z-regressions-shell-24-lock-after-hyprlock-1",
+  "finished": "2026-11-17T09:04:34Z",
+  "wall_s": 53.888,
+  "verdict": "fail",
+  "class": "product_crash",
+  "regression": true,
+  "reason": "probe qs ipc call lock isLocked broke its connection and the shell died",
+  "actions": 1,
+  "driver_end": null,
+  "review": null
+}

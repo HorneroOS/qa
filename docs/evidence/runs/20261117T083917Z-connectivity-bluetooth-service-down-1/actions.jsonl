@@ -1,0 +1,2 @@
+{"t": 16.523, "kind": "ready", "serial": []}
+{"t": 37.057, "kind": "setup", "run": "systemctl stop bluetooth.service", "rc": 1, "stdout": "", "stderr": "Failed to stop bluetooth.service: Access denied as the requested operation requires interactive authentication. However, interactive authentication has not been enabled by the calling program.\nSee system logs and 'systemctl status bluetooth.service' for details."}

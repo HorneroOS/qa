@@ -1,0 +1,55 @@
+[
+  {
+    "t": 70.344,
+    "kind": "probe",
+    "run": "qs ipc call drawers state dashboard",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 2"
+  },
+  {
+    "t": 83.391,
+    "kind": "probe",
+    "run": "python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.config/hornero/shell.json'))); print(len(d['plugins']['dashboardLayout'].get('pinned',[])))\"",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 0"
+  },
+  {
+    "t": 83.691,
+    "kind": "probe",
+    "run": "qs ipc call drawers state dashboard",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 83.955,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false 0",
+    "stderr": "",
+    "detail": "stdout 'false 0' != 'true 0'",
+    "where": "proof 2"
+  },
+  {
+    "t": 84.001,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-after-escape.png"
+    ],
+    "where": "proof 3"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T105649Z-extensions-bar-edge-top-1",
+  "finished": "2026-11-17T10:58:14Z",
+  "wall_s": 84.797,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 2: stdout 'false' != 'true'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

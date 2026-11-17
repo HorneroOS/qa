@@ -1,0 +1,43 @@
+id: studio/artcraft-launcher-niri
+purpose: >-
+  On a current HorneroOS Studio Preview ISO (Niri, report-only; excluded from the required gate while Niri and this entry stay experimental), the
+  experimental ArtCraft Launcher is absent until an explicit application
+  opt-in, installs only through the verified manual channel, launches
+  natively on Wayland, installs and launches one Craft application,
+  updates, and uninstalls cleanly. Versions and the Craft catalogue are
+  recorded dynamically; nothing here hardcodes a launcher version or an
+  application count.
+covers: [qa#36, hornero#325]
+instruction: >-
+  In a disposable VM from the pinned Studio Preview ISO: record the
+  opt-in with `horneroctl studio selection set --application
+  artcraft-launcher`, confirm the launcher package is absent, then
+  manually install the catalogue-pinned signed vendor package after
+  GPG fingerprint and SHA256 verification (HorneroOS/hornero
+  docs/studio-artcraft.md). Launch it from Hornero Shell, install and
+  launch one Craft application (for example PhotoCraft), create and
+  reopen a generated project through the portal file dialog, apply a
+  launcher update when offered, then uninstall the Craft application
+  and the launcher and confirm no orphan desktop files remain.
+proof:
+  - note: Opt-in selection persisted as an application, not a specialization
+    probe: {run: "python3 -c \"import json;print(str('artcraft-launcher' in json.load(open('/home/qa/.config/hornero/studio-selection.json'))['applications']).lower())\"", equals: "true"}
+  - note: horneroctl reports the launcher installed after the manual step
+    probe: {run: "horneroctl --json studio app show artcraft-launcher | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['state'])\"", equals: installed}
+  - note: Upstream desktop file is present and valid
+    probe: {run: "test -f /usr/share/applications/ai.storyteller.artcraft-launcher.desktop && desktop-file-validate /usr/share/applications/ai.storyteller.artcraft-launcher.desktop && echo valid", equals: valid}
+  - note: Launcher package is registered by the manual package install
+    probe: {run: "pacman -Qq ai.storyteller.artcraft-launcher >/dev/null 2>&1 && echo present || echo absent", equals: present}
+  - note: Native Wayland launcher window is running
+    probe: {run: "pgrep -f artcraft-launcher >/dev/null && echo up", equals: up}
+  - note: One Craft application was installed by the launcher (dynamic, not hardcoded)
+    probe: {run: "python3 -c \"import glob,os; print(str(any('ai.storyteller.' in os.path.basename(p) and 'artcraft-launcher' not in p for p in glob.glob('/home/qa/.local/share/applications/*.desktop')+glob.glob('/home/qa/.local/share/flatpak/app/*/current/active/files/share/applications/*.desktop'))).lower())\"", equals: "true"}
+  - note: Studio doctor and PipeWire stack remain healthy
+    probe: {run: "horneroctl studio doctor --json | python3 -c \"import json,sys;print(str(json.load(sys.stdin)['ok']).lower())\"", equals: "true"}
+  - note: Launcher frame (non-blank) for the record
+    screenshot: artcraft-launcher
+  - note: Craft application frame (non-blank) for the record
+    screenshot: artcraft-craft-app
+media: [artcraft-launcher, artcraft-craft-app]
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}

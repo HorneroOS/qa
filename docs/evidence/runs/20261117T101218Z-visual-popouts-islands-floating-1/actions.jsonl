@@ -1,0 +1,31 @@
+{"t": 15.512, "kind": "ready", "serial": []}
+{"t": 36.261, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-night --yes", "rc": 0, "stdout": "theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)", "stderr": ""}
+{"t": 36.535, "kind": "setup", "run": "horneroctl shell preset apply islands --yes", "rc": 0, "stdout": "applied preset Islands (islands)", "stderr": ""}
+{"t": 36.793, "kind": "setup", "run": "hyprctl eval 'hl.monitor({ output = \"Virtual-1\", mode = \"1920x1080@60\", position = \"0x0\", scale = 1 })'", "rc": 0, "stdout": "ok", "stderr": ""}
+{"t": 40.075, "kind": "setup", "run": "sleep 3", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 40.353, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 44.559, "kind": "setup", "run": "sleep 4", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 52.847, "kind": "setup", "run": "cat > \"$HOME/qa-populate.sh\" <<'EOS'\n#!/bin/sh\n# Real content behind the bars: terminals with output, a file manager and a browser-like window when installed.\n# QA captures need windows visible side by side: the product default is the scrolling layout (columns scroll off-screen).\nhyprctl eval 'hl.config({ general = { layout = \"dwindle\" } })' >/dev/null\nrun() { hyprctl eval \"hl.exec_cmd(\\\"$1\\\")\" >/dev/null; }\nrun \"kitty --title QA-Terminal sh -c 'ls --color=always -la /usr/share/hornero | head -30; echo; df -h | head -8; exec sh'\"\nsleep 1\nrun \"kitty --title QA-Monitor sh -c 'top -b -d 2 | head -40; exec sh'\"\nsleep 1\nfor fm in thunar nautilus pcmanfm dolphin; do command -v $fm >/dev/null && { run \"$fm /usr/share/hornero\"; break; }; done\nfor br in firefox chromium epiphany falkon; do command -v $br >/dev/null && { run \"$br --new-window file:///usr/share/doc\"; break; }; done\nsleep 6\nhyprctl clients -j | jq -r '.[].class' | sort | uniq -c > \"$HOME/qa-clients.txt\"\nEOS\nsh \"$HOME/qa-populate.sh\"\n", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 55.674, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 55.674, "kind": "wait", "step": 0, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 57.532, "kind": "wait_result", "step": 0, "ok": true}
+{"t": 57.532, "kind": "hover", "step": 1, "value": {"popout": "audio", "edge": "top"}, "note": null}
+{"t": 74.975, "kind": "hover", "step": 1, "popout": "audio", "edge": "top", "found": true, "detail": "found audio at (1746, 24.0)"}
+{"t": 74.975, "kind": "wait", "step": 2, "value": {"stable": 0.6, "timeout": 5}, "note": null}
+{"t": 75.77, "kind": "wait_result", "step": 2, "ok": true}
+{"t": 75.77, "kind": "screenshot", "step": 3, "value": "islands-floating-audio", "note": null}
+{"t": 75.871, "kind": "hover", "step": 4, "value": {"popout": "network", "edge": "top"}, "note": null}
+{"t": 91.369, "kind": "hover", "step": 4, "popout": "network", "edge": "top", "found": true, "detail": "found network at (1758, 24.0)"}
+{"t": 91.369, "kind": "wait", "step": 5, "value": {"stable": 0.6, "timeout": 5}, "note": null}
+{"t": 92.172, "kind": "wait_result", "step": 5, "ok": true}
+{"t": 92.172, "kind": "screenshot", "step": 6, "value": "islands-floating-network", "note": null}
+{"t": 92.274, "kind": "hover", "step": 7, "value": {"popout": "bluetooth", "edge": "top"}, "note": null}
+{"t": 104.113, "kind": "hover", "step": 7, "popout": "bluetooth", "edge": "top", "found": true, "detail": "found bluetooth at (1782, 24.0)"}
+{"t": 104.114, "kind": "wait", "step": 8, "value": {"stable": 0.6, "timeout": 5}, "note": null}
+{"t": 104.914, "kind": "wait_result", "step": 8, "ok": true}
+{"t": 104.914, "kind": "screenshot", "step": 9, "value": "islands-floating-bluetooth", "note": null}
+{"t": 105.025, "kind": "hover", "step": 10, "value": {"popout": "lockstatus", "edge": "top"}, "note": null}
+{"t": 127.033, "kind": "hover", "step": 10, "popout": "lockstatus", "edge": "top", "found": true, "detail": "found lockstatus at (1722, 24.0)"}
+{"t": 127.034, "kind": "wait", "step": 11, "value": {"stable": 0.6, "timeout": 5}, "note": null}
+{"t": 127.832, "kind": "wait_result", "step": 11, "ok": true}
+{"t": 127.832, "kind": "screenshot", "step": 12, "value": "islands-floating-lockstatus", "note": null}

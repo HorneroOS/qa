@@ -1,0 +1,7 @@
+{"t": 16.75, "kind": "ready", "serial": []}
+{"t": 37.355, "kind": "setup", "run": "horneroctl shell preset apply dock-bottom --yes", "rc": 0, "stdout": "applied preset Dock Bottom (dock-bottom)", "stderr": ""}
+{"t": 68.706, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 68.706, "kind": "probe", "step": 0, "value": {"run": "qs ipc call plugins status | jq -r .discovered", "equals": "true", "retry_s": 15}, "note": null}
+{"t": 69.002, "kind": "screenshot", "step": 1, "value": "bottom-dock-extension", "note": null}
+{"t": 69.053, "kind": "note", "step": 2, "value": "MANUAL (reviewer, KVM window): hover the fixture bar widget, wait for the tooltip, confirm it opens above the dock fully on-screen; activate the widget and confirm any popover is clamped inside the display; capture both frames into the bundle.", "note": "MANUAL (reviewer, KVM window): hover the fixture bar widget, wait for the tooltip, confirm it opens above the dock fully on-screen; activate the widget and confirm any popover is clamped inside the display; capture both frames into the bundle."}
+{"t": 69.053, "kind": "screenshot", "step": 3, "value": "bottom-dock-for-review", "note": null}

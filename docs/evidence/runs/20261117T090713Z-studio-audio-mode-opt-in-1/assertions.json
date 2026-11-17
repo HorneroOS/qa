@@ -1,0 +1,57 @@
+[
+  {
+    "t": 36.412,
+    "kind": "probe",
+    "run": "horneroctl studio mode",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Studio audio mode: balanced\nTemporary Performance: inactive\nQuantum is a scheduling period, not physical round-trip latency.",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 36.636,
+    "kind": "probe",
+    "run": "horneroctl studio mode",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Studio audio mode: balanced\nTemporary Performance: inactive\nQuantum is a scheduling period, not physical round-trip latency.",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 36.858,
+    "kind": "probe",
+    "run": "horneroctl studio mode audio low-latency >/dev/null 2>&1 && echo allowed || echo refused",
+    "ok": true,
+    "rc": 0,
+    "stdout": "refused",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 37.067,
+    "kind": "probe",
+    "run": "horneroctl studio mode restore",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Nothing to restore: no previous Studio mode recorded.",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 37.378,
+    "kind": "probe",
+    "run": "horneroctl studio mode",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Studio audio mode: balanced\nTemporary Performance: inactive\nQuantum is a scheduling period, not physical round-trip latency.",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  }
+]

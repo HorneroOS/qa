@@ -1,0 +1,11 @@
+{"t": 16.777, "kind": "ready", "serial": []}
+{"t": 37.384, "kind": "setup", "run": "horneroctl shell preset apply horizon --yes", "rc": 0, "stdout": "applied preset Horizon (horizon)", "stderr": ""}
+{"t": 37.667, "kind": "setup", "run": "hyprctl keyword monitor \"Virtual-1,1920x1080@60,0x0,1.5\"", "rc": 0, "stdout": "unknown request", "stderr": ""}
+{"t": 68.851, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 68.851, "kind": "probe", "step": 0, "value": {"run": "qs ipc call plugins status | jq -r .discovered", "equals": "true", "retry_s": 15}, "note": null}
+{"t": 69.145, "kind": "screenshot", "step": 1, "value": "hidpi-bar", "note": null}
+{"t": 69.196, "kind": "key", "step": 2, "value": "super+d", "note": null}
+{"t": 69.352, "kind": "wait", "step": 3, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 71.456, "kind": "wait_result", "step": 3, "ok": true}
+{"t": 71.456, "kind": "screenshot", "step": 4, "value": "hidpi-dashboard", "note": null}
+{"t": 71.553, "kind": "key", "step": 5, "value": "escape", "note": null}

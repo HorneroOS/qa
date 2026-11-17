@@ -1,0 +1,35 @@
+[
+  {
+    "t": 37.992,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys;print('recovery-readiness' in json.load(sys.stdin)['data'])\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 38.31,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys,os;d=json.load(sys.stdin)['data'];present=os.path.exists('/boot/vmlinuz-linux-lts') or os.path.exists('/boot/vmlinuz-linux-lts-fallback');print(d['recovery-readiness']=='ok' if present else d['recovery-readiness']=='fail')\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 38.589,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor | grep -ci qualified; true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  }
+]

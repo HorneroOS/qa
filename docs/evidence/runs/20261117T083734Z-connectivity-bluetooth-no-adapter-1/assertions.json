@@ -1,0 +1,46 @@
+[
+  {
+    "t": 37.145,
+    "kind": "probe",
+    "run": "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print('adapter' in json.load(sys.stdin)['data'])\"",
+    "ok": false,
+    "rc": 0,
+    "stdout": "False",
+    "stderr": "",
+    "detail": "stdout 'False' != 'True'",
+    "where": "proof 0"
+  },
+  {
+    "t": 37.495,
+    "kind": "probe",
+    "run": "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['adapter'])\"",
+    "ok": false,
+    "rc": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import json,sys;print(json.load(sys.stdin)['data']['adapter'])\n                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^\nKeyError: 'adapter'",
+    "detail": "stdout '' != 'fail'",
+    "where": "proof 1"
+  },
+  {
+    "t": 37.732,
+    "kind": "probe",
+    "run": "horneroctl hardware bluetooth doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['bluetooth-service'])\"",
+    "ok": false,
+    "rc": 0,
+    "stdout": "fail",
+    "stderr": "",
+    "detail": "stdout 'fail' != 'ok'",
+    "where": "proof 2"
+  },
+  {
+    "t": 38.004,
+    "kind": "probe",
+    "run": "a=$(horneroctl hardware bluetooth doctor --json); b=$(horneroctl hardware bluetooth doctor --json); [ \"$a\" = \"$b\" ] && echo stable || echo changed",
+    "ok": true,
+    "rc": 0,
+    "stdout": "stable",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  }
+]

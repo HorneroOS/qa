@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T105815Z-extensions-dashboard-all-enabled-stress-1",
+  "finished": "2026-11-17T10:59:10Z",
+  "wall_s": 54.936,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "step 0 probe failed: stdout 'false' != 'true'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

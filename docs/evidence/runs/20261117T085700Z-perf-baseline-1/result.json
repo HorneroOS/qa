@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T085700Z-perf-baseline-1",
+  "finished": "2026-11-17T08:58:16Z",
+  "wall_s": 75.824,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: json path 'samples.0.rss_kb': JSONDecodeError('Expecting value: line 1 column 1 (char 0)')",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

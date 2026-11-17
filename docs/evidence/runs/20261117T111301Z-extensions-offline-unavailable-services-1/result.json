@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T111301Z-extensions-offline-unavailable-services-1",
+  "finished": "2026-11-17T11:13:45Z",
+  "wall_s": 44.114,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 1: stdout 'true' != 'true '; proof 2: stdout 'false 0' != 'true 0'",
+  "actions": 2,
+  "driver_end": null,
+  "review": null
+}

@@ -1,0 +1,57 @@
+[
+  {
+    "t": 37.646,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys;print('gpu-driver-coherence' in json.load(sys.stdin)['data'])\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 37.914,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['gpu-driver-coherence'] in ('ok','fail'))\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 38.169,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor --json | python3 -c \"import json,sys,os;d=json.load(sys.stdin)['data'];mods=os.path.isdir('/usr/lib/modules/'+os.uname().release);print(d['gpu-driver-coherence']=='fail' if not mods else True)\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 38.444,
+    "kind": "probe",
+    "run": "a=$(horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['gpu-driver-coherence'])\"); b=$(horneroctl gaming doctor --json | python3 -c \"import json,sys;print(json.load(sys.stdin)['data']['gpu-driver-coherence'])\"); [ \"$a\" = \"$b\" ] && echo stable || echo changed",
+    "ok": true,
+    "rc": 0,
+    "stdout": "stable",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 38.698,
+    "kind": "probe",
+    "run": "horneroctl gaming doctor | grep -ci qualified; true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  }
+]

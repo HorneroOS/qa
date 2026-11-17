@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T111845Z-extensions-themes-reduced-motion-1",
+  "finished": "2026-11-17T11:20:17Z",
+  "wall_s": 92.482,
+  "verdict": "fail",
+  "class": "product_crash",
+  "regression": true,
+  "reason": "shell process died during the run; step 0 probe failed: stdout '' != 'true'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

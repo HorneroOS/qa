@@ -1,0 +1,12 @@
+{"t": 16.386, "kind": "ready", "serial": []}
+{"t": 36.816, "kind": "setup", "run": "horneroctl shell preset apply cockpit --yes", "rc": 0, "stdout": "applied preset Cockpit (cockpit)", "stderr": ""}
+{"t": 37.074, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 38.394, "kind": "setup", "run": "sleep 1", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 38.646, "kind": "setup", "run": "qs ipc call controlCenter open experience", "rc": 0, "stdout": "opened: experience", "stderr": ""}
+{"t": 43.569, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 43.569, "kind": "probe", "step": 0, "value": {"run": "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", "equals": "Hornero Settings - Experience", "retry_s": 10}, "note": null}
+{"t": 43.799, "kind": "wait", "step": 1, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 45.625, "kind": "wait_result", "step": 1, "ok": true}
+{"t": 45.625, "kind": "screenshot", "step": 2, "value": "pane-everyday", "note": null}
+{"t": 45.679, "kind": "pointer", "step": 3, "value": {"x": 0.8984, "y": 0.7188, "click": "left"}, "note": null}
+{"t": 45.82, "kind": "probe", "step": 4, "value": {"run": "qs ipc call experience get", "equals": "signal", "retry_s": 10}, "note": null}

@@ -1,0 +1,66 @@
+[
+  {
+    "t": 55.712,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-desktop-note\" and .state == \"loaded\")] | length'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "stdout '0' != '1'",
+    "where": "proof 0"
+  },
+  {
+    "t": 55.919,
+    "kind": "probe",
+    "run": "horneroctl plugin remove example-desktop-note --yes >/dev/null 2>&1 && echo removed || echo refused",
+    "ok": false,
+    "rc": 0,
+    "stdout": "refused",
+    "stderr": "",
+    "detail": "stdout 'refused' != 'removed'",
+    "where": "proof 1"
+  },
+  {
+    "t": 56.179,
+    "kind": "probe",
+    "run": "python3 -c \"import json,subprocess; cli=json.loads(subprocess.check_output(['horneroctl','plugin','list','--json'],text=True)); raw=cli['data']['plugins']; ps=json.loads(raw) if isinstance(raw,str) else raw; print(str(all(p['id']!='example-desktop-note' for p in ps)).lower())\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 56.434,
+    "kind": "probe",
+    "run": "qs ipc call plugins reload >/dev/null 2>&1; qs ipc call plugins status | jq -r '[.plugins[] | select(.id == \"example-desktop-note\")] | length'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 66.911,
+    "kind": "probe",
+    "run": "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'",
+    "ok": false,
+    "rc": 0,
+    "stdout": "false 0",
+    "stderr": "",
+    "detail": "stdout 'false 0' != 'true 0'",
+    "where": "proof 4"
+  },
+  {
+    "t": 66.958,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-after-uninstall.png"
+    ],
+    "where": "proof 5"
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "t": 37.865,
+    "kind": "probe",
+    "run": "horneroctl --json agent list",
+    "ok": true,
+    "rc": 0,
+    "stdout": " absent; auth absent\\nRegistered agents: 6 (declarative registry; nothing installed or launched by this command).\",\"data\":{\"agent.claude-code.exec\":\"claude\",\"agent.claude-code.installed\":\"false\",\"agent.codex.exec\":\"codex\",\"agent.codex.installed\":\"false\",\"agent.javi-hermes.exec\":\"hermes\",\"agent.javi-hermes.installed\":\"false\",\"agent.muse.exec\":\"muse\",\"agent.muse.installed\":\"false\",\"agent.opencode.exec\":\"opencode\",\"agent.opencode.installed\":\"false\",\"agent.veasel.exec\":\"veasel\",\"agent.veasel.installed\":\"false\",\"agents\":\"javi-hermes,codex,claude-code,muse,opencode,veasel\",\"count\":\"6\",\"default\":\"\"}}",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 38.172,
+    "kind": "probe",
+    "run": "horneroctl assistant shell-proposal --command \"touch /tmp/agentic-proposal-marker\" && test ! -e /tmp/agentic-proposal-marker && echo never-executed || echo executed",
+    "ok": false,
+    "rc": 0,
+    "stdout": "Shell proposal only (nothing executed): touch /tmp/agentic-proposal-marker\nRisk: mutating. Inspect, edit, or copy this command and run it yourself in a terminal if you want it executed, or use the existing typed broker: horneroctl assistant tool <name> [arg]. Requires: explicit manual run or existing typed broker approval.\nnever-executed",
+    "stderr": "",
+    "detail": "stdout ' horneroctl assistant tool <name> [arg]. Requires: explicit manual run or existing typed broker approval.\\nnever-executed' != 'never-executed'",
+    "where": "proof 1"
+  },
+  {
+    "t": 38.476,
+    "kind": "probe",
+    "run": "horneroctl --json assistant shell-proposal --command \"/usr/bin/sudo rm -rf /\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "{\"command\":\"assistant shell-proposal\",\"ok\":true,\"message\":\"Shell proposal only (nothing executed): /usr/bin/sudo rm -rf /\\nRisk: protected. Inspect, edit, or copy this command and run it yourself in a terminal if you want it executed, or use the existing typed broker: horneroctl assistant tool <name> [arg]. Requires: explicit manual run or existing typed broker approval.\",\"data\":{\"command\":\"/usr/bin/sudo rm -rf /\",\"dry_run\":\"true\",\"executed\":\"false\",\"requires\":\"explicit manual run or existing typed broker approval\",\"risk\":\"protected\"}}",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 38.766,
+    "kind": "probe",
+    "run": "horneroctl assistant delegate qa-bogus-agent --workspace /tmp \"review\" >/dev/null 2>&1 && echo allowed || echo refused",
+    "ok": true,
+    "rc": 0,
+    "stdout": "refused",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 39.069,
+    "kind": "probe",
+    "run": "horneroctl assistant delegate codex --workspace /tmp \"review the parser\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Delegate handoff proposal only (nothing executed): launch OpenAI Codex (codex) yourself in a terminal in workspace /tmp with task: review the parser\nWould launch: codex\nTruthful boundary: the external runtime (OpenAI Codex) keeps its OWN security model and does NOT inherit Hornero ABAC/bubblewrap/workspace policy. Hornero records this proposal only; the user launches it in a terminal themselves and the external runtime's own approvals and sandbox apply.",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  },
+  {
+    "t": 39.359,
+    "kind": "probe",
+    "run": "horneroctl --json agent config status",
+    "ok": true,
+    "rc": 0,
+    "stdout": "{\"command\":\"agent config status\",\"ok\":true,\"message\":\"No canonical agent config entries at /home/hornero/.config/hornero/agent-config.json. Registry is empty; nothing to project.\\nProjection scope: only skills are written to native, auto-discovered agent skill paths. Instruction, MCP, and ACP outputs are Hornero-owned companion fragments that the agents do not load automatically (ACP is inspection-only).\",\"data\":{\"duplicates\":\"\",\"entries\":\"0\",\"issues\":\"0\",\"registry\":\"/home/hornero/.config/hornero/agent-config.json\",\"targets\":\"0\"}}",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 5"
+  }
+]

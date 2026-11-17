@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T110351Z-extensions-lifecycle-disable-enable-1",
+  "finished": "2026-11-17T11:05:12Z",
+  "wall_s": 80.8,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '0' != '1'; proof 1: stdout 'refused' != 'disabled'; proof 2: stdout 'null' != 'disabled'; proof 4: stdout 'refused' != 'enabled'; proof 5: stdout '0' != '1'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

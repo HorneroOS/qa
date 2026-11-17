@@ -1,0 +1,57 @@
+[
+  {
+    "t": 38.183,
+    "kind": "probe",
+    "run": "horneroctl recovery doctor --json | python3 -c \"import json,sys;d=json.load(sys.stdin)['data'];print('snapshot_backend' in d and 'root_fstype' in d and 'snapshots_store' in d)\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 38.489,
+    "kind": "probe",
+    "run": "horneroctl recovery doctor --json | python3 -c \"import json,sys;d=json.load(sys.stdin)['data'];print((d['snapshot_backend']=='none') and (d['snapshot-backend']=='fail'))\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 38.778,
+    "kind": "probe",
+    "run": "horneroctl recovery doctor | grep -ci 'not OS rollback'; true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 39.058,
+    "kind": "probe",
+    "run": "horneroctl recovery --help | grep -c 'horneroctl recovery <doctor>'; true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 39.345,
+    "kind": "probe",
+    "run": "horneroctl recovery doctor --json | python3 -c \"import json,sys;d=json.load(sys.stdin)['data'];fs=[l.split()[2] for l in open('/proc/mounts') if l.split()[1]=='/'][0];print(d['root_fstype']==fs)\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "True",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  }
+]

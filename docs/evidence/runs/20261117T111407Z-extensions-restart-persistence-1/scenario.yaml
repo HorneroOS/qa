@@ -1,0 +1,30 @@
+id: extensions/restart-persistence
+purpose: >-
+  Foundation wave (qa#81): user extension arrangement persists through a
+  shell restart: the dashboard layout (order, pinned, card sizes) and the
+  desktop-widget slots the user chose in shell config are still in force
+  afterwards, and every enabled extension reloads. Plugin code has no
+  setter for any of this state. PENDING until run in an approved KVM window.
+covers: [qa#81, shell#222, shell#378]
+setup:
+  commands:
+    - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); pl=d.setdefault(\"plugins\",{}); pl[\"dashboardLayout\"]={\"order\":[\"example-multi-surface\",\"example-dashboard-note\"],\"pinned\":[\"example-multi-surface\"],\"sizes\":{\"example-dashboard-note\":\"wide\"}}; pl[\"desktopWidgetSlots\"]={\"default\":{\"example-desktop-note\":\"top-left\"}}; json.dump(d, open(p,\"w\"))"'
+    - 'pkill -x qs || true; sleep 1; hyprctl dispatch exec "$HOME/.local/bin/qa-shell.sh"; sleep 3'
+instruction: Restart the shell over a saved extension arrangement and open the dashboard.
+steps:
+  - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - screenshot: dashboard-after-restart
+  - key: escape
+proof:
+  - note: The saved dashboard layout survived the restart verbatim
+    probe: {run: "python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.config/hornero/shell.json'))); l=d['plugins']['dashboardLayout']; print(l['pinned'], l['sizes']['example-dashboard-note'], l['order'][0])\"", equals: "['example-multi-surface'] wide example-multi-surface"}
+  - note: The saved desktop-widget slot survived the restart verbatim
+    probe: {run: "python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.config/hornero/shell.json'))); print(d['plugins']['desktopWidgetSlots']['default']['example-desktop-note'])\"", equals: top-left}
+  - note: Every enabled fixture reloaded after the restart and none failed
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0", retry_s: 10}
+  - screenshot: final
+media: [dashboard-after-restart]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: on-failure}

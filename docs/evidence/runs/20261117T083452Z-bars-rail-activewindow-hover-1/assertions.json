@@ -1,0 +1,57 @@
+[
+  {
+    "t": 67.696,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 1"
+  },
+  {
+    "t": 69.233,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r .class",
+    "ok": true,
+    "rc": 0,
+    "stdout": "kitty",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 4"
+  },
+  {
+    "t": 69.802,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "activewindow",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 6"
+  },
+  {
+    "t": 70.343,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "activewindow",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 8"
+  },
+  {
+    "t": 74.264,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.detached",
+    "ok": false,
+    "rc": 0,
+    "stdout": "",
+    "stderr": "",
+    "detail": "stdout '' != 'winfo'",
+    "where": "step 11"
+  }
+]

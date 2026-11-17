@@ -1,0 +1,42 @@
+id: extensions/keyboard-only
+purpose: >-
+  Keyboard-only extension use (qa#81): the dashboard Extensions tab is
+  reachable, navigable and configurable without a pointer (Tab into the
+  cards, P pins the focused card, Escape cascades out), and PluginKit
+  controls expose visible focus. Focus-ring and tooltip-on-focus quality
+  are screenshot-review evidence; live AT-SPI announcements are NOT TESTED
+  here (shell#221 owns the live audit). PENDING until run in an approved
+  KVM window.
+covers: [qa#81, shell#370, shell#376, shell#378]
+setup:
+  commands:
+    - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); d.setdefault(\"plugins\",{})[\"dashboardLayout\"]={}; json.dump(d, open(p,\"w\"))"'
+instruction: Using only the keyboard, open the dashboard, move focus into the extension cards, pin one, and leave.
+steps:
+  - key: super+d
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - probe: {run: "qs ipc call drawers state dashboard", equals: "true", retry_s: 5}
+  - key: tab
+  - key: tab
+  - key: tab
+  - key: tab
+  - key: tab
+  - key: tab
+  - screenshot: dashboard-keyboard-focus
+  - note: Pin the focused card with P (dashboard card keyboard contract, shell#378)
+  - key: p
+  - wait: {stable: 0.5, timeout: 5}
+  - screenshot: dashboard-after-pin
+  - key: escape
+  - wait: {changed: true, stable: 0.5, timeout: 5}
+proof:
+  - note: The keyboard pin persisted exactly one pinned card in shell config
+    probe: {run: "python3 -c \"import json,os; d=json.load(open(os.path.expanduser('~/.config/hornero/shell.json'))); print(len(d['plugins']['dashboardLayout'].get('pinned',[])))\"", equals: "1", retry_s: 5}
+  - note: Escape closed the dashboard (innermost-first cascade reached the drawer)
+    probe: {run: "qs ipc call drawers state dashboard", equals: "false", retry_s: 3}
+  - note: All fixture extensions stayed loaded through the keyboard journey
+    probe: {run: "qs ipc call plugins status | jq -r '\"\\(.loaded >= 1) \\(.failed)\"'", equals: "true 0"}
+  - screenshot: after-escape
+media: [dashboard-keyboard-focus]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: on-failure}

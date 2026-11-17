@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T091659Z-visual-popouts-cockpit-dual-bottom-1",
+  "finished": "2026-11-17T09:19:00Z",
+  "wall_s": 120.578,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "step 1: popout 'audio' never opened from the bottom bar: not found; popouts seen: ",
+  "actions": 1,
+  "driver_end": null,
+  "review": null
+}

@@ -1,0 +1,60 @@
+id: experience/gaming-fullscreen
+purpose: >-
+  Gaming mode under a real fullscreen window on Hyprland: the compositor
+  reports the window as fullscreen, the shell's policy engages (popups held
+  and counted, telemetry paused, desktop layer hidden), the shell does not
+  take keyboard focus from the fullscreen window, and no bar pixels are
+  drawn over it. Leaving fullscreen releases the policy.
+covers: [shell#551, shell#478]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: cockpit
+  theme: hornero-signal-night
+  commands:
+    - qs ipc call experience set gaming
+    - sleep 3
+    - |
+      setsid -f kitty --class hqa-fullscreen --start-as=fullscreen -o background_opacity=1 -o background=#101010 -o cursor=none sh -c 'for i in $(seq 1 18); do echo; done; echo "FULLSCREEN TEST WINDOW"; sleep 600' >/dev/null 2>&1
+    - sleep 4
+    - notify-send -a hornero-qa 'Held notification' 'This must be queued, not shown over the game'
+    - sleep 2
+instruction: A terminal is fullscreen in Gaming mode. Check that nothing of the shell is drawn over it and that it keeps the keyboard.
+steps:
+  - wait: {stable: 1.0, timeout: 8}
+  - screenshot: gaming-fullscreen
+proof:
+  - note: The compositor reports the terminal as fullscreen (state bit 2)
+    probe: {run: "hyprctl clients -j | jq -r '[.[] | select(.class==\"hqa-fullscreen\")][0].fullscreen'", matches: "^(2|3)$", retry_s: 10}
+  - note: The fullscreen window keeps keyboard focus (the shell did not take it)
+    probe: {run: "hyprctl activewindow -j | jq -r .class", equals: hqa-fullscreen, retry_s: 5}
+  - note: Mode is gaming
+    probe: {run: "qs ipc call experience get", equals: gaming}
+  - note: Notification popups are held while fullscreen
+    probe: {run: "qs ipc call experience status | jq -r .effective.holdPopups", equals: "true", retry_s: 8}
+  - note: The held notification was counted
+    probe: {run: "qs ipc call experience status | jq -r '.effective.heldCount >= 1'", equals: "true", retry_s: 8}
+  - note: Telemetry polling is paused
+    probe: {run: "qs ipc call experience status | jq -r .effective.telemetryPaused", equals: "true", retry_s: 8}
+  - note: The desktop layer is hidden
+    probe: {run: "qs ipc call experience status | jq -r .effective.desktopWidgetsVisible", equals: "false"}
+  - note: Idle is inhibited while the game covers the screen
+    probe: {run: "qs ipc call experience status | jq -r .effective.idleInhibit", equals: "true"}
+  - note: Motion is off and glow is off
+    probe: {run: "qs ipc call experience status | jq -r '[.fields.motion, .effective.glow] | @csv'", equals: "\"off\",false"}
+  - note: No shell pixels over the fullscreen window (top 48 px is one colour)
+    probe:
+      run: |-
+        grim -g "0,0 1280x48" -t ppm - | python3 -c "import sys;b=sys.stdin.buffer.read().split(b'255\n',1)[1];print(len({b[i:i+3] for i in range(0,len(b),3)}))"
+      equals: "1"
+      retry_s: 8
+  - note: No shell pixels over the fullscreen window (bottom 48 px is one colour)
+    probe:
+      run: |-
+        grim -g "0,752 1280x48" -t ppm - | python3 -c "import sys;b=sys.stdin.buffer.read().split(b'255\n',1)[1];print(len({b[i:i+3] for i in range(0,len(b),3)}))"
+      equals: "1"
+  - screenshot: final
+media: [gaming-fullscreen]
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: always}

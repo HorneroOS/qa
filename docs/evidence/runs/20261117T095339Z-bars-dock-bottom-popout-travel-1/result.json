@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T095339Z-bars-dock-bottom-popout-travel-1",
+  "finished": "2026-11-17T09:55:03Z",
+  "wall_s": 84.191,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "step 9 probe failed: stdout '' != 'bluetooth'",
+  "actions": 5,
+  "driver_end": null,
+  "review": null
+}

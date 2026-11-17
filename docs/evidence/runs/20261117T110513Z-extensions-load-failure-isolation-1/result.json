@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T110513Z-extensions-load-failure-isolation-1",
+  "finished": "2026-11-17T11:06:20Z",
+  "wall_s": 66.395,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 0: stdout '0' != '1'; proof 1: stdout '0' != '1'; proof 2: stdout 'false' != 'true'; proof 5: stdout lacks 'example-broken'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

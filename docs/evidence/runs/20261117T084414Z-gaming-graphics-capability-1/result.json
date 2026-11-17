@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T084414Z-gaming-graphics-capability-1",
+  "finished": "2026-11-17T08:44:56Z",
+  "wall_s": 41.207,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "proof 3: stdout 'absent' != 'present'",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}

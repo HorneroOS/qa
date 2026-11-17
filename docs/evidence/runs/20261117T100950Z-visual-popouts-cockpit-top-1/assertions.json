@@ -1,0 +1,33 @@
+[
+  {
+    "t": 143.176,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -c .popout",
+    "ok": true,
+    "rc": 0,
+    "stdout": "{\"name\":\"lockstatus\",\"hasCurrent\":true,\"detached\":\"\",\"phase\":\"open\",\"intent\":\"hover\",\"keyboard\":false,\"frame\":[1642,44,169,98],\"target\":[1642,44,169,98],\"trigger\":[1718,15,16,16],\"side\":\"below\",\"attached\":false,\"flipped\":false,\"scroll\":false,\"opacity\":1}",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 143.46,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 143.557,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "005-final.png"
+    ],
+    "where": "proof 2"
+  }
+]

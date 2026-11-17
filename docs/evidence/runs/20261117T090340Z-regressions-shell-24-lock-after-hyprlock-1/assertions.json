@@ -1,0 +1,24 @@
+[
+  {
+    "t": 50.874,
+    "kind": "probe",
+    "run": "qs ipc call lock lock && echo ipc-ok",
+    "ok": true,
+    "rc": 0,
+    "stdout": "ipc-ok",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 3"
+  },
+  {
+    "t": 51.115,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": false,
+    "rc": 1,
+    "stdout": "",
+    "stderr": "",
+    "detail": "rc=1",
+    "where": "proof 0"
+  }
+]

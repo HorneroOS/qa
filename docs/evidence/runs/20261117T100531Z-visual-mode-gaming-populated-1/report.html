@@ -1,0 +1,45 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>visual/mode-gaming-populated · Hornero QA</title><style>
+:root{--bg:#f6f1ec;--fg:#2a211c;--muted:#6f625a;--card:#fff;--line:#e3d8cf;
+--pass:#2f7d4f;--fail:#b3412c;--inc:#9a6b12}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1613;--fg:#f1e8e1;--muted:#b3a59b;
+--card:#25201c;--line:#3a312b}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px}
+h1{font-size:1.4rem;margin:0 0 4px}h2{font-size:1.1rem;margin:28px 0 8px}
+.v{display:inline-block;padding:2px 10px;border-radius:999px;color:#fff;font-weight:600}
+.pass{background:var(--pass)}.fail{background:var(--fail)}.inconclusive{background:var(--inc)}
+table{border-collapse:collapse;width:100%;background:var(--card)}
+td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+code,pre{font:13px/1.4 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);padding:8px}
+figure img{width:100%;height:auto;display:block}
+</style></head><body><main>
+<h1>visual/mode-gaming-populated <span class="v pass">PASS</span></h1>
+<p class=muted>20261117T100531Z-visual-mode-gaming-populated-1 · attempt 1 · 71.311 s · class <code>-</code></p>
+<p><strong>Reason:</strong> all proof checks passed</p>
+<h2>Instruction</h2><p>Look at the populated desktop and judge it against the Signal Bezel visual language.</p>
+<h2>Proof</h2><table><tr><th></th><th>where</th><th>kind</th><th>note</th><th>detail</th></tr><tr><td>✅</td><td>proof 0</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 1</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 2</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 3</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 4</td><td>probe</td><td></td><td><code>ok</code></td></tr><tr><td>✅</td><td>proof 5</td><td>screenshot</td><td></td><td><code>[&quot;002-final.png&quot;]</code></td></tr></table>
+<h2>Product and environment</h2><table><tr><th>shell_sha</th><td><code>74619fab04951777b2bdba37c1b80e1d19cb66bc</code></td></tr><tr><th>config_sha</th><td><code>76058860dc3631250a6cd913ddbf1271c0eebf88</code></td></tr><tr><th>horneroctl</th><td><code>horneroctl horneroctl-v0.2.0-preview45-9-g420c73c (420c73c)</code></td></tr><tr><th>horneroctl_sha256</th><td><code>bea50d20f272e14fb1712b880c484c7dc65eb97381759b65f895e4808a700967</code></td></tr><tr><th>engine</th><td><code>native</code></td></tr><tr><th>compositor</th><td><code>hyprland</code></td></tr><tr><th>hornero_qa</th><td><code>0.1.0</code></td></tr><tr><th>host_kernel</th><td><code>7.3.4-arch1-2</code></td></tr><tr><th>qemu</th><td><code>QEMU emulator version 11.1.3</code></td></tr><tr><th>image</th><td><code>signal-s74619fa-c7605886-h420c73c.qcow2</code></td></tr><tr><th>outputs</th><td><code>1</code></td></tr><tr><th>resolution</th><td><code>1920x1080</code></td></tr></table>
+<h2>Screenshots</h2><div class=grid><figure><a href="screenshots/001-mode-gaming-pop.png"><img loading="lazy" src="screenshots/001-mode-gaming-pop.png" alt="001-mode-gaming-pop.png"></a><figcaption class=muted>001-mode-gaming-pop.png</figcaption></figure><figure><a href="screenshots/002-final.png"><img loading="lazy" src="screenshots/002-final.png" alt="002-final.png"></a><figcaption class=muted>002-final.png</figcaption></figure><figure><a href="screenshots/003-final.png"><img loading="lazy" src="screenshots/003-final.png" alt="003-final.png"></a><figcaption class=muted>003-final.png</figcaption></figure></div>
+<h2>Actions</h2><pre>{&quot;t&quot;: 16.539, &quot;kind&quot;: &quot;ready&quot;, &quot;serial&quot;: []}
+{&quot;t&quot;: 37.468, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;horneroctl appearance theme set hornero-signal-night --yes&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 37.761, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;horneroctl shell preset apply cockpit --yes&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;applied preset Cockpit (cockpit)&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 38.057, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;hyprctl eval &#x27;hl.monitor({ output = \&quot;Virtual-1\&quot;, mode = \&quot;1920x1080@60\&quot;, position = \&quot;0x0\&quot;, scale = 1 })&#x27;&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;ok&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 41.346, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;sleep 3&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 41.66, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;qs ipc call experience set gaming&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;ok: gaming&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 45.868, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;sleep 4&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 54.142, &quot;kind&quot;: &quot;setup&quot;, &quot;run&quot;: &quot;cat &gt; \&quot;$HOME/qa-populate.sh\&quot; &lt;&lt;&#x27;EOS&#x27;\n#!/bin/sh\n# Real content behind the bars: terminals with output, a file manager and a browser-like window when installed.\n# QA captures need windows visible side by side: the product default is the scrolling layout (columns scroll off-screen).\nhyprctl eval &#x27;hl.config({ general = { layout = \&quot;dwindle\&quot; } })&#x27; &gt;/dev/null\nrun() { hyprctl eval \&quot;hl.exec_cmd(\\\&quot;$1\\\&quot;)\&quot; &gt;/dev/null; }\nrun \&quot;kitty --title QA-Terminal sh -c &#x27;ls --color=always -la /usr/share/hornero | head -30; echo; df -h | head -8; exec sh&#x27;\&quot;\nsleep 1\nrun \&quot;kitty --title QA-Monitor sh -c &#x27;top -b -d 2 | head -40; exec sh&#x27;\&quot;\nsleep 1\nfor fm in thunar nautilus pcmanfm dolphin; do command -v $fm &gt;/dev/null &amp;&amp; { run \&quot;$fm /usr/share/hornero\&quot;; break; }; done\nfor br in firefox chromium epiphany falkon; do command -v $br &gt;/dev/null &amp;&amp; { run \&quot;$br --new-window file:///usr/share/doc\&quot;; break; }; done\nsleep 6\nhyprctl clients -j | jq -r &#x27;.[].class&#x27; | sort | uniq -c &gt; \&quot;$HOME/qa-clients.txt\&quot;\nEOS\nsh \&quot;$HOME/qa-populate.sh\&quot;\n&quot;, &quot;rc&quot;: 0, &quot;stdout&quot;: &quot;&quot;, &quot;stderr&quot;: &quot;&quot;}
+{&quot;t&quot;: 60.227, &quot;kind&quot;: &quot;tokens&quot;, &quot;theme&quot;: &quot;hornero-signal-night&quot;, &quot;roles&quot;: 34}
+{&quot;t&quot;: 60.227, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 0, &quot;value&quot;: {&quot;stable&quot;: 1.5, &quot;timeout&quot;: 10}, &quot;note&quot;: null}
+{&quot;t&quot;: 63.474, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 0, &quot;ok&quot;: true}
+{&quot;t&quot;: 63.475, &quot;kind&quot;: &quot;hover&quot;, &quot;step&quot;: 1, &quot;value&quot;: {&quot;away&quot;: true}, &quot;note&quot;: null}
+{&quot;t&quot;: 65.301, &quot;kind&quot;: &quot;hover_away&quot;, &quot;step&quot;: 1}
+{&quot;t&quot;: 65.301, &quot;kind&quot;: &quot;wait&quot;, &quot;step&quot;: 2, &quot;value&quot;: {&quot;stable&quot;: 1.0, &quot;timeout&quot;: 6}, &quot;note&quot;: null}
+{&quot;t&quot;: 66.796, &quot;kind&quot;: &quot;wait_result&quot;, &quot;step&quot;: 2, &quot;ok&quot;: true}
+{&quot;t&quot;: 66.796, &quot;kind&quot;: &quot;screenshot&quot;, &quot;step&quot;: 3, &quot;value&quot;: &quot;mode-gaming-pop&quot;, &quot;note&quot;: null}</pre>
+<p class=muted>Logs: <a href="logs/">logs/</a> · machine-readable: run.json, result.json, assertions.json, actions.jsonl</p>
+</main></body></html>

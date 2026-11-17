@@ -1,0 +1,6 @@
+{"t": 16.846, "kind": "ready", "serial": []}
+{"t": 37.329, "kind": "setup", "run": "notify-send -a hornero-qa 'Hornero QA' 'Notification ownership check'", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 68.429, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 68.429, "kind": "wait", "step": 0, "value": {"stable": 0.5, "timeout": 5}, "note": null}
+{"t": 73.563, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 73.564, "kind": "screenshot", "step": 1, "value": "notification", "note": null}

@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "001-cockpit-1440p-1-25x.png",
+  "sha256": "e3d7c3e4dca829cd68224e03590176b8856deca7560c9eeed6412f3ad5f50d8b",
+  "run_id": "20261117T104246Z-visual-scale-1440p-1-25x-1",
+  "scenario": "visual/scale-1440p-1-25x",
+  "captured": "2026-11-17T10:44:26Z",
+  "t": 100.573,
+  "product": {
+    "shell_sha": "74619fab04951777b2bdba37c1b80e1d19cb66bc",
+    "config_sha": "76058860dc3631250a6cd913ddbf1271c0eebf88",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview45-9-g420c73c (420c73c)",
+    "horneroctl_sha256": "bea50d20f272e14fb1712b880c484c7dc65eb97381759b65f895e4808a700967"
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.3.4-arch1-2",
+    "qemu": "QEMU emulator version 11.1.3",
+    "image": "signal-s74619fa-c7605886-h420c73c.qcow2",
+    "outputs": 1,
+    "resolution": "2560x1440",
+    "captured_resolution": "2560x1440"
+  },
+  "step": 3
+}

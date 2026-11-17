@@ -1,0 +1,132 @@
+[
+  {
+    "t": 51.168,
+    "kind": "probe",
+    "run": "hyprctl clients -j | jq -r '[.[] | select(.class==\"hqa-fullscreen\")][0].fullscreen'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "2",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 51.403,
+    "kind": "probe",
+    "run": "hyprctl activewindow -j | jq -r .class",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hqa-fullscreen",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 51.661,
+    "kind": "probe",
+    "run": "qs ipc call experience get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "gaming",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 51.909,
+    "kind": "probe",
+    "run": "qs ipc call experience status | jq -r .effective.holdPopups",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 52.15,
+    "kind": "probe",
+    "run": "qs ipc call experience status | jq -r '.effective.heldCount >= 1'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  },
+  {
+    "t": 52.404,
+    "kind": "probe",
+    "run": "qs ipc call experience status | jq -r .effective.telemetryPaused",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 5"
+  },
+  {
+    "t": 52.661,
+    "kind": "probe",
+    "run": "qs ipc call experience status | jq -r .effective.desktopWidgetsVisible",
+    "ok": true,
+    "rc": 0,
+    "stdout": "false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 6"
+  },
+  {
+    "t": 52.913,
+    "kind": "probe",
+    "run": "qs ipc call experience status | jq -r .effective.idleInhibit",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 7"
+  },
+  {
+    "t": 53.164,
+    "kind": "probe",
+    "run": "qs ipc call experience status | jq -r '[.fields.motion, .effective.glow] | @csv'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "\"off\",false",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 8"
+  },
+  {
+    "t": 53.475,
+    "kind": "probe",
+    "run": "grim -g \"0,0 1280x48\" -t ppm - | python3 -c \"import sys;b=sys.stdin.buffer.read().split(b'255\\n',1)[1];print(len({b[i:i+3] for i in range(0,len(b),3)}))\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 9"
+  },
+  {
+    "t": 53.73,
+    "kind": "probe",
+    "run": "grim -g \"0,752 1280x48\" -t ppm - | python3 -c \"import sys;b=sys.stdin.buffer.read().split(b'255\\n',1)[1];print(len({b[i:i+3] for i in range(0,len(b),3)}))\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "1",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 10"
+  },
+  {
+    "t": 53.77,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-final.png"
+    ],
+    "where": "proof 11"
+  }
+]

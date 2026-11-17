@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T085214Z-layouts-apply-hornero-left-1",
+  "finished": "2026-11-17T08:53:25Z",
+  "wall_s": 70.563,
+  "verdict": "pass",
+  "class": null,
+  "regression": false,
+  "reason": "all proof checks passed",
+  "actions": 0,
+  "driver_end": null,
+  "review": null
+}
