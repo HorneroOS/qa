@@ -1,0 +1,55 @@
+id: gaming/hyprland-tuning-lua
+purpose: >-
+  The Hyprland tuning of the Gaming experience mode reaches a Lua-only
+  Hyprland. The shell sends the same values as `eval hl.config(...)`
+  (services/GameMode.qml `luaTuning`) because `keyword` answers "unknown
+  request" on a Lua config. This scenario sends the exact request text over
+  the Hyprland request socket, proves the options changed, and proves that
+  `reload` restores the product's own values.
+covers: [shell#557]
+requires:
+  compositor: hyprland
+setup:
+  commands:
+    - |
+      python3 - <<'PY'
+      import glob, os, socket
+      rt = os.environ.get("XDG_RUNTIME_DIR", "/run/user/1000")
+      sig = os.environ.get("HYPRLAND_INSTANCE_SIGNATURE") or os.path.basename(sorted(glob.glob(rt + "/hypr/*"))[-1])
+      path = rt + "/hypr/" + sig + "/.socket.sock"
+      def ask(req):
+          s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+          s.connect(path)
+          s.sendall(req.encode())
+          out = b""
+          while True:
+              chunk = s.recv(4096)
+              if not chunk:
+                  break
+              out += chunk
+          s.close()
+          return out.decode()
+      lua = "hl.config({ animations = { enabled = false }, decoration = { shadow = { enabled = false }, blur = { enabled = false }, rounding = 0 }, general = { gaps_in = 0, gaps_out = 0, border_size = 1, allow_tearing = true } })"
+      reply = ask("eval " + lua)
+      os.makedirs(os.path.expanduser("~/.local/state"), exist_ok=True)
+      open(os.path.expanduser("~/.local/state/hqa-tuning-reply.txt"), "w").write("eval=" + reply.strip() + "\n")
+      PY
+    - sleep 1
+instruction: Read the Hyprland options after the Gaming tuning request, then reload and read them again.
+proof:
+  - note: The eval request was answered (reply recorded for review)
+    probe: {run: "cat ~/.local/state/hqa-tuning-reply.txt", contains: "eval=", save: tuning-reply.txt}
+  - note: Corner rounding is 0 after the eval tuning
+    probe: {run: "hyprctl getoption decoration:rounding -j | jq -r .int", equals: "0", retry_s: 5}
+  - note: Gap and tearing option values are recorded for review
+    probe: {run: "for o in general:gaps_in general:gaps_out general:allow_tearing decoration:rounding; do hyprctl getoption $o; done", save: options-after-tuning.txt}
+  - note: Gaps are 0 (plain-text option dump)
+    probe: {run: "hyprctl getoption general:gaps_in", contains: "0 0 0 0", retry_s: 5}
+  - note: Tearing is allowed (plain-text option dump)
+    probe: {run: "hyprctl getoption general:allow_tearing", contains: "bool: true", retry_s: 5}
+  - note: Reload restores the product rounding (Signal geometry, 5 px)
+    probe: {run: "hyprctl reload >/dev/null; sleep 2; hyprctl getoption decoration:rounding -j | jq -r .int", equals: "5", retry_s: 8}
+  - note: Reload restores tearing off
+    probe: {run: "hyprctl getoption general:allow_tearing", contains: "bool: false", retry_s: 5}
+budget: {wall_s: 90}
+artifacts: {screenshots: on-failure, logs: always}

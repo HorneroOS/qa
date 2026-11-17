@@ -769,3 +769,11 @@ scenarios:
     decision: keep
     rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
     schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T031641Z-wallpapers-ink-cockpit-vivid-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  experience/gaming-fullscreen:
+    decision: keep
+    rationale: "Editions audit: guards the Gaming policy under a real fullscreen window (compositor state, held notifications, paused telemetry, no shell pixels over it, focus kept)."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, which predates shell#551/#557), bundle 20261117T060803Z-experience-gaming-fullscreen-1. PASS means the probes held: compositor fullscreen state, focus kept, policy engaged, no shell pixels in the top/bottom 48 px of an opaque fullscreen window."
+  gaming/hyprland-tuning-lua:
+    decision: keep
+    rationale: "Editions audit: guards that the Gaming Hyprland tuning reaches a Lua-only Hyprland through eval (keyword is a silent no-op there)."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0, bundle 20261117T060645Z-gaming-hyprland-tuning-lua-1. The exact eval request text the shell sends is accepted by Hyprland 0.57 (reply ok) and changes rounding, gaps and tearing; reload restores them. The shell code path itself (shell#557) is not in that image."
