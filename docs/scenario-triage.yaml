@@ -536,7 +536,7 @@ scenarios:
   extensions/deck-draws-installed-widgets:
     decision: keep
     rationale: 'Regression for the empty Signal deck: packages left installed but not enabled by `horneroctl plugin catalog install` must still be drawn by the deck (shell docs/EXPERIENCE.md contract). Needs the plugins catalog staged at ~/catalog in the guest.'
-    schedule: 'Manually exercised in the QA VM on 2026-11-17 (4 of 6 widgets drawn at 1280x800, calendar and moon dropped for room); the scenario file itself has not been run through hornero-qa run yet. No PASS claimed.'
+    schedule: 'PENDING (qa#81): manually exercised in the QA VM on 2026-11-17 (4 of 6 widgets drawn at 1280x800, calendar and moon dropped for room); the scenario file itself has not been run through hornero-qa run yet. No PASS claimed.'
   extensions/lifecycle-disable-enable:
     decision: keep
     rationale: 'Extension Premium Acceptance (qa#81, foundation wave): horneroctl disable unloads an extension without touching neighbours; enable revalidates and loads it again.'
