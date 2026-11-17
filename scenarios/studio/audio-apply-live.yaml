@@ -1,0 +1,37 @@
+id: studio/audio-apply-live
+purpose: >-
+  `horneroctl studio audio apply --yes` against a LIVE PipeWire in the
+  guest: the drop-in is written, the running clock settings change to the
+  Low Latency proposal (quantum 128, min 64, max 256) and status reports
+  them. The horneroctl is the one baked into the image (see the PR for provenance).
+covers: [hornero#431, shell#572]
+requires:
+  compositor: hyprland
+setup:
+  commands:
+    - "horneroctl version > \"$HOME/hctl-version.txt\" 2>&1; sha256sum $(command -v horneroctl) >> \"$HOME/hctl-version.txt\""
+    - systemctl --user start pipewire wireplumber || true
+    - sleep 3
+    - "pw-metadata -n settings > \"$HOME/pw-before.txt\""
+    - "horneroctl studio audio apply --yes --json > \"$HOME/apply.json\" 2>&1"
+    - sleep 2
+instruction: Inspect the PipeWire audio profile state with horneroctl and pw-metadata.
+proof:
+  - note: The horneroctl under test is recorded (version and sha256)
+    probe: {run: "cat $HOME/hctl-version.txt", contains: "horneroctl", save: horneroctl-under-test.txt}
+  - note: PipeWire runtime before any change is recorded
+    probe: {run: "cat $HOME/pw-before.txt", contains: "clock.quantum", save: pw-before.txt}
+  - note: apply reported ok
+    probe: {run: "cat $HOME/apply.json", json: ok, equals: "true", save: apply.json}
+  - note: The drop-in exists and carries the Hornero marker
+    probe: {run: "grep -c 'applied by horneroctl studio audio apply' $HOME/.config/pipewire/pipewire.conf.d/50-hornero-studio-low-latency.conf", equals: "1"}
+  - note: The running PipeWire quantum is 128
+    probe: {run: "pw-metadata -n settings | grep \"key:'clock.quantum'\"", contains: "value:'128'", retry_s: 5}
+  - note: min and max quantum are 64 and 256
+    probe: {run: "pw-metadata -n settings | grep -E \"key:'clock.(min|max)-quantum'\" | sort", matches: "(?s)max-quantum.*256.*min-quantum.*64", retry_s: 5}
+  - note: status reports the profile as applied and the runtime as readable
+    probe: {run: "horneroctl studio audio status --json", json: data.dropin, equals: applied, save: status-applied.json}
+  - note: xruns and DSP load are reported as numbers or as unavailable, never invented
+    probe: {run: "horneroctl studio audio status --json | jq -r '.data.xruns + \" \" + .data.dsp_load_max_b_q'", matches: "^(unavailable|[0-9]+) (unavailable|[0-9.]+)$"}
+budget: {wall_s: 120}
+artifacts: {screenshots: on-failure, logs: always}

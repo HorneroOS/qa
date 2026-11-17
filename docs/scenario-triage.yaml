@@ -777,3 +777,15 @@ scenarios:
     decision: keep
     rationale: "Editions audit: guards that the Gaming Hyprland tuning reaches a Lua-only Hyprland through eval (keyword is a silent no-op there)."
     schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0, bundle 20261117T060645Z-gaming-hyprland-tuning-lua-1. The exact eval request text the shell sends is accepted by Hyprland 0.57 (reply ok) and changes rounding, gaps and tearing; reload restores them. The shell code path itself (shell#557) is not in that image."
+  studio/audio-apply-live:
+    decision: keep
+    rationale: "Editions audit: guards that studio audio apply changes a live PipeWire (drop-in plus clock quantum 128/64/256) and status reports it."
+    schedule: "PASS on image studio-hctl431 (shell f32a005, config 7605886, horneroctl built from hornero 650fae7, sha256 0e9d31d4...), bundle 20261117T064207Z-studio-audio-apply-live-1. Guest has no audio hardware (Dummy driver): xruns and DSP load read 0/0, not a latency or hardware claim."
+  studio/audio-revert-live:
+    decision: keep
+    rationale: "Editions audit: guards exact restore of the previous live PipeWire clock values and removal of the drop-in."
+    schedule: "PASS on image studio-hctl431, bundle 20261117T064336Z-studio-audio-revert-live-1."
+  studio/audio-foreign-file-live:
+    decision: keep
+    rationale: "Editions audit: guards that a personal PipeWire file of the same name is never overwritten or removed."
+    schedule: "PASS on image studio-hctl431, bundle 20261117T064513Z-studio-audio-foreign-file-live-1."
