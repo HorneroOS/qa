@@ -1,0 +1,31 @@
+id: extensions/deck-draws-installed-widgets
+purpose: >-
+  Needs the HorneroOS/plugins catalog (catalog.json + plugins/) staged at ~/catalog in the guest.
+  Signal mode must actually draw the first-party instrument deck from packages that `horneroctl plugin catalog install` left installed but NOT enabled (the contract in shell docs/EXPERIENCE.md). Regression for the empty deck on a real host where status said `disabled` and nothing was drawn.
+covers: [shell#478, plugins#62]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: cockpit
+  theme: hornero-signal-night
+  commands:
+    - "export HORNERO_PLUGINS_CATALOG_URL=$HOME/catalog; for id in agenda audio-deck calendar moon-phase network-scope system-insight; do horneroctl plugin catalog install hornero-$id --yes; done"
+    - qs ipc call plugins reload
+    - qs ipc call experience set signal
+    - sleep 12
+instruction: Judge the deck against the Signal Bezel language; at least four numbered instrument modules must be drawn, none overlapping.
+steps:
+  - wait: {stable: 1.5, timeout: 10}
+  - pointer: {x: 0.5, y: 0.5}
+  - screenshot: deck-drawn
+proof:
+  - note: Packages are installed and NOT enabled
+    probe: {run: "horneroctl plugin list --json | jq -r '.data.plugins | fromjson | map(select(.enabled)) | length'", equals: "0"}
+  - note: At least four deck widgets reached loaded (they are drawn, not merely catalogued)
+    probe: {run: "qs ipc call plugins status | jq '[.plugins[] | select(.placement==\"desktop\" and .state==\"loaded\")] | length >= 4'", equals: "true", retry_s: 15}
+  - note: No QML errors
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+media: [deck-drawn]
+budget: {wall_s: 140}
+artifacts: {screenshots: always, logs: always}
