@@ -8,6 +8,7 @@ attempts and reports flakiness instead of hiding it.
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import platform
@@ -41,16 +42,18 @@ from hornero_qa.vision import (
     Array,
     Rect,
     blank_frame,
+    builtin_tokens,
     changed,
     frame_sha256,
     load_frame,
-    load_tokens,
     match_anchor,
+    scheme_tokens,
     still,
 )
 
 ANCHORS_DIR = REPO_ROOT / "anchors"
-COLOURS_QML = "~/.config/quickshell/services/Colours.qml"
+SIGNAL_QML = "~/.config/quickshell/services/Signal.qml"
+SIGNAL_SCHEME = '"${XDG_STATE_HOME:-$HOME/.local/state}/hornero/signal/scheme.json"'
 POLL_S = 0.25
 SSH_FAILED = 255
 
@@ -170,13 +173,31 @@ class _Attempt:
                 raise QAError(FailureClass.PRODUCT_CRASH, "shell process not running after session start")
             raise QAError(FailureClass.PRODUCT, "shell running but its IPC never answered")
         self.bundle.action("ready", serial=_markers(self.engine.serial_text()))
-        r = self.probe(f"cat {COLOURS_QML}")
-        if r.rc == 0:
-            qml = self.bundle.root / "logs" / "Colours.qml"
-            qml.write_text(r.stdout + "\n", encoding="utf-8")
-            table = "_horneroLight" if self.scenario.setup.get("theme") == "hornero-light" else "_horneroDark"
-            self.tokens = load_tokens(qml, table)
         self.settle()
+
+    def load_tokens(self) -> None:
+        """Resolve Signal role tokens for the theme the shell is showing.
+
+        Colour probes compare against the applied theme: the live scheme
+        when its id matches the shell's theme, else the shell's built-in
+        role table for that id. Missing tokens leave probes on their
+        `fallback_hex`; the bundle records how many roles resolved."""
+        theme = self.probe("qs ipc call signal theme")
+        theme_id = theme.stdout.strip() if theme.rc == 0 else ""
+        logs = self.bundle.root / "logs"
+        logs.mkdir(parents=True, exist_ok=True)
+        scheme = self.probe(f"cat {SIGNAL_SCHEME}")
+        if scheme.rc == 0:
+            (logs / "signal-scheme.json").write_text(scheme.stdout + "\n", encoding="utf-8")
+            with contextlib.suppress(ValueError):
+                if json.loads(scheme.stdout).get("id") == theme_id:
+                    self.tokens = scheme_tokens(scheme.stdout)
+        if not self.tokens and theme_id:
+            qml = self.probe(f"cat {SIGNAL_QML}")
+            if qml.rc == 0:
+                with contextlib.suppress(ValueError):
+                    self.tokens = builtin_tokens(qml.stdout, theme_id)
+        self.bundle.action("tokens", theme=theme_id, roles=len(self.tokens))
 
     def settle(self, stable_s: float = 1.0, timeout: float = 20.0) -> bool:
         end = time.monotonic() + timeout
@@ -576,6 +597,7 @@ def run_once(
         att.boot()
         att.deadline = time.monotonic() + scenario.wall_s
         att.setup()
+        att.load_tokens()
         if opts.driver:
             driver_end = att.drive(opts.driver)
         else:

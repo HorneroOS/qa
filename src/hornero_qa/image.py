@@ -44,11 +44,17 @@ RUNTIME_PACKAGES = [
     "jq",
     "hyprlock",
     "gtk3",
+    # Hornero Signal type families (RFC 0001 §3.3): IBM Plex Sans / Mono /
+    # Sans Condensed. hornero-config and hornero-shell depend on it; naming it
+    # here keeps the image honest even if a package drops the dependency.
+    "ttf-ibm-plex",
 ]
-# AUR runtime dependencies the Hornero packages declare: M3 generation
-# requires python-materialyoucolor; recipe themes require python-pywal16's
-# `wal` command. Install with the base image's yay like package installs.
-AUR_RUNTIME_PACKAGES = ["python-materialyoucolor", "python-pywal16"]
+# Hornero Signal removed every AUR runtime dependency: themes are schema-v2
+# role tables rendered by hornero-config's stdlib Python, so neither
+# python-materialyoucolor (M3) nor python-pywal16 (recipe `wal`) is needed.
+AUR_RUNTIME_PACKAGES: list[str] = []
+# Factory theme of the Hornero Signal product (RFC 0001 §9).
+FACTORY_THEME = "hornero-signal-night"
 
 
 def _ssh(state: QAState, port: int, command: str, timeout: float = 1800) -> None:
@@ -253,7 +259,13 @@ def _mint(state: QAState, port: int, horneroctl: Path, compositor: str) -> None:
     _scp(state, port, horneroctl, "/tmp/horneroctl")
     compositor_packages = _compositor_packages(compositor)
     pkgs = " ".join((*RUNTIME_PACKAGES, *compositor_packages))
-    aur = " ".join(AUR_RUNTIME_PACKAGES)
+    aur_install = (
+        "yay -S --noconfirm --needed --removemake "
+        "--answerclean None --answerdiff None --answeredit None --answerupgrade None "
+        + " ".join(AUR_RUNTIME_PACKAGES)
+        if AUR_RUNTIME_PACKAGES
+        else ": no AUR runtime packages"
+    )
     _ssh(
         state,
         port,
@@ -268,8 +280,14 @@ for _ in $(seq 1 20); do pgrep -x Hyprland > /dev/null || break; sleep 0.5; done
 put() {{ install -D -m "$1" "$2" "$3.qa-tmp" && mv -f "$3.qa-tmp" "$3"; }}
 sudo install -m 0755 /tmp/horneroctl /usr/local/bin/horneroctl && rm -f /tmp/horneroctl
 rm -rf /tmp/qa && mkdir -p /tmp/qa && tar xf /tmp/qa-guest.tar -C /tmp/qa && G=/tmp/qa/guest
-put 0644 $G/hyprland.conf ~/.config/hypr/hyprland.conf
-cmp -s $G/hyprland.conf ~/.config/hypr/hyprland.conf
+# Hyprland 0.57+ prefers hyprland.lua; the QA entrypoint replaces the
+# product's and a stale hyprlang file must not suggest otherwise.
+put 0644 $G/hyprland.lua ~/.config/hypr/hyprland.lua
+cmp -s $G/hyprland.lua ~/.config/hypr/hyprland.lua
+rm -f ~/.config/hypr/hyprland.conf
+for f in environment input layout helpers keybindings window-rules smart-colors static; do
+  test -f ~/.config/hypr/hyprland.lua.d/$f.lua
+done
 put 0755 $G/qa-session.sh ~/.local/bin/qa-session.sh
 put 0755 $G/qa-shell.sh ~/.local/bin/qa-shell.sh
 put 0644 $G/bash_profile ~/.bash_profile
@@ -291,8 +309,7 @@ PY
 install -d ~/.local/share/hornero/shell-presets
 install -m0644 ~/.config/quickshell/presets/*.json ~/.local/share/hornero/shell-presets/
 sudo pacman -Sy --noconfirm --needed {pkgs}
-yay -S --noconfirm --needed --removemake \
-  --answerclean None --answerdiff None --answeredit None --answerupgrade None {aur}
+{aur_install}
 # Build/install the exact config pin as its system package. The shell deploy
 # step also materializes defaults into a staging HOME for validation; that
 # user tree must not be the only source of product catalogues in a ready image.
@@ -312,6 +329,19 @@ rm -rf "$HOME/.local/share/hornero/wallpapers" "$HOME/.local/share/dots/wallpape
 # not leave the desktop rendering a black fallback background.
 install -d "$HOME/.local/share/hornero"
 ln -s /usr/share/hornero/wallpapers "$HOME/.local/share/hornero/wallpapers"
+# Point the wallpaper at the factory theme's packaged artwork (the shell
+# harness still names a pre-Signal hornero-dark file).
+python3 - <<'PY'
+import json, pathlib
+home = pathlib.Path.home()
+theme = json.loads(pathlib.Path("/usr/share/hornero/themes/{FACTORY_THEME}/theme.json").read_text())
+wall = home / ".local/share/hornero/wallpapers" / theme["wallpaperDir"] / theme["defaultWallpaper"]
+if not wall.is_file():
+    raise SystemExit(f"factory wallpaper missing from hornero-config: {{wall}}")
+pointer = home / ".local/state/hornero/wallpaper/path"
+pointer.parent.mkdir(parents=True, exist_ok=True)
+pointer.write_text(str(wall) + chr(10))
+PY
 sudo gpasswd -a "$USER" uucp > /dev/null
 sudo touch /etc/cloud/cloud-init.disabled
 /usr/local/bin/horneroctl welcome set-show-on-login false --yes || true

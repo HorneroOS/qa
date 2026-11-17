@@ -71,5 +71,11 @@ uv run hornero-qa anchor cut runs/<run>/screenshots/003-launcher.png \
 ```
 
 The anchor records the source run, product SHAs and capture SHA-256. Add
-`color_probes` by hand, naming tokens from the shell's `Colours.qml`, so a
-recolour is caught even when the structure still matches.
+`color_probes` by hand, naming Hornero Signal palette roles (`ground`,
+`signal`, `ink`, …; RFC 0001 §3.1), so a recolour is caught even when the
+structure still matches. The runner resolves roles for the theme the shell is
+actually showing (`qs ipc call signal theme`): first the live schema-v2
+scheme at `~/.local/state/hornero/signal/scheme.json` when its id matches,
+otherwise the built-in table in the shell's `services/Signal.qml`. Unresolved
+roles fall back to the probe's `fallback_hex`; the bundle's `tokens` action
+records the theme id and how many roles resolved.
