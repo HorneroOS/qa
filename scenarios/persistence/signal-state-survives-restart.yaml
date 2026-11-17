@@ -1,0 +1,41 @@
+id: persistence/signal-state-survives-restart
+purpose: >-
+  User-chosen Signal state persists across a shell restart: theme (Signal
+  Day), layout preset (Hornero Right) and experience mode (Focus) are set, the
+  shell process is killed and started again the way the session starts it, and
+  all three come back unchanged with no config error.
+covers: [shell#475, shell#479]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: hornero-right
+  commands:
+    - horneroctl appearance theme apply hornero-signal-day --yes
+    - qs ipc call experience set focus
+    - sleep 3
+    - pkill -x qs || true
+    - sleep 2
+    - 'setsid -f nohup "$HOME/.local/bin/qa-shell.sh" >/dev/null 2>&1 < /dev/null'
+    - 'for _ in $(seq 1 60); do qs ipc call drawers list >/dev/null 2>&1 && exit 0; sleep 1; done; exit 1'
+instruction: Choose a theme, layout and experience mode, restart the shell, and check they are still in effect.
+steps:
+  - wait: {stable: 1.5, timeout: 10}
+  - screenshot: after-restart
+proof:
+  - note: The shell is a fresh process answering IPC
+    probe: {run: "qs ipc call drawers list", contains: launcher, retry_s: 15}
+  - note: Theme survived
+    probe: {run: "qs ipc call signal theme", equals: hornero-signal-day, retry_s: 10}
+  - note: Theme record on disk agrees
+    probe: {run: "jq -r .id \"$HOME/.local/state/hornero/signal/scheme.json\"", equals: hornero-signal-day}
+  - note: Experience mode survived
+    probe: {run: "qs ipc call experience get", equals: focus, retry_s: 10}
+  - note: Layout survived - one visible bar on the right edge
+    probe: {run: "qs ipc call debug bars | jq -r '[.[] | select(.visible) | .edge] | join(\",\")'", equals: right, retry_s: 10}
+  - note: No QML errors since the restart
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - screenshot: final
+media: [after-restart]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: always}

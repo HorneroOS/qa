@@ -1,0 +1,36 @@
+id: multimonitor/popout-scaled-output
+purpose: >-
+  Anchored popouts on a second virtual output with a different scale
+  (shell#476/#482): Virtual-2 is set to 1920x1080 at scale 1.5 (logical
+  1280x720) next to Virtual-1 at scale 1; both outputs carry a bar, and the
+  Bluetooth card opened from Virtual-2's rail lands on the right of its trigger
+  inside that output. Placement geometry for the second output is judged on the
+  head-1 capture because the shell's debug IPC answers for the first output only.
+covers: [shell#476, shell#482, qa#25]
+requires: {outputs: 2, compositor: hyprland}
+setup:
+  layout: hornero-left
+  commands:
+    - >-
+      hyprctl eval 'hl.monitor({ output = "Virtual-2", mode = "1920x1080@60", position = "1280x0", scale = 1.5 })'
+    - sleep 3
+instruction: Hover the Bluetooth status icon on the second, scaled output and look at the card.
+steps:
+  - probe: {run: "hyprctl monitors -j | jq -c '[.[] | {name,scale}] | sort_by(.name)'", equals: '[{"name":"Virtual-1","scale":1},{"name":"Virtual-2","scale":1.5}]', retry_s: 10}
+  - wait: {stable: 1.5, timeout: 8}
+  - pointer: {x: 0.5, y: 0.3}
+  - wait: {stable: 0.6, timeout: 4}
+  - pointer: {x: 0.511, y: 0.741, glide: 8}
+  - wait: {stable: 1.0, timeout: 6}
+  - screenshot: scaled-output-popout
+proof:
+  - note: Hyprland reports scale 1 and 1.5
+    probe: {run: "hyprctl monitors -j | jq -c '[.[] | {name,scale,width,height}] | sort_by(.name)'", equals: '[{"name":"Virtual-1","scale":1,"width":1280,"height":800},{"name":"Virtual-2","scale":1.5,"width":1920,"height":1080}]'}
+  - note: Each output has a visible bar sized in its own logical pixels (800 and 720 high)
+    probe: {run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {s: .screen, h: .geom[3]}] | sort_by(.s)'", equals: '[{"s":"Virtual-1","h":800},{"s":"Virtual-2","h":720}]', retry_s: 10}
+  - note: Cursor is on the second output
+    probe: {run: "hyprctl cursorpos | cut -d, -f1 | tr -d ' ' | awk '{print ($1 > 1280) ? \"second\" : \"first\"}'", equals: second}
+  - screenshot: scaled-output-popout
+media: [scaled-output-popout]
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: always}

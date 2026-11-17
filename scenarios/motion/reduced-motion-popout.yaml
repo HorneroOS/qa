@@ -1,0 +1,45 @@
+id: motion/reduced-motion-popout
+purpose: >-
+  Reduced motion (RFC 0001 §3.6, shell#476): with the system preference
+  org.gnome.desktop.interface enable-animations=false the anchored popout opens
+  without the spring morph (its frame equals its solved target from the first
+  visible sample), while with animations enabled the same popout visibly morphs.
+  The shell is sampled from inside the guest at ~30 ms; the pointer is moved by
+  the compositor (hl.dsp.cursor.move) so sampling starts at the hover. The
+  standard run is the control: without it a zero morph count proves nothing.
+covers: [shell#476, shell#482]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: hornero-left
+  commands:
+    - qs ipc call experience set everyday
+    - >-
+      measure() { out="$1"; hyprctl eval 'hl.dispatch(hl.dsp.cursor.move({x=600,y=400}))' >/dev/null; sleep 1.5; : > "$out";
+      hyprctl eval 'hl.dispatch(hl.dsp.cursor.move({x=28,y=673}))' >/dev/null;
+      end=$(( $(date +%s%3N) + 900 ));
+      while [ "$(date +%s%3N)" -lt "$end" ]; do
+      qs ipc call debug dump | jq -r '.popout | select(.phase != "closed") | (if .frame == .target then "still" else "moving" end)' >> "$out"; done; };
+      gsettings set org.gnome.desktop.interface enable-animations true; sleep 1; measure "$HOME/qa-motion-standard.txt";
+      hyprctl eval 'hl.dispatch(hl.dsp.cursor.move({x=600,y=400}))' >/dev/null; sleep 1.5;
+      gsettings set org.gnome.desktop.interface enable-animations false; sleep 1; measure "$HOME/qa-motion-reduced.txt"
+instruction: Hover the Bluetooth status icon with animations on, then off, and compare how the card appears.
+steps:
+  - wait: {stable: 1.0, timeout: 6}
+  - screenshot: reduced-motion-popout-open
+proof:
+  - note: Control run saw the popout open at all
+    probe: {run: "grep -c . \"$HOME/qa-motion-standard.txt\"", matches: "^([1-9][0-9]*)$"}
+  - note: Control run (animations on) morphed - at least 3 samples where frame differed from target
+    probe: {run: "[ \"$(grep -c moving \"$HOME/qa-motion-standard.txt\")\" -ge 3 ] && echo morph", equals: morph}
+  - note: Reduced run opened the popout (samples exist)
+    probe: {run: "grep -c still \"$HOME/qa-motion-reduced.txt\"", matches: "^([1-9][0-9]*)$"}
+  - note: Reduced run never morphed - zero samples where frame differed from target
+    probe: {run: "grep -c moving \"$HOME/qa-motion-reduced.txt\" || true", equals: "0"}
+  - note: Both timelines kept for review
+    probe: {run: "paste -d' ' \"$HOME/qa-motion-standard.txt\" /dev/null | sort | uniq -c; echo --; sort \"$HOME/qa-motion-reduced.txt\" | uniq -c", save: motion-timelines.txt}
+  - screenshot: final
+media: [reduced-motion-popout-open]
+budget: {wall_s: 150}
+artifacts: {screenshots: always, logs: always}
