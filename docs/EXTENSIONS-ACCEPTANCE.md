@@ -50,8 +50,8 @@ least one loaded"), so a missing fixture can never read as a pass.
 
 ### Lane defects fixed (2026-11-17)
 
-- **Fixtures missing** (13 lanes): nothing installed the fixtures, see above.
-- **Shell restart** (5 extension lanes and `wallpapers/unconfigured-empty-state`,
+- **Fixtures missing** (most lanes): nothing installed the fixtures, see above.
+- **Shell restart** (five extension lanes and `wallpapers/unconfigured-empty-state`,
   all classed `product_crash`): the scenarios restarted the shell with
   `hyprctl dispatch exec`, which the Lua-configured Hyprland of the image
   rejects (`dispatch in lua ... unexpected symbol`), so the shell never came
@@ -148,3 +148,5 @@ After an approved KVM window, update `docs/scenario-triage.yaml` first
 Status column above to match the bundle verdict. A row whose bundle is
 missing, incomplete or only a screenshot sidecar stays PENDING — screenshot
 sidecars without a complete run result are never PASS.
+
+Status of these fixes: root causes read from the recorded bundles of the run on image `signal-s74619fa` (probe output, `actions.jsonl`); the edited scenarios pass `hornero-qa validate` and the contract tests but have NOT been re-run in a VM yet. They stay PENDING until a bundle says otherwise.
