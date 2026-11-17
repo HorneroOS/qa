@@ -1,0 +1,61 @@
+{
+  "schema": "hornero.qa.run/1",
+  "run_id": "20261117T015924Z-bars-popout-placement-top-1",
+  "started": "2026-11-17T01:59:24Z",
+  "scenario": "bars/popout-placement-top",
+  "covers": [
+    "shell#476",
+    "shell#482"
+  ],
+  "instruction": "Hover the bluetooth status icon in the top bar and look at where the card lands.",
+  "attempt": 1,
+  "image_sha256": "87a4d03d58bada3512500eb9ed367649ced977efa7ace3340a3dac3b55391b76",
+  "product": {
+    "shell_sha": "433acea4b684a765a1c669e1f5f0ae5f9544d7d1",
+    "config_sha": "f1e98b1722f0eabbe1182c8c36634c6ee40e77b7",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview45-2-gdaa03b0 (daa03b0)",
+    "horneroctl_sha256": "4af1345cace70bd98300a14c8cfe37e50621d1e985cb8134417c08209cfabdda"
+  },
+  "image": {
+    "schema": "hornero.qa.image/1",
+    "name": "signal-s433acea-cf1e98b1-hdaa03b0",
+    "built": "2026-11-17T01:55:40Z",
+    "base": "arch-provisioned-yay-20261116.qcow2",
+    "product": {
+      "shell_sha": "433acea4b684a765a1c669e1f5f0ae5f9544d7d1",
+      "config_sha": "f1e98b1722f0eabbe1182c8c36634c6ee40e77b7",
+      "horneroctl": "horneroctl horneroctl-v0.2.0-preview45-2-gdaa03b0 (daa03b0)",
+      "horneroctl_sha256": "4af1345cace70bd98300a14c8cfe37e50621d1e985cb8134417c08209cfabdda"
+    },
+    "compositor": "hyprland",
+    "builder_mem_mb": 3072,
+    "builder_cpus": 3,
+    "runtime_packages": [
+      "papirus-icon-theme",
+      "qt6ct",
+      "dunst",
+      "libnotify",
+      "jq",
+      "hyprlock",
+      "gtk3",
+      "ttf-ibm-plex"
+    ],
+    "compositor_packages": [],
+    "aur_runtime_packages": [],
+    "catalogues": {
+      "shell_presets": "user catalogue seeded from shell presets/",
+      "themes": "hornero-config system package; user copies removed",
+      "wallpapers": "hornero-config system package; user copies removed"
+    }
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.3.4-arch1-2",
+    "qemu": "QEMU emulator version 11.1.3",
+    "image": "signal-s433acea-cf1e98b1-hdaa03b0.qcow2",
+    "outputs": 1,
+    "resolution": "1280x800"
+  }
+}

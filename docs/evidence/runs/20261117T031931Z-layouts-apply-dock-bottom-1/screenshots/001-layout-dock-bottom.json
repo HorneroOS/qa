@@ -1,0 +1,27 @@
+{
+  "schema": "hornero.qa.screenshot/1",
+  "file": "001-layout-dock-bottom.png",
+  "sha256": "d5c259fba27d79bad261ba971ee5b1c43abc8e68c775977212e4d3c78a78407b",
+  "run_id": "20261117T031931Z-layouts-apply-dock-bottom-1",
+  "scenario": "layouts/apply-dock-bottom",
+  "captured": "2026-11-17T03:20:40Z",
+  "t": 68.966,
+  "product": {
+    "shell_sha": "433acea4b684a765a1c669e1f5f0ae5f9544d7d1",
+    "config_sha": "f1e98b1722f0eabbe1182c8c36634c6ee40e77b7",
+    "horneroctl": "horneroctl horneroctl-v0.2.0-preview45-2-gdaa03b0 (daa03b0)",
+    "horneroctl_sha256": "4af1345cace70bd98300a14c8cfe37e50621d1e985cb8134417c08209cfabdda"
+  },
+  "environment": {
+    "engine": "native",
+    "compositor": "hyprland",
+    "hornero_qa": "0.1.0",
+    "host_kernel": "7.3.4-arch1-2",
+    "qemu": "QEMU emulator version 11.1.3",
+    "image": "signal-s433acea-cf1e98b1-hdaa03b0.qcow2",
+    "outputs": 1,
+    "resolution": "1280x800",
+    "captured_resolution": "1280x800"
+  },
+  "proof": true
+}

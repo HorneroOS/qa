@@ -1,0 +1,51 @@
+id: bars/popout-placement-right
+purpose: >-
+  Anchored-surface placement (shell#476/#482, RFC 0001 amendment): a bluetooth popout
+  opened from the right bar on the hornero-right layout is placed on the
+  left side of its trigger, stays inside the output, never overlaps a bar,
+  and sits within 12 px of the bar edge. Visual quality of the card is
+  judged on the saved screenshot.
+covers: [shell#476, shell#482]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: hornero-right
+  commands:
+    - qs ipc call experience set everyday
+instruction: Hover the bluetooth status icon in the right bar and look at where the card lands.
+steps:
+  - wait: {stable: 1.0, timeout: 8}
+  - pointer: {x: 0.5, y: 0.5}
+  - wait: {stable: 0.6, timeout: 4}
+  - pointer: {x: 0.9781, y: 0.8413, glide: 8}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: bluetooth, retry_s: 6}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.phase", equals: open, retry_s: 4}
+  - wait: {stable: 0.5, timeout: 4}
+  - screenshot: popout-right
+proof:
+  - note: The bluetooth card is open on the left side of its trigger
+    probe: {run: "qs ipc call debug dump | jq -r '[.popout.name, .popout.side] | join(\"/\")'", equals: "bluetooth/left"}
+  - note: Frame is inside the output, clear of every bar on it, near the bar edge and over its trigger
+    probe:
+      run: >-
+        B=$(qs ipc call debug bars); D=$(qs ipc call debug dump);
+        jq -nr --argjson b "$B" --argjson d "$D" '
+          $d.popout as $p | $d.win as $w | $p.frame as [$fx,$fy,$fw,$fh] |
+          ($b | map(select(.screen == $b[0].screen))) as $bars |
+          ($bars | map(select(.edge == "right"))[0].geom) as [$bx,$by,$bw,$bh] |
+          {
+            name: ($p.name == "bluetooth"),
+            side: ($p.side == "left"),
+            inWindow: ($fx >= 0 and $fy >= 0 and $fx + $fw <= $w.w and $fy + $fh <= $w.h),
+            clearOfEveryBar: ($bars | all(.geom as [$ax,$ay,$aw,$ah] | $fy >= $ay + $ah or $fy + $fh <= $ay or $fx >= $ax + $aw or $fx + $fw <= $ax)),
+            nearTrigger: ($bx - ($fx + $fw) >= 0 and $bx - ($fx + $fw) <= 12),
+            overTrigger: ($p.trigger as [$tx,$ty,$tw,$th] | ($ty + $th/2 >= $fy and $ty + $th/2 <= $fy + $fh))
+          } | [.[]] | all'
+      equals: "true"
+  - note: Frame and trigger recorded for review
+    probe: {run: "qs ipc call debug dump | jq -c .popout", save: popout-right.json}
+  - screenshot: final
+media: [popout-right]
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: always}

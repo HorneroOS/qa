@@ -1,0 +1,99 @@
+[
+  {
+    "t": 46.745,
+    "kind": "probe",
+    "run": "qs ipc call drawers state launcher",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 2"
+  },
+  {
+    "t": 56.384,
+    "kind": "probe",
+    "run": "horneroctl appearance theme get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "current theme: hornero-signal-day (scheme; mode=light, gtk=Hornero-Signal-Day)",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 7"
+  },
+  {
+    "t": 56.659,
+    "kind": "probe",
+    "run": "horneroctl appearance theme get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "current theme: hornero-signal-day (scheme; mode=light, gtk=Hornero-Signal-Day)",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 56.868,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '.data.gtk_color_scheme'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "prefer-light",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 57.087,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '.data.mode'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "light",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 57.313,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '.data.gtk_theme'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hornero-Signal-Day",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 57.529,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '.data.icon_theme'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Papirus",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  },
+  {
+    "t": 57.77,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": true,
+    "rc": 0,
+    "stdout": "498",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 5"
+  },
+  {
+    "t": 57.815,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-final.png"
+    ],
+    "where": "proof 6"
+  }
+]

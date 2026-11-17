@@ -1,0 +1,11 @@
+id: smoke/no-config-errors
+purpose: >-
+  A fresh desktop shows no Hyprland config-error banner: every product
+  fragment the session sources parses and every dispatcher it binds exists,
+  including binds for optional plugins that are not installed.
+instruction: Boot the machine and look at the desktop for error banners.
+proof:
+  - note: Hyprland reports no config errors
+    probe: {run: "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'", equals: "0"}
+  - screenshot: desktop
+budget: {wall_s: 60}

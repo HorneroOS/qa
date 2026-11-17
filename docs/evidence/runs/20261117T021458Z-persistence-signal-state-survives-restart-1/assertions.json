@@ -1,0 +1,77 @@
+[
+  {
+    "t": 87.283,
+    "kind": "probe",
+    "run": "qs ipc call drawers list",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bar\nosd\nsession\nlauncher\ndashboard\nutilities\nsidebar\nlayoutPicker",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 87.538,
+    "kind": "probe",
+    "run": "qs ipc call signal theme",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-day",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 87.794,
+    "kind": "probe",
+    "run": "jq -r .id \"$HOME/.local/state/hornero/signal/scheme.json\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-day",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 88.073,
+    "kind": "probe",
+    "run": "qs ipc call experience get",
+    "ok": true,
+    "rc": 0,
+    "stdout": "focus",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 88.37,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -r '[.[] | select(.visible) | .edge] | join(\",\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "right",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 4"
+  },
+  {
+    "t": 88.631,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 5"
+  },
+  {
+    "t": 88.675,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-final.png"
+    ],
+    "where": "proof 6"
+  }
+]

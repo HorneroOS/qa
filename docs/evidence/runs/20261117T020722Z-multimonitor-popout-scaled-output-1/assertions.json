@@ -1,0 +1,56 @@
+[
+  {
+    "t": 70.883,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -c '[.[] | {name,scale}] | sort_by(.name)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1.5}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 0"
+  },
+  {
+    "t": 82.086,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -c '[.[] | {name,scale,width,height}] | sort_by(.name)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[{\"name\":\"Virtual-1\",\"scale\":1,\"width\":1280,\"height\":800},{\"name\":\"Virtual-2\",\"scale\":1.5,\"width\":1920,\"height\":1080}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 82.333,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {s: .screen, h: .geom[3]}] | sort_by(.s)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[{\"s\":\"Virtual-1\",\"h\":800},{\"s\":\"Virtual-2\",\"h\":720}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 82.562,
+    "kind": "probe",
+    "run": "hyprctl cursorpos | cut -d, -f1 | tr -d ' ' | awk '{print ($1 > 1280) ? \"second\" : \"first\"}'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "second",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 82.696,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "003-scaled-output-popout-h0.png",
+      "004-scaled-output-popout-h1.png"
+    ],
+    "where": "proof 3"
+  }
+]

@@ -10,7 +10,7 @@ setup:
   theme: hornero-signal-night
   commands:
     - qs ipc call experience set everyday
-    - horneroctl wallpaper set /usr/share/hornero/wallpapers/argentina/quebrada-mineral-01.jpg --yes
+    - horneroctl wallpaper set /usr/share/hornero/wallpapers/quebrada/quebrada-mineral-01.jpg --yes
     - sleep 6
 instruction: Look at the desktop and judge it against the Signal Bezel visual language and its concept specimens.
 steps:

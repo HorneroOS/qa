@@ -1,0 +1,13 @@
+[
+  {
+    "t": 89.574,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": false,
+    "rc": 0,
+    "stdout": "bluetooth",
+    "stderr": "",
+    "detail": "stdout 'bluetooth' != 'network'",
+    "where": "step 4"
+  }
+]

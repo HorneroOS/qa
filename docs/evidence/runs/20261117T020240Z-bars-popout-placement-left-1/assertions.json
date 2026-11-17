@@ -1,0 +1,66 @@
+[
+  {
+    "t": 82.395,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.name",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bluetooth",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 4"
+  },
+  {
+    "t": 82.678,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r .popout.phase",
+    "ok": true,
+    "rc": 0,
+    "stdout": "open",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 87.243,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -r '[.popout.name, .popout.side] | join(\"/\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "bluetooth/right",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 87.549,
+    "kind": "probe",
+    "run": "B=$(qs ipc call debug bars); D=$(qs ipc call debug dump); jq -nr --argjson b \"$B\" --argjson d \"$D\" '\n  $d.popout as $p | $d.win as $w | $p.frame as [$fx,$fy,$fw,$fh] |\n  ($b | map(select(.screen == $b[0].screen))) as $bars |\n  ($bars | map(select(.edge == \"left\"))[0].geom) as [$bx,$by,$bw,$bh] |\n  {\n    name: ($p.name == \"bluetooth\"),\n    side: ($p.side == \"right\"),\n    inWindow: ($fx >= 0 and $fy >= 0 and $fx + $fw <= $w.w and $fy + $fh <= $w.h),\n    clearOfEveryBar: ($bars | all(.geom as [$ax,$ay,$aw,$ah] | $fy >= $ay + $ah or $fy + $fh <= $ay or $fx >= $ax + $aw or $fx + $fw <= $ax)),\n    nearTrigger: ($fx - ($bx + $bw) >= 0 and $fx - ($bx + $bw) <= 12),\n    overTrigger: ($p.trigger as [$tx,$ty,$tw,$th] | ($ty + $th/2 >= $fy and $ty + $th/2 <= $fy + $fh))\n  } | [.[]] | all'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "true",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 87.823,
+    "kind": "probe",
+    "run": "qs ipc call debug dump | jq -c .popout",
+    "ok": true,
+    "rc": 0,
+    "stdout": "{\"name\":\"bluetooth\",\"hasCurrent\":true,\"detached\":\"\",\"phase\":\"open\",\"intent\":\"hover\",\"keyboard\":false,\"frame\":[56,592,224,154],\"target\":[56,592,224,154],\"trigger\":[18,659,20,20],\"side\":\"right\",\"attached\":true,\"flipped\":false,\"scroll\":false,\"opacity\":1}",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 2"
+  },
+  {
+    "t": 87.865,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-final.png"
+    ],
+    "where": "proof 3"
+  }
+]

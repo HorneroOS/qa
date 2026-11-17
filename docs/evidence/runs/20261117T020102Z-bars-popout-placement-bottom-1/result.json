@@ -1,0 +1,12 @@
+{
+  "run_id": "20261117T020102Z-bars-popout-placement-bottom-1",
+  "finished": "2026-11-17T02:02:33Z",
+  "wall_s": 91.327,
+  "verdict": "fail",
+  "class": "product",
+  "regression": true,
+  "reason": "step 4 probe failed: stdout 'battery' != 'bluetooth'",
+  "actions": 2,
+  "driver_end": null,
+  "review": null
+}

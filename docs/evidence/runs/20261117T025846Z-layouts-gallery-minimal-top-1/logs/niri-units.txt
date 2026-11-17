@@ -1,0 +1,2 @@
+[probe failed rc=4] Unit niri.service could not be found.
+Unit niri-shutdown.target could not be found.

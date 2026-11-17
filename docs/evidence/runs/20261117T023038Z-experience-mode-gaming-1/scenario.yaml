@@ -1,0 +1,31 @@
+id: experience/mode-gaming
+purpose: >-
+  Experience mode gaming on Cockpit: the mode is active, its segment/indicator treatment is captured for comparison with the other modes (Signal must be visibly richer than Everyday).
+covers: [shell#478, shell#494]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: cockpit
+  theme: hornero-signal-night
+  commands:
+    - qs ipc call experience set gaming
+    - sleep 6
+instruction: Look at the desktop and judge it against the Signal Bezel visual language and its concept specimens.
+steps:
+  - wait: {stable: 1.5, timeout: 10}
+  - pointer: {x: 0.5, y: 0.5}
+  - wait: {stable: 1.0, timeout: 6}
+  - screenshot: mode-gaming
+proof:
+  - note: Mode is active
+    probe: {run: "qs ipc call experience get", equals: gaming, retry_s: 8}
+  - note: At least one bar is visible and the geometry is recorded for review
+    probe: {run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {edge,style,geom}]'", matches: "edge", save: bars.json, retry_s: 12}
+  - note: No QML errors
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - screenshot: final
+
+media: [mode-gaming]
+budget: {wall_s: 100}
+artifacts: {screenshots: always, logs: always}

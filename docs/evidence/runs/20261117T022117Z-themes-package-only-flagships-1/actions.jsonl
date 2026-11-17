@@ -1,0 +1,38 @@
+{"t": 15.803, "kind": "ready", "serial": []}
+{"t": 36.059, "kind": "setup", "run": "rm -rf \"$HOME/.local/share/hornero/themes\" \"$HOME/.local/share/hornero/wallpapers\" \"$HOME/.local/share/dots/themes\" \"$HOME/.local/share/dots/wallpapers\"", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 67.157, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 67.157, "kind": "probe", "step": 0, "value": {"run": "test ! -e \"$HOME/.local/share/hornero/themes\" && test ! -e \"$HOME/.local/share/dots/themes\" && test ! -e \"$HOME/.local/share/hornero/wallpapers\" && test ! -e \"$HOME/.local/share/dots/wallpapers\" && echo no-user-catalogue", "equals": "no-user-catalogue"}, "note": null}
+{"t": 67.401, "kind": "probe", "step": 1, "value": {"run": "horneroctl appearance theme list --full --json | jq -er '.message | fromjson | any(.[]; .id == \"hornero-signal-day\") and any(.[]; .id == \"pampa\")'", "equals": "true"}, "note": null}
+{"t": 67.61, "kind": "key", "step": 2, "value": "ctrl+space", "note": null}
+{"t": 67.715, "kind": "wait", "step": 3, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 75.804, "kind": "wait_result", "step": 3, "ok": false}
+{"t": 75.804, "kind": "probe", "step": 4, "value": {"run": "qs ipc call drawers state launcher", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 76.068, "kind": "type", "step": 5, "value": ">theme Hornero Signal Day", "note": null}
+{"t": 77.161, "kind": "wait", "step": 6, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 85.371, "kind": "wait_result", "step": 6, "ok": false}
+{"t": 85.371, "kind": "screenshot", "step": 7, "value": "package-only-hornero-signal-day-search", "note": null}
+{"t": 85.429, "kind": "key", "step": 8, "value": "enter", "note": null}
+{"t": 85.529, "kind": "probe", "step": 9, "value": {"run": "horneroctl appearance theme get", "contains": "hornero-signal-day", "retry_s": 20}, "note": null}
+{"t": 85.747, "kind": "screenshot", "step": 10, "value": "package-only-hornero-signal-day", "note": null}
+{"t": 85.799, "kind": "key", "step": 11, "value": "ctrl+space", "note": null}
+{"t": 85.912, "kind": "wait", "step": 12, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 94.158, "kind": "wait_result", "step": 12, "ok": false}
+{"t": 94.158, "kind": "probe", "step": 13, "value": {"run": "qs ipc call drawers state launcher", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 94.443, "kind": "type", "step": 14, "value": ">theme Pampa", "note": null}
+{"t": 94.987, "kind": "wait", "step": 15, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 103.233, "kind": "wait_result", "step": 15, "ok": false}
+{"t": 103.234, "kind": "screenshot", "step": 16, "value": "package-only-pampa-search", "note": null}
+{"t": 103.293, "kind": "key", "step": 17, "value": "enter", "note": null}
+{"t": 103.396, "kind": "probe", "step": 18, "value": {"run": "horneroctl appearance theme get", "contains": "pampa", "retry_s": 30}, "note": null}
+{"t": 103.658, "kind": "screenshot", "step": 19, "value": "package-only-pampa", "note": null}
+{"t": 103.709, "kind": "probe", "step": 20, "value": {"run": "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'", "equals": "pampa|dark|Hornero-Pampa|Papirus-Dark|prefer-dark", "retry_s": 10}, "note": null}
+{"t": 104.025, "kind": "probe", "step": 21, "value": {"run": "horneroctl wallpaper current", "contains": "/usr/share/hornero/wallpapers/pampa/pampa-01.jpg"}, "note": null}
+{"t": 104.285, "kind": "key", "step": 22, "value": "ctrl+space", "note": null}
+{"t": 104.633, "kind": "wait", "step": 23, "value": {"changed": true, "stable": 0.4, "timeout": 8}, "note": null}
+{"t": 112.77, "kind": "wait_result", "step": 23, "ok": false}
+{"t": 112.77, "kind": "probe", "step": 24, "value": {"run": "qs ipc call drawers state launcher", "equals": "true", "retry_s": 3}, "note": null}
+{"t": 113.055, "kind": "type", "step": 25, "value": ">theme Hornero Signal Day", "note": null}
+{"t": 114.353, "kind": "wait", "step": 26, "value": {"changed": true, "stable": 0.5, "timeout": 8}, "note": null}
+{"t": 122.519, "kind": "wait_result", "step": 26, "ok": false}
+{"t": 122.519, "kind": "key", "step": 27, "value": "enter", "note": null}
+{"t": 122.906, "kind": "probe", "step": 28, "value": {"run": "horneroctl appearance theme get", "contains": "hornero-signal-day", "retry_s": 20}, "note": null}

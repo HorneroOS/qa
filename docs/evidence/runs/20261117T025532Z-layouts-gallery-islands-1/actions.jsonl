@@ -1,0 +1,12 @@
+{"t": 17.326, "kind": "ready", "serial": []}
+{"t": 38.05, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-night --yes", "rc": 0, "stdout": "theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)", "stderr": ""}
+{"t": 38.399, "kind": "setup", "run": "horneroctl shell preset apply islands --yes", "rc": 0, "stdout": "applied preset Islands (islands)", "stderr": ""}
+{"t": 38.763, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 44.037, "kind": "setup", "run": "sleep 5", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 75.36, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 75.36, "kind": "wait", "step": 0, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 85.618, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 85.618, "kind": "pointer", "step": 1, "value": {"x": 0.5, "y": 0.5}, "note": null}
+{"t": 85.728, "kind": "wait", "step": 2, "value": {"stable": 1.0, "timeout": 6}, "note": null}
+{"t": 91.819, "kind": "wait_result", "step": 2, "ok": false}
+{"t": 91.819, "kind": "screenshot", "step": 3, "value": "gallery-islands", "note": null}

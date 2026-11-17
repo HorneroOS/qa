@@ -1,0 +1,13 @@
+{"t": 16.851, "kind": "ready", "serial": []}
+{"t": 37.156, "kind": "setup", "run": "horneroctl shell preset apply hornero-right --yes", "rc": 0, "stdout": "applied preset Hornero Right (hornero-right)", "stderr": ""}
+{"t": 37.938, "kind": "setup", "run": "horneroctl appearance theme apply hornero-signal-day --yes", "rc": 0, "stdout": "Hornero Signal Day theme applied (/home/hornero/.local/state/hornero/signal/scheme.json)", "stderr": ""}
+{"t": 38.231, "kind": "setup", "run": "qs ipc call experience set focus", "rc": 0, "stdout": "ok: focus", "stderr": ""}
+{"t": 41.508, "kind": "setup", "run": "sleep 3", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 41.699, "kind": "setup", "run": "pkill -x qs || true", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 43.958, "kind": "setup", "run": "sleep 2", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 44.152, "kind": "setup", "run": "setsid -f nohup \"$HOME/.local/bin/qa-shell.sh\" >/dev/null 2>&1 < /dev/null", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 45.608, "kind": "setup", "run": "for _ in $(seq 1 60); do qs ipc call drawers list >/dev/null 2>&1 && exit 0; sleep 1; done; exit 1", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 76.768, "kind": "tokens", "theme": "hornero-signal-day", "roles": 34}
+{"t": 76.768, "kind": "wait", "step": 0, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 86.922, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 86.922, "kind": "screenshot", "step": 1, "value": "after-restart", "note": null}

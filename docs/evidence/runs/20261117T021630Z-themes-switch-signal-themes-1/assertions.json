@@ -1,0 +1,88 @@
+[
+  {
+    "t": 87.368,
+    "kind": "probe",
+    "run": "qs ipc call signal theme",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-day",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 5"
+  },
+  {
+    "t": 113.896,
+    "kind": "probe",
+    "run": "qs ipc call signal theme",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-contrast",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 13"
+  },
+  {
+    "t": 140.417,
+    "kind": "probe",
+    "run": "qs ipc call signal theme",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-night",
+    "stderr": "",
+    "detail": "ok",
+    "where": "step 21"
+  },
+  {
+    "t": 148.894,
+    "kind": "probe",
+    "run": "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme] | join(\"|\")'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-night|dark|Hornero-Signal",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 149.155,
+    "kind": "probe",
+    "run": "jq -r '[.id, .mode, (.palette | length)] | join(\"|\")' \"$HOME/.local/state/hornero/signal/scheme.json\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "hornero-signal-night|dark|34",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 149.434,
+    "kind": "probe",
+    "run": "pgrep -x qs || pgrep -x quickshell",
+    "ok": true,
+    "rc": 0,
+    "stdout": "499",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 2"
+  },
+  {
+    "t": 149.702,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 149.747,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "004-final.png"
+    ],
+    "where": "proof 4"
+  }
+]

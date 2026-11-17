@@ -1,0 +1,5 @@
+standard
+      6 moving
+     24 still
+reduced
+     33 still

@@ -1,0 +1,33 @@
+[
+  {
+    "t": 91.136,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {edge,style,geom}]'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[{\"edge\":\"bottom\",\"style\":\"dock\",\"geom\":[0,726,1280,74]}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 91.402,
+    "kind": "probe",
+    "run": "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 91.446,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-final.png"
+    ],
+    "where": "proof 2"
+  }
+]

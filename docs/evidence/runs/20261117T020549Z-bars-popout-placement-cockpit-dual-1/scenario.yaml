@@ -1,0 +1,51 @@
+id: bars/popout-placement-cockpit-dual
+purpose: >-
+  Anchored-surface placement (shell#476/#482, RFC 0001 amendment): a network popout
+  opened from the top bar on the cockpit layout is placed on the
+  below side of its trigger, stays inside the output, never overlaps a bar,
+  and sits within 12 px of the bar edge. Cockpit is a dual bar (top inset + bottom attached): the card must stay clear of both bars. Visual quality of the card is
+  judged on the saved screenshot.
+covers: [shell#476, shell#482]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: cockpit
+  commands:
+    - qs ipc call experience set everyday
+instruction: Hover the network status icon in the top bar and look at where the card lands.
+steps:
+  - wait: {stable: 1.0, timeout: 8}
+  - pointer: {x: 0.5, y: 0.5}
+  - wait: {stable: 0.6, timeout: 4}
+  - pointer: {x: 0.8883, y: 0.045, glide: 8}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.name", equals: network, retry_s: 6}
+  - probe: {run: "qs ipc call debug dump | jq -r .popout.phase", equals: open, retry_s: 4}
+  - wait: {stable: 0.5, timeout: 4}
+  - screenshot: popout-cockpit-dual
+proof:
+  - note: The network card is open on the below side of its trigger
+    probe: {run: "qs ipc call debug dump | jq -r '[.popout.name, .popout.side] | join(\"/\")'", equals: "network/below"}
+  - note: Frame is inside the output, clear of every bar on it, near the bar edge and over its trigger
+    probe:
+      run: >-
+        B=$(qs ipc call debug bars); D=$(qs ipc call debug dump);
+        jq -nr --argjson b "$B" --argjson d "$D" '
+          $d.popout as $p | $d.win as $w | $p.frame as [$fx,$fy,$fw,$fh] |
+          ($b | map(select(.screen == $b[0].screen))) as $bars |
+          ($bars | map(select(.edge == "top"))[0].geom) as [$bx,$by,$bw,$bh] |
+          {
+            name: ($p.name == "network"),
+            side: ($p.side == "below"),
+            inWindow: ($fx >= 0 and $fy >= 0 and $fx + $fw <= $w.w and $fy + $fh <= $w.h),
+            clearOfEveryBar: ($bars | all(.geom as [$ax,$ay,$aw,$ah] | $fy >= $ay + $ah or $fy + $fh <= $ay or $fx >= $ax + $aw or $fx + $fw <= $ax)),
+            nearTrigger: ($fy - ($by + $bh) >= 0 and $fy - ($by + $bh) <= 12),
+            overTrigger: ($p.trigger as [$tx,$ty,$tw,$th] | ($tx + $tw/2 >= $fx and $tx + $tw/2 <= $fx + $fw))
+          } | [.[]] | all'
+      equals: "true"
+  - note: Frame and trigger recorded for review
+    probe: {run: "qs ipc call debug dump | jq -c .popout", save: popout-cockpit-dual.json}
+  - screenshot: final
+media: [popout-cockpit-dual]
+budget: {wall_s: 120}
+artifacts: {screenshots: always, logs: always}

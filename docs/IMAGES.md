@@ -172,7 +172,9 @@ Current ready images in `~/.local/share/hornero/qa/images/` (2026-11-16;
 
 | Image | Composition |
 |---|---|
-| `signal-s6e880f2-c64b0c46-hdaa03b0.qcow2` (current) | shell `6e880f2`, config `64b0c46`, horneroctl `daa03b0` — Signal mains |
+| `signal-s433acea-cf1e98b1-hdaa03b0.qcow2` (current) | shell `433acea`, config `f1e98b1`, horneroctl `daa03b0` (hornero main only changed docs since) |
+| `signal-s02cc16b-cfee77ce-hdaa03b0.qcow2` | shell `02cc16b` (anchored surfaces), config `fee77ce` |
+| `signal-s6e880f2-c64b0c46-hdaa03b0.qcow2` | shell `6e880f2`, config `64b0c46` |
 | `signal-s5651dd2-cc5f96a7-h421a593.qcow2` | earlier Signal composition (bisect) |
 | `arch-provisioned-yay-20261116.qcow2` | provisioned base for `image refresh` |
 
@@ -233,3 +235,14 @@ product fix lands:
 | Gap | Workaround | Tracking |
 |---|---|---|
 | This QA image still seeds curated shell presets for layout journeys | the mint seeds `~/.local/share/hornero/shell-presets` from the shell tree under test; appearance packs and media come from the exact `hornero-config` package | shell#95 package integration |
+
+## Harness notes found on 2026-11-17
+
+- `requires.resolution` only sets the QEMU scanout; the guest `hyprland.lua`
+  pins `Virtual-1` to 1280x800, so a 1366x768 scenario still renders 1280x800
+  unless it also runs `hyprctl eval 'hl.monitor({ output = "Virtual-1", mode = "1366x768@60", position = "0x0", scale = 1 })'`
+  in `setup.commands` (the `layouts/gallery-*-1366x768` captures are 1280x800 until that is added).
+- Legacy `hyprctl keyword` / `hyprctl dispatch exec` in older scenarios are no-ops
+  on the Lua session; `multimonitor/mixed-dpi-two-outputs` and
+  `multimonitor/virtual-output-disable-reconnect` were ported to `hyprctl eval`.
+- `qs ipc call debug dump` answers for the first output only.

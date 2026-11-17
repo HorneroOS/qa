@@ -1,0 +1,29 @@
+id: layouts/gallery-cockpit-1366x768
+purpose: >-
+  cockpit at 1366x768 (common laptop panel) to check bar density, clipping and segment anatomy.
+covers: [shell#484, shell#490, shell#494]
+requires:
+  resolution: 1366x768
+  compositor: hyprland
+setup:
+  layout: cockpit
+  theme: hornero-signal-night
+  commands:
+    - qs ipc call experience set everyday
+    - sleep 5
+instruction: Look at the desktop and judge it against the Signal Bezel visual language and its concept specimens.
+steps:
+  - wait: {stable: 1.5, timeout: 10}
+  - pointer: {x: 0.5, y: 0.5}
+  - wait: {stable: 1.0, timeout: 6}
+  - screenshot: cockpit-1366
+proof:
+  - note: At least one bar is visible and the geometry is recorded for review
+    probe: {run: "qs ipc call debug bars | jq -c '[.[] | select(.visible) | {edge,style,geom}]'", matches: "edge", save: bars.json, retry_s: 12}
+  - note: No QML errors
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - screenshot: final
+
+media: [cockpit-1366]
+budget: {wall_s: 100}
+artifacts: {screenshots: always, logs: always}

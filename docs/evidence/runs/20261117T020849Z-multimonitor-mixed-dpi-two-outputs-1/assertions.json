@@ -1,0 +1,45 @@
+[
+  {
+    "t": 73.257,
+    "kind": "probe",
+    "run": "hyprctl version",
+    "ok": true,
+    "rc": 0,
+    "stdout": "Hyprland 0.57.2 built from branch v0.57.2 at commit 11cbc6c577b84ffb1edf4df3fc5b6128c3ae6947 clean (VERSION: bump to 0.57.2).\nDate: Mon Nov 9 11:05:46 2026\nTag: v0.57.2, commits: 8015\n\nLibraries:\nHyprgraphics: built against 0.6.0, system has 0.6.0\nHyprutils: built against 0.14.3, system has 0.14.3\nHyprcursor: built against 0.1.13, system has 0.1.14\nHyprlang: built against 0.6.8, system has 0.6.8\nAquamarine: built against 0.16.0, system has 0.16.0\n\nVersion ABI string: 11cbc6c577b84ffb1edf4df3fc5b6128c3ae6947_aq_0.16_hu_0.14_hg_0.6_hc_0.1_hlg_0.6\nno flags were set",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 73.537,
+    "kind": "probe",
+    "run": "hyprctl monitors -j | jq -c '[.[] | {name,scale}] | sort_by(.name)'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[{\"name\":\"Virtual-1\",\"scale\":1},{\"name\":\"Virtual-2\",\"scale\":1.5}]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 73.795,
+    "kind": "probe",
+    "run": "qs ipc call debug bars | jq -c '[.[] | select(.visible)] | group_by(.screen) | map(length) | sort'",
+    "ok": true,
+    "rc": 0,
+    "stdout": "[2,2]",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 73.927,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "001-mixed-scale-outputs-h0.png",
+      "002-mixed-scale-outputs-h1.png"
+    ],
+    "where": "proof 3"
+  }
+]

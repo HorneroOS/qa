@@ -1,0 +1,12 @@
+{"t": 15.955, "kind": "ready", "serial": []}
+{"t": 36.657, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-day --yes", "rc": 0, "stdout": "theme set to hornero-signal-day (mode=light, gtk=Hornero-Signal-Day)", "stderr": ""}
+{"t": 36.929, "kind": "setup", "run": "horneroctl shell preset apply cockpit-clear --yes", "rc": 0, "stdout": "applied preset Cockpit Clear (cockpit-clear)", "stderr": ""}
+{"t": 37.312, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 42.589, "kind": "setup", "run": "sleep 5", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 73.706, "kind": "tokens", "theme": "hornero-signal-day", "roles": 34}
+{"t": 73.706, "kind": "wait", "step": 0, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 83.914, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 83.914, "kind": "pointer", "step": 1, "value": {"x": 0.5, "y": 0.5}, "note": null}
+{"t": 83.955, "kind": "wait", "step": 2, "value": {"stable": 1.0, "timeout": 6}, "note": null}
+{"t": 89.958, "kind": "wait_result", "step": 2, "ok": false}
+{"t": 89.958, "kind": "screenshot", "step": 3, "value": "cockpit-clear-day", "note": null}

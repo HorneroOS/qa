@@ -483,30 +483,11 @@ scenarios:
     schedule: Blocked until a pinned image ships the merged horneroctl Studio
       contracts (HorneroOS/hornero#299); then schedule in the next approved KVM
       QA window.
-  themes/appearance-apply-light:
-    decision: keep
-    rationale: 'Retain coverage for this product behavior: Apply a theme from Appearance
-      and verify the current-look preview follows the applied state.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
   themes/package-only-flagships:
     decision: keep
     rationale: 'Retain coverage for this product behavior: Installed Hornero theme
       packs apply without a user or dotfiles theme catalogue, including Light and
       Pampa with matching GTK and icons.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
-  themes/set-hornero-light:
-    decision: keep
-    rationale: 'Retain coverage for this product behavior: Switching the official
-      theme to Hornero Light applies natively and the active-theme query agrees afterwards.'
-    schedule: Schedule in the next approved KVM QA window against the pinned ready
-      image.
-  themes/ui-switch-hornero-light:
-    decision: keep
-    rationale: 'Retain coverage for this product behavior: A keyboard user can find
-      Hornero Light through the launcher, apply it, and observe one coherent Shell,
-      GTK, icon, and mode state.'
     schedule: Schedule in the next approved KVM QA window against the pinned ready
       image.
   wallpapers/unconfigured-empty-state:
@@ -612,3 +593,179 @@ scenarios:
     decision: keep
     rationale: 'Extension Premium Acceptance (qa#81): per-screen bar/desktop extensions stay loaded on two differently scaled VIRTUAL outputs. Physical monitors, hotplug and disconnect fallback stay NOT TESTED until an approved hardware fixture exists.'
     schedule: 'PENDING (qa#81): execute in the next approved KVM window; the visual claim additionally needs reviewer screenshot/manual evidence per docs/EXTENSIONS-ACCEPTANCE.md. No PASS is claimed.'
+  bars/popout-placement-bottom:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "FAIL (harness drift): hover hit 'battery' not 'bluetooth' after #494; PASSED on 02cc16b. Re-derive coordinates."
+  bars/popout-placement-cockpit-dual:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "FAIL (harness drift): hover hit 'bluetooth' not 'network' after #494; PASSED on 02cc16b. Re-derive coordinates."
+  bars/popout-placement-left:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T020240Z-bars-popout-placement-left-1."
+  bars/popout-placement-right:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T020416Z-bars-popout-placement-right-1."
+  bars/popout-placement-top:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "FAIL (harness drift, not a product verdict): hover coordinates were derived on shell 02cc16b and no longer hit Bluetooth after the segment/anatomy changes (the popout opened was 'battery'). Re-derive from `qs ipc call debug bars` and re-run; the same scenario PASSED on image 02cc16b (bundle 20261117T011637Z-bars-popout-placement-top-1, not tracked)."
+  experience/everyday-vs-signal:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "FAIL (harness drift): the Settings > Experience pane layout moved after #488-#491 so the Switch click missed (mode stayed everyday); PASSED on 02cc16b. Re-derive click coordinates. Mode-by-mode captures are covered by experience/mode-*."
+  experience/mode-everyday:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T022725Z-experience-mode-everyday-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  experience/mode-focus:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T022547Z-experience-mode-focus-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  experience/mode-gaming:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T023038Z-experience-mode-gaming-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  experience/mode-signal:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T022902Z-experience-mode-signal-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  experience/mode-studio:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T023135Z-experience-mode-studio-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-classic-bottom:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T023313Z-layouts-gallery-classic-bottom-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-classic-top:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T023448Z-layouts-gallery-classic-top-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-cockpit:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T024423Z-layouts-gallery-cockpit-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-cockpit-1366x768:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T023623Z-layouts-gallery-cockpit-1366x768-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-cockpit-clear:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T024111Z-layouts-gallery-cockpit-clear-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-cockpit-clear-1366x768:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T023759Z-layouts-gallery-cockpit-clear-1366x768-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-cockpit-clear-day:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T023936Z-layouts-gallery-cockpit-clear-day-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-cockpit-day:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T024246Z-layouts-gallery-cockpit-day-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-cozy-minimal:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T024558Z-layouts-gallery-cozy-minimal-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-dock-bottom:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T024733Z-layouts-gallery-dock-bottom-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-gaming:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T024909Z-layouts-gallery-gaming-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-horizon:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T025044Z-layouts-gallery-horizon-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-hornero-left:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T025221Z-layouts-gallery-hornero-left-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-hornero-right:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T025355Z-layouts-gallery-hornero-right-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-islands:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T025532Z-layouts-gallery-islands-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-minimal-left:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T025709Z-layouts-gallery-minimal-left-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-minimal-top:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T025846Z-layouts-gallery-minimal-top-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  layouts/gallery-studio:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T030021Z-layouts-gallery-studio-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  motion/reduced-motion-popout:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T021329Z-motion-reduced-motion-popout-1."
+  multimonitor/popout-scaled-output:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T020722Z-multimonitor-popout-scaled-output-1."
+  persistence/signal-state-survives-restart:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T021458Z-persistence-signal-state-survives-restart-1."
+  themes/appearance-apply-signal-day:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T022323Z-themes-appearance-apply-signal-day-1."
+  themes/set-signal-day:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T021904Z-themes-set-signal-day-1."
+  themes/switch-signal-themes:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T021630Z-themes-switch-signal-themes-1."
+  themes/ui-switch-signal-day:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T022018Z-themes-ui-switch-signal-day-1."
+  wallpapers/ink-cockpit-bright:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T030156Z-wallpapers-ink-cockpit-bright-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  wallpapers/ink-cockpit-clear-bright:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T030334Z-wallpapers-ink-cockpit-clear-bright-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  wallpapers/ink-cockpit-clear-dark:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T030518Z-wallpapers-ink-cockpit-clear-dark-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  wallpapers/ink-cockpit-clear-detailed:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T030656Z-wallpapers-ink-cockpit-clear-detailed-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  wallpapers/ink-cockpit-clear-vivid:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T030835Z-wallpapers-ink-cockpit-clear-vivid-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  wallpapers/ink-cockpit-dark:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "INCONCLUSIVE (boot): guest SSH not reachable in 240 s; re-run. Not a product verdict."
+  wallpapers/ink-cockpit-detailed:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T031502Z-wallpapers-ink-cockpit-detailed-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."
+  wallpapers/ink-cockpit-vivid:
+    decision: keep
+    rationale: "Signal mission acceptance scenario (qa#E, 2026-11-17): guards the Hornero Signal visual/interaction contract; screenshot review is the judge of design quality."
+    schedule: "PASS on image signal-s433acea-cf1e98b1-hdaa03b0 (shell 433acea, config f1e98b1, horneroctl daa03b0), bundle 20261117T031641Z-wallpapers-ink-cockpit-vivid-1. PASS means only that the setup applied and the probes held; the visual judgement is human screenshot review - see HorneroOS/shell#485 and the filed defects (e.g. Cockpit Clear ink over bright/detailed wallpapers)."

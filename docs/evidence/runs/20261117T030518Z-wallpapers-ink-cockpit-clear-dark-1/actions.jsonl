@@ -1,0 +1,13 @@
+{"t": 16.726, "kind": "ready", "serial": []}
+{"t": 37.57, "kind": "setup", "run": "horneroctl appearance theme set hornero-signal-night --yes", "rc": 0, "stdout": "theme set to hornero-signal-night (mode=dark, gtk=Hornero-Signal)", "stderr": ""}
+{"t": 37.947, "kind": "setup", "run": "horneroctl shell preset apply cockpit-clear --yes", "rc": 0, "stdout": "applied preset Cockpit Clear (cockpit-clear)", "stderr": ""}
+{"t": 38.293, "kind": "setup", "run": "qs ipc call experience set everyday", "rc": 0, "stdout": "ok: everyday", "stderr": ""}
+{"t": 38.557, "kind": "setup", "run": "horneroctl wallpaper set /usr/share/hornero/wallpapers/buenos-aires-nocturno/buenos-aires-nocturno-01.jpg --yes", "rc": 0, "stdout": "wallpaper set: /usr/share/hornero/wallpapers/buenos-aires-nocturno/buenos-aires-nocturno-01.jpg", "stderr": ""}
+{"t": 44.835, "kind": "setup", "run": "sleep 6", "rc": 0, "stdout": "", "stderr": ""}
+{"t": 75.914, "kind": "tokens", "theme": "hornero-signal-night", "roles": 34}
+{"t": 75.914, "kind": "wait", "step": 0, "value": {"stable": 1.5, "timeout": 10}, "note": null}
+{"t": 86.204, "kind": "wait_result", "step": 0, "ok": false}
+{"t": 86.204, "kind": "pointer", "step": 1, "value": {"x": 0.5, "y": 0.5}, "note": null}
+{"t": 86.469, "kind": "wait", "step": 2, "value": {"stable": 1.0, "timeout": 6}, "note": null}
+{"t": 92.473, "kind": "wait_result", "step": 2, "ok": false}
+{"t": 92.473, "kind": "screenshot", "step": 3, "value": "cockpit-clear-dark", "note": null}

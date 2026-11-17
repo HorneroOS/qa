@@ -1,0 +1,66 @@
+[
+  {
+    "t": 84.047,
+    "kind": "probe",
+    "run": "grep -c . \"$HOME/qa-motion-standard.txt\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "30",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 0"
+  },
+  {
+    "t": 84.264,
+    "kind": "probe",
+    "run": "[ \"$(grep -c moving \"$HOME/qa-motion-standard.txt\")\" -ge 3 ] && echo morph",
+    "ok": true,
+    "rc": 0,
+    "stdout": "morph",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 1"
+  },
+  {
+    "t": 84.497,
+    "kind": "probe",
+    "run": "grep -c still \"$HOME/qa-motion-reduced.txt\"",
+    "ok": true,
+    "rc": 0,
+    "stdout": "33",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 2"
+  },
+  {
+    "t": 84.719,
+    "kind": "probe",
+    "run": "grep -c moving \"$HOME/qa-motion-reduced.txt\" || true",
+    "ok": true,
+    "rc": 0,
+    "stdout": "0",
+    "stderr": "",
+    "detail": "ok",
+    "where": "proof 3"
+  },
+  {
+    "t": 84.941,
+    "kind": "probe",
+    "run": "echo standard; sort \"$HOME/qa-motion-standard.txt\" | uniq -c; echo reduced; sort \"$HOME/qa-motion-reduced.txt\" | uniq -c",
+    "ok": true,
+    "rc": 0,
+    "stdout": "standard\n      6 moving\n     24 still\nreduced\n     33 still",
+    "stderr": "",
+    "detail": "rc=0",
+    "where": "proof 4"
+  },
+  {
+    "t": 84.984,
+    "kind": "screenshot",
+    "ok": true,
+    "detail": [
+      "002-final.png"
+    ],
+    "where": "proof 5"
+  }
+]

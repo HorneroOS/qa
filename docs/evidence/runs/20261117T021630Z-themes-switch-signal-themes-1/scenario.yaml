@@ -1,0 +1,51 @@
+id: themes/switch-signal-themes
+purpose: >-
+  A keyboard user cycles the three Hornero Signal themes (Day, Contrast,
+  Night) from the launcher; each switch is reflected by the shell, the
+  persisted scheme and a distinct ground colour, and mode follows the theme.
+covers: [config#128, shell#475]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: cockpit
+  theme: hornero-signal-night
+instruction: Open the launcher and switch to Signal Day, then Signal Contrast, then back to Signal Night.
+steps:
+  - key: ctrl+space
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - type: ">theme Hornero Signal Day"
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - key: enter
+  - probe: {run: "qs ipc call signal theme", equals: hornero-signal-day, retry_s: 20}
+  - wait: {stable: 1.0, timeout: 8}
+  - screenshot: signal-day
+  - key: ctrl+space
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - type: ">theme Hornero Signal Contrast"
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - key: enter
+  - probe: {run: "qs ipc call signal theme", equals: hornero-signal-contrast, retry_s: 20}
+  - wait: {stable: 1.0, timeout: 8}
+  - screenshot: signal-contrast
+  - key: ctrl+space
+  - wait: {changed: true, stable: 0.4, timeout: 8}
+  - type: ">theme Hornero Signal Night"
+  - wait: {changed: true, stable: 0.5, timeout: 8}
+  - key: enter
+  - probe: {run: "qs ipc call signal theme", equals: hornero-signal-night, retry_s: 20}
+  - wait: {stable: 1.0, timeout: 8}
+  - screenshot: signal-night
+proof:
+  - note: Night is active at the end and CLI agrees
+    probe: {run: "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme] | join(\"|\")'", equals: "hornero-signal-night|dark|Hornero-Signal"}
+  - note: Persisted scheme is complete (34 roles) and is Night
+    probe: {run: "jq -r '[.id, .mode, (.palette | length)] | join(\"|\")' \"$HOME/.local/state/hornero/signal/scheme.json\"", equals: "hornero-signal-night|dark|34"}
+  - note: Shell survived three transitions
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - note: No QML errors
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - screenshot: final
+media: [signal-day, signal-contrast, signal-night]
+budget: {wall_s: 240, max_actions: 40}
+artifacts: {screenshots: always, logs: always}

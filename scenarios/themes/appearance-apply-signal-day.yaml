@@ -11,11 +11,11 @@ steps:
   - key: enter
   - probe: {run: "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", equals: "Hornero Settings - Network", retry_s: 10}
   - wait: {stable: 2.0, timeout: 10}
-  - pointer: {x: 0.17, y: 0.52, click: left}
+  - pointer: {x: 0.144, y: 0.4475, click: left}
   - probe: {run: "hyprctl clients -j | jq -r '[.[] | select(.title | startswith(\"Hornero Settings\")) | .title][0] // \"missing\"'", equals: "Hornero Settings - Appearance", retry_s: 8}
   - wait: {stable: 1.5, timeout: 10}
   - screenshot: appearance-before-apply
-  - pointer: {x: 0.33, y: 0.62, click: left}
+  - pointer: {x: 0.4375, y: 0.6463, click: left}
   - probe: {run: "horneroctl appearance theme get", contains: "hornero-signal-day", retry_s: 30}
   - probe: {run: "horneroctl --json appearance theme get | jq -er '[.data.id,.data.mode,.data.gtk_theme,.data.icon_theme,.data.gtk_color_scheme] | join(\"|\")'", equals: "hornero-signal-day|light|Hornero-Signal-Day|Papirus|prefer-light", retry_s: 10}
   - wait: {stable: 1.5, timeout: 10}
