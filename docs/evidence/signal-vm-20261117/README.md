@@ -16,3 +16,13 @@ horneroctl daa03b0) unless the file says 02cc16b below. Run bundles are under
 | shell-contrast-theme-bar-edge.png / shell-night-reference.png | 02cc16b | Signal Contrast bar vs ground 1.02:1 |
 | shell-scaled-output-*.png | 02cc16b | popout and utilities drawer on a 1.5x second output |
 | config-deprecated-banner-boot.png | 02cc16b | Hyprland deprecated-config banner at boot |
+
+## Installer (rootless QEMU), preview32 ISO
+
+`installer-preview32-live-3gib-ram-gate.png`: the signed preview32 ISO
+(sha256 b8cd0f86..., GPG good) boots rootless under user QEMU/KVM with OVMF on a
+throwaway disk and reaches Calamares, which refuses to continue at 3 GiB
+("does not have enough working memory. At least 4 ..."; installer
+`welcome.conf` requiredRam: 4.0). Install-to-first-boot needs a 4 GiB guest,
+above the mission's 3 GiB VM cap, so it was not run. Host resolv.conf must be
+shadowed in a user+mount namespace for DNS (script in VM-HOWTO).
