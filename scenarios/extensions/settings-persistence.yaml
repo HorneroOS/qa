@@ -9,8 +9,12 @@ purpose: >-
 covers: [qa#81, shell#374]
 setup:
   commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
     - 'python3 -c "import json,os; p=os.path.expanduser(\"~/.config/hornero/shell.json\"); d=json.load(open(p)); d.setdefault(\"plugins\",{}).setdefault(\"settings\",{})[\"example-clock\"]={\"twentyFourHour\": False}; json.dump(d, open(p,\"w\"))"'
-    - 'pkill -x qs || true; sleep 1; hyprctl dispatch exec "$HOME/.local/bin/qa-shell.sh"; sleep 3'
+    - 'pkill -x qs || true; sleep 2'
+    - 'setsid -f nohup "$HOME/.local/bin/qa-shell.sh" >/dev/null 2>&1 < /dev/null'
+    - 'for _ in $(seq 1 60); do qs ipc call drawers list >/dev/null 2>&1 && exit 0; sleep 1; done; exit 1'
 instruction: Restart the shell with a stored example-clock setting and open Settings to inspect the generated extension settings.
 steps:
   - probe: {run: "qs ipc call plugins status | jq -r .discovered", equals: "true", retry_s: 15}

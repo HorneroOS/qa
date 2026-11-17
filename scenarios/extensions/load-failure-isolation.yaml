@@ -11,6 +11,10 @@ purpose: >-
   vacuously. Execution still PENDING a ready image carrying the fixture
   and an approved KVM window; never executed yet.
 covers: [qa#81, shell#380]
+setup:
+  commands:
+    - 'for id in example-clock example-multi-surface example-dashboard-note example-desktop-note example-broken; do d="$HOME/.config/quickshell/examples/plugins/$id"; horneroctl plugin install-local "$d" --yes && horneroctl plugin trust "$id" --yes && horneroctl plugin enable "$id" --yes || exit 1; done'
+    - qs ipc call plugins reload
 instruction: Boot the desktop with one broken and one healthy extension enabled and inspect the reported states.
 proof:
   - note: The broken fixture is present and reported failed (precondition, never vacuous)
