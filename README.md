@@ -1,5 +1,9 @@
 # Hornero QA
 
+[![ci](https://github.com/HorneroOS/qa/actions/workflows/ci.yml/badge.svg)](https://github.com/HorneroOS/qa/actions/workflows/ci.yml)
+[![Evidence staleness](https://github.com/HorneroOS/qa/actions/workflows/evidence-staleness.yml/badge.svg)](https://github.com/HorneroOS/qa/actions/workflows/evidence-staleness.yml)
+[![License: MIT](https://img.shields.io/github/license/HorneroOS/qa)](LICENSE)
+
 System-level graphical, end-to-end, visual and agentic acceptance for
 [HorneroOS](https://github.com/HorneroOS), the Arch-based workstation
 operating-system family (Desktop · Studio · Gaming).
@@ -62,10 +66,25 @@ uv run hornero-qa studio-gate
 ## What lives here (and what does not)
 
 Product and system acceptance lives here. Unit, component and repo-local
-tests stay in their owning repositories (shell, config, hornero, greeter,
-website). See the boundary table in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#1-boundary).
+tests stay in their owning repositories
+([`HorneroOS/shell`](https://github.com/HorneroOS/shell),
+[`HorneroOS/config`](https://github.com/HorneroOS/config),
+[`HorneroOS/hornero`](https://github.com/HorneroOS/hornero),
+[`HorneroOS/greeter`](https://github.com/HorneroOS/greeter),
+[`HorneroOS/website`](https://github.com/HorneroOS/website)).
+See the boundary table in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#1-boundary).
 
 ## License
 
 MIT. Hornero QA integrates GPL tools such as os-autoinst only as external
 processes; no GPL code is copied into this repository.
+
+---
+
+[Website](https://www.horneroos.com) ·
+[Docs](https://www.horneroos.com/docs) ·
+[`HorneroOS/shell`](https://github.com/HorneroOS/shell) ·
+[`HorneroOS/config`](https://github.com/HorneroOS/config) ·
+[`HorneroOS/hornero`](https://github.com/HorneroOS/hornero) ·
+[Issues](https://github.com/HorneroOS/qa/issues) ·
+[License](LICENSE)
