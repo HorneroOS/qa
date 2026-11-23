@@ -317,6 +317,10 @@ scenarios:
     decision: keep
     rationale: "Retain coverage for this product behavior: Studio render jobs require explicit submission through allow-listed adapters only: unknown adapters and missing inputs are refused, job ids cannot traverse out of the user job store, and no background execution happens."
     schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090752Z-studio-jobs-approval-privacy-1."
+  studio/jobs-render-adapters:
+    decision: keep
+    rationale: "Retain coverage for this product behavior: Studio render jobs expose the allow-listed kdenlive-render and melt-render adapters alongside blender-render and ffmpeg-export: invalid project/output types are refused, creative doctor checks report optional tooling without failing, and cancellation is documented as a state transition rather than a process kill (HorneroOS/hornero#289 extension, horneroctl 7fe478c)."
+    schedule: "NOT RUN on a QA guest image yet: all six probes verified 2026-11-23 against a host-built horneroctl (7fe478c) only, which is not guest acceptance evidence. Execute on the next Signal image containing horneroctl >= 7fe478c; no PASS is claimed until a bundle exists."
   agentic/shell-proposal-delegate:
     decision: fix
     rationale: "Agentic workstation acceptance (HorneroOS/hornero#391/#394): shell proposals never execute, prefixed elevation is classified protected, and external delegation is refused or truthful. Host acceptance already runs in hornero scripts/agentic-acceptance.sh; this scenario carries the same contract into guest QA."
