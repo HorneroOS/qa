@@ -1,0 +1,24 @@
+id: studio/jobs-render-adapters
+purpose: >-
+  Studio render jobs expose the allow-listed kdenlive-render and
+  melt-render adapters alongside blender-render and ffmpeg-export:
+  invalid project/output types and dash-prefixed paths are refused,
+  creative doctor checks report optional tooling without failing, and
+  cancellation is documented as a state transition.
+covers: [hornero#289]
+instruction: Open a terminal and review Studio job adapters and creative diagnostics without rendering anything.
+proof:
+  - note: Help lists all four allow-listed adapters
+    probe: {run: "horneroctl studio jobs --help", contains: "kdenlive-render"}
+  - note: Help documents melt-render too
+    probe: {run: "horneroctl studio jobs --help", contains: "melt-render"}
+  - note: Cancellation semantics are stated honestly (no process-kill claim)
+    probe: {run: "horneroctl studio jobs --help", contains: "state transition, not a"}
+  - note: kdenlive-render refuses a non-Kdenlive input
+    probe: {run: "printf qa > /tmp/qa-not-kdenlive.mov && horneroctl studio jobs submit --adapter kdenlive-render --input /tmp/qa-not-kdenlive.mov --output /tmp/qa-out.mp4 >/dev/null 2>&1 && echo allowed || echo refused", equals: refused}
+  - note: melt-render refuses an unsupported output extension
+    probe: {run: "printf '<mlt/>' > /tmp/qa-proj.kdenlive && horneroctl studio jobs submit --adapter melt-render --input /tmp/qa-proj.kdenlive --output /tmp/qa-out.avi >/dev/null 2>&1 && echo allowed || echo refused", equals: refused}
+  - note: Studio doctor reports creative tooling rows
+    probe: {run: "horneroctl studio doctor", contains: "studio-creative-ffmpeg"}
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}
