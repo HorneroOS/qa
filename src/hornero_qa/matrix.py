@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import subprocess
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
@@ -21,6 +22,9 @@ EVIDENCE_ROOTS = (Path("docs/evidence"), Path(".github/evidence"))
 SCREENSHOT_SCHEMA = "hornero.qa.screenshot/1"
 APPEARANCE_SCHEMA = "hornero.appearance-evidence/1"
 RUN_SCHEMA = "hornero.qa.run/1"
+ARTIFACT_DIGESTS_SCHEMA = "hornero.qa.artifact-digests/1"
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_REMOTE_URL_PREFIXES = ("https://", "s3://", "r2://")
 
 
 class MatrixError(ValueError):
@@ -110,16 +114,31 @@ def _load_triage(repo_root: Path, scenario_ids: set[str]) -> dict[str, dict[str,
         decision = value.get("decision")
         rationale = value.get("rationale")
         schedule = value.get("schedule", "")
+        raw_expires = value.get("expires")
         if decision not in {"keep", "fix", "retire"}:
             raise MatrixError(f"{path}: {scenario_id}: decision must be keep, fix, or retire")
         if not isinstance(rationale, str) or not rationale.strip():
             raise MatrixError(f"{path}: {scenario_id}: rationale is required")
         if decision == "keep" and (not isinstance(schedule, str) or not schedule.strip()):
             raise MatrixError(f"{path}: {scenario_id}: keep decisions require a schedule")
+        expires = ""
+        if raw_expires is not None:
+            if isinstance(raw_expires, date) and not isinstance(raw_expires, datetime):
+                expires = raw_expires.isoformat()
+            elif isinstance(raw_expires, str):
+                try:
+                    expires = date.fromisoformat(raw_expires).isoformat()
+                except ValueError as exc:
+                    raise MatrixError(
+                        f"{path}: {scenario_id}: invalid expires date {raw_expires!r}"
+                    ) from exc
+            else:
+                raise MatrixError(f"{path}: {scenario_id}: expires must be an ISO date (YYYY-MM-DD)")
         entries[scenario_id] = {
             "decision": decision,
             "rationale": rationale.strip(),
             "schedule": schedule.strip() if isinstance(schedule, str) else "",
+            "expires": expires,
         }
     missing = sorted(scenario_ids - entries.keys())
     stale = sorted(entries.keys() - scenario_ids)
@@ -145,7 +164,7 @@ def _collect_sidecars(repo_root: Path, scenario_ids: set[str]) -> dict[str, list
             if path.relative_to(repo_root).as_posix() not in tracked_files:
                 continue
             relative = path.relative_to(base)
-            if path.name in {"run.json", "result.json", "assertions.json"} or any(
+            if path.name in {"run.json", "result.json", "assertions.json", "artifact_digests.json"} or any(
                 (base / parent / "run.json").is_file() for parent in relative.parents
             ):
                 continue
@@ -192,6 +211,38 @@ def _collect_sidecars(repo_root: Path, scenario_ids: set[str]) -> dict[str, list
                     )
                 )
     return executions
+
+
+def _load_artifact_digests(
+    root: Path, repo_root: Path, tracked_files: set[str]
+) -> dict[str, dict[str, str]] | None:
+    manifest = root / "artifact_digests.json"
+    if not manifest.is_file() or manifest.relative_to(repo_root).as_posix() not in tracked_files:
+        return None
+    data = _read_json(manifest)
+    if data.get("schema") != ARTIFACT_DIGESTS_SCHEMA:
+        raise MatrixError(f"{manifest}: unsupported artifact_digests schema {data.get('schema')!r}")
+    artifacts = data.get("artifacts")
+    if not isinstance(artifacts, dict):
+        raise MatrixError(f"{manifest}: artifacts must be a JSON object")
+    validated: dict[str, dict[str, str]] = {}
+    for rel_path, entry in artifacts.items():
+        if (
+            not isinstance(rel_path, str)
+            or not rel_path
+            or rel_path.startswith("/")
+            or ".." in Path(rel_path).parts
+            or not isinstance(entry, dict)
+        ):
+            raise MatrixError(f"{manifest}: invalid artifact entry {rel_path!r}")
+        sha256 = entry.get("sha256")
+        url = entry.get("url")
+        if not isinstance(sha256, str) or not _SHA256_RE.fullmatch(sha256):
+            raise MatrixError(f"{manifest}: {rel_path!r}: invalid sha256 digest")
+        if not isinstance(url, str) or not url.startswith(_REMOTE_URL_PREFIXES):
+            raise MatrixError(f"{manifest}: {rel_path!r}: url must use https://, s3://, or r2://")
+        validated[rel_path] = {"sha256": sha256, "url": url}
+    return validated
 
 
 def _collect_bundles(
@@ -255,12 +306,17 @@ def _collect_bundles(
         if result is not None:
             if verdict not in {"pass", "fail", "inconclusive"}:
                 raise MatrixError(f"{result_file}: unknown verdict {verdict!r}")
+            digests = _load_artifact_digests(root, repo_root, tracked_files)
             missing_artifact: str | None = None
             for artifact in ("screenshots", "logs"):
                 policy = bundle_scenario.artifacts.get(artifact, "always")
                 required = verdict != "pass" or policy == "always"
                 prefix = f"{(root / artifact).relative_to(repo_root).as_posix()}/"
-                if required and not any(path.startswith(prefix) for path in tracked_files):
+                has_local = any(path.startswith(prefix) for path in tracked_files)
+                has_manifest = digests is not None and any(
+                    key.startswith(f"{artifact}/") for key in digests
+                )
+                if required and not (has_local or has_manifest):
                     missing_artifact = artifact
                     break
             if missing_artifact:
@@ -332,10 +388,26 @@ def _latest(history: list[Execution]) -> Execution | None:
     return max(history, key=lambda item: (item.timestamp, item.quality, item.evidence))
 
 
+def expired_quarantines(
+    repo_root: Path, runs_dir: Path, *, today: date
+) -> list[tuple[str, str, str]]:
+    """Fix-decision scenarios whose optional quarantine `expires` date has passed."""
+    scenarios, triage, _ = _collect(repo_root, runs_dir)
+    expired: list[tuple[str, str, str]] = []
+    for scenario in scenarios:
+        entry = triage[scenario.id]
+        if entry["decision"] != "fix" or not entry.get("expires"):
+            continue
+        if date.fromisoformat(entry["expires"]) < today:
+            expired.append((scenario.id, entry["expires"], entry["rationale"]))
+    return sorted(expired)
+
+
 def stale_scenarios(
     repo_root: Path, runs_dir: Path, *, max_age_days: int, today: date
 ) -> list[tuple[str, str, str]]:
-    """Keep-decision scenarios with no execution or one older than max_age_days.
+    """Keep-decision scenarios with no execution or one older than max_age_days,
+    plus fix-decision scenarios whose quarantine `expires` date has passed.
 
     Returns (scenario_id, last_execution_iso_or_dash, result) sorted by id.
     Age is measured in whole days between the latest tracked execution date
@@ -346,7 +418,13 @@ def stale_scenarios(
     scenarios, triage, executions = _collect(repo_root, runs_dir)
     stale: list[tuple[str, str, str]] = []
     for scenario in scenarios:
-        if triage[scenario.id]["decision"] != "keep":
+        entry = triage[scenario.id]
+        if entry["decision"] == "fix":
+            expires = entry.get("expires", "")
+            if expires and date.fromisoformat(expires) < today:
+                stale.append((scenario.id, expires, f"Quarantine expired ({expires})"))
+            continue
+        if entry["decision"] != "keep":
             continue
         latest = _latest(executions[scenario.id])
         if latest is None:

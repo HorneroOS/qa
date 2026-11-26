@@ -555,14 +555,20 @@ def _probe_ok(spec: dict[str, Any], r: ProbeResult) -> tuple[bool, str]:
     """Apply the probe's matchers to stdout, or to the value at `json` path."""
     out = r.stdout
     subject = "stdout"
+    parsed_json: Any = None
     if "json" in spec:
         try:
-            got = _dig(json.loads(out), spec["json"])
+            parsed_json = json.loads(out)
+            got = _dig(parsed_json, spec["json"])
         except (ValueError, KeyError, IndexError) as exc:
             return False, f"json path {spec['json']!r}: {exc!r}"
         out = got if isinstance(got, str) else json.dumps(got)
         subject = spec["json"]
-    checks = {k: spec[k] for k in ("equals", "contains", "matches", "not_contains") if k in spec}
+    checks = {
+        k: spec[k]
+        for k in ("equals", "contains", "matches", "not_contains", "max_rss_kb", "max_cold_start_ms")
+        if k in spec
+    }
     if not checks:
         if "json" in spec:
             return True, f"{subject}={out!r}"
@@ -576,6 +582,30 @@ def _probe_ok(spec: dict[str, Any], r: ProbeResult) -> tuple[bool, str]:
             return False, f"{subject} contains {want!r}"
         if k == "matches" and not re.search(want, out, re.M):
             return False, f"{subject} {out[-120:]!r} does not match /{want}/"
+        if k in ("max_rss_kb", "max_cold_start_ms"):
+            metric_key = "rss_kb" if k == "max_rss_kb" else "cold_start_ms"
+            raw_val: Any = out
+            if "json" not in spec:
+                try:
+                    doc = json.loads(r.stdout)
+                    if isinstance(doc, dict) and metric_key in doc:
+                        raw_val = doc[metric_key]
+                    elif (
+                        isinstance(doc, dict)
+                        and isinstance(doc.get("samples"), list)
+                        and doc["samples"]
+                        and isinstance(doc["samples"][0], dict)
+                        and metric_key in doc["samples"][0]
+                    ):
+                        raw_val = doc["samples"][0][metric_key]
+                except ValueError:
+                    pass
+            try:
+                actual = float(raw_val)
+            except (TypeError, ValueError):
+                return False, f"{metric_key} {raw_val!r} is not numeric"
+            if actual > float(want):
+                return False, f"{metric_key} {actual:g} exceeds budget {float(want):g}"
     return True, "ok"
 
 
