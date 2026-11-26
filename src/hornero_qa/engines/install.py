@@ -143,9 +143,7 @@ class InstallEngine:
     def serial_text(self) -> str:
         return self.serial.read_text(encoding="utf-8", errors="replace") if self.serial.exists() else ""
 
-    def wait_serial_marker(
-        self, marker: str, *, timeout_s: float = 120.0, poll_s: float = 0.5
-    ) -> bool:
+    def wait_serial_marker(self, marker: str, *, timeout_s: float = 120.0, poll_s: float = 0.5) -> bool:
         """Poll serial.log until `marker` appears or timeout expires."""
         deadline = time.monotonic() + timeout_s
         while time.monotonic() < deadline:

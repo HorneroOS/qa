@@ -53,11 +53,7 @@ def test_matrix_accepts_artifact_digests_manifest(tmp_path: Path) -> None:
     )
     (repo / "scenarios" / "demo" / "one.yaml").write_text(scenario_yaml, encoding="utf-8")
     (repo / "docs" / "scenario-triage.yaml").write_text(
-        "scenarios:\n"
-        "  demo/one:\n"
-        "    decision: keep\n"
-        "    rationale: Core check\n"
-        "    schedule: per-PR\n",
+        "scenarios:\n  demo/one:\n    decision: keep\n    rationale: Core check\n    schedule: per-PR\n",
         encoding="utf-8",
     )
     bundle = repo / "docs" / "evidence" / "runs" / "20261126T000000Z-demo-one-1"

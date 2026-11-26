@@ -129,9 +129,7 @@ def _load_triage(repo_root: Path, scenario_ids: set[str]) -> dict[str, dict[str,
                 try:
                     expires = date.fromisoformat(raw_expires).isoformat()
                 except ValueError as exc:
-                    raise MatrixError(
-                        f"{path}: {scenario_id}: invalid expires date {raw_expires!r}"
-                    ) from exc
+                    raise MatrixError(f"{path}: {scenario_id}: invalid expires date {raw_expires!r}") from exc
             else:
                 raise MatrixError(f"{path}: {scenario_id}: expires must be an ISO date (YYYY-MM-DD)")
         entries[scenario_id] = {
@@ -313,9 +311,7 @@ def _collect_bundles(
                 required = verdict != "pass" or policy == "always"
                 prefix = f"{(root / artifact).relative_to(repo_root).as_posix()}/"
                 has_local = any(path.startswith(prefix) for path in tracked_files)
-                has_manifest = digests is not None and any(
-                    key.startswith(f"{artifact}/") for key in digests
-                )
+                has_manifest = digests is not None and any(key.startswith(f"{artifact}/") for key in digests)
                 if required and not (has_local or has_manifest):
                     missing_artifact = artifact
                     break
@@ -388,9 +384,7 @@ def _latest(history: list[Execution]) -> Execution | None:
     return max(history, key=lambda item: (item.timestamp, item.quality, item.evidence))
 
 
-def expired_quarantines(
-    repo_root: Path, runs_dir: Path, *, today: date
-) -> list[tuple[str, str, str]]:
+def expired_quarantines(repo_root: Path, runs_dir: Path, *, today: date) -> list[tuple[str, str, str]]:
     """Fix-decision scenarios whose optional quarantine `expires` date has passed."""
     scenarios, triage, _ = _collect(repo_root, runs_dir)
     expired: list[tuple[str, str, str]] = []
