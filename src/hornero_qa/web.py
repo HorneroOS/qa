@@ -30,9 +30,10 @@ if TYPE_CHECKING:
     from playwright.sync_api import ConsoleMessage, Error, Page, Request
 
 JOURNEY_DIR = REPO_ROOT / "web" / "journeys"
-DEFAULT_BASE = "https://website-zcra.vercel.app"
+DEFAULT_BASE = "https://horneroos.com"
 VIEWPORTS = {"phone": (390, 844), "desktop": (1366, 860)}
 GITHUB = "https://api.github.com"
+_APPROVED_DOWNLOAD_HOSTS = frozenset({"github.com", "objects.githubusercontent.com", "horneroos.com"})
 
 
 @dataclass
@@ -142,8 +143,22 @@ def _truth(name: str, page: Page, base: str) -> tuple[bool, str]:
     if name == "no_download_claims":
         page.goto(urljoin(base, "/install"), wait_until="load")
         hrefs = page.eval_on_selector_all("a[href]", "els => els.map(e => e.href)")
-        bad = [h for h in hrefs if re.search(r"\.(iso|img|qcow2)(\?|$)", h)]
-        return not bad, f"download links: {bad}" if bad else "no image download links"
+        downloads = [h for h in hrefs if re.search(r"\.(iso|img|qcow2)(\?|$)", h)]
+        if not downloads:
+            return False, "no signed ISO download links found on /install"
+        signatures = [
+            h for h in hrefs if re.search(r"\.(sha256|sha256sum|sig|asc)(\?|$)", h) or "SHA256SUMS" in h
+        ]
+        invalid: list[str] = []
+        for link in downloads:
+            parsed = urlparse(link)
+            if parsed.scheme != "https" or parsed.hostname not in _APPROVED_DOWNLOAD_HOSTS:
+                invalid.append(link)
+        if invalid:
+            return False, f"unapproved or insecure download links: {invalid}"
+        if not signatures:
+            return False, f"download links lack signature/checksum verification links: {downloads}"
+        return True, f"validated {len(downloads)} signed download link(s)"
     raise ValueError(f"unknown truth check {name!r}")
 
 

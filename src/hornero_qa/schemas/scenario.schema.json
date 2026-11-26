@@ -294,6 +294,16 @@
           "description": "Keep the full stdout in the bundle as logs/<save> (e.g. a JSON report).",
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9._-]*$"
+        },
+        "max_rss_kb": {
+          "description": "Optional numeric ceiling (KiB) asserted against the extracted value or JSON rss_kb.",
+          "type": "number",
+          "minimum": 0
+        },
+        "max_cold_start_ms": {
+          "description": "Optional numeric ceiling (ms) asserted against the extracted value or JSON cold_start_ms.",
+          "type": "number",
+          "minimum": 0
         }
       }
     },

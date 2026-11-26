@@ -14,5 +14,6 @@ proof:
       run: "~/.config/quickshell/scripts/perf-baseline.sh --samples 5 --interval 1"
       json: samples.0.rss_kb
       matches: "^[0-9]+$"
+      max_rss_kb: 524288
       save: perf-baseline.json
 budget: {wall_s: 120}

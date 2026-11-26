@@ -134,6 +134,20 @@ def delta_e_ok(rgb1: Any, rgb2: Any) -> float:
     return float(np.linalg.norm(oklab(rgb1) - oklab(rgb2)) * 100.0)
 
 
+def relative_luminance(rgb: Any) -> float:
+    """WCAG 2.1 relative luminance for an sRGB 0..255 triple."""
+    r, g, b = _srgb_to_linear(np.asarray(rgb, dtype=np.float64))
+    return float(0.2126 * r + 0.7152 * g + 0.0722 * b)
+
+
+def contrast_ratio(rgb1: Any, rgb2: Any) -> float:
+    """WCAG 2.1 contrast ratio between two sRGB 0..255 triples (range 1.0..21.0)."""
+    l1 = relative_luminance(rgb1)
+    l2 = relative_luminance(rgb2)
+    lighter, darker = max(l1, l2), min(l1, l2)
+    return (lighter + 0.05) / (darker + 0.05)
+
+
 def hex_rgb(h: str) -> tuple[int, int, int]:
     h = h.lstrip("#")
     return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)

@@ -20,6 +20,9 @@ from hornero_qa.scenario import parse as parse_scenario
 
 SCHEMA_PATH = Path(__file__).parent / "schemas" / "studio_acceptance.schema.json"
 RUN_SCHEMA = "hornero.qa.run/1"
+ARTIFACT_DIGESTS_SCHEMA = "hornero.qa.artifact-digests/1"
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_REMOTE_URL_PREFIXES = ("https://", "s3://", "r2://")
 REQUIRED_BUNDLE_FILES = ("run.json", "result.json", "scenario.yaml", "actions.jsonl", "assertions.json")
 RUN_ID_PATTERN = r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}"
 REVIEW_URL = re.compile(r"^https://github\.com/HorneroOS/[A-Za-z0-9_.-]+/pull/[1-9][0-9]*$")
@@ -39,6 +42,40 @@ PIN_FIELDS = (
 
 class StudioGateError(ValueError):
     """Invalid Studio evidence index or unsafe bundle reference."""
+
+
+def _load_artifact_digests(root: Path) -> dict[str, dict[str, str]] | None:
+    manifest = root / "artifact_digests.json"
+    if manifest.is_symlink():
+        raise StudioGateError("artifact_digests.json must not be a symlink")
+    if not manifest.is_file():
+        return None
+    data = _read_object(manifest)
+    if data.get("schema") != ARTIFACT_DIGESTS_SCHEMA:
+        raise StudioGateError(f"unsupported artifact_digests schema {data.get('schema')!r}")
+    artifacts = data.get("artifacts")
+    if not isinstance(artifacts, dict) or not artifacts:
+        raise StudioGateError("artifact_digests.json must contain a non-empty artifacts object")
+    validated: dict[str, dict[str, str]] = {}
+    for rel_path, item in artifacts.items():
+        if (
+            not isinstance(rel_path, str)
+            or not rel_path
+            or rel_path.startswith("/")
+            or ".." in Path(rel_path).parts
+            or not isinstance(item, dict)
+        ):
+            raise StudioGateError(f"invalid artifact_digests entry {rel_path!r}")
+        sha256 = item.get("sha256")
+        url = item.get("url")
+        if not isinstance(sha256, str) or not _SHA256_RE.fullmatch(sha256):
+            raise StudioGateError(f"artifact_digests entry {rel_path!r} has invalid sha256")
+        if not isinstance(url, str) or not url.startswith(_REMOTE_URL_PREFIXES):
+            raise StudioGateError(
+                f"artifact_digests entry {rel_path!r} url must use https://, s3://, or r2://"
+            )
+        validated[rel_path] = {"sha256": sha256, "url": url}
+    return validated
 
 
 class _UniqueKeyLoader(yaml.SafeLoader):
@@ -299,8 +336,17 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
         return [f"bundle {run_id!r} does not use the owner-approved hardware fixture"]
     if actual["hardware_fixture_sha256"] != entry.get("approved_fixture_sha256"):
         return [f"bundle {run_id!r} fixture digest does not match the owner-approved fixture"]
-    screenshots = list((root / "screenshots").glob("*.png"))
-    if (root / "screenshots").is_symlink() or not screenshots:
+    try:
+        digests = _load_artifact_digests(root)
+    except StudioGateError as exc:
+        return [f"bundle {run_id!r} has invalid artifact_digests.json: {exc}"]
+    if (root / "screenshots").is_symlink():
+        return [f"bundle {run_id!r} screenshot directory is unsafe"]
+    screenshots = list((root / "screenshots").glob("*.png")) if (root / "screenshots").is_dir() else []
+    manifest_screenshots = (
+        [k for k in digests if k.startswith("screenshots/") and k.endswith(".png")] if digests else []
+    )
+    if not screenshots and not manifest_screenshots:
         return [f"bundle {run_id!r} has no screenshot artifact"]
     for shot in screenshots:
         sidecar = shot.with_suffix(".json")
@@ -327,12 +373,17 @@ def _verify_evidence(entry: dict[str, Any], runs_dir: Path) -> list[str]:
             return [f"bundle {run_id!r} screenshot {shot.name!r} sidecar provenance is invalid"]
     if (root / "logs").is_symlink():
         return [f"bundle {run_id!r} log directory is unsafe"]
-    log_files = [
-        path
-        for path in (root / "logs").glob("*")
-        if path.is_file() and not path.is_symlink() and path.stat().st_size
-    ]
-    if not log_files:
+    log_files = (
+        [
+            path
+            for path in (root / "logs").glob("*")
+            if path.is_file() and not path.is_symlink() and path.stat().st_size
+        ]
+        if (root / "logs").is_dir()
+        else []
+    )
+    manifest_logs = [k for k in digests if k.startswith("logs/")] if digests else []
+    if not log_files and not manifest_logs:
         return [f"bundle {run_id!r} has no log artifact"]
     try:
         actual_bundle_digest = bundle_digest(root)

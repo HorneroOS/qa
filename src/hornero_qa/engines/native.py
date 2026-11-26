@@ -17,7 +17,7 @@ import subprocess
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, BinaryIO, cast
+from typing import Any, BinaryIO
 
 from hornero_qa.keys import parse_key, text_to_chords
 from hornero_qa.qmp import QMP, QMPError
@@ -155,7 +155,7 @@ class NativeEngine:
             "-device",
             "virtio-net-pci,netdev=net0",
             "-display",
-            "gtk,gl=on" if self.compositor == "niri" else "none",
+            "egl-headless,gl=on" if self.compositor == "niri" else "none",
             "-serial",
             f"file:{self.serial}",
             "-qmp",
@@ -174,12 +174,6 @@ class NativeEngine:
             self.qmp = QMP.wait(self.qmp_sock, deadline_s=30)
         except QMPError as exc:
             raise QAError(FailureClass.BOOT, f"QEMU did not start: {exc}") from exc
-        if self.compositor == "niri":
-            marker = f"hornero-qa-{self.run_dir.name}"
-            for _ in range(40):
-                if self._find_host_display_client(marker) is not None:
-                    break
-                time.sleep(0.25)
 
     def alive(self) -> bool:
         return self.proc is not None and self.proc.poll() is None
@@ -239,41 +233,11 @@ class NativeEngine:
                 capture_output=True,
             )
             return dest
-        try:
-            if head == 0:
-                q.screendump(dest)
-            else:
-                q.cmd("screendump", filename=str(dest), format="png", device="hxgpu0", head=head)
-        except QMPError:
-            if self.compositor != "niri":
-                raise
-            # VirGL/GL displays have no QEMU pixman surface for QMP screendump;
-            # capture only this QA VM's named GTK window instead of the host root.
-            marker = f"hornero-qa-{self.run_dir.name}"
-            client = self._find_host_display_client(marker)
-            if client is None:
-                raise QAError(FailureClass.HARNESS, "Niri VM display window not found for capture") from None
-            x, y = client["at"]
-            width, height = client["size"]
-            geometry = f"{x},{y} {width}x{height}"
-            subprocess.run(["grim", "-g", geometry, str(dest)], check=True)
+        if head == 0:
+            q.screendump(dest)
+        else:
+            q.cmd("screendump", filename=str(dest), format="png", device="hxgpu0", head=head)
         return dest
-
-    @staticmethod
-    def _find_host_display_client(marker: str) -> dict[str, Any] | None:
-        try:
-            clients = json.loads(
-                subprocess.run(
-                    ["hyprctl", "-j", "clients"], capture_output=True, text=True, check=True
-                ).stdout
-            )
-        except (OSError, subprocess.CalledProcessError, json.JSONDecodeError):
-            return None
-        for client in clients:
-            title = f"{client.get('title', '')} {client.get('initialTitle', '')}"
-            if marker in title:
-                return cast(dict[str, Any], client)
-        return None
 
     def probe(self, command: str, timeout: float = 20.0) -> ProbeResult:
         """Read-only guest probe over SSH in the user's session environment."""
