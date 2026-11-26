@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pytest
 import yaml
@@ -13,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SCENARIOS_DIR = REPO_ROOT / "scenarios"
 
 
-def _load_yaml(path: Path) -> dict:
+def _load_yaml(path: Path) -> dict[str, Any]:
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     assert isinstance(data, dict), f"{path} did not parse to a YAML mapping"
     return data
