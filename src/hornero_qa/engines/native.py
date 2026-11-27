@@ -81,6 +81,8 @@ class NativeEngine:
         mem_mb: int = 2048,
         smp: int = 2,
         compositor: str = "hyprland",
+        *,
+        visible_display: bool = False,
     ) -> None:
         self.state = state
         self.image = image
@@ -90,6 +92,7 @@ class NativeEngine:
         self.mem_mb = mem_mb
         self.smp = smp
         self.compositor = compositor
+        self.visible_display = visible_display
         self.work = state.work_dir / run_dir.name
         self.overlay = self.work / "disk.qcow2"
         self.qmp_sock = qmp_socket_path(state.work_dir, run_dir.name)
@@ -100,29 +103,15 @@ class NativeEngine:
         self.stderr: BinaryIO | None = None
         self.qmp: QMP | None = None
 
-    # ------------------------------------------------------------ lifecycle --
-    def start(self) -> None:
-        if not self.image.exists():
-            raise QAError(FailureClass.PROVISIONING, f"ready image missing: {self.image}")
-        self.work.mkdir(parents=True, exist_ok=True)
-        self.qmp_sock.unlink(missing_ok=True)
-        subprocess.run(
-            [
-                "qemu-img",
-                "create",
-                "-q",
-                "-f",
-                "qcow2",
-                "-F",
-                "qcow2",
-                "-b",
-                str(self.image),
-                str(self.overlay),
-            ],
-            check=True,
-        )
+    def build_qemu_argv(self) -> list[str]:
+        """Construct the QEMU command line, headless by default."""
         w, h = self.resolution
-        argv = [
+        is_niri = self.compositor == "niri"
+        if is_niri:
+            display = "gtk,gl=on" if self.visible_display else "egl-headless,gl=on"
+        else:
+            display = "gtk" if self.visible_display else "none"
+        return [
             "systemd-run",
             "--user",
             "--scope",
@@ -148,7 +137,7 @@ class NativeEngine:
             "-device",
             # QEMU only enables the primary scanout from xres/yres. Explicit
             # per-head resolutions enable additional displays in the guest.
-            _virtio_gpu_device(self.outputs, (w, h), virgl=self.compositor == "niri"),
+            _virtio_gpu_device(self.outputs, (w, h), virgl=is_niri),
             "-drive",
             f"file={self.overlay},format=qcow2,if=virtio",
             "-netdev",
@@ -156,7 +145,7 @@ class NativeEngine:
             "-device",
             "virtio-net-pci,netdev=net0",
             "-display",
-            "egl-headless,gl=on" if self.compositor == "niri" else "none",
+            display,
             "-serial",
             f"file:{self.serial}",
             "-qmp",
@@ -169,6 +158,30 @@ class NativeEngine:
             "-device",
             "usb-kbd",
         ]
+
+    # ------------------------------------------------------------ lifecycle --
+    def start(self) -> None:
+        if not self.image.exists():
+            raise QAError(FailureClass.PROVISIONING, f"ready image missing: {self.image}")
+        self.work.mkdir(parents=True, exist_ok=True)
+        self.serial.parent.mkdir(parents=True, exist_ok=True)
+        self.qmp_sock.unlink(missing_ok=True)
+        subprocess.run(
+            [
+                "qemu-img",
+                "create",
+                "-q",
+                "-f",
+                "qcow2",
+                "-F",
+                "qcow2",
+                "-b",
+                str(self.image),
+                str(self.overlay),
+            ],
+            check=True,
+        )
+        argv = self.build_qemu_argv()
         self.stderr = (self.run_dir / "logs" / "qemu.stderr").open("wb")
         try:
             self.proc = subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=self.stderr)
@@ -209,8 +222,8 @@ class NativeEngine:
         q = self._q()
         dest.parent.mkdir(parents=True, exist_ok=True)
         if self.compositor == "niri":
-            # QEMU has no pixman surface for its GTK/VirGL window. Ask the
-            # guest compositor for the capture and transfer that image alone.
+            # QEMU has no pixman surface for its egl-headless/VirGL display.
+            # Ask the guest compositor for the capture and transfer that image alone.
             remote = f"/tmp/hornero-qa-{self.run_dir.name}-frame.png"
             result = self.probe(f"grim {shlex.quote(remote)}", timeout=15)
             if result.rc != 0:

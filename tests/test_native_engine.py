@@ -80,3 +80,66 @@ def test_hyprland_guest_config_uses_preferred_mode() -> None:
     lua = (Path(__file__).resolve().parents[1] / "guest" / "hyprland.lua").read_text(encoding="utf-8")
     assert 'mode = "1280x800@60"' not in lua
     assert lua.count('mode = "preferred"') >= 3
+
+
+def test_niri_qemu_argv_is_headless_with_egl_and_virgl(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import subprocess
+
+    def forbid_hyprctl(argv: list[str], **kw: object) -> object:
+        raise AssertionError(f"unexpected subprocess call: {argv}")
+
+    monkeypatch.setattr(subprocess, "run", forbid_hyprctl)
+
+    state = QAState(root=tmp_path / "state")
+    eng = NativeEngine(state, tmp_path / "niri.qcow2", tmp_path / "runs" / "niri-1", compositor="niri")
+    argv = eng.build_qemu_argv()
+
+    display_idx = argv.index("-display")
+    assert argv[display_idx + 1] == "egl-headless,gl=on"
+    assert not any("gtk" in arg for arg in argv)
+    assert not any("hyprctl" in arg for arg in argv)
+    device_args = [argv[i + 1] for i, a in enumerate(argv) if a == "-device"]
+    assert any('"driver":"virtio-vga-gl"' in d for d in device_args)
+
+    visible_eng = NativeEngine(
+        state,
+        tmp_path / "niri.qcow2",
+        tmp_path / "runs" / "niri-vis",
+        compositor="niri",
+        visible_display=True,
+    )
+    vis_argv = visible_eng.build_qemu_argv()
+    assert vis_argv[vis_argv.index("-display") + 1] == "gtk,gl=on"
+
+
+def test_hyprland_qemu_argv_uses_none_display_and_qmp_screendump(tmp_path: Path) -> None:
+    state = QAState(root=tmp_path / "state")
+    eng = NativeEngine(state, tmp_path / "hypr.qcow2", tmp_path / "runs" / "hypr-1", outputs=2)
+    argv = eng.build_qemu_argv()
+
+    assert argv[argv.index("-display") + 1] == "none"
+    device_args = [argv[i + 1] for i, a in enumerate(argv) if a == "-device"]
+    assert any('"driver":"virtio-vga"' in d and "virtio-vga-gl" not in d for d in device_args)
+
+    class _FakeQMP:
+        def __init__(self) -> None:
+            self.calls: list[tuple[str, dict[str, object]]] = []
+
+        def screendump(self, png_path: Path) -> None:
+            self.calls.append(("screendump", {"filename": str(png_path)}))
+
+        def cmd(self, execute: str, **arguments: object) -> None:
+            self.calls.append((execute, arguments))
+
+    fake_qmp = _FakeQMP()
+    eng.qmp = fake_qmp  # type: ignore[assignment]
+    p0 = tmp_path / "h0.png"
+    p1 = tmp_path / "h1.png"
+    eng.screenshot(p0, head=0)
+    eng.screenshot(p1, head=1)
+    assert fake_qmp.calls == [
+        ("screendump", {"filename": str(p0)}),
+        ("screendump", {"filename": str(p1), "format": "png", "device": "hxgpu0", "head": 1}),
+    ]
