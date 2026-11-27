@@ -631,11 +631,41 @@ def _dig(data: Any, path: str) -> Any:
     return data
 
 
+_NUMERIC_BUDGETS: dict[str, tuple[str, ...]] = {
+    "max_rss_kb": ("rss_kb",),
+    "max_cold_start_ms": ("cold_start_ms", "startup_ready_ms"),
+    "max_cpu_percent": ("cpu_percent",),
+    "max_ipc_ms": ("ipc_ms",),
+}
+
+
+def _extract_numeric_metric(doc: Any, keys: tuple[str, ...]) -> Any:
+    """Resolve a numeric metric key from a top-level dict or samples[0]."""
+    if not isinstance(doc, dict):
+        return None
+    for key in keys:
+        if key in doc and doc[key] != "":
+            return doc[key]
+    samples = doc.get("samples")
+    if isinstance(samples, list) and samples and isinstance(samples[0], dict):
+        for key in keys:
+            if key in samples[0] and samples[0][key] != "":
+                return samples[0][key]
+    return None
+
+
 def _probe_ok(spec: dict[str, Any], r: ProbeResult) -> tuple[bool, str]:
     """Apply the probe's matchers to stdout, or to the value at `json` path."""
     out = r.stdout
     subject = "stdout"
     parsed_json: Any = None
+    checks = {
+        k: spec[k] for k in ("equals", "contains", "matches", "not_contains", *_NUMERIC_BUDGETS) if k in spec
+    }
+    needs_json = "json" in spec or any(k in _NUMERIC_BUDGETS for k in checks)
+    if needs_json and r.rc != 0:
+        detail = (r.stderr or r.stdout).strip()[-200:]
+        return False, f"rc={r.rc}" + (f": {detail}" if detail else "")
     if "json" in spec:
         try:
             parsed_json = json.loads(out)
@@ -644,11 +674,9 @@ def _probe_ok(spec: dict[str, Any], r: ProbeResult) -> tuple[bool, str]:
             return False, f"json path {spec['json']!r}: {exc!r}"
         out = got if isinstance(got, str) else json.dumps(got)
         subject = spec["json"]
-    checks = {
-        k: spec[k]
-        for k in ("equals", "contains", "matches", "not_contains", "max_rss_kb", "max_cold_start_ms")
-        if k in spec
-    }
+    elif any(k in _NUMERIC_BUDGETS for k in checks):
+        with contextlib.suppress(ValueError):
+            parsed_json = json.loads(r.stdout)
     if not checks:
         if "json" in spec:
             return True, f"{subject}={out!r}"
@@ -662,30 +690,19 @@ def _probe_ok(spec: dict[str, Any], r: ProbeResult) -> tuple[bool, str]:
             return False, f"{subject} contains {want!r}"
         if k == "matches" and not re.search(want, out, re.M):
             return False, f"{subject} {out[-120:]!r} does not match /{want}/"
-        if k in ("max_rss_kb", "max_cold_start_ms"):
-            metric_key = "rss_kb" if k == "max_rss_kb" else "cold_start_ms"
+        if k in _NUMERIC_BUDGETS:
+            metric_keys = _NUMERIC_BUDGETS[k]
             raw_val: Any = out
             if "json" not in spec:
-                try:
-                    doc = json.loads(r.stdout)
-                    if isinstance(doc, dict) and metric_key in doc:
-                        raw_val = doc[metric_key]
-                    elif (
-                        isinstance(doc, dict)
-                        and isinstance(doc.get("samples"), list)
-                        and doc["samples"]
-                        and isinstance(doc["samples"][0], dict)
-                        and metric_key in doc["samples"][0]
-                    ):
-                        raw_val = doc["samples"][0][metric_key]
-                except ValueError:
-                    pass
+                extracted = _extract_numeric_metric(parsed_json, metric_keys)
+                if extracted is not None:
+                    raw_val = extracted
             try:
                 actual = float(raw_val)
             except (TypeError, ValueError):
-                return False, f"{metric_key} {raw_val!r} is not numeric"
+                return False, f"{metric_keys[0]} {raw_val!r} is not numeric"
             if actual > float(want):
-                return False, f"{metric_key} {actual:g} exceeds budget {float(want):g}"
+                return False, f"{metric_keys[0]} {actual:g} exceeds budget {float(want):g}"
     return True, "ok"
 
 
