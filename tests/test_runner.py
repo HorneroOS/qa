@@ -188,3 +188,97 @@ def test_broken_connection_with_live_shell_is_harness(tmp_path: Path) -> None:
     with pytest.raises(QAError) as exc:
         att.check_probe({"run": "qs ipc call lock lock"})
     assert exc.value.cls is FailureClass.HARNESS
+
+
+def test_keep_rejects_mismatched_primary_head_resolution(tmp_path: Path) -> None:
+    from typing import Any, cast
+
+    from PIL import Image
+
+    from hornero_qa.evidence import Bundle
+    from hornero_qa.runner import RunOptions, _Attempt
+    from hornero_qa.scenario import parse
+
+    sc = parse(
+        "id: smoke/res\npurpose: Verify resolution check.\n"
+        "requires: {resolution: 1366x768, outputs: 2}\n"
+        "instruction: Capture.\nproof:\n  - screenshot: final\n"
+    )
+    bundle = Bundle.create(tmp_path / "runs", "r-res", {"scenario": sc.id}, sc.text)
+
+    class _FakeEngine:
+        compositor = "hyprland"
+
+        def screenshot(self, dest: Path, head: int = 0) -> Path:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            size = (1280, 800) if head == 0 else (1920, 1080)
+            Image.new("RGB", size, (10, 20, 30)).save(dest)
+            return dest
+
+    att = _Attempt(
+        sc,
+        cast(Any, _FakeEngine()),
+        bundle,
+        RunOptions(image=tmp_path / "img.qcow2"),
+        frame_path=tmp_path / "work" / "frame.png",
+    )
+    with pytest.raises(QAError, match="1280x800 != scenario resolution 1366x768") as exc:
+        att.keep("shot")
+    assert exc.value.cls is FailureClass.HARNESS
+
+    # Matching primary head succeeds even when head 1 differs (mixed-DPI setups).
+    class _MatchingPrimaryEngine(_FakeEngine):
+        def screenshot(self, dest: Path, head: int = 0) -> Path:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            size = (1366, 768) if head == 0 else (1920, 1080)
+            Image.effect_noise(size, 25).convert("RGB").save(dest)
+            return dest
+
+    att.engine = cast(Any, _MatchingPrimaryEngine())
+    assert att.keep("shot") == ["001-shot-h0.png", "002-shot-h1.png"]
+
+
+def test_niri_layout_box_and_hover_away_coords(tmp_path: Path) -> None:
+    import json
+    from typing import Any, cast
+
+    from hornero_qa.evidence import Bundle
+    from hornero_qa.runner import RunOptions, _Attempt
+    from hornero_qa.scenario import parse
+
+    sc = parse(
+        "id: compositors/niri-hover\npurpose: Verify Niri layout query and away coordinates.\n"
+        "requires: {compositor: niri, resolution: 1920x1080}\n"
+        "instruction: Hover away.\nproof:\n  - probe: {run: 'true'}\n"
+    )
+    bundle = Bundle.create(tmp_path / "runs", "r-niri", {"scenario": sc.id}, sc.text)
+
+    class _NiriEngine:
+        compositor = "niri"
+
+        def __init__(self) -> None:
+            self.probes: list[str] = []
+            self.pointers: list[tuple[float, float, str | None, int]] = []
+
+        def probe(self, command: str, timeout: float = 20.0) -> ProbeResult:
+            self.probes.append(command)
+            assert "hyprctl" not in command
+            payload = {
+                "Virtual-1": {"logical": {"x": 0, "y": 0, "width": 1920, "height": 1080, "scale": 1.0}}
+            }
+            return ProbeResult(0, json.dumps(payload), "")
+
+        def pointer(self, x: float, y: float, click: str | None = None, glide: int = 1) -> None:
+            self.pointers.append((x, y, click, glide))
+
+    eng = _NiriEngine()
+    att = _Attempt(
+        sc,
+        cast(Any, eng),
+        bundle,
+        RunOptions(image=tmp_path / "img.qcow2"),
+        frame_path=tmp_path / "work" / "frame.png",
+    )
+    att.hover(0, {"away": True})
+    assert eng.probes and all("niri msg --json outputs" in cmd for cmd in eng.probes)
+    assert eng.pointers == [(0.5, 0.5, None, 6)]

@@ -247,10 +247,17 @@ def match_anchor(
         raise ValueError(f"resolution mismatch: frame {frame.shape[1]}x{frame.shape[0]} != anchor {fw}x{fh}")
     th = DEFAULT_THRESHOLDS[anchor.mode] | anchor.thresholds
     r, m = anchor.region, anchor.margin
+    if anchor.ref.shape[:2] != (r["h"], r["w"]):
+        raise ValueError(
+            f"anchor {anchor.id} reference {anchor.ref.shape[1]}x{anchor.ref.shape[0]} "
+            f"does not match region {r['w']}x{r['h']}"
+        )
     x0, y0 = max(0, r["x"] - m), max(0, r["y"] - m)
     x1, y1 = min(frame.shape[1], r["x"] + r["w"] + m), min(frame.shape[0], r["y"] + r["h"] + m)
     scene = _feature(frame[y0:y1, x0:x1], anchor.mode)
     ref = _feature(anchor.ref, anchor.mode)
+    if scene.shape[0] < ref.shape[0] or scene.shape[1] < ref.shape[1]:
+        raise ValueError(f"anchor {anchor.id} region {r} exceeds frame {fw}x{fh}")
     # Features at the reference's own border are computed from edge padding,
     # not real neighbours: compare only pixels the filters saw identically.
     mask = np.zeros((r["h"], r["w"]), dtype=bool)
@@ -258,6 +265,8 @@ def match_anchor(
     for mk in anchor.mask:
         mask[mk["y"] : mk["y"] + mk["h"], mk["x"] : mk["x"] + mk["w"]] = False
     n = int(mask.sum())
+    if n == 0:
+        raise ValueError(f"anchor {anchor.id} has no unmasked interior pixels")
     rv = ref[mask]
     rz = rv - rv.mean()
     rnorm = float(np.sqrt((rz**2).sum()))
@@ -285,7 +294,17 @@ def match_anchor(
     for p in anchor.color_probes:
         size = int(p.get("size", 3))
         px, py = mx + int(p["at"]["x"]), my + int(p["at"]["y"])
-        patch = frame[py : py + size, px : px + size].reshape(-1, 3).mean(axis=0)
+        px0, py0 = max(0, px), max(0, py)
+        px1, py1 = min(frame.shape[1], px + size), min(frame.shape[0], py + size)
+        if size <= 0 or px0 >= px1 or py0 >= py1:
+            probes.append({"token": p["token"], "error": "probe_out_of_bounds"})
+            probe_ok = False
+            continue
+        patch = frame[py0:py1, px0:px1].reshape(-1, 3).mean(axis=0)
+        if np.isnan(patch).any():
+            probes.append({"token": p["token"], "error": "probe_nan"})
+            probe_ok = False
+            continue
         want = (tokens or {}).get(p["token"]) or p.get("fallback_hex")
         if not want:
             probes.append({"token": p["token"], "error": "token_unresolved"})

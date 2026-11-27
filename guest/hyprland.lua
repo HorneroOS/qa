@@ -21,9 +21,9 @@ dofile(here .. "window-rules.lua")
 dofile(here .. "smart-colors.lua")
 dofile(here .. "static.lua")
 
--- Outputs: one virtio-gpu head by default; extra heads stack to the right.
-hl.monitor({ output = "Virtual-1", mode = "1280x800@60", position = "0x0", scale = 1 })
-hl.monitor({ output = "Virtual-2", mode = "1280x800@60", position = "1280x0", scale = 1 })
+-- Outputs: use QEMU's preferred mode per head; extra heads stack to the right.
+hl.monitor({ output = "Virtual-1", mode = "preferred", position = "0x0", scale = 1 })
+hl.monitor({ output = "Virtual-2", mode = "preferred", position = "auto", scale = 1 })
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
 -- QEMU has no NVIDIA VA-API: point libva at the virtio driver.

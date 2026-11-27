@@ -11,6 +11,7 @@ from __future__ import annotations
 import contextlib
 import hashlib
 import json
+import shlex
 import shutil
 import socket
 import subprocess
@@ -169,7 +170,12 @@ class NativeEngine:
             "usb-kbd",
         ]
         self.stderr = (self.run_dir / "logs" / "qemu.stderr").open("wb")
-        self.proc = subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=self.stderr)
+        try:
+            self.proc = subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=self.stderr)
+        except OSError:
+            self.stderr.close()
+            self.stderr = None
+            raise
         try:
             self.qmp = QMP.wait(self.qmp_sock, deadline_s=30)
         except QMPError as exc:
@@ -206,7 +212,7 @@ class NativeEngine:
             # QEMU has no pixman surface for its GTK/VirGL window. Ask the
             # guest compositor for the capture and transfer that image alone.
             remote = f"/tmp/hornero-qa-{self.run_dir.name}-frame.png"
-            result = self.probe(f"grim {remote}", timeout=15)
+            result = self.probe(f"grim {shlex.quote(remote)}", timeout=15)
             if result.rc != 0:
                 raise QAError(
                     FailureClass.HARNESS,
@@ -243,8 +249,12 @@ class NativeEngine:
         """Read-only guest probe over SSH in the user's session environment."""
         # UTF-8 locale: Qt prints a locale warning on stdout under C, which would pollute probes.
         env = (
-            "export LANG=C.UTF-8 LC_ALL=C.UTF-8 XDG_RUNTIME_DIR=/run/user/$(id -u) WAYLAND_DISPLAY=wayland-1 "
-            'HYPRLAND_INSTANCE_SIGNATURE="$(ls -t /run/user/$(id -u)/hypr 2>/dev/null | head -1)"; '
+            "export LANG=C.UTF-8 LC_ALL=C.UTF-8 XDG_RUNTIME_DIR=/run/user/$(id -u); "
+            'wayland_sock="$(find "$XDG_RUNTIME_DIR" -maxdepth 1 -type s -name \'wayland-[0-9]*\' '
+            '-printf \'%T@ %f\\n\' 2>/dev/null | sort -nr | head -1 | cut -d" " -f2-)"; '
+            'WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-${wayland_sock:-wayland-1}}"; '
+            'HYPRLAND_INSTANCE_SIGNATURE="$(ls -t "$XDG_RUNTIME_DIR"/hypr 2>/dev/null | head -1)"; '
+            "export WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE; "
             'niri_pid="$(pgrep -xo niri || true)"; '
             'if [ -n "$niri_pid" ]; then '
             'niri_socket="$(find "$XDG_RUNTIME_DIR" -maxdepth 1 -type s '

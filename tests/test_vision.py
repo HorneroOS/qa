@@ -126,3 +126,26 @@ def test_cut_anchor_namespaced_id(tmp_path: Path, save_png: SavePng) -> None:
     path = cut_anchor(frame, tmp_path, "launcher/search-field", (0, 0, 60, 24), ["launcher"])
     assert path == tmp_path / "launcher" / "search-field.json"
     assert Anchor.load(path).id == "launcher/search-field"
+
+
+def test_edge_anchor_and_out_of_bounds_color_probe_do_not_nan_crash(
+    tmp_path: Path, save_png: SavePng
+) -> None:
+    img = paint_widget(desktop(), 0, 0)
+    frame_path = save_png(img, "edge.png")
+    path = cut_anchor(frame_path, tmp_path / "anchors", "edge", (0, 0, 40, 24), ["edge"])
+    anchor = Anchor.load(path)
+    anchor.color_probes = [
+        {"token": "partial", "at": {"x": -1, "y": -1}, "size": 3, "fallback_hex": "#112233"},
+        {"token": "oob", "at": {"x": 500, "y": 500}, "size": 3, "fallback_hex": "#112233"},
+    ]
+    res = match_anchor(anchor, load_frame(frame_path))
+    assert not res.verdict
+    assert res.reason == "colour_probe"
+    assert res.probes[0]["got"].startswith("#")
+    assert res.probes[1] == {"token": "oob", "error": "probe_out_of_bounds"}
+
+    # Fully masked anchor fails cleanly with ValueError rather than NaN.
+    anchor.mask = [{"x": 0, "y": 0, "w": 40, "h": 24}]
+    with pytest.raises(ValueError, match="no unmasked interior pixels"):
+        match_anchor(anchor, load_frame(frame_path))

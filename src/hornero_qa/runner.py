@@ -96,6 +96,14 @@ class _Attempt:
     blank_heads: list[int] = field(default_factory=list)
 
     # ------------------------------------------------------------ helpers --
+    def _verify_resolution(self, img: Array, head: int = 0) -> None:
+        if head == 0 and (img.shape[1], img.shape[0]) != self.scenario.resolution:
+            w, h = self.scenario.resolution
+            raise QAError(
+                FailureClass.HARNESS,
+                f"captured resolution {img.shape[1]}x{img.shape[0]} != scenario resolution {w}x{h}",
+            )
+
     def grab(self, head: int = 0) -> Array:
         path = self.frame_path.with_name(f"frame-h{head}.png")
         self.engine.screenshot(path, head)
@@ -105,7 +113,9 @@ class _Attempt:
         kept = []
         self.blank_heads = []
         for head in range(self.scenario.outputs):
-            if blank_frame(self.grab(head)):
+            img = self.grab(head)
+            self._verify_resolution(img, head)
+            if blank_frame(img):
                 self.blank_heads.append(head)
             suffix = f"-h{head}" if self.scenario.outputs > 1 else ""
             dst = self.bundle.screenshot(
@@ -174,6 +184,7 @@ class _Attempt:
             raise QAError(FailureClass.PRODUCT, "shell running but its IPC never answered")
         self.bundle.action("ready", serial=_markers(self.engine.serial_text()))
         self.settle()
+        self._verify_resolution(self.grab(0))
 
     def load_tokens(self) -> None:
         """Resolve Signal role tokens for the theme the shell is showing.
@@ -235,6 +246,7 @@ class _Attempt:
             # Presets/themes reload asynchronously; wait for the desktop to settle.
             time.sleep(0.5)
             self.settle(stable_s=1.5, timeout=30)
+            self._verify_resolution(self.grab(0))
 
     def steps(self) -> None:
         for i, step in enumerate(self.scenario.steps):
@@ -270,13 +282,51 @@ class _Attempt:
                 if not rec["ok"]:
                     raise QAError(FailureClass.PRODUCT, f"step {i} {kind} failed: {rec['detail']}")
 
+    def _layout_outputs(self) -> list[tuple[float, float, float, float]]:
+        """Logical (x, y, width, height) of each active output."""
+        if getattr(self.engine, "compositor", "hyprland") == "niri":
+            r = self.probe("niri msg --json outputs", timeout=15)
+            if r.rc != 0:
+                raise QAError(FailureClass.HARNESS, f"niri outputs probe failed (rc={r.rc}): {r.stderr}")
+            raw = json.loads(r.stdout)
+            outputs = raw.values() if isinstance(raw, dict) else raw
+            boxes = [
+                (
+                    float(o["logical"]["x"]),
+                    float(o["logical"]["y"]),
+                    float(o["logical"]["width"]),
+                    float(o["logical"]["height"]),
+                )
+                for o in outputs
+                if isinstance(o, dict) and isinstance(o.get("logical"), dict)
+            ]
+            if not boxes:
+                w, h = self.scenario.resolution
+                return [(0.0, 0.0, float(w), float(h))]
+            return boxes
+        r = self.probe("hyprctl monitors -j", timeout=15)
+        if r.rc != 0:
+            raise QAError(FailureClass.HARNESS, f"hyprctl monitors failed (rc={r.rc}): {r.stderr}")
+        mons = json.loads(r.stdout)
+        if not mons:
+            w, h = self.scenario.resolution
+            return [(0.0, 0.0, float(w), float(h))]
+        return [
+            (float(m["x"]), float(m["y"]), float(m["width"]) / m["scale"], float(m["height"]) / m["scale"])
+            for m in mons
+        ]
+
     def _layout_box(self) -> tuple[float, float]:
         """Logical bounding box (width, height) of all outputs: the QMP tablet spans it."""
-        r = self.probe("hyprctl monitors -j", timeout=15)
-        mons = json.loads(r.stdout)
-        width = max(m["x"] + m["width"] / m["scale"] for m in mons)
-        height = max(m["y"] + m["height"] / m["scale"] for m in mons)
+        boxes = self._layout_outputs()
+        width = max(x + w for x, _y, w, _h in boxes)
+        height = max(y + h for _x, y, _w, h in boxes)
         return float(width), float(height)
+
+    def _away_point(self) -> tuple[float, float]:
+        """Center of the primary output, clear of all edge bars and monitor seams."""
+        x, y, w, h = self._layout_outputs()[0]
+        return x + w / 2.0, y + h / 2.0
 
     def _point(self, x: float, y: float, glide: int = 6) -> None:
         w, h = self._layout_box()
@@ -288,7 +338,8 @@ class _Attempt:
         Bar and trigger geometry come from `debug bars`, so presets, scales and
         icon sets can change without moving hard-coded coordinates."""
         if spec.get("away"):
-            self._point(40, 300)
+            ax, ay = self._away_point()
+            self._point(ax, ay)
             time.sleep(1.4)
             self.bundle.action("hover_away", step=step)
             return
@@ -321,7 +372,8 @@ class _Attempt:
                 if cur and cur not in seen:
                     seen.append(cur)
                 if cur:  # a different popout is open: leave so it closes before the next trigger
-                    self._point(40, 300)
+                    ax, ay = self._away_point()
+                    self._point(ax, ay)
                     time.sleep(1.0)
         msg = f"found {name} at {found}" if found else f"not found; popouts seen: {' '.join(seen)}"
         self.bundle.action("hover", step=step, popout=name, edge=edge, found=bool(found), detail=msg)
