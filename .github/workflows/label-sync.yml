@@ -19,6 +19,10 @@ on:
         default: false
         type: boolean
 
+concurrency:
+  group: label-sync
+  cancel-in-progress: false
+
 jobs:
   sync:
     # yamllint disable rule:line-length

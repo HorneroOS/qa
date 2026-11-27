@@ -9,21 +9,28 @@ name: ci
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   fast:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86  # v5.4.2
+        with:
+          enable-cache: true
       - name: Sync
         run: uv sync --locked --group web  # typing only; no browser in the fast lane
       - name: Ruff
-        run: uv run ruff check . && uv run ruff format --check .
+        run: uv run --locked ruff check . && uv run --locked ruff format --check .
       - name: Mypy
-        run: uv run mypy
+        run: uv run --locked mypy
       - name: Pytest
-        run: uv run pytest -q
+        run: uv run --locked pytest -q
       - name: Scenario matrix
-        run: uv run hornero-qa matrix --check
+        run: uv run --locked hornero-qa matrix --check
       - name: Markdown lint
         run: npx --yes markdownlint-cli2 "**/*.md" "#.venv/**" "#node_modules/**"

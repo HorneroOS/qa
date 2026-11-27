@@ -345,3 +345,89 @@ def test_staleness_flags_never_run_and_old_evidence_only(tmp_path: Path) -> None
     report = staleness_report(repo, runs, max_age_days=45, today=date(2026, 11, 17))
     assert "2 stale" in report
     assert "- smoke/with-evidence: last=2026-10-02" in report
+
+
+def test_tracked_dir_index_matches_prefix_semantics() -> None:
+    from hornero_qa.matrix import _tracked_dir_index
+
+    tracked = {
+        "docs/evidence/runs/run-1/screenshots/001.png",
+        "docs/evidence/runs/run-1/logs/sub/serial.log",
+        "docs/evidence/runs/run-2/screenshots",  # regular file, not a directory
+        "docs/evidence/runs/run-2/screenshots2/other.png",
+        "top/file.txt",
+    }
+    dirs = _tracked_dir_index(tracked)
+
+    candidates = (
+        "docs/evidence/runs/run-1/screenshots",
+        "docs/evidence/runs/run-1/logs",
+        "docs/evidence/runs/run-1/logs/sub",
+        "docs/evidence/runs/run-2/screenshots",
+        "docs/evidence/runs/run-2/logs",
+        "top",
+        "missing",
+    )
+    for cand in candidates:
+        expected = any(path.startswith(f"{cand}/") for path in tracked)
+        assert (cand in dirs) is expected
+
+
+def test_matrix_collect_scales_linearly_with_many_runs(tmp_path: Path) -> None:
+    import time
+
+    from hornero_qa.matrix import _tracked_dir_index
+
+    repo = _repo(tmp_path)
+    runs_root = repo / "docs/evidence/runs"
+    scenario_text = (repo / "scenarios/smoke/with-evidence.yaml").read_text(encoding="utf-8")
+    total_runs = 40
+    for i in range(total_runs):
+        run_id = f"20261003T000000Z-run-{i:04d}"
+        run_dir = runs_root / run_id
+        (run_dir / "screenshots").mkdir(parents=True)
+        (run_dir / "run.json").write_text(
+            json.dumps(
+                {
+                    "schema": "hornero.qa.run/1",
+                    "scenario": "smoke/with-evidence",
+                    "run_id": run_id,
+                    "started": "2026-10-03T07:00:00Z",
+                }
+            ),
+            encoding="utf-8",
+        )
+        (run_dir / "result.json").write_text(
+            json.dumps(
+                {
+                    "run_id": run_id,
+                    "finished": f"2026-10-03T07:01:{i % 60:02d}Z",
+                    "verdict": "pass",
+                }
+            ),
+            encoding="utf-8",
+        )
+        (run_dir / "scenario.yaml").write_text(scenario_text, encoding="utf-8")
+        (run_dir / "actions.jsonl").write_text("", encoding="utf-8")
+        (run_dir / "assertions.json").write_text("[]", encoding="utf-8")
+        (run_dir / "screenshots/capture.png").write_bytes(b"PNG")
+    # Add thousands of unrelated tracked files to verify O(N) directory-prefix lookup.
+    extra = repo / "docs/evidence/noise"
+    extra.mkdir(parents=True)
+    for j in range(2000):
+        (extra / f"noise-{j:04d}.png").write_bytes(b"")
+    subprocess.run(["git", "-C", str(repo), "add", "docs/evidence"], check=True, capture_output=True)
+
+    t0 = time.monotonic()
+    matrix = generate_matrix(repo, runs_root)
+    elapsed = time.monotonic() - t0
+
+    assert "2026-10-03 | PASS" in matrix
+    assert elapsed < 5.0
+
+    # Direct O(N) index check over 20,000 paths.
+    many_paths = {f"docs/evidence/runs/run-{i:05d}/screenshots/001.png" for i in range(20_000)}
+    t1 = time.monotonic()
+    dirs = _tracked_dir_index(many_paths)
+    assert time.monotonic() - t1 < 1.0
+    assert "docs/evidence/runs/run-19999/screenshots" in dirs

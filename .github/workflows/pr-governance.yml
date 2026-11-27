@@ -14,6 +14,10 @@ name: PR governance
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, edited]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   governance:
     # yamllint disable rule:line-length

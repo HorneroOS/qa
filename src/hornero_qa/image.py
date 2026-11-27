@@ -145,74 +145,79 @@ def refresh(
         check=True,
     )
     port = _free_port()
-    log = (build / "qemu.log").open("wb")
-    proc = subprocess.Popen(
-        [
-            "systemd-run",
-            "--user",
-            "--scope",
-            "--quiet",
-            f"--unit=hornero-qa-build-{name}",
-            "-p",
-            f"MemoryMax={mem_mb + 1200}M",
-            "--",
-            "qemu-system-x86_64",
-            "-enable-kvm",
-            "-cpu",
-            "host",
-            "-machine",
-            "q35",
-            "-smp",
-            str(cpus),
-            "-m",
-            str(mem_mb),
-            "-device",
-            "virtio-vga",
-            "-drive",
-            f"file={overlay},format=qcow2,if=virtio",
-            "-netdev",
-            f"user,id=net0,dns=9.9.9.9,hostfwd=tcp:127.0.0.1:{port}-:22",
-            "-device",
-            "virtio-net-pci,netdev=net0",
-            "-display",
-            "none",
-            "-serial",
-            f"file:{build / 'serial.log'}",
-        ],
-        stdout=subprocess.DEVNULL,
-        stderr=log,
-    )
-    try:
-        for _ in range(180):
-            try:
-                _ssh(state, port, "true", timeout=10)
-                break
-            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
-                time.sleep(2)
-        else:
-            raise SystemExit("builder VM never answered SSH")
+    with (build / "qemu.log").open("wb") as log:
+        proc = subprocess.Popen(
+            [
+                "systemd-run",
+                "--user",
+                "--scope",
+                "--quiet",
+                f"--unit=hornero-qa-build-{name}",
+                "-p",
+                f"MemoryMax={mem_mb + 1200}M",
+                "--",
+                "qemu-system-x86_64",
+                "-enable-kvm",
+                "-cpu",
+                "host",
+                "-machine",
+                "q35",
+                "-smp",
+                str(cpus),
+                "-m",
+                str(mem_mb),
+                "-device",
+                "virtio-vga",
+                "-drive",
+                f"file={overlay},format=qcow2,if=virtio",
+                "-netdev",
+                f"user,id=net0,dns=9.9.9.9,hostfwd=tcp:127.0.0.1:{port}-:22",
+                "-device",
+                "virtio-net-pci,netdev=net0",
+                "-display",
+                "none",
+                "-serial",
+                f"file:{build / 'serial.log'}",
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=log,
+        )
+        try:
+            for _ in range(180):
+                try:
+                    _ssh(state, port, "true", timeout=10)
+                    break
+                except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+                    time.sleep(2)
+            else:
+                raise SystemExit("builder VM never answered SSH")
 
-        env = os.environ | {
-            "VM_SSH_PORT": str(port),
-            "VM_SSH_KEY": str(state.ssh_key),
-            "VM_SSH_USER": state.guest_user,
-            "VM_CACHE_DIR": str(build / "cache"),
-            "VM_ARTIFACTS_DIR": str(build / "artifacts"),
-            "HX_CONFIG_PIN": f"{CONFIG_REPO} {config_sha}",
-            "HX_HOREROCTL_BIN": str(horneroctl),
-            "V_C_ERROR_BUG_REPORT_DISABLED": "1",
-        }
-        subprocess.run(["bash", str(shell_checkout / "tests/vm/lib/deploy-shell.sh")], env=env, check=True)
-        _mint(state, port, horneroctl, compositor)
-        # The connection drops while the guest powers off, so ssh may exit
-        # 255 even on success: QEMU exiting is the real signal.
-        with contextlib.suppress(subprocess.CalledProcessError, subprocess.TimeoutExpired):
-            _ssh(state, port, "sudo systemctl poweroff --no-block", timeout=60)
-        proc.wait(timeout=180)
-    finally:
-        if proc.poll() is None:
-            proc.kill()
-            proc.wait()
+            env = os.environ | {
+                "VM_SSH_PORT": str(port),
+                "VM_SSH_KEY": str(state.ssh_key),
+                "VM_SSH_USER": state.guest_user,
+                "VM_CACHE_DIR": str(build / "cache"),
+                "VM_ARTIFACTS_DIR": str(build / "artifacts"),
+                "HX_CONFIG_PIN": f"{CONFIG_REPO} {config_sha}",
+                # HorneroOS/shell's deploy-shell.sh historically reads HX_HOREROCTL_BIN;
+                # export both names so pinned older and newer shell trees both work.
+                "HX_HORNEROCTL_BIN": str(horneroctl),
+                "HX_HOREROCTL_BIN": str(horneroctl),
+                "V_C_ERROR_BUG_REPORT_DISABLED": "1",
+            }
+            subprocess.run(
+                ["bash", str(shell_checkout / "tests/vm/lib/deploy-shell.sh")], env=env, check=True
+            )
+            _mint(state, port, horneroctl, compositor)
+            # The connection drops while the guest powers off, so ssh may exit
+            # 255 even on success: QEMU exiting is the real signal.
+            with contextlib.suppress(subprocess.CalledProcessError, subprocess.TimeoutExpired):
+                _ssh(state, port, "sudo systemctl poweroff --no-block", timeout=60)
+            proc.wait(timeout=180)
+        finally:
+            if proc.poll() is None:
+                proc.kill()
+                proc.wait()
     out = state.images_dir / f"{name}.qcow2"
     tmp = out.with_suffix(".qcow2.tmp")
     subprocess.run(["qemu-img", "convert", "-O", "qcow2", "-c", str(overlay), str(tmp)], check=True)

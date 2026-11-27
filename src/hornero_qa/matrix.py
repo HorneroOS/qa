@@ -150,9 +150,26 @@ def _load_triage(repo_root: Path, scenario_ids: set[str]) -> dict[str, dict[str,
     return entries
 
 
-def _collect_sidecars(repo_root: Path, scenario_ids: set[str]) -> dict[str, list[Execution]]:
+def _tracked_dir_index(tracked_files: set[str]) -> set[str]:
+    """Return all directory prefixes (without trailing slash) containing tracked files."""
+    dirs: set[str] = set()
+    for path in tracked_files:
+        idx = path.rfind("/")
+        while idx > 0:
+            prefix = path[:idx]
+            if prefix in dirs:
+                break
+            dirs.add(prefix)
+            idx = path.rfind("/", 0, idx)
+    return dirs
+
+
+def _collect_sidecars(
+    repo_root: Path, scenario_ids: set[str], tracked_files: set[str] | None = None
+) -> dict[str, list[Execution]]:
     executions: dict[str, list[Execution]] = {scenario_id: [] for scenario_id in scenario_ids}
-    tracked_files = _tracked_files(repo_root)
+    if tracked_files is None:
+        tracked_files = _tracked_files(repo_root)
     seen: set[Path] = set()
     for root in EVIDENCE_ROOTS:
         base = repo_root / root
@@ -244,11 +261,17 @@ def _load_artifact_digests(
 
 
 def _collect_bundles(
-    repo_root: Path, runs_dir: Path, scenario_ids: set[str], executions: dict[str, list[Execution]]
+    repo_root: Path,
+    runs_dir: Path,
+    scenario_ids: set[str],
+    executions: dict[str, list[Execution]],
+    tracked_files: set[str] | None = None,
 ) -> None:
     if not runs_dir.exists():
         return
-    tracked_files = _tracked_files(repo_root)
+    if tracked_files is None:
+        tracked_files = _tracked_files(repo_root)
+    tracked_dirs = _tracked_dir_index(tracked_files)
     for run_file in sorted(runs_dir.rglob("run.json")):
         if run_file.relative_to(repo_root).as_posix() not in tracked_files:
             continue
@@ -309,8 +332,8 @@ def _collect_bundles(
             for artifact in ("screenshots", "logs"):
                 policy = bundle_scenario.artifacts.get(artifact, "always")
                 required = verdict != "pass" or policy == "always"
-                prefix = f"{(root / artifact).relative_to(repo_root).as_posix()}/"
-                has_local = any(path.startswith(prefix) for path in tracked_files)
+                artifact_rel = (root / artifact).relative_to(repo_root).as_posix()
+                has_local = artifact_rel in tracked_dirs
                 has_manifest = digests is not None and any(key.startswith(f"{artifact}/") for key in digests)
                 if required and not (has_local or has_manifest):
                     missing_artifact = artifact
@@ -372,9 +395,10 @@ def _collect(
     if len(scenario_ids) != len(scenarios):
         raise MatrixError("scenario IDs are not unique")
     triage = _load_triage(repo_root, scenario_ids)
-    executions = _collect_sidecars(repo_root, scenario_ids)
+    tracked_files = _tracked_files(repo_root)
+    executions = _collect_sidecars(repo_root, scenario_ids, tracked_files)
     resolved_runs = runs_dir if runs_dir.is_absolute() else repo_root / runs_dir
-    _collect_bundles(repo_root, resolved_runs, scenario_ids, executions)
+    _collect_bundles(repo_root, resolved_runs, scenario_ids, executions, tracked_files)
     return scenarios, triage, executions
 
 
