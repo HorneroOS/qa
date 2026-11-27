@@ -199,6 +199,13 @@
       "items": {
         "type": "string"
       }
+    },
+    "contrast_probes": {
+      "description": "Optional perceptual Oklab and WCAG 2.2 contrast probes evaluated against the captured frame.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contrast_probe"
+      }
     }
   },
   "$defs": {
@@ -330,6 +337,78 @@
         }
       }
     },
+    "sample_point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "contrast_probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fg",
+        "bg"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "fg": {
+          "$ref": "#/$defs/sample_point"
+        },
+        "bg": {
+          "$ref": "#/$defs/sample_point"
+        },
+        "normalized": {
+          "type": "boolean"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "min_ratio": {
+          "type": "number",
+          "minimum": 1.0,
+          "maximum": 21.0
+        },
+        "min_delta_e": {
+          "type": "number",
+          "minimum": 0.0
+        },
+        "max_delta_e": {
+          "type": "number",
+          "minimum": 0.0
+        },
+        "fg_token": {
+          "type": "string"
+        },
+        "bg_token": {
+          "type": "string"
+        },
+        "fg_hex": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "bg_hex": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        }
+      }
+    },
     "step": {
       "type": "object",
       "minProperties": 1,
@@ -387,6 +466,9 @@
         },
         "anchor": {
           "$ref": "#/$defs/anchor"
+        },
+        "contrast_probe": {
+          "$ref": "#/$defs/contrast_probe"
         },
         "screenshot": {
           "type": "string",
@@ -467,6 +549,11 @@
         },
         {
           "required": [
+            "contrast_probe"
+          ]
+        },
+        {
+          "required": [
             "screenshot"
           ]
         },
@@ -497,6 +584,9 @@
         "anchor": {
           "$ref": "#/$defs/anchor"
         },
+        "contrast_probe": {
+          "$ref": "#/$defs/contrast_probe"
+        },
         "screenshot": {
           "type": "string",
           "pattern": "^[a-z0-9-]+$"
@@ -512,6 +602,11 @@
         {
           "required": [
             "anchor"
+          ]
+        },
+        {
+          "required": [
+            "contrast_probe"
           ]
         },
         {

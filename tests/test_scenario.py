@@ -27,6 +27,28 @@ def test_scenario_can_require_niri() -> None:
     assert sc.requires["compositor"] == "niri"
 
 
+def test_scenario_contrast_probe_schema() -> None:
+    text = (
+        MINIMAL
+        + "contrast_probes:\n"
+        + "  - name: bar-text\n"
+        + "    fg: {x: 10, y: 12}\n"
+        + "    bg: {x: 2, y: 12}\n"
+        + "    min_ratio: 4.5\n"
+        + "    min_delta_e: 10.0\n"
+    )
+    sc = parse(text)
+    assert len(sc.contrast_probes) == 1
+    assert sc.contrast_probes[0]["min_ratio"] == 4.5
+
+    step_probe = MINIMAL.replace(
+        "proof:\n",
+        "steps:\n  - contrast_probe: {fg: {x: 10, y: 12}, bg: {x: 2, y: 12}, min_ratio: 3.0}\nproof:\n",
+    )
+    sc2 = parse(step_probe)
+    assert sc2.steps[0]["contrast_probe"]["min_ratio"] == 3.0
+
+
 @pytest.mark.parametrize(
     ("patch", "where"),
     [

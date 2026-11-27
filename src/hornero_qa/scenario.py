@@ -38,6 +38,7 @@ class Scenario:
     budget: dict[str, Any] = field(default_factory=dict)
     artifacts: dict[str, Any] = field(default_factory=dict)
     media: list[str] = field(default_factory=list)
+    contrast_probes: list[dict[str, Any]] = field(default_factory=list)
     source: Path | None = None
     text: str = ""
 

@@ -15,6 +15,7 @@ import hashlib
 import json
 import math
 import re
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,7 @@ from numpy.typing import NDArray
 from PIL import Image
 
 Array = NDArray[np.float32]
+RGB = Sequence[float] | NDArray[Any]
 
 ANCHOR_SCHEMA = "hornero.anchor/1"
 DEFAULT_THRESHOLDS: dict[str, dict[str, float]] = {
@@ -111,41 +113,247 @@ def still(a: Array, b: Array, ignore: list[Rect] | None = None) -> bool:
 
 # ------------------------------------------------------------------ colour --
 def _srgb_to_linear(c: NDArray[np.float64]) -> NDArray[np.float64]:
-    c = c / 255.0
-    out: NDArray[np.float64] = np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+    norm = np.clip(c, 0.0, 255.0) / 255.0
+    out: NDArray[np.float64] = np.where(norm <= 0.04045, norm / 12.92, ((norm + 0.055) / 1.055) ** 2.4)
     return out
 
 
-def oklab(rgb: Any) -> NDArray[np.float64]:
+def rgb_to_oklab(rgb: RGB) -> tuple[float, float, float]:
+    """Convert an sRGB 0..255 triple to Oklab (L, a, b)."""
     r, g, b = _srgb_to_linear(np.asarray(rgb, dtype=np.float64))
-    lc = np.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b)
-    mc = np.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b)
-    sc = np.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b)
-    return np.array(
-        [
-            0.2104542553 * lc + 0.7936177850 * mc - 0.0040720468 * sc,
-            1.9779984951 * lc - 2.4285922050 * mc + 0.4505937099 * sc,
-            0.0259040371 * lc + 0.7827717662 * mc - 0.8086757660 * sc,
-        ]
+    lc = float(np.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b))
+    mc = float(np.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b))
+    sc = float(np.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b))
+    return (
+        0.2104542553 * lc + 0.7936177850 * mc - 0.0040720468 * sc,
+        1.9779984951 * lc - 2.4285922050 * mc + 0.4505937099 * sc,
+        0.0259040371 * lc + 0.7827717662 * mc - 0.8086757660 * sc,
     )
+
+
+def oklab(rgb: Any) -> NDArray[np.float64]:
+    return np.array(rgb_to_oklab(rgb), dtype=np.float64)
 
 
 def delta_e_ok(rgb1: Any, rgb2: Any) -> float:
     return float(np.linalg.norm(oklab(rgb1) - oklab(rgb2)) * 100.0)
 
 
+def oklab_delta_e(rgb1: RGB, rgb2: RGB) -> float:
+    """Perceptual Oklab Euclidean distance (scaled by 100) between two sRGB triples."""
+    return delta_e_ok(rgb1, rgb2)
+
+
 def relative_luminance(rgb: Any) -> float:
-    """WCAG 2.1 relative luminance for an sRGB 0..255 triple."""
+    """WCAG 2.2 relative luminance for an sRGB 0..255 triple."""
     r, g, b = _srgb_to_linear(np.asarray(rgb, dtype=np.float64))
     return float(0.2126 * r + 0.7152 * g + 0.0722 * b)
 
 
 def contrast_ratio(rgb1: Any, rgb2: Any) -> float:
-    """WCAG 2.1 contrast ratio between two sRGB 0..255 triples (range 1.0..21.0)."""
+    """WCAG 2.2 contrast ratio between two sRGB 0..255 triples (range 1.0..21.0)."""
     l1 = relative_luminance(rgb1)
     l2 = relative_luminance(rgb2)
     lighter, darker = max(l1, l2), min(l1, l2)
     return (lighter + 0.05) / (darker + 0.05)
+
+
+def wcag_contrast_ratio(rgb1: RGB, rgb2: RGB) -> float:
+    """WCAG 2.2 contrast ratio between two sRGB 0..255 triples (range 1.0..21.0)."""
+    return contrast_ratio(rgb1, rgb2)
+
+
+@dataclass(frozen=True)
+class ContrastProbeResult:
+    """Structured verdict for an automated WCAG 2.2 + Oklab contrast probe."""
+
+    ok: bool
+    fg_rgb: tuple[int, int, int] | None
+    bg_rgb: tuple[int, int, int] | None
+    contrast_ratio: float | None
+    delta_e_ok: float | None
+    min_ratio: float | None = None
+    min_delta_e: float | None = None
+    max_delta_e: float | None = None
+    fg_delta_e: float | None = None
+    bg_delta_e: float | None = None
+    name: str | None = None
+    error: str | None = None
+    reason: str = "ok"
+
+    def as_dict(self) -> dict[str, Any]:
+        d = asdict(self)
+        if self.fg_rgb is not None:
+            d["fg_rgb"] = list(self.fg_rgb)
+        if self.bg_rgb is not None:
+            d["bg_rgb"] = list(self.bg_rgb)
+        return d
+
+
+def _extract_xy(point: tuple[float, float] | Sequence[float] | dict[str, float]) -> tuple[float, float]:
+    if isinstance(point, dict):
+        return float(point["x"]), float(point["y"])
+    return float(point[0]), float(point[1])
+
+
+def _sample_patch(
+    frame: Array,
+    point: tuple[float, float] | Sequence[float] | dict[str, float],
+    size: int,
+    normalized: bool,
+) -> tuple[NDArray[np.float64] | None, str | None]:
+    if frame.ndim != 3 or frame.shape[2] < 3 or size <= 0:
+        return None, "probe_out_of_bounds"
+    fh, fw = int(frame.shape[0]), int(frame.shape[1])
+    if fw <= 0 or fh <= 0:
+        return None, "probe_out_of_bounds"
+    raw_x, raw_y = _extract_xy(point)
+    if not (math.isfinite(raw_x) and math.isfinite(raw_y)):
+        return None, "probe_out_of_bounds"
+    if normalized:
+        if raw_x < 0.0 or raw_x > 1.0 or raw_y < 0.0 or raw_y > 1.0:
+            return None, "probe_out_of_bounds"
+        px = min(fw - 1, round(raw_x * fw))
+        py = min(fh - 1, round(raw_y * fh))
+    else:
+        px = round(raw_x)
+        py = round(raw_y)
+        if px < 0 or py < 0 or px >= fw or py >= fh:
+            return None, "probe_out_of_bounds"
+    px1 = min(fw, px + size)
+    py1 = min(fh, py + size)
+    patch = np.asarray(frame[py:py1, px:px1, :3], dtype=np.float64).reshape(-1, 3).mean(axis=0)
+    if np.isnan(patch).any():
+        return None, "probe_nan"
+    return patch, None
+
+
+def _rgb_tuple(patch: NDArray[np.float64]) -> tuple[int, int, int]:
+    r, g, b = (int(np.clip(round(float(c)), 0, 255)) for c in patch)
+    return (r, g, b)
+
+
+def check_contrast_probe(
+    frame: Array,
+    fg: tuple[float, float] | Sequence[float] | dict[str, float],
+    bg: tuple[float, float] | Sequence[float] | dict[str, float],
+    *,
+    min_ratio: float | None = 4.5,
+    min_delta_e: float | None = None,
+    max_delta_e: float | None = None,
+    fg_hex: str | None = None,
+    bg_hex: str | None = None,
+    fg_token: str | None = None,
+    bg_token: str | None = None,
+    tokens: dict[str, str] | None = None,
+    size: int = 3,
+    normalized: bool = False,
+    name: str | None = None,
+) -> ContrastProbeResult:
+    """Sample foreground/background patches from a frame and verify WCAG 2.2 / Oklab bounds."""
+    fg_patch, fg_err = _sample_patch(frame, fg, size, normalized)
+    if fg_err is not None or fg_patch is None:
+        return ContrastProbeResult(
+            ok=False,
+            fg_rgb=None,
+            bg_rgb=None,
+            contrast_ratio=None,
+            delta_e_ok=None,
+            min_ratio=min_ratio,
+            min_delta_e=min_delta_e,
+            max_delta_e=max_delta_e,
+            name=name,
+            error=fg_err,
+            reason=fg_err or "probe_out_of_bounds",
+        )
+    bg_patch, bg_err = _sample_patch(frame, bg, size, normalized)
+    if bg_err is not None or bg_patch is None:
+        return ContrastProbeResult(
+            ok=False,
+            fg_rgb=_rgb_tuple(fg_patch),
+            bg_rgb=None,
+            contrast_ratio=None,
+            delta_e_ok=None,
+            min_ratio=min_ratio,
+            min_delta_e=min_delta_e,
+            max_delta_e=max_delta_e,
+            name=name,
+            error=bg_err,
+            reason=bg_err or "probe_out_of_bounds",
+        )
+
+    ratio = round(wcag_contrast_ratio(fg_patch, bg_patch), 4)
+    de = round(oklab_delta_e(fg_patch, bg_patch), 2)
+    fg_rgb = _rgb_tuple(fg_patch)
+    bg_rgb = _rgb_tuple(bg_patch)
+
+    fg_want = (tokens or {}).get(fg_token) if fg_token else None
+    if not fg_want:
+        fg_want = fg_hex
+    if fg_token and not fg_want:
+        return ContrastProbeResult(
+            ok=False,
+            fg_rgb=fg_rgb,
+            bg_rgb=bg_rgb,
+            contrast_ratio=ratio,
+            delta_e_ok=de,
+            min_ratio=min_ratio,
+            min_delta_e=min_delta_e,
+            max_delta_e=max_delta_e,
+            name=name,
+            error="token_unresolved",
+            reason="token_unresolved",
+        )
+    bg_want = (tokens or {}).get(bg_token) if bg_token else None
+    if not bg_want:
+        bg_want = bg_hex
+    if bg_token and not bg_want:
+        return ContrastProbeResult(
+            ok=False,
+            fg_rgb=fg_rgb,
+            bg_rgb=bg_rgb,
+            contrast_ratio=ratio,
+            delta_e_ok=de,
+            min_ratio=min_ratio,
+            min_delta_e=min_delta_e,
+            max_delta_e=max_delta_e,
+            name=name,
+            error="token_unresolved",
+            reason="token_unresolved",
+        )
+
+    tol = 6.0 if max_delta_e is None else float(max_delta_e)
+    fg_de = round(oklab_delta_e(fg_patch, hex_rgb(fg_want)), 2) if fg_want else None
+    bg_de = round(oklab_delta_e(bg_patch, hex_rgb(bg_want)), 2) if bg_want else None
+
+    failures: list[str] = []
+    if min_ratio is not None and ratio < float(min_ratio):
+        failures.append(f"contrast_ratio {ratio:.2f} < min_ratio {float(min_ratio):.2f}")
+    if min_delta_e is not None and de < float(min_delta_e):
+        failures.append(f"delta_e_ok {de:.2f} < min_delta_e {float(min_delta_e):.2f}")
+    if fg_de is not None and fg_de > tol:
+        failures.append(f"fg_delta_e {fg_de:.2f} > max_delta_e {tol:.2f}")
+    if bg_de is not None and bg_de > tol:
+        failures.append(f"bg_delta_e {bg_de:.2f} > max_delta_e {tol:.2f}")
+    if max_delta_e is not None and fg_de is None and bg_de is None and de > float(max_delta_e):
+        failures.append(f"delta_e_ok {de:.2f} > max_delta_e {float(max_delta_e):.2f}")
+
+    ok = not failures
+    return ContrastProbeResult(
+        ok=ok,
+        fg_rgb=fg_rgb,
+        bg_rgb=bg_rgb,
+        contrast_ratio=ratio,
+        delta_e_ok=de,
+        min_ratio=min_ratio,
+        min_delta_e=min_delta_e,
+        max_delta_e=max_delta_e,
+        fg_delta_e=fg_de,
+        bg_delta_e=bg_de,
+        name=name,
+        error=None,
+        reason="ok" if ok else "; ".join(failures),
+    )
 
 
 def hex_rgb(h: str) -> tuple[int, int, int]:

@@ -1,0 +1,46 @@
+id: appearance/chromatic-apply
+purpose: >-
+  Hornero Chromatic generates a contrast-validated palette, applies it
+  atomically through horneroctl, updates the live Signal scheme and shell
+  state, records a rollback snapshot, and keeps the shell healthy.
+covers: [qa#92, hornero#428]
+requires:
+  resolution: 1280x800
+  compositor: hyprland
+setup:
+  layout: cockpit
+  theme: hornero-signal-night
+  commands:
+    - horneroctl appearance chromatic apply --seed "#3A7FD9" --variant expressive --yes
+instruction: >-
+  Apply a Hornero Chromatic palette from a seed colour, inspect the active
+  Signal scheme and Chromatic status, and verify the live desktop presentation.
+steps:
+  - wait: {stable: 1.5, timeout: 10}
+  - hover: {away: true}
+  - wait: {stable: 1.0, timeout: 6}
+  - screenshot: chromatic-applied
+proof:
+  - note: Chromatic status reports active=true and liveTheme=hornero-chromatic
+    probe:
+      run: "horneroctl appearance chromatic status --json | jq -er '[.active,.liveTheme,.selected] | join(\"|\")'"
+      equals: "true|hornero-chromatic|hornero-chromatic"
+      retry_s: 10
+  - note: Shell IPC reports hornero-chromatic as the active Signal theme
+    probe: {run: "qs ipc call signal theme", equals: hornero-chromatic, retry_s: 10}
+  - note: Persisted scheme is schemaVersion 2 with hornero-chromatic id, chromatic metadata, and >=33 palette roles
+    probe:
+      run: "jq -er '[.schemaVersion, .id, (.chromatic.algorithm | type), (.palette | length >= 33)] | join(\"|\")' \"${XDG_STATE_HOME:-$HOME/.local/state}/hornero/signal/scheme.json\""
+      equals: "2|hornero-chromatic|number|true"
+  - note: Chromatic transaction recorded at least one rollback snapshot
+    probe:
+      run: "horneroctl appearance chromatic status --json | jq -er '.snapshots >= 1'"
+      equals: "true"
+  - note: No QML errors logged during Chromatic transition
+    probe: {run: "grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true", equals: "0"}
+  - note: Shell remains alive after Chromatic apply
+    probe: {run: "pgrep -x qs || pgrep -x quickshell"}
+  - screenshot: final
+media: [chromatic-applied]
+budget: {wall_s: 180, max_actions: 20}
+artifacts: {screenshots: always, logs: on-failure}
