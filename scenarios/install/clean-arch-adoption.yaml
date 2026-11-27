@@ -1,0 +1,32 @@
+id: install/clean-arch-adoption
+purpose: >-
+  Installing HorneroOS packages on an existing Arch Linux system and running
+  missing-only user seeding reaches an authenticated Hyprland + Hornero Shell
+  desktop without overwriting pre-existing user configuration files.
+covers: [qa#98, config#181, hornero#480]
+instruction: >-
+  Boot a clean Arch Linux VM, install hornero-shell, hornero-config, and
+  horneroctl-bin from the AUR alongside Hyprland session packages, preserve a
+  pre-existing user marker file, run /usr/share/hornero/seed-user.sh --dest
+  "$HOME" (and horneroctl config materialize --dest "$HOME" --dry-run), log in
+  at greetd, and leave the adopted desktop running for the proofs.
+proof:
+  - note: Core HorneroOS packages are installed on the Arch host
+    probe: {run: "pacman -Qq hornero-shell hornero-config horneroctl-bin >/dev/null && echo installed", equals: installed}
+  - note: Packaged missing-only user seed script is installed and passes dry-run
+    probe: {run: "test -x /usr/share/hornero/seed-user.sh && /usr/share/hornero/seed-user.sh --dest \"$HOME\" --dry-run >/dev/null && echo ok", equals: ok}
+  - note: horneroctl config materialize dry-run succeeds cleanly
+    probe: {run: "horneroctl config materialize --dest \"$HOME\" --dry-run >/dev/null && echo ok", equals: ok}
+  - note: horneroctl doctor passes on the adopted system
+    probe: {run: "horneroctl doctor >/dev/null && echo ok", equals: ok}
+  - note: Installed Hyprland session is running after greetd authentication
+    probe: {run: "pgrep -x Hyprland >/dev/null && echo up", equals: up}
+  - note: Hornero Shell answers IPC
+    probe: {run: "qs -c hornero ipc call drawers list", contains: launcher}
+  - note: No Hyprland config errors on the adopted system
+    probe: {run: "hyprctl configerrors -j | python3 -c \"import json,sys;print(len([e for e in json.load(sys.stdin) if len(e)>0]))\"", equals: "0"}
+  - note: Desktop frame (non-blank) for the record
+    screenshot: adopted-desktop
+media: [adopted-desktop]
+budget: {wall_s: 3600}
+artifacts: {screenshots: always, logs: always}

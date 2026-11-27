@@ -91,6 +91,10 @@ scenarios:
     decision: fix
     rationale: "Pairwise install acceptance (NOT RUN until a candidate ISO exists): guards HorneroOS/installer#11 and HorneroOS/qa#19. Declared for the manual install harness; no PASS is claimed."
     schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. NOT RUN: execute on the next candidate ISO via ~/.local/share/hornero/install-test/run-install-vm.sh in an approved KVM window."
+  install/clean-arch-adoption:
+    decision: fix
+    rationale: "Clean-Arch package adoption acceptance (NOT RUN in tracked QA bundle yet): guards HorneroOS/qa#98, HorneroOS/config#181, and HorneroOS/hornero#480. Pending tracked bundle execution; no PASS is claimed until a bundle exists."
+    schedule: "NOT RUN in a tracked QA bundle yet: execute in a disposable Arch VM via the AUR adoption path in an approved KVM window."
   install/desktop-uefi-encrypted:
     decision: fix
     rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (desktop, UEFI, encrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): PASS. Evidence: ~/.local/share/hornero/install-test/evidence/desktop-uefi-encrypted/RESULT.md"
@@ -139,6 +143,10 @@ scenarios:
     decision: fix
     rationale: "Install-to-first-boot acceptance for the candidate Preview ISO (studio, BIOS, unencrypted): guards HorneroOS/installer#11 and HorneroOS/qa#19. EXECUTED 2026-10-25/26 in disposable QEMU VMs against ISO sha256 876d36daf3c6b3b758d8974b7b0186e831bd8bfcd7fe14abd1dcf0f544fd9020 via the manual install harness (hornero-qa runner has no install engine yet): FAIL on 876d36da (1 proof: hornero#310); delta e93f8414 PASS. Evidence: ~/.local/share/hornero/install-test/evidence/studio-bios-unencrypted/RESULT.md"
     schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Delta re-executed 2026-10-26 on ISO sha256 e93f8414b271bfda37a0583d439511596a3f3eacb94a7b57ec8fb04cae66f097 (horneroctl-bin 0.2.0_preview33-1): PASS, hornero#310 fixed (horneroctl studio doctor: all 5"
+  appearance/chromatic-apply:
+    decision: fix
+    rationale: "Hornero Chromatic apply acceptance (NOT RUN in tracked KVM bundle yet): guards HorneroOS/qa#92 and HorneroOS/hornero#428. Pending execution against a ready image shipping hornero-chromatic; no PASS is claimed until a tracked bundle exists."
+    schedule: "NOT RUN in a tracked KVM bundle yet: execute in the next approved KVM window against a ready image with hornero-chromatic."
   bars/dock-bottom-popout-travel:
     decision: fix
     rationale: "Retain coverage for this product behavior: Moving the pointer from a bottom-dock status trigger into its popout must keep the card open across the gap and preserve focus in the active app."
