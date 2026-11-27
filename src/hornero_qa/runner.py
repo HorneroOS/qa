@@ -44,6 +44,7 @@ from hornero_qa.vision import (
     blank_frame,
     builtin_tokens,
     changed,
+    check_contrast_probe,
     frame_sha256,
     load_frame,
     match_anchor,
@@ -277,7 +278,7 @@ class _Attempt:
                 self.hover(i, val)
             elif kind == "screenshot":
                 self.keep(val, {"step": i})
-            elif kind in ("probe", "anchor"):
+            elif kind in ("probe", "anchor", "contrast_probe"):
                 rec = self.check(kind, val, f"step {i}")
                 if not rec["ok"]:
                     raise QAError(FailureClass.PRODUCT, f"step {i} {kind} failed: {rec['detail']}")
@@ -413,6 +414,8 @@ class _Attempt:
             rec = self.check_probe(spec)
         elif kind == "anchor":
             rec = self.check_anchor(spec)
+        elif kind == "contrast_probe":
+            rec = self.check_contrast(spec)
         else:  # screenshot
             kept = self.keep(spec, {"proof": True})
             ok = not self.blank_heads
@@ -476,6 +479,27 @@ class _Attempt:
                     )
                 return rec
             time.sleep(POLL_S)
+
+    def check_contrast(self, spec: dict[str, Any]) -> dict[str, Any]:
+        has_de_bound = "min_delta_e" in spec or "max_delta_e" in spec
+        min_ratio = spec.get("min_ratio", None if has_de_bound else 4.5)
+        res = check_contrast_probe(
+            self.grab(),
+            spec["fg"],
+            spec["bg"],
+            min_ratio=min_ratio,
+            min_delta_e=spec.get("min_delta_e"),
+            max_delta_e=spec.get("max_delta_e"),
+            fg_hex=spec.get("fg_hex"),
+            bg_hex=spec.get("bg_hex"),
+            fg_token=spec.get("fg_token"),
+            bg_token=spec.get("bg_token"),
+            tokens=self.tokens,
+            size=int(spec.get("size", 3)),
+            normalized=bool(spec.get("normalized", False)),
+            name=spec.get("name"),
+        )
+        return {"kind": "contrast_probe", "ok": res.ok, "detail": res.reason} | res.as_dict()
 
     def drive(self, cmd: list[str]) -> str:
         """Agentic driver loop. Returns how the driver ended: done, give_up or limit."""
@@ -571,6 +595,10 @@ class _Attempt:
             kind = next(k for k in chk if k != "note")
             rec = self.check(kind, chk[kind], f"proof {i}")
             rec["note"] = chk.get("note")
+            out.append(rec)
+        for i, spec in enumerate(self.scenario.contrast_probes):
+            rec = self.check("contrast_probe", spec, f"contrast_probes {i}")
+            rec["note"] = spec.get("name")
             out.append(rec)
         return out
 

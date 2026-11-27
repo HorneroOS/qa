@@ -282,3 +282,54 @@ def test_niri_layout_box_and_hover_away_coords(tmp_path: Path) -> None:
     att.hover(0, {"away": True})
     assert eng.probes and all("niri msg --json outputs" in cmd for cmd in eng.probes)
     assert eng.pointers == [(0.5, 0.5, None, 6)]
+
+
+def test_runner_contrast_probe_proof_and_failure(tmp_path: Path) -> None:
+    from typing import Any, cast
+
+    from PIL import Image
+
+    from hornero_qa.evidence import Bundle
+    from hornero_qa.runner import RunOptions, _Attempt
+    from hornero_qa.scenario import parse
+
+    sc = parse(
+        "id: appearance/test-contrast\n"
+        "purpose: Verify contrast_probe and contrast_probes execution.\n"
+        "instruction: Check contrast.\n"
+        "proof:\n"
+        "  - note: High-contrast ink passes AA\n"
+        "    contrast_probe: {fg: {x: 20, y: 20}, bg: {x: 5, y: 5}, min_ratio: 4.5}\n"
+        "contrast_probes:\n"
+        "  - name: low-contrast-check\n"
+        "    fg: {x: 60, y: 20}\n"
+        "    bg: {x: 5, y: 5}\n"
+        "    min_ratio: 4.5\n"
+    )
+    bundle = Bundle.create(tmp_path / "runs", "r-contrast", {"scenario": sc.id}, sc.text)
+
+    class _ContrastEngine:
+        compositor = "hyprland"
+
+        def screenshot(self, dest: Path, head: int = 0) -> Path:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            img = Image.new("RGB", (120, 80), (19, 23, 29))
+            for y in range(15, 30):
+                for x in range(15, 30):
+                    img.putpixel((x, y), (236, 230, 218))
+                for x in range(55, 70):
+                    img.putpixel((x, y), (44, 51, 60))
+            img.save(dest)
+            return dest
+
+    att = _Attempt(
+        sc,
+        cast(Any, _ContrastEngine()),
+        bundle,
+        RunOptions(image=tmp_path / "img.qcow2"),
+        frame_path=tmp_path / "work" / "frame.png",
+    )
+    results = att.proof()
+    assert len(results) == 2
+    assert results[0]["ok"] is True and results[0]["kind"] == "contrast_probe"
+    assert results[1]["ok"] is False and "contrast_ratio" in results[1]["detail"]
