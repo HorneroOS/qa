@@ -1,0 +1,67 @@
+id: upgrades/config-migration
+purpose: >-
+  Upgrade and config-migration acceptance: verify hyprland.lua factory/user
+  lifecycle refresh preserves user customizations with a backup, and verify
+  horneroctl package status --json classifies Hornero-owned and system update
+  lanes cleanly without network access (HorneroOS/qa#102, HorneroOS/config#184,
+  HorneroOS/hornero#178).
+covers: [qa#102, config#184, hornero#178]
+requires:
+  compositor: hyprland
+setup:
+  commands:
+    - |
+      set -e
+      root="$HOME/.local/state/hornero-qa-config-migration"
+      rm -rf "$root"
+      mkdir -p "$root/bin"
+      cat > "$root/hyprland.lua" <<'LUA'
+      local user_dir = (debug.getinfo(1, "S").source:match("^@(.*)/[^/]*$") or ".") .. "/hyprland.lua.d/"
+      local function load_factory(mod) return mod end
+      local function load_user(mod) return mod end
+      -- user-custom-pin
+      load_factory("monitors.lua")
+      load_factory("environment.lua")
+      load_factory("static.lua")
+      LUA
+      cat > "$root/bin/checkupdates" <<'SH'
+      #!/usr/bin/env sh
+      printf 'linux 6.12 -> 6.13\ncurl 8.10 -> 8.11\n'
+      SH
+      cat > "$root/bin/yay" <<'SH'
+      #!/usr/bin/env sh
+      printf 'hornero-config 0.3.9-1 -> 0.4.0-1\nhornero-shell 1.3.12-1 -> 1.3.13-1\n'
+      SH
+      chmod +x "$root/bin/checkupdates" "$root/bin/yay"
+      HORNERO_HYPR_TARGET="$root/hyprland.lua" horneroctl config refresh-hypr --dry-run > "$root/dry-run.txt"
+      HORNERO_HYPR_TARGET="$root/hyprland.lua" horneroctl config refresh-hypr --yes > "$root/apply.txt"
+instruction: >-
+  Exercise additive hyprland.lua factory migration against a staged legacy
+  entrypoint and query horneroctl package status --json update lanes.
+steps:
+  - wait: {stable: 1, timeout: 10}
+proof:
+  - note: Packaged factory Hyprland entrypoint exists and separates load_factory from load_user
+    probe:
+      run: "grep -q 'load_factory' /etc/xdg/hypr/hyprland.lua && grep -q 'load_user' /etc/xdg/hypr/hyprland.lua && echo ok"
+      equals: ok
+  - note: Dry-run config refresh previews missing factory modules without mutating disk
+    probe:
+      run: "cat ~/.local/state/hornero-qa-config-migration/dry-run.txt"
+      contains: "Dry run:"
+      save: refresh-dry-run.txt
+  - note: Applied config refresh creates .pre-refresh backup, preserves user lines, and inserts missing factory modules
+    probe:
+      run: "test -f ~/.local/state/hornero-qa-config-migration/hyprland.lua.pre-refresh && grep -F -q 'user-custom-pin' ~/.local/state/hornero-qa-config-migration/hyprland.lua && grep -F -q 'monitors-user.lua' ~/.local/state/hornero-qa-config-migration/hyprland.lua && grep -F -q 'plugins.lua' ~/.local/state/hornero-qa-config-migration/hyprland.lua && echo ok"
+      equals: ok
+  - note: Re-running config refresh dry-run after migration is idempotent
+    probe:
+      run: "HORNERO_HYPR_TARGET=\"$HOME/.local/state/hornero-qa-config-migration/hyprland.lua\" horneroctl config refresh-hypr --dry-run"
+      contains: "already up to date"
+  - note: horneroctl package status --json reports Hornero-owned and system update lanes truthfully
+    probe:
+      run: "HORNERO_CHECKUPDATES_BIN=\"$HOME/.local/state/hornero-qa-config-migration/bin/checkupdates\" HORNERO_AUR_HELPER_BIN=\"$HOME/.local/state/hornero-qa-config-migration/bin/yay\" horneroctl package status --json | jq -er '[.ok, .data.hornero_pending_count, .data.system_pending_count, .data.hornero_pending, .data.snapshot_backend] | join(\"|\")'"
+      equals: "true|2|2|hornero-config, hornero-shell|none"
+      save: package-status.json
+budget: {wall_s: 90}
+artifacts: {screenshots: on-failure, logs: always}

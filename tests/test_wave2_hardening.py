@@ -287,6 +287,7 @@ def test_wcag_contrast_ratio() -> None:
 def test_perf_baseline_budget_assertions() -> None:
     sc = load(REPO_ROOT / "scenarios" / "perf" / "baseline.yaml")
     assert sc.id == "perf/baseline"
+    assert any("--format json" in str(p["probe"]["run"]) for p in sc.proof if "probe" in p)
 
     ok, _ = _probe_ok(
         {"run": "perf", "json": "samples.0.rss_kb", "max_rss_kb": 200000},
@@ -313,3 +314,36 @@ def test_perf_baseline_budget_assertions() -> None:
     )
     assert fail_cs is False
     assert "cold_start_ms" in why_cs
+
+    ok_ready, _ = _probe_ok(
+        {"run": "perf", "json": "startup_ready_ms", "max_cold_start_ms": 5000},
+        ProbeResult(0, json.dumps({"startup_ready_ms": "2400"}), ""),
+    )
+    assert ok_ready is True
+
+    ok_multi, _ = _probe_ok(
+        {"run": "perf", "max_rss_kb": 524288, "max_cpu_percent": 15, "max_ipc_ms": 250},
+        ProbeResult(0, json.dumps({"samples": [{"rss_kb": 320000, "cpu_percent": 3.5, "ipc_ms": 22}]}), ""),
+    )
+    assert ok_multi is True
+
+    fail_cpu, why_cpu = _probe_ok(
+        {"run": "perf", "max_rss_kb": 524288, "max_cpu_percent": 5, "max_ipc_ms": 250},
+        ProbeResult(0, json.dumps({"samples": [{"rss_kb": 320000, "cpu_percent": 12.4, "ipc_ms": 22}]}), ""),
+    )
+    assert fail_cpu is False
+    assert "cpu_percent" in why_cpu and "exceeds budget" in why_cpu
+
+    fail_ipc, why_ipc = _probe_ok(
+        {"run": "perf", "max_ipc_ms": 50},
+        ProbeResult(0, json.dumps({"samples": [{"ipc_ms": 120}]}), ""),
+    )
+    assert fail_ipc is False
+    assert "ipc_ms" in why_ipc
+
+    fail_rc, why_rc = _probe_ok(
+        {"run": "perf", "json": "samples.0.rss_kb", "max_rss_kb": 524288},
+        ProbeResult(1, "", "no running quickshell instance"),
+    )
+    assert fail_rc is False
+    assert "rc=1" in why_rc

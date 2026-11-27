@@ -308,7 +308,17 @@
           "minimum": 0
         },
         "max_cold_start_ms": {
-          "description": "Optional numeric ceiling (ms) asserted against the extracted value or JSON cold_start_ms.",
+          "description": "Optional numeric ceiling (ms) asserted against the extracted value or JSON cold_start_ms / startup_ready_ms.",
+          "type": "number",
+          "minimum": 0
+        },
+        "max_cpu_percent": {
+          "description": "Optional numeric ceiling (%) asserted against the extracted value or JSON cpu_percent.",
+          "type": "number",
+          "minimum": 0
+        },
+        "max_ipc_ms": {
+          "description": "Optional numeric ceiling (ms) asserted against the extracted value or JSON ipc_ms.",
           "type": "number",
           "minimum": 0
         }

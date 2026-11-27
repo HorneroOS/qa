@@ -1,0 +1,34 @@
+id: wayland-interop/clipboard-roundtrip
+purpose: >-
+  Wayland clipboard interoperability acceptance: verify wl-copy and wl-paste
+  preserve UTF-8 text payloads and text/plain MIME offers inside the live
+  Wayland session (HorneroOS/qa#102).
+covers: [qa#102]
+requires:
+  outputs: 1
+setup:
+  commands:
+    - "command -v wl-copy >/dev/null && command -v wl-paste >/dev/null"
+    - "printf '%s' 'hornero-qa-clipboard-roundtrip:αβγ' | wl-copy --type 'text/plain;charset=utf-8' >/dev/null 2>&1"
+instruction: Copy a UTF-8 string into the Wayland clipboard and verify wl-paste reads it back cleanly.
+steps:
+  - wait: {stable: 1, timeout: 10}
+proof:
+  - note: Wayland display socket is active in the probe environment
+    probe:
+      run: "test -n \"$WAYLAND_DISPLAY\" && echo ok"
+      equals: ok
+  - note: wl-paste returns the exact UTF-8 payload written via wl-copy
+    probe:
+      run: "wl-paste --no-newline"
+      equals: "hornero-qa-clipboard-roundtrip:αβγ"
+      retry_s: 5
+  - note: Wayland clipboard advertises a text/plain MIME offer
+    probe:
+      run: "wl-paste --list-types"
+      contains: "text/plain"
+  - note: Hornero Shell remains alive during clipboard interoperability
+    probe:
+      run: "pgrep -x qs || pgrep -x quickshell"
+budget: {wall_s: 60}
+artifacts: {screenshots: on-failure, logs: on-failure}

@@ -2,18 +2,30 @@ id: perf/baseline
 purpose: >-
   Reference performance numbers for the composition under test, measured by
   the shell's own scripts/perf-baseline.sh inside the fixed QA machine
-  (2 vCPU, 2 GiB, one 1280x800 output), so numbers are comparable between
-  runs and releases (HorneroOS/shell#47).
-covers: [shell#47]
-instruction: Leave the freshly booted desktop idle and measure the shell.
+  (2 vCPU, 2 GiB, one 1280x800 output), enforcing hard RSS, idle CPU, IPC
+  latency, and cold-start budgets so regressions show up as numbers across
+  runs and releases (HorneroOS/shell#47, HorneroOS/qa#102).
+covers: [shell#47, qa#102]
+setup:
+  commands:
+    - "~/.config/quickshell/scripts/perf-baseline.sh --restart --samples 1 --interval 1 --format json --out ~/.local/state/hornero-qa-cold-start.json"
+instruction: Leave the freshly booted desktop idle and measure the shell against numeric budgets.
 steps:
   - wait: {stable: 3, timeout: 30}
 proof:
-  - note: The shell's baseline harness runs and reports steady-state samples
+  - note: Steady-state shell RSS, idle CPU, and IPC latency stay within hard numeric budgets
     probe:
-      run: "~/.config/quickshell/scripts/perf-baseline.sh --samples 5 --interval 1"
-      json: samples.0.rss_kb
-      matches: "^[0-9]+$"
+      run: "~/.config/quickshell/scripts/perf-baseline.sh --samples 5 --interval 1 --format json"
       max_rss_kb: 524288
+      max_cpu_percent: 15
+      max_ipc_ms: 250
       save: perf-baseline.json
+  - note: Shell restart-to-IPC-ready cold start completes within the latency ceiling
+    probe:
+      run: "cat ~/.local/state/hornero-qa-cold-start.json"
+      json: startup_ready_ms
+      matches: "^[0-9]+$"
+      max_cold_start_ms: 15000
+      save: perf-cold-start.json
 budget: {wall_s: 120}
+artifacts: {screenshots: on-failure, logs: always}

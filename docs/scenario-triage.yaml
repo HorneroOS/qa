@@ -260,8 +260,8 @@ scenarios:
     schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085542Z-notifications-shell-owns-bus-1."
   perf/baseline:
     decision: fix
-    rationale: "Retain coverage for this product behavior: Reference performance numbers for the composition under test, measured by the shell's own scripts/perf-baseline.sh inside the fixed QA machine (2 vCPU, 2 GiB, one 1280x800 output), so numbers are comparable between runs and releases (HorneroOS/shell#47)."
-    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085700Z-perf-baseline-1. harness: perf probe output is not JSON on this image; needs the perf harness update (shell#47/#228)."
+    rationale: "Retain coverage for this product behavior: Reference performance numbers for the composition under test, measured by the shell's own scripts/perf-baseline.sh inside the fixed QA machine (2 vCPU, 2 GiB, one 1280x800 output), so numbers are comparable between runs and releases (HorneroOS/shell#47, HorneroOS/qa#102)."
+    schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T085700Z-perf-baseline-1. Scenario updated for --format json and numeric budgets (qa#102); re-run in the next approved KVM window."
   personalization/baseline-settings:
     decision: keep
     rationale: "Retain coverage for this product behavior: Capture the current Settings navigation and Appearance presentation."
@@ -800,3 +800,11 @@ scenarios:
     decision: keep
     rationale: "Visual-audit capture (qa#88, HorneroOS/.github#31): populated desktop, real resolution, popouts opened by geometry-derived hover."
     schedule: "PASS on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T105032Z-visual-theme-night-populated-1. PASS means windows were mapped inside the output and probes held; the captures under docs/evidence/signal-visual-20261117/ are reviewed by eye."
+  upgrades/config-migration:
+    decision: fix
+    rationale: "Upgrade and config-migration acceptance (NOT RUN in tracked KVM bundle yet): guards HorneroOS/qa#102, HorneroOS/config#184, and HorneroOS/hornero#178 (hyprland.lua factory lifecycle + horneroctl package status --json update-lane classification). Pending execution in an approved KVM window; no PASS is claimed until a tracked bundle exists."
+    schedule: "NOT RUN in a tracked KVM bundle yet: execute in the next approved KVM window against a ready image with hornero-config and horneroctl."
+  wayland-interop/clipboard-roundtrip:
+    decision: fix
+    rationale: "Wayland clipboard interoperability acceptance (NOT RUN in tracked KVM bundle yet): guards HorneroOS/qa#102 (wl-copy/wl-paste UTF-8 roundtrip and MIME offer preservation under Wayland). Pending execution in an approved KVM window; no PASS is claimed until a tracked bundle exists."
+    schedule: "NOT RUN in a tracked KVM bundle yet: execute in the next approved KVM window against a ready Wayland image."
