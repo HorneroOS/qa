@@ -1,0 +1,63 @@
+id: playground/vm-boot-ready
+purpose: >-
+  Playground VM boot acceptance: reuses NativeEngine with Hyprland on
+  virtio-vga, verifies hornero-shell is alive and answering IPC, zero fatal
+  compositor or QML errors occurred, and Hornero Welcome is reachable
+  (HorneroOS/playground#1).
+covers: [playground#1]
+requires:
+  engine: native
+  compositor: hyprland
+  outputs: 1
+  resolution: 1280x800
+instruction: >-
+  Boot the Playground VM image into Hyprland and confirm the desktop shell,
+  compositor health, and Welcome surface are ready.
+steps:
+  - wait: {stable: 1.5, timeout: 15}
+  - screenshot: desktop
+proof:
+  - note: Hyprland compositor session is running
+    probe:
+      run: "(pgrep -x Hyprland >/dev/null || pgrep -x Hyprland-bin >/dev/null) && echo up"
+      equals: up
+  - note: Exactly one virtual output is configured
+    probe:
+      run: "hyprctl monitors -j | jq 'length'"
+      equals: "1"
+  - note: Hyprland reports zero config errors
+    probe:
+      run: "hyprctl configerrors -j | jq -r 'map(select(length > 0)) | length'"
+      equals: "0"
+  - note: hornero-shell process is alive
+    probe:
+      run: "(pgrep -x qs >/dev/null || pgrep -x quickshell >/dev/null) && echo up"
+      equals: up
+  - note: hornero-shell answers IPC and exposes the launcher drawer
+    probe:
+      run: "qs ipc call drawers list"
+      contains: launcher
+      retry_s: 10
+  - note: At least one shell bar is visible
+    probe:
+      run: "qs ipc call debug bars | jq '[.[] | select(.visible)] | length > 0'"
+      equals: "true"
+      retry_s: 10
+  - note: Zero fatal compositor crash markers in Hyprland log
+    probe:
+      run: "if [ -f /tmp/hypr.log ]; then grep -Eic 'fatal error|segmentation fault|segfault|abort\\(\\)' /tmp/hypr.log || true; else echo 0; fi"
+      equals: "0"
+  - note: Zero QML runtime errors in shell log
+    probe:
+      run: "if [ -f /tmp/qs.log ]; then grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true; else echo 0; fi"
+      equals: "0"
+  - note: Welcome IPC target is registered and responds with status
+    probe:
+      run: "qs ipc call welcome status"
+      contains: showOnLogin
+      retry_s: 10
+  - note: Desktop frame (non-blank) for the record
+    screenshot: final
+media: [desktop]
+budget: {wall_s: 90}
+artifacts: {screenshots: always, logs: on-failure}
