@@ -12,7 +12,7 @@ available on the hosted runners), so the automated part is the
 
 | Trigger | Obligation |
 |---|---|
-| New signed Preview ISO | Mandatory refresh of the core lanes (`install/*`, `smoke/*`, `session/*`, `controlcenter*`, `lock/*`, `recovery/*`) against the exact shipped artifact before the release is announced. |
+| New signed release ISO | Mandatory refresh of the core lanes (`install/*`, `smoke/*`, `session/*`, `controlcenter*`, `lock/*`, `recovery/*`) against the exact shipped artifact before the release is announced. |
 | Weekly approved KVM window | Execute `keep` lanes whose evidence is stale (below), oldest first, on the base image pinned in `fixtures/`. Publishing the resulting bundles/sidecars updates the matrix. |
 | Shell/Config/Greeter release without a new ISO | Refresh the lanes covering the changed surface; everything else ages normally. |
 
