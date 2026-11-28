@@ -9,7 +9,7 @@ requires:
   engine: native
   compositor: hyprland
   outputs: 1
-  resolution: 1280x800
+  resolution: 1920x1080
 setup:
   commands:
     - "qs ipc call notifs disableDnd >/dev/null"
