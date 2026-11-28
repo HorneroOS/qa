@@ -808,3 +808,15 @@ scenarios:
     decision: fix
     rationale: "Wayland clipboard interoperability acceptance (NOT RUN in tracked KVM bundle yet): guards HorneroOS/qa#102 (wl-copy/wl-paste UTF-8 roundtrip and MIME offer preservation under Wayland). Pending execution in an approved KVM window; no PASS is claimed until a tracked bundle exists."
     schedule: "NOT RUN in a tracked KVM bundle yet: execute in the next approved KVM window against a ready Wayland image."
+  playground/apps-and-welcome:
+    decision: fix
+    rationale: "Playground Apps & Welcome acceptance (NOT RUN in tracked KVM bundle yet): guards HorneroOS/playground#1 (horneroctl --json store list and horneroctl --json welcome status inside the Playground VM image via NativeEngine). Pending execution in an approved KVM window; no PASS is claimed until a tracked bundle exists."
+    schedule: "NOT RUN in a tracked KVM bundle yet: execute in the next approved KVM window against a Playground VM image."
+  playground/presenter-dnd:
+    decision: fix
+    rationale: "Playground Presenter Mode DND acceptance (NOT RUN in tracked KVM bundle yet): guards HorneroOS/playground#1 (qs ipc call notifs enableDnd -> isDndEnabled -> disableDnd round-trip via NativeEngine). Pending execution in an approved KVM window; no PASS is claimed until a tracked bundle exists."
+    schedule: "NOT RUN in a tracked KVM bundle yet: execute in the next approved KVM window against a Playground VM image."
+  playground/vm-boot-ready:
+    decision: fix
+    rationale: "Playground VM boot acceptance (NOT RUN in tracked KVM bundle yet): guards HorneroOS/playground#1 (Hyprland on virtio-vga via NativeEngine, hornero-shell alive, zero fatal compositor crashes, Welcome IPC reachable). Pending execution in an approved KVM window; no PASS is claimed until a tracked bundle exists."
+    schedule: "NOT RUN in a tracked KVM bundle yet: execute in the next approved KVM window against a Playground VM image."

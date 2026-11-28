@@ -1,0 +1,49 @@
+id: playground/apps-and-welcome
+purpose: >-
+  Playground Apps & Welcome acceptance: verifies horneroctl --json store list
+  and horneroctl --json welcome status respond cleanly with valid structured
+  envelopes inside the Playground VM image (HorneroOS/playground#1).
+covers: [playground#1]
+requires:
+  engine: native
+  compositor: hyprland
+  outputs: 1
+  resolution: 1280x800
+instruction: >-
+  Query Hornero Apps catalog listing and Hornero Welcome status via horneroctl
+  --json inside the Playground VM and verify valid responses.
+steps:
+  - wait: {stable: 1.0, timeout: 10}
+proof:
+  - note: horneroctl --json store list returns ok=true
+    probe:
+      run: "horneroctl --json store list"
+      json: ok
+      equals: "true"
+      save: store-list.json
+  - note: horneroctl --json store list reports a non-empty app catalog
+    probe:
+      run: "horneroctl --json store list | python3 -c \"import json,sys;r=json.load(sys.stdin);d=r['data'];apps=json.loads(d['apps']);print(r['command']=='store list' and int(d['count'])>0 and int(d['total'])>=int(d['count']) and isinstance(apps,list) and len(apps)==int(d['count']))\""
+      equals: "True"
+  - note: horneroctl --json welcome status returns ok=true
+    probe:
+      run: "horneroctl --json welcome status"
+      json: ok
+      equals: "true"
+      save: welcome-status.json
+  - note: horneroctl --json welcome status exposes expected status fields
+    probe:
+      run: "horneroctl --json welcome status | python3 -c \"import json,sys;r=json.load(sys.stdin);d=r['data'];print(r['command']=='welcome status' and d.get('show_on_login') in ('true','false') and bool(d.get('content')) and bool(d.get('schema_version')) and d.get('source') in ('file','defaults'))\""
+      equals: "True"
+  - note: Welcome IPC target responds cleanly alongside CLI status
+    probe:
+      run: "qs ipc call welcome status"
+      contains: showOnLogin
+      retry_s: 10
+  - note: hornero-shell remains alive after CLI queries
+    probe:
+      run: "(pgrep -x qs >/dev/null || pgrep -x quickshell >/dev/null) && echo up"
+      equals: up
+  - screenshot: final
+budget: {wall_s: 90}
+artifacts: {screenshots: on-failure, logs: always}

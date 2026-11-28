@@ -1,0 +1,71 @@
+id: playground/presenter-dnd
+purpose: >-
+  Playground Presenter Mode acceptance: verifies notification suppression
+  round-trip via qs ipc call notifs enableDnd -> isDndEnabled -> disableDnd,
+  preserving shell D-Bus notification ownership without crashing
+  (HorneroOS/playground#1).
+covers: [playground#1]
+requires:
+  engine: native
+  compositor: hyprland
+  outputs: 1
+  resolution: 1280x800
+setup:
+  commands:
+    - "qs ipc call notifs disableDnd >/dev/null"
+    - "qs ipc call notifs clear >/dev/null"
+instruction: >-
+  Enable Presenter Mode Do Not Disturb via shell IPC, verify isDndEnabled
+  reports true while sending a test notification, then disable DND and verify
+  the round-trip returns to false.
+steps:
+  - wait: {stable: 1.0, timeout: 10}
+  - note: Precondition - DND starts disabled
+    probe:
+      run: "qs ipc call notifs isDndEnabled"
+      equals: "false"
+      retry_s: 5
+  - note: Enable DND via shell IPC
+    probe:
+      run: "qs ipc call notifs enableDnd >/dev/null && qs ipc call notifs isDndEnabled"
+      equals: "true"
+      retry_s: 5
+  - wait: {stable: 1.0, timeout: 6}
+  - note: Send a normal-urgency notification while Presenter DND is active
+    probe:
+      run: "notify-send -a hornero-qa 'Presenter Mode' 'Notification suppression check' && qs ipc call notifs isDndEnabled"
+      equals: "true"
+      retry_s: 5
+  - screenshot: dnd-enabled
+  - note: Disable DND via shell IPC and confirm round-trip
+    probe:
+      run: "qs ipc call notifs disableDnd >/dev/null && qs ipc call notifs isDndEnabled"
+      equals: "false"
+      retry_s: 5
+  - wait: {stable: 1.0, timeout: 6}
+proof:
+  - note: Presenter DND round-trip returns isDndEnabled to false
+    probe:
+      run: "qs ipc call notifs isDndEnabled"
+      equals: "false"
+      retry_s: 5
+  - note: Hornero shell owns org.freedesktop.Notifications on the session bus
+    probe:
+      run: "busctl --user status org.freedesktop.Notifications | sed -n 's/^Comm=//p'"
+      matches: "^(qs|quickshell)$"
+  - note: dunst was not D-Bus activated during DND notification handling
+    probe:
+      run: "pgrep -x dunst || echo none"
+      equals: none
+  - note: Zero QML runtime errors logged during DND transitions
+    probe:
+      run: "if [ -f /tmp/qs.log ]; then grep -Ec 'TypeError|ReferenceError|Cannot assign|QML.*Error' /tmp/qs.log || true; else echo 0; fi"
+      equals: "0"
+  - note: hornero-shell remains alive after Presenter DND round-trip
+    probe:
+      run: "(pgrep -x qs >/dev/null || pgrep -x quickshell >/dev/null) && echo up"
+      equals: up
+  - screenshot: final
+media: [dnd-enabled]
+budget: {wall_s: 90}
+artifacts: {screenshots: always, logs: on-failure}
