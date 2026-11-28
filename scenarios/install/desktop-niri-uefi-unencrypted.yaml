@@ -1,7 +1,7 @@
 id: install/desktop-niri-uefi-unencrypted
 purpose: >-
-  A Desktop installation with the experimental Niri compositor on UEFI with
-  unencrypted storage, from the candidate Preview ISO, reaches an
+  A Desktop installation with the Niri compositor on UEFI with
+  unencrypted storage, from the candidate ISO, reaches an
   authenticated Hornero desktop on a real output whose installed
   composition matches the canonical resolved choice. Environment
   requirement: Niri needs working 3D acceleration (upstream requirement);
@@ -16,7 +16,7 @@ covers: [installer#11, qa#19, config#121]
 instruction: >-
   Boot the candidate ISO in a disposable VM (UEFI firmware,
   blank target disk), launch the graphical installer, choose
-  HorneroOS Desktop — Niri (Experimental),
+  HorneroOS Desktop — Niri,
   without encryption,
   create the QA user, let installation finish, reboot with the ISO detached,
   authenticate at the

@@ -1,6 +1,6 @@
 id: studio/artcraft-launcher-niri
 purpose: >-
-  On a current HorneroOS Studio Preview ISO (Niri, report-only; excluded from the required gate while Niri and this entry stay experimental), the
+  On a current HorneroOS Studio ISO (Niri, report-only; excluded from the required gate while this launcher entry stays opt-in), the
   experimental ArtCraft Launcher is absent until an explicit application
   opt-in, installs only through the verified manual channel, launches
   natively on Wayland, installs and launches one Craft application,
@@ -9,7 +9,7 @@ purpose: >-
   application count.
 covers: [qa#36, hornero#325]
 instruction: >-
-  In a disposable VM from the pinned Studio Preview ISO: record the
+  In a disposable VM from the pinned Studio ISO: record the
   opt-in with `horneroctl studio selection set --application
   artcraft-launcher`, confirm the launcher package is absent, then
   manually install the catalogue-pinned signed vendor package after

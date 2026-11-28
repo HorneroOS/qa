@@ -105,7 +105,7 @@ scenarios:
     schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. Carried over to ISO e93f8414 per evidence-delta/DELTA-JUSTIFICATION.md (only horneroctl-bin changed since 876d36da PASS); not re-executed in delta. Re-executed 2026-11-04 on published preview32 ISO sh"
   install/desktop-niri-uefi-unencrypted:
     decision: fix
-    rationale: "Install-to-first-boot acceptance for the experimental Niri compositor choice (desktop, UEFI, unencrypted): guards HorneroOS/installer#11, HorneroOS/qa#19 and HorneroOS/config#121. First declared 2026-11-04 (Preview 33 Stage D); no install scenario covered the Niri edition choice before."
+    rationale: "Install-to-first-boot acceptance for the Niri compositor choice (desktop, UEFI, unencrypted): guards HorneroOS/installer#11, HorneroOS/qa#19 and HorneroOS/config#121. First declared 2026-11-04 (Preview 33 Stage D); no install scenario covered the Niri edition choice before."
     schedule: "NOT RUN on the Signal image: ISO-based or edition-specific lane; blocked on a Signal ISO (HorneroOS/installer#101) and the 4 GiB install harness. EXECUTED 2026-11-04 on published preview32 ISO sha256 b8cd0f8604bc69f7d2112fb8bccd97115d32d197e9c92c62e02faf5de6345aec: FAIL \u2014 install, greeter authentication, niri/quickshell processes and Shell IPC "
   install/desktop-recovery-uefi-encrypted:
     decision: fix
@@ -339,7 +339,7 @@ scenarios:
     schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090542Z-studio-artcraft-launcher-hyprland-1. fixture: ArtCraft launcher is not installed in the ready image."
   studio/artcraft-launcher-niri:
     decision: fix
-    rationale: "Same ArtCraft Launcher contract on Niri (HorneroOS/qa#36): report-only while Niri remains experimental; excluded from the required gate."
+    rationale: "Same ArtCraft Launcher contract on Niri (HorneroOS/qa#36): report-only Niri coverage; excluded from the required gate."
     schedule: "FAIL on image signal-s74619fa-c7605886-h420c73c (shell 74619fa, config 7605886, horneroctl 420c73c), bundle 20261117T090627Z-studio-artcraft-launcher-niri-1. fixture: ArtCraft launcher is not installed in the ready image."
   studio/selection-parity:
     decision: keep
