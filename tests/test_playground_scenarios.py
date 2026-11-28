@@ -9,6 +9,7 @@ import pytest
 import yaml
 
 from hornero_qa.cli import main
+from hornero_qa.display_profiles import OFFICIAL_DEFAULT_PROFILE
 from hornero_qa.scenario import load
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -33,7 +34,8 @@ def test_playground_scenarios_conform_to_schema_and_reuse_native_engine() -> Non
         assert sc.requires.get("engine") == "native"
         assert sc.requires.get("compositor") == "hyprland"
         assert sc.requires.get("outputs") == 1
-        assert sc.requires.get("resolution") == "1280x800"
+        assert sc.requires.get("resolution") == OFFICIAL_DEFAULT_PROFILE.resolution
+        assert sc.resolution == (1920, 1080)
         assert sc.proof
 
         cmds = list(sc.setup.get("commands") or []) + [
